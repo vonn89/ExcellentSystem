@@ -1,0 +1,4 @@
+localhost
+EPSON LX-310
+POS-58
+GT-800
