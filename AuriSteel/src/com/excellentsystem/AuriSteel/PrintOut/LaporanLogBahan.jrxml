@@ -1,0 +1,307 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="3a08def6-2d89-4dab-be22-d22a25ba54d9">
+	<property name="ireport.zoom" value="1.0245201830476063"/>
+	<property name="ireport.x" value="73"/>
+	<property name="ireport.y" value="0"/>
+	<style name="columnHeader" mode="Opaque" forecolor="#FFFFFF" backcolor="#000099">
+		<box>
+			<topPen lineWidth="0.0" lineStyle="Solid"/>
+			<leftPen lineWidth="0.0" lineStyle="Solid"/>
+			<bottomPen lineWidth="0.0" lineStyle="Solid"/>
+			<rightPen lineWidth="0.0" lineStyle="Solid"/>
+		</box>
+		<paragraph leftIndent="5" rightIndent="5"/>
+	</style>
+	<style name="label" forecolor="#000099">
+		<paragraph leftIndent="5" rightIndent="5"/>
+	</style>
+	<parameter name="namaPerusahaan" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["Sentral Indah Perdana"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="tglAkhir" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["2018-04-05"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="tglMulai" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["2018-03-05"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="namaBarang" class="java.lang.String" isForPrompting="false"/>
+	<queryString>
+		<![CDATA[]]>
+	</queryString>
+	<field name="kategori" class="java.lang.String">
+		<fieldDescription><![CDATA[kategori]]></fieldDescription>
+	</field>
+	<field name="keterangan" class="java.lang.String">
+		<fieldDescription><![CDATA[keterangan]]></fieldDescription>
+	</field>
+	<field name="kodeBahan" class="java.lang.String">
+		<fieldDescription><![CDATA[kodeBahan]]></fieldDescription>
+	</field>
+	<field name="nilaiAkhir" class="java.lang.Double">
+		<fieldDescription><![CDATA[nilaiAkhir]]></fieldDescription>
+	</field>
+	<field name="nilaiAwal" class="java.lang.Double">
+		<fieldDescription><![CDATA[nilaiAwal]]></fieldDescription>
+	</field>
+	<field name="nilaiKeluar" class="java.lang.Double">
+		<fieldDescription><![CDATA[nilaiKeluar]]></fieldDescription>
+	</field>
+	<field name="nilaiMasuk" class="java.lang.Double">
+		<fieldDescription><![CDATA[nilaiMasuk]]></fieldDescription>
+	</field>
+	<field name="stokAkhir" class="java.lang.Double">
+		<fieldDescription><![CDATA[stokAkhir]]></fieldDescription>
+	</field>
+	<field name="stokAwal" class="java.lang.Double">
+		<fieldDescription><![CDATA[stokAwal]]></fieldDescription>
+	</field>
+	<field name="stokKeluar" class="java.lang.Double">
+		<fieldDescription><![CDATA[stokKeluar]]></fieldDescription>
+	</field>
+	<field name="stokMasuk" class="java.lang.Double">
+		<fieldDescription><![CDATA[stokMasuk]]></fieldDescription>
+	</field>
+	<field name="tanggal" class="java.lang.String">
+		<fieldDescription><![CDATA[tanggal]]></fieldDescription>
+	</field>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="60" splitType="Stretch">
+			<staticText>
+				<reportElement style="label" x="0" y="0" width="802" height="40" uuid="38403c0e-8fd0-426d-bfd8-677c5ea6d5d2"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Serif" size="28" isStrikeThrough="false"/>
+				</textElement>
+				<text><![CDATA[Laporan Log Bahan]]></text>
+			</staticText>
+			<textField pattern="dd MMM yyyy">
+				<reportElement style="label" x="85" y="40" width="100" height="20" uuid="12609b49-0302-4ff8-b6b4-f0d1c71e208d"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[new SimpleDateFormat("yyyy-MM-dd").parse($P{tglMulai})]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement style="label" x="15" y="40" width="70" height="20" uuid="85d4a651-6560-449f-89a7-4c0fb0e4a504"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Tanggal  :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="label" x="185" y="40" width="10" height="20" uuid="015eb3d8-fd8a-4a68-8f0f-2b2eba5f39ab"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[-]]></text>
+			</staticText>
+			<textField pattern="dd MMM yyyy">
+				<reportElement style="label" x="195" y="40" width="100" height="20" uuid="d88eea0f-7fb3-46ff-b2a2-9217a24dc071"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[new SimpleDateFormat("yyyy-MM-dd").parse($P{tglAkhir})]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="25" splitType="Stretch">
+			<textField>
+				<reportElement style="label" x="0" y="0" width="802" height="25" uuid="c59dd8ca-6d51-4634-b579-b2548881e745"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Serif" size="16"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{namaPerusahaan}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="50" splitType="Stretch">
+			<staticText>
+				<reportElement style="columnHeader" x="563" y="20" width="60" height="30" uuid="fe0741c5-2f97-4fc5-96e2-88ccccf6be6d"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Stok Keluar]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="columnHeader" x="0" y="20" width="120" height="30" uuid="ca83b5cb-ffc3-434d-9a83-22b435c642bb"/>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Tanggal]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="columnHeader" x="323" y="20" width="60" height="30" uuid="39a642b7-37ac-4ebf-b136-835cb13270df"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Stok Awal]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="columnHeader" x="683" y="20" width="60" height="30" uuid="fc6c9887-4469-4544-ae72-b049d846867f"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Stok  Akhir]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="columnHeader" x="443" y="20" width="60" height="30" uuid="2f672046-ee9b-4aeb-88cc-19aa1f16bba8"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Stok Masuk]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="columnHeader" x="743" y="20" width="60" height="30" uuid="ed9b3e47-89e7-4b5e-9172-9dc6cd95461d"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Nilai Akhir]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="columnHeader" x="623" y="20" width="60" height="30" uuid="fbf01d93-6e44-4558-8e48-20ef1ecec544"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Nilai  Keluar]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="columnHeader" x="503" y="20" width="60" height="30" uuid="d39f40a9-20fb-4e57-bab4-ed2502752011"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Nilai Masuk]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="columnHeader" x="383" y="20" width="60" height="30" uuid="47cbbaf1-8bc9-4a50-b6ef-42936275f83d"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Nilai Awal]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="columnHeader" x="120" y="20" width="103" height="30" uuid="d4d167f5-eb75-465c-bc4e-60d56bb177ee"/>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[kategori]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="columnHeader" x="223" y="20" width="100" height="30" uuid="d8373cf3-389c-4dba-bfa1-091bca80c7ff"/>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[keterangan]]></text>
+			</staticText>
+			<textField>
+				<reportElement style="label" x="0" y="0" width="802" height="20" uuid="42d66362-e973-45ca-a17d-acb282d62900"/>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{namaBarang}]]></textFieldExpression>
+			</textField>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField pattern="#,##0.##">
+				<reportElement style="label" x="563" y="0" width="60" height="20" uuid="61492cc2-464c-4363-95ac-ed32d505ac4a"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{stokKeluar}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.##">
+				<reportElement style="label" x="323" y="0" width="60" height="20" uuid="91b64534-c568-4bba-9364-11901652a1cf"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{stokAwal}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.##">
+				<reportElement style="label" x="683" y="0" width="60" height="20" uuid="fc9ec8f2-2910-4f77-9823-335fb6c17b9d"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{stokAkhir}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.##">
+				<reportElement style="label" x="443" y="0" width="60" height="20" uuid="abf6912f-ffba-49b5-af02-bb3233022699"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{stokMasuk}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd MMM yyyy HH:mm:ss">
+				<reportElement style="label" x="0" y="0" width="120" height="20" uuid="8a72a659-b45d-46cf-8589-ba6bd63de29b"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse($F{tanggal})]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0">
+				<reportElement style="label" x="743" y="0" width="60" height="20" uuid="2c9ece00-ac61-4a39-84ce-93326ee47a3e"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nilaiAkhir}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0">
+				<reportElement style="label" x="623" y="0" width="60" height="20" uuid="b142e8da-08be-4f90-8cc3-f0be649fd730"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nilaiKeluar}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0">
+				<reportElement style="label" x="503" y="0" width="60" height="20" uuid="98b95b09-f16b-4ea2-a614-912ca4fbf7ba"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nilaiMasuk}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0">
+				<reportElement style="label" x="383" y="0" width="60" height="20" uuid="76eba927-852c-45ef-aad2-2d211dd3d73d"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nilaiAwal}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="label" mode="Transparent" x="120" y="0" width="103" height="20" uuid="342dbc02-a707-4c1e-adb7-52ad5398147d"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{kategori}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="label" x="223" y="0" width="100" height="20" uuid="ac119350-8496-443d-b3bc-d159b03309d3"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{keterangan}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="20" splitType="Stretch">
+			<staticText>
+				<reportElement x="583" y="0" width="100" height="20" uuid="b5989e56-d882-466c-bd00-c4787c68092a"/>
+				<textElement textAlignment="Right" verticalAlignment="Top">
+					<font fontName="Times New Roman" size="8"/>
+				</textElement>
+				<text><![CDATA[Print Date :  ]]></text>
+			</staticText>
+			<textField pattern="EEEEE dd MMMMM yyyy HH:mm">
+				<reportElement x="683" y="0" width="119" height="20" uuid="f6c38026-9d1c-418e-9981-708ad7e9adad"/>
+				<textElement textAlignment="Right">
+					<font fontName="Times New Roman" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="0" width="36" height="20" uuid="f6da040b-fea2-4c95-921f-a66778bb421c"/>
+				<textElement textAlignment="Right">
+					<font fontName="Times New Roman" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Page "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement x="36" y="0" width="34" height="20" uuid="86e3d874-2fad-4b1f-bd9f-6c92e473b87b"/>
+				<textElement>
+					<font fontName="Times New Roman" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+</jasperReport>

@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="dad0d932-ef61-446d-8e44-8525cbfd59c0">
+	<property name="ireport.zoom" value="1.3310000000000006"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<style name="columnHeader" mode="Opaque" forecolor="#FFFFFF" backcolor="#000099">
+		<box>
+			<topPen lineWidth="0.0" lineStyle="Solid"/>
+			<leftPen lineWidth="0.0" lineStyle="Solid"/>
+			<bottomPen lineWidth="0.0" lineStyle="Solid"/>
+			<rightPen lineWidth="0.0" lineStyle="Solid"/>
+		</box>
+		<paragraph leftIndent="5" rightIndent="5"/>
+	</style>
+	<style name="label" forecolor="#000099">
+		<paragraph leftIndent="5" rightIndent="5"/>
+	</style>
+	<style name="columnHeaderGroup" mode="Opaque" forecolor="#000099" backcolor="#DAE6FF">
+		<paragraph leftIndent="5" rightIndent="5"/>
+	</style>
+	<parameter name="namaPerusahaan" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["Sentral Indah Perdana"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="tglAkhir" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["2018-04-05"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="tglMulai" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["2018-03-05"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="subReport" class="net.sf.jasperreports.engine.JasperReport" isForPrompting="false">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[]]>
+	</queryString>
+	<field name="tglProduksi" class="java.lang.String">
+		<fieldDescription><![CDATA[tglProduksi]]></fieldDescription>
+	</field>
+	<field name="kodeProduksi" class="java.lang.String">
+		<fieldDescription><![CDATA[kodeProduksi]]></fieldDescription>
+	</field>
+	<field name="kodeBahan" class="java.lang.String">
+		<fieldDescription><![CDATA[kodeBahan]]></fieldDescription>
+	</field>
+	<field name="allBarangDetail" class="java.util.List">
+		<fieldDescription><![CDATA[allBarangDetail]]></fieldDescription>
+	</field>
+	<field name="beratDiproduksi" class="java.lang.Double">
+		<fieldDescription><![CDATA[beratDiproduksi]]></fieldDescription>
+	</field>
+	<field name="materialCost" class="java.lang.Double">
+		<fieldDescription><![CDATA[materialCost]]></fieldDescription>
+	</field>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="60" splitType="Stretch">
+			<staticText>
+				<reportElement style="label" x="170" y="40" width="10" height="20" uuid="dde1c60a-8755-4863-b4f1-dec224e56c68"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[-]]></text>
+			</staticText>
+			<textField pattern="dd MMM yyyy">
+				<reportElement style="label" x="70" y="40" width="100" height="20" uuid="c4f13d4a-c2a3-4a32-a745-3561b5454851"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[new SimpleDateFormat("yyyy-MM-dd").parse($P{tglMulai})]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement style="label" x="0" y="40" width="70" height="20" uuid="6adcd07d-dfc6-4e75-911f-b0d7cd02da07"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Tanggal  :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="label" x="0" y="0" width="555" height="40" uuid="6679ecd2-9d9a-4911-96f1-993438d235e2"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Serif" size="28" isStrikeThrough="false"/>
+				</textElement>
+				<text><![CDATA[Laporan Produksi]]></text>
+			</staticText>
+			<textField pattern="dd MMM yyyy">
+				<reportElement style="label" x="180" y="40" width="100" height="20" uuid="fdaaa7f3-8d42-4d6b-9c46-bc7c1bdbf0ed"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[new SimpleDateFormat("yyyy-MM-dd").parse($P{tglAkhir})]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="25" splitType="Stretch">
+			<textField>
+				<reportElement style="label" x="0" y="0" width="555" height="25" uuid="25734ba2-eb94-486f-9031-e5d478c43109"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Serif" size="16"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{namaPerusahaan}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="25">
+			<staticText>
+				<reportElement style="columnHeader" x="455" y="0" width="100" height="20" uuid="08dfe190-2a19-42f0-8205-588ce269089e"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Total]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="columnHeader" x="375" y="0" width="80" height="20" uuid="144ebab9-815b-4fa8-8342-a5d53f6c11a5"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Nilai Satuan]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="columnHeader" x="245" y="0" width="50" height="20" uuid="6636047e-a023-481c-aea7-6b84b08cc881"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Qty]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="columnHeader" x="295" y="0" width="80" height="20" uuid="161e9bdc-cc62-4d97-8031-da8ccdd2b117"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Satuan]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="columnHeader" x="0" y="0" width="100" height="20" uuid="270d17d7-1272-4d49-a09b-378feb1f1c18"/>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[Kode Barang]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="columnHeader" x="100" y="0" width="145" height="20" uuid="5fb3c7a4-6484-47d9-903d-8cf0c9f06ead"/>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[Nama Barang]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="40" splitType="Stretch">
+			<textField>
+				<reportElement style="label" x="0" y="0" width="100" height="20" uuid="b490269b-d24f-4059-a0c8-4122466ce5e2"/>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{kodeProduksi}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd MMM yyyy HH:mm:ss">
+				<reportElement style="label" x="100" y="0" width="455" height="20" uuid="711068bf-3089-4762-86c6-2d7f3695fcee"/>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse($F{tglProduksi})]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="label" x="0" y="20" width="245" height="20" uuid="cdc1beeb-6335-4746-a06c-b11b740f4523"/>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{kodeBahan}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.##">
+				<reportElement style="label" x="245" y="20" width="210" height="20" uuid="30d3a309-325e-41cb-8b7e-a77028e9a341"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{beratDiproduksi}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.##">
+				<reportElement style="label" x="455" y="20" width="100" height="20" uuid="64204a33-459d-4e62-8b22-b96e621b839e"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{materialCost}]]></textFieldExpression>
+			</textField>
+		</band>
+		<band height="20">
+			<subreport isUsingCache="true">
+				<reportElement x="0" y="0" width="555" height="20" uuid="00c46ee3-18ac-441f-8771-d38c9e32d0bd"/>
+				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{allBarangDetail})]]></dataSourceExpression>
+				<subreportExpression><![CDATA[$P{subReport}]]></subreportExpression>
+			</subreport>
+		</band>
+		<band height="1">
+			<line>
+				<reportElement x="0" y="0" width="555" height="1" forecolor="#00457F" uuid="fe090e04-2d42-40c0-a058-2b80c4104796"/>
+			</line>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="20" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="0" width="36" height="20" uuid="3fd62184-c83c-4ab3-ad3e-f50e14f6423b"/>
+				<textElement textAlignment="Right">
+					<font fontName="Times New Roman" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Page "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
+			</textField>
+			<textField pattern="EEEEE dd MMMMM yyyy HH:mm">
+				<reportElement x="436" y="0" width="119" height="20" uuid="6033c94c-c1ae-4e38-ade6-0f21cd353326"/>
+				<textElement textAlignment="Right">
+					<font fontName="Times New Roman" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="336" y="0" width="100" height="20" uuid="727746e3-453f-4345-b373-b0c77487a4f9"/>
+				<textElement textAlignment="Right" verticalAlignment="Top">
+					<font fontName="Times New Roman" size="8"/>
+				</textElement>
+				<text><![CDATA[Print Date :  ]]></text>
+			</staticText>
+			<textField evaluationTime="Report">
+				<reportElement x="36" y="0" width="34" height="20" uuid="a8ec72f0-a888-4a9e-a2f9-352d868bb14e"/>
+				<textElement>
+					<font fontName="Times New Roman" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+</jasperReport>

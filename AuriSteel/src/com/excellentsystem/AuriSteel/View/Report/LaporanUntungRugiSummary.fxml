@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Hyperlink?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+
+<AnchorPane id="AnchorPane" prefHeight="800.0" prefWidth="1200.0" styleClass="stage" stylesheets="@../../Resource/MyTheme.css" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.excellentsystem.AuriSteel.View.Report.LaporanUntungRugiSummaryController">
+   <children>
+      <GridPane fx:id="pane" hgap="10.0" style="-fx-background-color: seccolor6;" vgap="10.0" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="15.0">
+        <columnConstraints>
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="250.0" minWidth="10.0" prefWidth="250.0" />
+          <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+            <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="100.0" minWidth="10.0" prefWidth="50.0" />
+            <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+            <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+            <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="100.0" minWidth="50.0" prefWidth="50.0" />
+        </columnConstraints>
+        <rowConstraints>
+            <RowConstraints maxHeight="35.0" minHeight="35.0" prefHeight="35.0" vgrow="SOMETIMES" />
+          <RowConstraints maxHeight="35.0" minHeight="35.0" prefHeight="35.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="35.0" minHeight="35.0" prefHeight="35.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="35.0" minHeight="35.0" prefHeight="35.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="35.0" minHeight="35.0" prefHeight="35.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="35.0" minHeight="35.0" prefHeight="35.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="35.0" minHeight="35.0" prefHeight="35.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="35.0" minHeight="35.0" prefHeight="35.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="35.0" minHeight="35.0" prefHeight="35.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="35.0" minHeight="35.0" prefHeight="35.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="35.0" minHeight="35.0" prefHeight="35.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="35.0" minHeight="35.0" prefHeight="35.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="35.0" minHeight="35.0" prefHeight="35.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="35.0" minHeight="35.0" prefHeight="35.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="35.0" minHeight="35.0" prefHeight="35.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="35.0" minHeight="35.0" prefHeight="35.0" vgrow="SOMETIMES" />
+        </rowConstraints>
+         <padding>
+            <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+         </padding>
+         <children>
+            <AnchorPane prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: seccolor5;" GridPane.columnSpan="2147483647" GridPane.rowIndex="4" />
+            <AnchorPane prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: seccolor5;" GridPane.columnSpan="2147483647" GridPane.rowIndex="7" />
+            <AnchorPane prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: seccolor5;" GridPane.columnSpan="2147483647" GridPane.rowIndex="8" />
+            <AnchorPane prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: seccolor5;" GridPane.columnSpan="2147483647" GridPane.rowIndex="9" />
+            <AnchorPane prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: seccolor5;" GridPane.columnSpan="2147483647" GridPane.rowIndex="12" />
+            <AnchorPane prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: seccolor5;" GridPane.columnSpan="2147483647" GridPane.rowIndex="13" />
+            <AnchorPane prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: seccolor5;" GridPane.columnSpan="2147483647" GridPane.rowIndex="15" />
+            <AnchorPane prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: seccolor5;" GridPane.columnSpan="2147483647" GridPane.rowIndex="3" />
+            <Label style="-fx-font-weight: bold;" text="Operating Expenses" GridPane.rowIndex="4" />
+            <Hyperlink text="General And Administration Expenses" GridPane.rowIndex="6" />
+            <Hyperlink text="Sales Expenses" GridPane.rowIndex="5" />
+            <Hyperlink text="Revenue" GridPane.rowIndex="1" />
+            <Hyperlink text="Cost Of Revenue" GridPane.rowIndex="2" />
+            <Label style="-fx-font-weight: bold;" text="Income From Operation" GridPane.rowIndex="8" />
+            <Hyperlink text="Other Income" GridPane.rowIndex="10" />
+            <Hyperlink text="Other Charges" GridPane.rowIndex="11" />
+            <Label style="-fx-font-weight: bold;" text="Other Income (Charges)" GridPane.rowIndex="9" />
+            <Label style="-fx-font-weight: bold;" text="Income Before Tax" GridPane.rowIndex="13" />
+            <Hyperlink text="Income Tax" GridPane.rowIndex="14" />
+            <Label style="-fx-font-weight: bold;" text="Net Income" GridPane.rowIndex="15" />
+            <Label fx:id="revenueLabel" text="0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            <Label fx:id="costOfRevenueLabel" text="0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+            <Label fx:id="salesExpenseLabel" text="0" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+            <Label fx:id="generalAdministrationLabel" text="0" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+            <Label fx:id="revenue2Label" text="0" GridPane.columnIndex="4" GridPane.rowIndex="1" />
+            <Label fx:id="costOfRevenue2Label" text="0" GridPane.columnIndex="4" GridPane.rowIndex="2" />
+            <Label fx:id="grossIncomeLabel" text="0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+            <Label fx:id="grossIncome2Label" text="0" GridPane.columnIndex="4" GridPane.rowIndex="3" />
+            <Label fx:id="salesExpense2Label" text="0" GridPane.columnIndex="4" GridPane.rowIndex="5" />
+            <Label fx:id="generalAdministration2Label" text="0" GridPane.columnIndex="4" GridPane.rowIndex="6" />
+            <Label fx:id="operatingExpenseLabel" text="0" GridPane.columnIndex="1" GridPane.rowIndex="7" />
+            <Label fx:id="operatingExpense2Label" text="0" GridPane.columnIndex="4" GridPane.rowIndex="7" />
+            <Label fx:id="incomeOperatingLabel" style="-fx-font-weight: bold;" text="0" GridPane.columnIndex="1" GridPane.rowIndex="8" />
+            <Label fx:id="incomeOperating2Label" style="-fx-font-weight: bold;" text="0" GridPane.columnIndex="4" GridPane.rowIndex="8" />
+            <Label fx:id="otherIncomeLabel" text="0" GridPane.columnIndex="1" GridPane.rowIndex="10" />
+            <Label fx:id="otherIncome2Label" text="0" GridPane.columnIndex="4" GridPane.rowIndex="10" />
+            <Label fx:id="otherChargesLabel" text="0" GridPane.columnIndex="1" GridPane.rowIndex="11" />
+            <Label fx:id="otherCharges2Label" text="0" GridPane.columnIndex="4" GridPane.rowIndex="11" />
+            <Label fx:id="incomeBeforeTaxLabel" style="-fx-font-weight: bold;" text="0" GridPane.columnIndex="1" GridPane.rowIndex="13" />
+            <Label fx:id="incomeBeforeTax2Label" style="-fx-font-weight: bold;" text="0" GridPane.columnIndex="4" GridPane.rowIndex="13" />
+            <Label fx:id="totalOtherIncomeChargesLabel" text="0" GridPane.columnIndex="1" GridPane.rowIndex="12" />
+            <Label fx:id="totalOtherIncomeCharges2Label" text="0" GridPane.columnIndex="4" GridPane.rowIndex="12" />
+            <Label fx:id="incomeTaxLabel" text="0" GridPane.columnIndex="1" GridPane.rowIndex="14" />
+            <Label fx:id="netIncomeLabel" style="-fx-font-weight: bold;" text="0" GridPane.columnIndex="1" GridPane.rowIndex="15" />
+            <Label fx:id="incomeTax2Label" text="0" GridPane.columnIndex="4" GridPane.rowIndex="14" />
+            <Label fx:id="netIncome2Label" style="-fx-font-weight: bold;" text="0" GridPane.columnIndex="4" GridPane.rowIndex="15" />
+            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="5.0" GridPane.columnIndex="1" GridPane.columnSpan="2">
+               <children>
+                  <ComboBox fx:id="periodeBeforeCombo" maxWidth="1.7976931348623157E308" onAction="#getBefore" prefWidth="200.0" styleClass="combo-box-border" HBox.hgrow="ALWAYS" />
+               </children>
+            </HBox>
+            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="5.0" GridPane.columnIndex="4" GridPane.columnSpan="2">
+               <children>
+                  <ComboBox fx:id="periodeCombo" maxWidth="1.7976931348623157E308" onAction="#getNow" prefWidth="200.0" styleClass="combo-box-border" HBox.hgrow="ALWAYS" />
+               </children>
+            </HBox>
+            <Label fx:id="operatingExpensePercentage2Label" text="0" GridPane.columnIndex="5" GridPane.rowIndex="7" />
+            <Label fx:id="grossIncomePercentage2Label" text="0" GridPane.columnIndex="5" GridPane.rowIndex="3" />
+            <Label fx:id="grossIncomePercentageLabel" text="0" GridPane.columnIndex="2" GridPane.rowIndex="3" />
+            <Label fx:id="incomeOperatingPercentage2Label" text="0" GridPane.columnIndex="5" GridPane.rowIndex="8" />
+            <Label fx:id="netIncomePercentageLabel" text="0" GridPane.columnIndex="2" GridPane.rowIndex="15" />
+            <Label fx:id="operatingExpensePercentageLabel" text="0" GridPane.columnIndex="2" GridPane.rowIndex="7" />
+            <Label fx:id="incomeOperatingPercentageLabel" text="0" GridPane.columnIndex="2" GridPane.rowIndex="8" />
+            <Label fx:id="incomeBeforeTaxPercentageLabel" text="0" GridPane.columnIndex="2" GridPane.rowIndex="13" />
+            <Label fx:id="incomeBeforeTaxPercentage2Label" text="0" GridPane.columnIndex="5" GridPane.rowIndex="13" />
+            <Label fx:id="netIncomePercentage2Label" text="0" GridPane.columnIndex="5" GridPane.rowIndex="15" />
+            <Separator orientation="VERTICAL" prefHeight="200.0" GridPane.columnIndex="3" GridPane.rowIndex="1" GridPane.rowSpan="2147483647" />
+         </children>
+      </GridPane>
+   </children>
+</AnchorPane>

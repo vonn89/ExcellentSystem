@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+
+<AnchorPane id="AnchorPane" prefHeight="600.0" prefWidth="1000.0" styleClass="stage" stylesheets="@../Resource/MyTheme.css" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.excellentsystem.AuriSteel.View.DataAbsensiController">
+   <children>
+      <GridPane hgap="10.0" layoutX="115.0" layoutY="86.0" vgap="5.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+        <columnConstraints>
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="200.0" minWidth="10.0" prefWidth="100.0" />
+          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+        </columnConstraints>
+        <rowConstraints>
+          <RowConstraints maxHeight="30.0" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="30.0" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+        </rowConstraints>
+         <padding>
+            <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
+         </padding>
+         <children>
+            <TableView fx:id="pegawaiTable" prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="1" GridPane.rowSpan="2147483647">
+              <columns>
+                <TableColumn fx:id="namaColumn" prefWidth="75.0" text="Nama" />
+              </columns>
+               <columnResizePolicy>
+                  <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+               </columnResizePolicy>
+            </TableView>
+            <TableView fx:id="absensiTable" prefHeight="200.0" prefWidth="200.0" tableMenuButtonVisible="true" GridPane.columnIndex="1" GridPane.rowIndex="1">
+              <columns>
+                  <TableColumn fx:id="hariColumn" prefWidth="75.0" text="Hari" />
+                <TableColumn fx:id="tanggalColumn" prefWidth="75.0" text="Tanggal" />
+                <TableColumn fx:id="jamMasukColumn" prefWidth="75.0" text="Jam Masuk" />
+                  <TableColumn fx:id="jamPulangColumn" prefWidth="75.0" text="Jam Pulang" />
+                  <TableColumn fx:id="absenMasukColumn" prefWidth="75.0" text="Absen Masuk" />
+                  <TableColumn fx:id="absenPulangColumn" prefWidth="75.0" text="Absen Pulang" />
+                  <TableColumn fx:id="waktuKerjaColumn" prefWidth="75.0" text="Waktu Kerja" />
+                  <TableColumn fx:id="terlambatColumn" prefWidth="75.0" text="Terlambat" />
+                  <TableColumn fx:id="lemburColumn" prefWidth="75.0" text="Lembur" />
+                  <TableColumn fx:id="lemburMalamColumn" prefWidth="75.0" text="Lembur Plus" />
+                  <TableColumn fx:id="keteranganColumn" maxWidth="10000.0" prefWidth="75.0" text="Keterangan" />
+              </columns>
+               <columnResizePolicy>
+                  <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+               </columnResizePolicy>
+            </TableView>
+            <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="10.0" GridPane.columnSpan="2147483647">
+               <children>
+                  <Label styleClass="label-header" text="Januari 2020" />
+               </children>
+            </HBox>
+            <HBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="200.0" spacing="5.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
+               <children>
+                  <Label layoutX="417.0" layoutY="17.0" text="Total Hari Kerja" />
+                  <Label fx:id="totalHariKerjaLabel" layoutX="516.0" layoutY="17.0" style="-fx-font-weight: bold;" text="0 Hari" />
+                  <Label text="Total Jam Kerja" />
+                  <Label fx:id="totalJamKerjaLabel" style="-fx-font-weight: bold;" text="0 Jam" />
+                  <Label layoutX="10.0" layoutY="10.0" text="Terlambat" />
+                  <Label fx:id="totalTerlambatLabel" layoutX="104.0" layoutY="10.0" style="-fx-font-weight: bold;" text="0" />
+                  <Label fx:id="totalWaktuTerlambatLabel" layoutX="165.0" layoutY="10.0" style="-fx-font-weight: bold;" text="( 0 menit )" />
+                  <Label layoutX="111.0" layoutY="10.0" text="Lembur" />
+                  <Label fx:id="totalLemburLabel" layoutX="165.0" layoutY="10.0" style="-fx-font-weight: bold;" text="0 Jam" />
+               </children>
+            </HBox>
+         </children>
+      </GridPane>
+   </children>
+</AnchorPane>

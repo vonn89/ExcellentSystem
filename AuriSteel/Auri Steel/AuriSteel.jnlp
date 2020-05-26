@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<jnlp spec="1.0" xmlns:jfx="http://javafx.com" href="AuriSteel.jnlp">
+  <information>
+    <title>AuriSteel</title>
+    <vendor>Excellent Systems</vendor>
+    <description>null</description>
+  <shortcut><desktop/></shortcut>
+  </information>
+  <resources>
+    <j2se version="1.6+" href="http://java.sun.com/products/autodl/j2se"/>
+    <jar href="AuriSteel.jar" size="4868246" download="eager" />
+    <jar href="lib\animal-sniffer-annotations-1.17.jar" size="3448" download="eager" />
+    <jar href="lib\api-common-1.8.1.jar" size="45087" download="eager" />
+    <jar href="lib\auto-value-annotations-1.6.6.jar" size="5923" download="eager" />
+    <jar href="lib\checker-compat-qual-2.5.5.jar" size="5852" download="eager" />
+    <jar href="lib\com.lowagie.text-2.1.7.jar" size="1782376" download="eager" />
+    <jar href="lib\commons-beanutils-1.8.0.jar" size="231320" download="eager" />
+    <jar href="lib\commons-codec-1.10.jar" size="284184" download="eager" />
+    <jar href="lib\commons-codec-1.11.jar" size="335042" download="eager" />
+    <jar href="lib\commons-collections-2.1.1.jar" size="175426" download="eager" />
+    <jar href="lib\commons-digester-2.1.jar" size="196768" download="eager" />
+    <jar href="lib\commons-logging-1.1.1.jar" size="60841" download="eager" />
+    <jar href="lib\commons-logging-1.2.jar" size="61829" download="eager" />
+    <jar href="lib\commons-net-3.6-sources.jar" size="435798" download="eager" />
+    <jar href="lib\commons-net-3.6.jar" size="307410" download="eager" />
+    <jar href="lib\commons-net-examples-3.6.jar" size="84913" download="eager" />
+    <jar href="lib\curvesapi-1.03.jar" size="92241" download="eager" />
+    <jar href="lib\error_prone_annotations-2.3.2.jar" size="13166" download="eager" />
+    <jar href="lib\failureaccess-1.0.1.jar" size="4617" download="eager" />
+    <jar href="lib\gax-1.48.1.jar" size="322014" download="eager" />
+    <jar href="lib\gax-httpjson-0.65.1.jar" size="70425" download="eager" />
+    <jar href="lib\google-api-client-1.30.2.jar" size="205702" download="eager" />
+    <jar href="lib\google-api-services-storage-v1-rev20190624-1.30.1.jar" size="185406" download="eager" />
+    <jar href="lib\google-auth-library-credentials-0.17.1.jar" size="5667" download="eager" />
+    <jar href="lib\google-auth-library-oauth2-http-0.17.1.jar" size="103480" download="eager" />
+    <jar href="lib\google-cloud-core-1.90.0.jar" size="122367" download="eager" />
+    <jar href="lib\google-cloud-core-http-1.90.0.jar" size="15068" download="eager" />
+    <jar href="lib\google-cloud-storage-1.90.0.jar" size="310312" download="eager" />
+    <jar href="lib\google-http-client-1.31.0.jar" size="282214" download="eager" />
+    <jar href="lib\google-http-client-appengine-1.31.0.jar" size="17893" download="eager" />
+    <jar href="lib\google-http-client-jackson2-1.31.0.jar" size="8365" download="eager" />
+    <jar href="lib\google-oauth-client-1.30.1.jar" size="66723" download="eager" />
+    <jar href="lib\groovy-all-2.0.1.jar" size="6191960" download="eager" />
+    <jar href="lib\grpc-context-1.19.0.jar" size="29016" download="eager" />
+    <jar href="lib\gson-2.8.5.jar" size="241622" download="eager" />
+    <jar href="lib\guava-18.0.jar" size="2256213" download="eager" />
+    <jar href="lib\httpclient-4.5.9.jar" size="774384" download="eager" />
+    <jar href="lib\httpcore-4.4.11.jar" size="326874" download="eager" />
+    <jar href="lib\j2objc-annotations-1.3.jar" size="8781" download="eager" />
+    <jar href="lib\jackson-core-2.9.9.jar" size="325632" download="eager" />
+    <jar href="lib\jasperreports-5.1.0.jar" size="4412857" download="eager" />
+    <jar href="lib\jasperreports-applet-5.1.0.jar" size="499367" download="eager" />
+    <jar href="lib\jasperreports-fonts-5.1.0.jar" size="2478082" download="eager" />
+    <jar href="lib\jasperreports-javaflow-5.1.0.jar" size="4455296" download="eager" />
+    <jar href="lib\javax.annotation-api-1.3.2.jar" size="26586" download="eager" />
+    <jar href="lib\jcommon-1.0.21.jar" size="323663" download="eager" />
+    <jar href="lib\jdt-compiler-3.1.1.jar" size="1212369" download="eager" />
+    <jar href="lib\jfreechart-1.0.17.jar" size="1544449" download="eager" />
+    <jar href="lib\jsr305-3.0.2.jar" size="19936" download="eager" />
+    <jar href="lib\junit-4.12.jar" size="314932" download="eager" />
+    <jar href="lib\listenablefuture-9999.0-empty-to-avoid-conflict-with-guava.jar" size="2199" download="eager" />
+    <jar href="lib\log4j-1.2.17.jar" size="489884" download="eager" />
+    <jar href="lib\mysql-connector-java-5.1.23-bin.jar" size="834126" download="eager" />
+    <jar href="lib\opencensus-api-0.21.0.jar" size="351573" download="eager" />
+    <jar href="lib\opencensus-contrib-http-util-0.21.0.jar" size="23313" download="eager" />
+    <jar href="lib\poi-3.15-beta1.jar" size="2538750" download="eager" />
+    <jar href="lib\poi-examples-3.15-beta1.jar" size="341726" download="eager" />
+    <jar href="lib\poi-excelant-3.15-beta1.jar" size="31570" download="eager" />
+    <jar href="lib\poi-ooxml-3.15-beta1.jar" size="1292287" download="eager" />
+    <jar href="lib\poi-ooxml-schemas-3.15-beta1.jar" size="5920793" download="eager" />
+    <jar href="lib\poi-scratchpad-3.15-beta1.jar" size="1320130" download="eager" />
+    <jar href="lib\proto-google-common-protos-1.16.0.jar" size="1348545" download="eager" />
+    <jar href="lib\proto-google-iam-v1-0.12.0.jar" size="112431" download="eager" />
+    <jar href="lib\protobuf-java-3.9.1.jar" size="1635825" download="eager" />
+    <jar href="lib\protobuf-java-util-3.9.1.jar" size="73224" download="eager" />
+    <jar href="lib\threetenbp-1.3.3.jar" size="511401" download="eager" />
+    <jar href="lib\toplink-essentials-agent.jar" size="9735" download="eager" />
+    <jar href="lib\toplink-essentials.jar" size="2437382" download="eager" />
+    <jar href="lib\xmlbeans-2.6.0.jar" size="2758931" download="eager" />
+  </resources>
+  <applet-desc  width="800" height="600" main-class="com.javafx.main.NoJavaFXFallback"  name="AuriSteel" >
+    <param name="requiredFXVersion" value="8.0+"/>
+  </applet-desc>
+  <jfx:javafx-desc  width="800" height="600" main-class="com.excellentsystem.AuriSteel.Main"  name="AuriSteel" />
+  <update check="always"/>
+</jnlp>
