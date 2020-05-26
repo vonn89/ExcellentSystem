@@ -222,9 +222,11 @@ public class DataUserController  {
         allOtoritas.add("Penjualan Grosir Besar");
         allOtoritas.add("Penjualan Grosir");
         allOtoritas.add("Penjualan Retail");
+        allOtoritas.add("Data Pelanggan");
         allOtoritas.add("Data Barang");
         allOtoritas.add("Stok Barang");
         allOtoritas.add("Data Penjualan");
+        allOtoritas.add("Data Pembelian");
         allOtoritas.add("Keuangan");
         allOtoritas.add("Laporan");
         allOtoritas.add("Pengaturan");
