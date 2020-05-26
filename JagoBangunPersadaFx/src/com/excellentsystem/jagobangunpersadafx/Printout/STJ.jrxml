@@ -1,0 +1,870 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="SuratTandaJadi" pageWidth="595" pageHeight="842" columnWidth="483" leftMargin="56" rightMargin="56" topMargin="28" bottomMargin="28" isFloatColumnFooter="true" uuid="708404ea-03f0-4d9a-99fb-f8f07042c7b0">
+	<property name="ireport.zoom" value="1.210000000000001"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<style name="style1" pattern="" fontName="Times New Roman" fontSize="12">
+		<paragraph lineSpacing="1_1_2"/>
+	</style>
+	<style name="table">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TH" mode="Opaque" backcolor="#F0F8FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_CH" mode="Opaque" backcolor="#BFE1FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<subDataset name="dataset1" uuid="16009ad8-554c-47b8-b9ca-9be627c711fc"/>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["C:\\Users\\Xtreme\\Google Drive\\JagoBangunPersadaFx\\src\\jagobangunpersadafx\\PrintOut\\"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="tglSTJ" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="tahunPBB" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["2018"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="SubReportParam" class="net.sf.jasperreports.engine.JasperReport" isForPrompting="false"/>
+	<parameter name="header" class="java.lang.Object" isForPrompting="false"/>
+	<parameter name="watermark" class="java.lang.Object" isForPrompting="false"/>
+	<queryString>
+		<![CDATA[]]>
+	</queryString>
+	<field name="jumlahRp" class="java.lang.Double">
+		<fieldDescription><![CDATA[jumlahRp]]></fieldDescription>
+	</field>
+	<field name="keterangan" class="java.lang.String">
+		<fieldDescription><![CDATA[keterangan]]></fieldDescription>
+	</field>
+	<field name="noSTJ" class="java.lang.String">
+		<fieldDescription><![CDATA[noSTJ]]></fieldDescription>
+	</field>
+	<field name="tglSTJ" class="java.lang.String">
+		<fieldDescription><![CDATA[tglSTJ]]></fieldDescription>
+	</field>
+	<field name="allDetail" class="java.util.List">
+		<fieldDescription><![CDATA[allDetail]]></fieldDescription>
+	</field>
+	<field name="nama" class="java.lang.String">
+		<fieldDescription><![CDATA[customer.nama]]></fieldDescription>
+	</field>
+	<field name="luasTanah" class="java.lang.Double">
+		<fieldDescription><![CDATA[property.luasTanah]]></fieldDescription>
+	</field>
+	<field name="hargaJual" class="java.lang.Double">
+		<fieldDescription><![CDATA[property.hargaJual]]></fieldDescription>
+	</field>
+	<field name="namaProperty" class="java.lang.String">
+		<fieldDescription><![CDATA[property.namaProperty]]></fieldDescription>
+	</field>
+	<field name="tipe" class="java.lang.String">
+		<fieldDescription><![CDATA[property.tipe]]></fieldDescription>
+	</field>
+	<field name="alamat" class="java.lang.String">
+		<fieldDescription><![CDATA[customer.alamat]]></fieldDescription>
+	</field>
+	<field name="email" class="java.lang.String">
+		<fieldDescription><![CDATA[customer.email]]></fieldDescription>
+	</field>
+	<field name="noHandphone" class="java.lang.String">
+		<fieldDescription><![CDATA[customer.noHandphone]]></fieldDescription>
+	</field>
+	<field name="noKTP" class="java.lang.String">
+		<fieldDescription><![CDATA[customer.noKTP]]></fieldDescription>
+	</field>
+	<field name="noNPWP" class="java.lang.String">
+		<fieldDescription><![CDATA[customer.noNPWP]]></fieldDescription>
+	</field>
+	<field name="noTelp" class="java.lang.String">
+		<fieldDescription><![CDATA[customer.noTelp]]></fieldDescription>
+	</field>
+	<field name="luasBangunan" class="java.lang.Double">
+		<fieldDescription><![CDATA[property.luasBangunan]]></fieldDescription>
+	</field>
+	<field name="diskon" class="java.lang.Double">
+		<fieldDescription><![CDATA[property.diskon]]></fieldDescription>
+	</field>
+	<background>
+		<band height="786">
+			<image vAlign="Middle">
+				<reportElement positionType="Float" mode="Transparent" x="0" y="107" width="483" height="679" uuid="e0c7dd8c-43d4-4b0a-97d2-be0e7cafa11c"/>
+				<imageExpression><![CDATA[$P{watermark}]]></imageExpression>
+			</image>
+		</band>
+	</background>
+	<title>
+		<band height="657" splitType="Stretch">
+			<image>
+				<reportElement x="0" y="0" width="483" height="107" uuid="8687c206-5f4e-4191-bfec-a8ba38ed0220"/>
+				<imageExpression><![CDATA[$P{header}]]></imageExpression>
+			</image>
+			<textField isBlankWhenNull="true">
+				<reportElement style="style1" x="160" y="207" width="323" height="20" uuid="35470b0b-364b-46d7-a3c9-ea298944a6f7"/>
+				<textElement verticalAlignment="Top">
+					<font fontName="Times New Roman" size="12" pdfFontName="Times-Roman" isPdfEmbedded="true"/>
+					<paragraph lineSpacing="1_1_2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nama}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement style="style1" x="0" y="207" width="150" height="20" uuid="c7961f6f-889f-4a07-a862-ed3a9c012aa5"/>
+				<textElement textAlignment="Justified" verticalAlignment="Top">
+					<font fontName="Times New Roman" size="12" pdfFontName="Times-Roman" isPdfEmbedded="true"/>
+					<paragraph lineSpacing="1_1_2"/>
+				</textElement>
+				<text><![CDATA[Nama]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="style1" x="0" y="440" width="120" height="20" uuid="50b0622a-6fce-4875-be8a-4d3d2ae50971"/>
+				<textElement textAlignment="Justified" verticalAlignment="Top">
+					<font fontName="Times New Roman" size="12" pdfFontName="Times-Roman" isPdfEmbedded="true"/>
+					<paragraph lineSpacing="1_1_2"/>
+				</textElement>
+				<text><![CDATA[1. Lokasi]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="style1" x="0" y="460" width="120" height="20" uuid="44fd1723-f541-4fba-b0cf-c366ca690df9"/>
+				<textElement textAlignment="Justified" verticalAlignment="Top">
+					<font fontName="Times New Roman" size="12" pdfFontName="Times-Roman" isPdfEmbedded="true"/>
+					<paragraph lineSpacing="1_1_2"/>
+				</textElement>
+				<text><![CDATA[2. Tipe]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="style1" x="0" y="480" width="120" height="20" uuid="77d77c0c-08a2-488b-a695-7172604f84d4"/>
+				<textElement textAlignment="Justified" verticalAlignment="Top">
+					<font fontName="Times New Roman" size="12" pdfFontName="Times-Roman" isPdfEmbedded="true"/>
+					<paragraph lineSpacing="1_1_2"/>
+				</textElement>
+				<text><![CDATA[3. Luas Tanah]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="style1" x="0" y="500" width="120" height="20" uuid="43e0c0be-3704-4b49-a145-75506805ee4b"/>
+				<textElement textAlignment="Justified" verticalAlignment="Top">
+					<font fontName="Times New Roman" size="12" pdfFontName="Times-Roman" isPdfEmbedded="true"/>
+					<paragraph lineSpacing="1_1_2"/>
+				</textElement>
+				<text><![CDATA[4. Luas Bangunan]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="style1" x="0" y="520" width="120" height="20" uuid="45c3c541-3cf4-4bac-9d9d-cabc7e193459"/>
+				<textElement textAlignment="Justified" verticalAlignment="Top">
+					<font fontName="Times New Roman" size="12" pdfFontName="Times-Roman" isPdfEmbedded="true"/>
+					<paragraph lineSpacing="1_1_2"/>
+				</textElement>
+				<text><![CDATA[5. Harga Jual]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="style1" x="0" y="559" width="120" height="20" uuid="a43146a6-d5fd-419b-acd5-fd6d44f146b0"/>
+				<textElement textAlignment="Justified" verticalAlignment="Top">
+					<font fontName="Times New Roman" size="12" pdfFontName="Times-Roman" isPdfEmbedded="true"/>
+					<paragraph lineSpacing="1_1_2"/>
+				</textElement>
+				<text><![CDATA[7. Fasilitas yang didapat]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="style1" x="150" y="227" width="10" height="20" uuid="38d53bea-31b8-4461-99ec-97f362e637c5"/>
+				<textElement textAlignment="Justified" verticalAlignment="Top">
+					<font fontName="Times New Roman" size="12" pdfFontName="Times-Roman" isPdfEmbedded="true"/>
+					<paragraph lineSpacing="1_1_2"/>
+				</textElement>
+				<text><![CDATA[: ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="style1" x="120" y="440" width="10" height="20" uuid="756751b1-0edf-4265-9044-668753f5a956"/>
+				<textElement textAlignment="Justified" verticalAlignment="Top">
+					<font fontName="Times New Roman" size="12" pdfFontName="Times-Roman" isPdfEmbedded="true"/>
+					<paragraph lineSpacing="1_1_2"/>
+				</textElement>
+				<text><![CDATA[: ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="style1" x="120" y="460" width="10" height="20" uuid="7399c09c-25b3-405f-90b5-311c887f70f8"/>
+				<textElement textAlignment="Justified" verticalAlignment="Top">
+					<font fontName="Times New Roman" size="12" pdfFontName="Times-Roman" isPdfEmbedded="true"/>
+					<paragraph lineSpacing="1_1_2"/>
+				</textElement>
+				<text><![CDATA[: ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="style1" x="120" y="480" width="10" height="20" uuid="799a00a8-fc30-44cf-88b0-913ec75d65a4"/>
+				<textElement textAlignment="Justified" verticalAlignment="Top">
+					<font fontName="Times New Roman" size="12" pdfFontName="Times-Roman" isPdfEmbedded="true"/>
+					<paragraph lineSpacing="1_1_2"/>
+				</textElement>
+				<text><![CDATA[: ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="style1" x="120" y="500" width="10" height="20" uuid="8ec08df1-2a91-496a-8026-7535813435b7"/>
+				<textElement textAlignment="Justified" verticalAlignment="Top">
+					<font fontName="Times New Roman" size="12" pdfFontName="Times-Roman" isPdfEmbedded="true"/>
+					<paragraph lineSpacing="1_1_2"/>
+				</textElement>
+				<text><![CDATA[: ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="style1" x="120" y="520" width="10" height="20" uuid="a4332d30-302a-4bf2-961d-01ae753e10c4"/>
+				<textElement textAlignment="Justified" verticalAlignment="Top">
+					<font fontName="Times New Roman" size="12" pdfFontName="Times-Roman" isPdfEmbedded="true"/>
+					<paragraph lineSpacing="1_1_2"/>
+				</textElement>
+				<text><![CDATA[: ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="style1" x="120" y="559" width="10" height="20" uuid="d349bdb1-bada-4689-b064-9b185ae38f27"/>
+				<textElement textAlignment="Justified" verticalAlignment="Top">
+					<font fontName="Times New Roman" size="12" pdfFontName="Times-Roman" isPdfEmbedded="true"/>
+					<paragraph lineSpacing="1_1_2"/>
+				</textElement>
+				<text><![CDATA[: ]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement style="style1" x="130" y="440" width="353" height="20" uuid="7811826e-2651-4db6-acb1-22377813661e"/>
+				<textElement verticalAlignment="Top">
+					<font fontName="Times New Roman" size="12" pdfFontName="Times-Roman" isPdfEmbedded="true"/>
+					<paragraph lineSpacing="1_1_2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{namaProperty}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement style="style1" x="130" y="460" width="353" height="20" uuid="4e796d61-e8fe-425e-b3f2-9523200f7c18"/>
+				<textElement verticalAlignment="Top">
+					<font fontName="Times New Roman" size="12" pdfFontName="Times-Roman" isPdfEmbedded="true"/>
+					<paragraph lineSpacing="1_1_2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{tipe}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0" isBlankWhenNull="true">
+				<reportElement style="style1" x="130" y="480" width="30" height="20" uuid="02de2514-0734-49eb-9c10-18d7d0d15adb"/>
+				<textElement verticalAlignment="Top">
+					<font fontName="Times New Roman" size="12" pdfFontName="Times-Roman" isPdfEmbedded="true"/>
+					<paragraph lineSpacing="1_1_2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{luasTanah}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement style="style1" x="130" y="520" width="20" height="20" uuid="0afa3e3b-7ae2-4a60-98c3-09eadf905847"/>
+				<textElement textAlignment="Justified" verticalAlignment="Top">
+					<font fontName="Times New Roman" size="12" pdfFontName="Times-Roman" isPdfEmbedded="true"/>
+					<paragraph lineSpacing="1_1_2"/>
+				</textElement>
+				<text><![CDATA[Rp]]></text>
+			</staticText>
+			<textField pattern="#,##0.-" isBlankWhenNull="true">
+				<reportElement style="style1" x="150" y="520" width="100" height="20" uuid="8eda759b-8e7b-43e3-ae3b-046474474300"/>
+				<textElement verticalAlignment="Top">
+					<font fontName="Times New Roman" size="12" pdfFontName="Times-Roman" isPdfEmbedded="true"/>
+					<paragraph lineSpacing="1_1_2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{hargaJual}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement style="style1" stretchType="RelativeToBandHeight" x="130" y="559" width="353" height="20" isPrintWhenDetailOverflows="true" uuid="1b52bd00-ef6a-46ce-b386-62187514dfc8"/>
+				<textElement textAlignment="Justified" verticalAlignment="Top">
+					<font fontName="Times New Roman" size="12" pdfFontName="Times-Roman" isPdfEmbedded="true"/>
+					<paragraph lineSpacing="1_1_2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{keterangan}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement style="style1" x="160" y="480" width="323" height="20" uuid="18c1677b-988e-4caf-8793-35d737d9bb67"/>
+				<textElement textAlignment="Justified" verticalAlignment="Top">
+					<font fontName="Times New Roman" size="12" pdfFontName="Times-Roman" isPdfEmbedded="true"/>
+					<paragraph lineSpacing="1_1_2"/>
+				</textElement>
+				<text><![CDATA[m²]]></text>
+			</staticText>
+			<textField pattern="dd MMMMM yyyy">
+				<reportElement style="style1" x="0" y="167" width="483" height="20" uuid="fc13ada5-373b-488c-8a3d-ffe17113f914"/>
+				<textElement textAlignment="Justified" verticalAlignment="Top">
+					<font fontName="Times New Roman" size="12" pdfFontName="Times-Roman" isPdfEmbedded="true"/>
+					<paragraph lineSpacing="1_1_2"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Pada hari ini, tanggal "+$P{tglSTJ}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement style="style1" x="0" y="227" width="150" height="20" uuid="e5dbc2ef-ed1c-4b03-ba67-22a8086d5f30"/>
+				<textElement textAlignment="Justified" verticalAlignment="Top">
+					<font fontName="Times New Roman" size="12" pdfFontName="Times-Roman" isPdfEmbedded="true"/>
+					<paragraph lineSpacing="1_1_2"/>
+				</textElement>
+				<text><![CDATA[Alamat Korespondensi]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="style1" x="243" y="373" width="10" height="20" uuid="68606cef-0445-420d-bf8e-4041e9ace23f"/>
+				<textElement textAlignment="Justified" verticalAlignment="Top">
+					<font fontName="Times New Roman" size="12" pdfFontName="Times-Roman" isPdfEmbedded="true"/>
+					<paragraph lineSpacing="1_1_2"/>
+				</textElement>
+				<text><![CDATA[: ]]></text>
+			</staticText>
+			<textField>
+				<reportElement style="style1" x="0" y="127" width="483" height="20" uuid="0a371408-8eec-4029-9467-205031ceac3b"/>
+				<textElement textAlignment="Center" verticalAlignment="Top">
+					<font fontName="Times New Roman" size="12" pdfFontName="Times-Roman" isPdfEmbedded="true"/>
+					<paragraph lineSpacing="1_1_2"/>
+				</textElement>
+				<textFieldExpression><![CDATA["No : "+$F{noSTJ}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement style="style1" x="0" y="347" width="483" height="20" uuid="46082ed0-6b24-4f49-834d-0ca89411bd42"/>
+				<textElement textAlignment="Justified" verticalAlignment="Top">
+					<font fontName="Times New Roman" size="12" pdfFontName="Times-Roman" isPdfEmbedded="true"/>
+					<paragraph lineSpacing="1_1_2"/>
+				</textElement>
+				<text><![CDATA[( Selanjutnya disebut sebagai PEMBELI )]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="style1" x="0" y="380" width="483" height="40" uuid="ccf04dd7-cb5b-4e68-94a1-0250c36f6218"/>
+				<textElement textAlignment="Justified" verticalAlignment="Top">
+					<font fontName="Times New Roman" size="12" pdfFontName="Times-Roman" isPdfEmbedded="true"/>
+					<paragraph lineSpacing="1_1_2"/>
+				</textElement>
+				<text><![CDATA[PEMBELI dengan ini setuju untuk memesan 1 (satu) unit KAVLING/RUMAH/RUKO* dari PT JAGO BANGUN PERSADA, berkedudukan di Kudus (selanjutnya disebut PT JBP).]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="style1" x="0" y="420" width="483" height="20" uuid="98d5d01f-11fa-4589-a3c1-135a4b7faeda"/>
+				<textElement textAlignment="Justified" verticalAlignment="Top">
+					<font fontName="Times New Roman" size="12" pdfFontName="Times-Roman" isPdfEmbedded="true"/>
+					<paragraph lineSpacing="1_1_2"/>
+				</textElement>
+				<text><![CDATA[sebagaimana diuraikan di bawah ini  :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="107" width="483" height="20" uuid="410c00f7-acdc-4f98-a142-4297194abbd4"/>
+				<textElement textAlignment="Center" verticalAlignment="Top">
+					<font fontName="Times New Roman" size="16" isUnderline="true"/>
+					<paragraph lineSpacing="1_1_2"/>
+				</textElement>
+				<text><![CDATA[SURAT PEMESANAN UNIT]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="187" width="100" height="20" uuid="57cb0240-613e-4e07-8155-b4f3f71dce32"/>
+				<textElement textAlignment="Justified" verticalAlignment="Top">
+					<font fontName="Times New Roman" size="12"/>
+					<paragraph lineSpacing="1_1_2"/>
+				</textElement>
+				<text><![CDATA[DATA PEMBELI  :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="style1" x="0" y="247" width="150" height="20" uuid="5c1f5c3c-48a8-492c-af8d-1f0620e56b4a"/>
+				<textElement textAlignment="Justified" verticalAlignment="Top">
+					<font fontName="Times New Roman" size="12" pdfFontName="Times-Roman" isPdfEmbedded="true"/>
+					<paragraph lineSpacing="1_1_2"/>
+				</textElement>
+				<text><![CDATA[No. Telp]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="style1" x="0" y="287" width="150" height="20" uuid="421357b0-4516-40f0-a857-90c9433f2d1c"/>
+				<textElement textAlignment="Justified" verticalAlignment="Top">
+					<font fontName="Times New Roman" size="12" pdfFontName="Times-Roman" isPdfEmbedded="true"/>
+					<paragraph lineSpacing="1_1_2"/>
+				</textElement>
+				<text><![CDATA[Email]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="style1" x="0" y="307" width="150" height="20" uuid="caa96626-e949-4741-b7e7-c5f178d788ff"/>
+				<textElement textAlignment="Justified" verticalAlignment="Top">
+					<font fontName="Times New Roman" size="12" pdfFontName="Times-Roman" isPdfEmbedded="true"/>
+					<paragraph lineSpacing="1_1_2"/>
+				</textElement>
+				<text><![CDATA[No. KTP]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="style1" x="0" y="327" width="150" height="20" uuid="3f6ca754-5a4c-430e-9bb0-6aebf5b18219"/>
+				<textElement textAlignment="Justified" verticalAlignment="Top">
+					<font fontName="Times New Roman" size="12" pdfFontName="Times-Roman" isPdfEmbedded="true"/>
+					<paragraph lineSpacing="1_1_2"/>
+				</textElement>
+				<text><![CDATA[NPWP]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="style1" x="150" y="287" width="10" height="20" uuid="c6cb4d67-2816-43f0-bbe8-da69e40df4f7"/>
+				<textElement textAlignment="Justified" verticalAlignment="Top">
+					<font fontName="Times New Roman" size="12" pdfFontName="Times-Roman" isPdfEmbedded="true"/>
+					<paragraph lineSpacing="1_1_2"/>
+				</textElement>
+				<text><![CDATA[: ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="style1" x="150" y="307" width="10" height="20" uuid="0f617e06-7f34-416e-beb5-4b8f003ced10"/>
+				<textElement textAlignment="Justified" verticalAlignment="Top">
+					<font fontName="Times New Roman" size="12" pdfFontName="Times-Roman" isPdfEmbedded="true"/>
+					<paragraph lineSpacing="1_1_2"/>
+				</textElement>
+				<text><![CDATA[: ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="style1" x="150" y="327" width="10" height="20" uuid="de85b700-7502-4b8b-8bd0-f0a47d4cb364"/>
+				<textElement textAlignment="Justified" verticalAlignment="Top">
+					<font fontName="Times New Roman" size="12" pdfFontName="Times-Roman" isPdfEmbedded="true"/>
+					<paragraph lineSpacing="1_1_2"/>
+				</textElement>
+				<text><![CDATA[: ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="style1" x="150" y="207" width="10" height="20" uuid="de0ab30b-6894-477e-8c00-8d26ad5dfd6c"/>
+				<textElement textAlignment="Justified" verticalAlignment="Top">
+					<font fontName="Times New Roman" size="12" pdfFontName="Times-Roman" isPdfEmbedded="true"/>
+					<paragraph lineSpacing="1_1_2"/>
+				</textElement>
+				<text><![CDATA[: ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="style1" x="150" y="247" width="10" height="20" uuid="b6d6fa0c-eef6-4d22-aa04-9bad7efa2dcd"/>
+				<textElement textAlignment="Justified" verticalAlignment="Top">
+					<font fontName="Times New Roman" size="12" pdfFontName="Times-Roman" isPdfEmbedded="true"/>
+					<paragraph lineSpacing="1_1_2"/>
+				</textElement>
+				<text><![CDATA[: ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="style1" x="160" y="500" width="323" height="20" uuid="44f81104-0b2f-4818-854e-545d2c4572ff"/>
+				<textElement textAlignment="Justified" verticalAlignment="Top">
+					<font fontName="Times New Roman" size="12" pdfFontName="Times-Roman" isPdfEmbedded="true"/>
+					<paragraph lineSpacing="1_1_2"/>
+				</textElement>
+				<text><![CDATA[m²]]></text>
+			</staticText>
+			<textField pattern="#,##0" isBlankWhenNull="true">
+				<reportElement style="style1" x="130" y="500" width="30" height="20" uuid="7e32fed7-9a29-4e65-93dd-dd7cf55b8086"/>
+				<textElement verticalAlignment="Top">
+					<font fontName="Times New Roman" size="12" pdfFontName="Times-Roman" isPdfEmbedded="true"/>
+					<paragraph lineSpacing="1_1_2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{luasBangunan}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="250" y="520" width="233" height="20" uuid="e9669841-43bb-4e64-9dc2-a53e35a7593f"/>
+				<textElement textAlignment="Justified" verticalAlignment="Top">
+					<font fontName="Times New Roman" size="12"/>
+					<paragraph lineSpacing="1_1_2"/>
+				</textElement>
+				<textFieldExpression><![CDATA["( Harga sudah termasuk:  AJB & Pajak )"]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="160" y="227" width="323" height="20" uuid="afa4c05f-c231-4d21-8dbf-5f561e5a7c5b"/>
+				<textElement verticalAlignment="Top">
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{alamat}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="160" y="247" width="323" height="20" uuid="d936cb2a-e551-4ae2-8ef0-1b38904eca48"/>
+				<textElement verticalAlignment="Top">
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{noTelp}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="160" y="307" width="323" height="20" uuid="b3d52406-6849-4701-adc5-c2d08a0f3b57"/>
+				<textElement verticalAlignment="Top">
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{noKTP}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="160" y="327" width="323" height="20" uuid="3405b880-cc49-4ac2-9468-5303125e1493"/>
+				<textElement verticalAlignment="Top">
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{noNPWP}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="160" y="287" width="323" height="20" uuid="421e53d9-ef16-4f65-8e16-ce09eb564160"/>
+				<textElement verticalAlignment="Top">
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{email}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="160" y="267" width="323" height="20" uuid="b28d6f3d-bd2c-40dd-9c77-5cf422f77482"/>
+				<textElement verticalAlignment="Top">
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{noHandphone}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement style="style1" x="0" y="267" width="150" height="20" uuid="fd2ffbe0-5673-4343-8477-7c94b0d1564a"/>
+				<textElement textAlignment="Justified" verticalAlignment="Top">
+					<font fontName="Times New Roman" size="12" pdfFontName="Times-Roman" isPdfEmbedded="true"/>
+					<paragraph lineSpacing="1_1_2"/>
+				</textElement>
+				<text><![CDATA[No. Handphone]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="style1" x="150" y="267" width="10" height="20" uuid="bfe0763e-9826-468a-9776-82389f2434eb"/>
+				<textElement textAlignment="Justified" verticalAlignment="Top">
+					<font fontName="Times New Roman" size="12" pdfFontName="Times-Roman" isPdfEmbedded="true"/>
+					<paragraph lineSpacing="1_1_2"/>
+				</textElement>
+				<text><![CDATA[: ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="540" width="120" height="20" uuid="cbeab3f4-64cf-4216-b275-7562fd7b4d38"/>
+				<textElement verticalAlignment="Top">
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<text><![CDATA[6. Diskon]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="style1" x="120" y="540" width="10" height="20" uuid="f22bc914-7eca-478c-91de-77448fac2311"/>
+				<textElement textAlignment="Justified" verticalAlignment="Top">
+					<font fontName="Times New Roman" size="12" pdfFontName="Times-Roman" isPdfEmbedded="true"/>
+					<paragraph lineSpacing="1_1_2"/>
+				</textElement>
+				<text><![CDATA[: ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="style1" x="130" y="540" width="20" height="20" uuid="daf65c01-f7d2-4b20-93df-f11031ac305c"/>
+				<textElement textAlignment="Justified" verticalAlignment="Top">
+					<font fontName="Times New Roman" size="12" pdfFontName="Times-Roman" isPdfEmbedded="true"/>
+					<paragraph lineSpacing="1_1_2"/>
+				</textElement>
+				<text><![CDATA[Rp]]></text>
+			</staticText>
+			<textField pattern="#,##0.-" isBlankWhenNull="true">
+				<reportElement style="style1" x="150" y="540" width="100" height="20" uuid="7c0ee8ee-95f7-4e4d-888b-bca0484bbd5e"/>
+				<textElement verticalAlignment="Top">
+					<font fontName="Times New Roman" size="12" pdfFontName="Times-Roman" isPdfEmbedded="true"/>
+					<paragraph lineSpacing="1_1_2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{diskon}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement style="style1" positionType="Float" x="0" y="620" width="483" height="20" uuid="a57e09d0-8c6c-4c48-b6fe-01b72bef2d3c"/>
+				<textElement textAlignment="Justified" verticalAlignment="Top">
+					<font fontName="Times New Roman" size="12" pdfFontName="Times-Roman" isPdfEmbedded="true"/>
+					<paragraph lineSpacing="1_1_2"/>
+				</textElement>
+				<text><![CDATA[Berikut kami informasikan untuk pembayaran Down Payment selanjutnya  :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement positionType="Float" x="0" y="592" width="221" height="20" uuid="b8b50576-645b-4abd-992b-900b23ce7fa4"/>
+				<textElement verticalAlignment="Top">
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<text><![CDATA[Telah diterima pembayaran tanda jadi sebesar ]]></text>
+			</staticText>
+			<textField pattern="Rp #,##0.-">
+				<reportElement positionType="Float" x="221" y="592" width="92" height="20" uuid="acd29c19-94e5-4fb5-8392-52250c4999ff"/>
+				<textElement verticalAlignment="Top">
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{jumlahRp}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement positionType="Float" x="313" y="592" width="65" height="20" uuid="69d2f4fa-36ca-44de-bed3-8388313f3a59"/>
+				<textElement verticalAlignment="Top">
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<text><![CDATA[pada tanggal]]></text>
+			</staticText>
+			<textField pattern="dd MMMMM yyyy">
+				<reportElement positionType="Float" x="378" y="592" width="105" height="20" uuid="ea5447db-70f2-43ea-92e8-349be4389c8c"/>
+				<textElement verticalAlignment="Top">
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{tglSTJ}]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<detail>
+		<band height="19" splitType="Stretch">
+			<subreport>
+				<reportElement x="-57" y="0" width="597" height="19" uuid="e1f78eb6-41fd-4c19-87a9-0f7642a0f118"/>
+				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{allDetail})]]></dataSourceExpression>
+				<subreportExpression><![CDATA[$P{SubReportParam}]]></subreportExpression>
+			</subreport>
+		</band>
+	</detail>
+	<summary>
+		<band height="1400" splitType="Immediate">
+			<staticText>
+				<reportElement x="0" y="22" width="483" height="20" uuid="e3ae3c43-0805-46f1-ad0f-88ef1438f658"/>
+				<textElement textAlignment="Justified" verticalAlignment="Top">
+					<font fontName="Times New Roman" size="12"/>
+					<paragraph lineSpacing="1_1_2" tabStopWidth="20"/>
+				</textElement>
+				<text><![CDATA[PEMBELI telah setuju dan sepakat dengan ketentuan-ketentuan berikut ini  :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="20" y="42" width="463" height="95" uuid="65b4a1d4-712b-45f6-b515-95b397c7139f"/>
+				<textElement textAlignment="Justified" verticalAlignment="Top">
+					<font fontName="Times New Roman" size="12"/>
+					<paragraph lineSpacing="1_1_2" tabStopWidth="40"/>
+				</textElement>
+				<text><![CDATA[Setiap pembayaran dengan uang tunai yang dilakukan oleh PEMBELI kepada PT JBP dianggap sah apabila telah dikeluarkan tanda bukti penerimaannya (kwitansi) yang ditandatangani oleh PT JBP atau pihak yang ditunjuk oleh PT JBP, Pembayaran yang menggunakan cek / giro / transfer dianggap sah dan berlaku apabila dananya telah dapat dicairkan atau dipindahbukukan oleh PT JBP.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="20" y="137" width="463" height="100" uuid="5c993f79-9e32-4d37-923b-29b74e3ba865"/>
+				<textElement textAlignment="Justified" verticalAlignment="Top">
+					<font fontName="Times New Roman" size="12"/>
+					<paragraph lineSpacing="1_1_2" tabStopWidth="40"/>
+				</textElement>
+				<text><![CDATA[Setiap pembayaran harus dilakukan di kantor atau di tempat lain yang ditentukan oleh PT JBP atau langsung disetorkan kepada rekening PT JBP pada bank yang ditunjuk oleh PT JBP. Segala pembayaran ke nomor rekening lain yang bukan atas nama PT JBP adalah tidak diakui dan segala akibat pembayaran yang tidak menyebutkan lokasi dimaksud menjadi tanggungan PEMBELI sepenuhnya.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="20" y="237" width="463" height="60" uuid="f6f90b74-5fd3-4d63-a9c4-ff35626d3790"/>
+				<textElement textAlignment="Justified" verticalAlignment="Top">
+					<font fontName="Times New Roman" size="12"/>
+					<paragraph lineSpacing="1_1_2" tabStopWidth="40"/>
+				</textElement>
+				<text><![CDATA[Dalam hal PEMBELI membatalkan Surat Pemesanan Unit (SPU) maka PEMBELI setuju dan sepakat bahwa uang Tanda Jadi tidak dikembalikan dan uang sebesar 100% yang telah dibayarkan (tidak termasuk uang Tanda Jadi) tidak dikembalikan (bila ada).]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="20" y="297" width="463" height="60" uuid="284dc225-8fc5-4a7d-9a00-f7f72d7af3ce"/>
+				<textElement textAlignment="Justified" verticalAlignment="Top">
+					<font fontName="Times New Roman" size="12"/>
+					<paragraph lineSpacing="1_1_2" tabStopWidth="40"/>
+				</textElement>
+				<text><![CDATA[PEMBELI Kavling / Rumah / Ruko yang menggunakan fasilitas kredit dari bank / lembaga keuangan non bank (apabila ada), wajib mendapatkan surat persetujuan kredit dari bank / lembaga keuangan non bank yang dimohon paling lambat 90 hari kalender sejak Tanda Jadi.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="20" y="358" width="463" height="120" uuid="04981c1e-4744-4f2e-8658-b6baf0b26bd4"/>
+				<textElement textAlignment="Justified" verticalAlignment="Top">
+					<font fontName="Times New Roman" size="12"/>
+					<paragraph lineSpacing="1_1_2" tabStopWidth="40"/>
+				</textElement>
+				<text><![CDATA[Apabila PEMBELI mendapatkan surat persetujuan kredit dari bank / lembaga keuangan non bank (apabila ada) dengan persetujuan kredit dibawah dari plafon yang dibutuhkan, maka PEMBELI wajib memberikan tambahan uang sampai dengan plafon yang dibutuhkan, apabila PEMBELI melakukan pembatalan dikarenakan tidak sanggup untuk memberikan tambahan uang tersebut  maka PEMBELI setuju dan sepakat bahwa uang Tanda Jadi tidak dikembalikan dan uang yang telah dibayarkan (tidak termasuk uang Tanda Jadi) akan dikembalikan 50%.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="20" y="478" width="463" height="155" uuid="4dfff252-9110-4ad7-b686-9a204ec67a27"/>
+				<textElement textAlignment="Justified" verticalAlignment="Top">
+					<font fontName="Times New Roman" size="12"/>
+					<paragraph lineSpacing="1_1_2" tabStopWidth="40"/>
+				</textElement>
+				<text><![CDATA[Dalam hal PEMBELI tidak mendapatkan Surat Persetujuan Kredit dari bank / lembaga keuangan non bank (apabila ada) sebagaimana dimaskud dalam point no 4  diatas, maka Pembatalan SPU ini PEMBELI mendapatkan pengembalian uang Tanda Jadi dan uang yang telah dibayarkan 100% (Pembeli wajib melampirkan Surat Penolakan Persetujuan kredit dari bank / lembaga keuangan non bank) apabila PEMBELI tidak dapat melampirkan Surat Penolakan Kredit dari bank / lembaga keuangan non bank maka PEMBELI setuju dan sepakat uang Tanda Jadi tidak dikembalikan dan uang sebesar 100% yang telah dibayarkan (tidak termasuk uang Tanda Jadi) tidak dikembalikan (bila ada)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="20" y="633" width="463" height="40" uuid="cd8d60ec-bb63-497e-8112-eda8ac7b445a"/>
+				<textElement textAlignment="Justified" verticalAlignment="Top">
+					<font fontName="Times New Roman" size="12"/>
+					<paragraph lineSpacing="1_1_2" tabStopWidth="40"/>
+				</textElement>
+				<text><![CDATA[PEMBELI wajib untuk menandatangani lampiran SPU Kavling / Rumah / Ruko dalam jangka waktu 14 hari kalender setelah mendapatkan pemberitahuan dari PT JBP.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="20" y="673" width="463" height="20" uuid="57ecc91d-857e-42f2-a4f4-7ad25da1163f"/>
+				<textElement textAlignment="Justified" verticalAlignment="Top">
+					<font fontName="Times New Roman" size="12"/>
+					<paragraph lineSpacing="1_1_2" tabStopWidth="40"/>
+				</textElement>
+				<text><![CDATA[PEMBELI wajib tunduk pada peraturan yang dikeluarkan oleh PT JBP dan Estate Management.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="20" y="693" width="463" height="155" uuid="2be266d5-95f7-441a-8036-cbafc4921bf3"/>
+				<textElement textAlignment="Justified" verticalAlignment="Top">
+					<font fontName="Times New Roman" size="12"/>
+					<paragraph lineSpacing="1_1_2" tabStopWidth="20"/>
+				</textElement>
+				<text><![CDATA[PEMBELI melepaskan PT JBP  dari segala tuntutan / klaim/ gugatan dalam bentuk apapun juga dalam hal :
+a.	Penandatanganan Akta Jual Beli di hadapan PPAT dan balik nama sertifikat ke atas nama PEMBELI tidak dapat dilakukan karena tidak dipenuhinya syarat-syarat yang diperlukan atau adanya penolakan dari instansi yang berwenang karena kesalahan PEMBELI.
+b.	Fasilitas kredit dari bank / lembaga keuangan non bank tidak diberikan kepada PEMBELI karena tidak dipenuhinya syarat-syarat yang diperlukan atau adanya penolakan dari bank / lembaga keuangan non bank ( dengan / tanpa alasan apapun ).
+]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="20" y="848" width="463" height="40" uuid="3a827e12-726f-4e9e-93c8-b2a0f3fc9437"/>
+				<textElement textAlignment="Justified" verticalAlignment="Top">
+					<font fontName="Times New Roman" size="12"/>
+					<paragraph lineSpacing="1_1_2" tabStopWidth="40"/>
+				</textElement>
+				<text><![CDATA[Sehubungan dengan ketentuan point 9 di atas, maka PEMBELI wajib mangganti kerugian kepada PT JBP (bila ada).]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="20" y="888" width="463" height="115" uuid="1649b0ac-c40f-456f-87eb-16bac3ac5fbf"/>
+				<textElement textAlignment="Justified" verticalAlignment="Top">
+					<font fontName="Times New Roman" size="12"/>
+					<paragraph lineSpacing="1_1_2" tabStopWidth="40"/>
+				</textElement>
+				<text><![CDATA[Alamat dan nomor telepon PEMBELI di atas adalah benar dan segala administrasi surat-menyurat mempergunakan alamat dan nomor telepon di atas. Perubahan alamat dan nomor telepon wajib diinformasikan secara tertulis kepada PT JBP selambat-lambatnya 14 hari kalender sejak perubahan alamat dan nomor telepon tersebut dilakukan. Segala akibat yang timbul atas kelalaian memberikan informasi tentang perubahan tersebut menjadi tanggung jawab PEMBELI.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="20" y="1003" width="463" height="40" uuid="a512aff4-b091-41c2-8ec9-d62b2537a7dd"/>
+				<textElement textAlignment="Justified" verticalAlignment="Top">
+					<font fontName="Times New Roman" size="12"/>
+					<paragraph lineSpacing="1_1_2" tabStopWidth="40"/>
+				</textElement>
+				<text><![CDATA[Hal-hal yang belum diatur dalam SPU akan diatur lebih lanjut dalam lampiran SPU dan merupakan satu kesatuan dan bagian yang tidak terpisahkan dalam SPU ini.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="1076" width="483" height="40" uuid="b16ab5ec-5623-4175-a843-d8e135da37df"/>
+				<textElement textAlignment="Justified" verticalAlignment="Top">
+					<font fontName="Times New Roman" size="12"/>
+					<paragraph lineSpacing="1_1_2" tabStopWidth="40"/>
+				</textElement>
+				<text><![CDATA[	PEMBELI dengan ini menyatakan telah membaca, mengerti dan menyetujui setiap seluruh syarat-syarat dan ketentuan-ketentuan dalam Surat Pemesanan Unit ini.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="1141" width="200" height="20" uuid="16d14704-9c04-460d-891f-546553190b0c"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="12" isBold="true"/>
+					<paragraph lineSpacing="1_1_2" tabStopWidth="20"/>
+				</textElement>
+				<text><![CDATA[Pembeli]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="283" y="1141" width="200" height="20" uuid="f2a7220c-3e51-4207-acf0-f240b3c45bfe"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="12" isBold="true"/>
+					<paragraph lineSpacing="1_1_2" tabStopWidth="20"/>
+				</textElement>
+				<text><![CDATA[Administrasi]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="1231" width="200" height="20" uuid="30d5181b-df0b-4416-ac12-043e67a1fd4b"/>
+				<textElement textAlignment="Justified" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="12"/>
+					<paragraph lineSpacing="1_1_2" tabStopWidth="20"/>
+				</textElement>
+				<text><![CDATA[(                                                                )]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="283" y="1231" width="200" height="20" uuid="68476e50-6554-491d-a753-7e126a2c1c51"/>
+				<textElement textAlignment="Justified" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="12"/>
+					<paragraph lineSpacing="1_1_2" tabStopWidth="20"/>
+				</textElement>
+				<text><![CDATA[(                                                               )]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="1281" width="100" height="20" uuid="bbc9c0f1-ee04-4abe-8a52-7fc8fcca6048"/>
+				<textElement textAlignment="Justified" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="12"/>
+					<paragraph lineSpacing="1_1_2" tabStopWidth="20"/>
+				</textElement>
+				<text><![CDATA[Mengetahui,]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="1379" width="200" height="20" uuid="e234510c-6205-4d50-943e-030e32ec6ca2"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="12" isBold="true"/>
+					<paragraph lineSpacing="1_1_2" tabStopWidth="20"/>
+				</textElement>
+				<text><![CDATA[General Manager]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="283" y="1379" width="200" height="20" uuid="aad00df1-6cca-437e-948f-0421bf29aa84"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="12" isBold="true"/>
+					<paragraph lineSpacing="1_1_2" tabStopWidth="20"/>
+				</textElement>
+				<text><![CDATA[Direktur]]></text>
+			</staticText>
+			<line>
+				<reportElement x="0" y="1379" width="200" height="1" uuid="f5070a8b-422b-4755-9225-b70244f0f19e"/>
+			</line>
+			<line>
+				<reportElement x="283" y="1378" width="200" height="1" uuid="40c05728-1cfb-451b-adc9-1cb07499fa01"/>
+			</line>
+			<staticText>
+				<reportElement x="0" y="42" width="20" height="95" uuid="41574ba5-e7ee-40ad-82f9-2d33bee3e06a"/>
+				<textElement>
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<text><![CDATA[1.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="137" width="20" height="100" uuid="c7bfa603-ca7f-4585-8628-f6e8ddb87172"/>
+				<textElement>
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<text><![CDATA[2.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="237" width="20" height="60" uuid="688561a1-ba82-4902-bd75-98b8e4e1ee5a"/>
+				<textElement>
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<text><![CDATA[3.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="297" width="20" height="60" uuid="32e5a5e2-7085-49a6-b794-c31eb097e92a"/>
+				<textElement>
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<text><![CDATA[4.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="358" width="20" height="120" uuid="289cfcd0-8579-4db9-9f12-4847cb9e844e"/>
+				<textElement>
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<text><![CDATA[5.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="478" width="20" height="155" uuid="77b66636-fd40-4a1f-abcb-1d5aac6d2cf4"/>
+				<textElement>
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<text><![CDATA[6.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="633" width="20" height="40" uuid="7cd8d32c-b235-484c-b4ba-b7417ebc69f4"/>
+				<textElement>
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<text><![CDATA[7.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="673" width="20" height="20" uuid="ab5033f1-24eb-4963-a9b4-352f23044080"/>
+				<textElement>
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<text><![CDATA[8.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="693" width="20" height="155" uuid="abc345a7-e13c-4a7c-9867-6b6a4f95e56b"/>
+				<textElement>
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<text><![CDATA[9.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="848" width="20" height="40" uuid="7344b503-6a41-4dc0-ba55-3eb0553e7a0c"/>
+				<textElement>
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<text><![CDATA[10.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="888" width="20" height="115" uuid="df034bce-ad4b-4bdf-8821-e88240b0fbed"/>
+				<textElement>
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<text><![CDATA[11.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="1003" width="20" height="40" uuid="9781b896-a1d0-4cec-be54-57e85a42a725"/>
+				<textElement>
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<text><![CDATA[12.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="1043" width="20" height="20" uuid="2db48877-19e5-4577-8e44-b46587268475"/>
+				<textElement>
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<text><![CDATA[13.]]></text>
+			</staticText>
+			<textField pattern="yyyy">
+				<reportElement x="20" y="1043" width="463" height="20" uuid="491c1588-a04d-4742-adb4-d765c97cb7b3"/>
+				<textElement verticalAlignment="Top">
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Pajak Bumi dan Bangunan wajib dibayar oleh PEMBELI sejak tahun "+$P{tahunPBB}]]></textFieldExpression>
+			</textField>
+		</band>
+	</summary>
+</jasperReport>

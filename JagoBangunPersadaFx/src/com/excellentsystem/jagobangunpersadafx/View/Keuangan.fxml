@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.TreeTableColumn?>
+<?import javafx.scene.control.TreeTableView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+
+<AnchorPane id="AnchorPane" prefHeight="628.0" prefWidth="1024.0" styleClass="stage" stylesheets="@../Resource/MyTheme.css" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.excellentsystem.jagobangunpersadafx.View.KeuanganController">
+   <children>
+      <GridPane hgap="5.0" layoutX="28.0" layoutY="43.0" vgap="5.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+        <columnConstraints>
+          <ColumnConstraints hgrow="SOMETIMES" />
+        </columnConstraints>
+        <rowConstraints>
+          <RowConstraints fillHeight="false" maxHeight="30.0" minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES" />
+          <RowConstraints maxHeight="1.7976931348623157E308" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="30.0" minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES" />
+        </rowConstraints>
+         <children>
+            <HBox alignment="CENTER_LEFT" prefHeight="100.0" spacing="10.0">
+               <children>
+                  <Label text="Tipe Keuangan" />
+                  <ComboBox fx:id="TipeKeuanganCombo" onAction="#getKeuangan" prefHeight="30.0" prefWidth="120.0" />
+                  <Label text="Tanggal" />
+                  <DatePicker fx:id="tglAwalPicker" onAction="#getKeuangan" prefHeight="30.0" prefWidth="120.0">
+                     <HBox.margin>
+                        <Insets />
+                     </HBox.margin>
+                  </DatePicker>
+                  <Label alignment="CENTER" prefHeight="30.0" text="-" />
+                  <DatePicker fx:id="tglAkhirPicker" onAction="#getKeuangan" prefHeight="30.0" prefWidth="120.0" />
+               </children>
+            </HBox>
+            <TextField fx:id="searchField" maxWidth="300.0" prefHeight="30.0" prefWidth="300.0" promptText="Search..." styleClass="search-field" GridPane.halignment="RIGHT" />
+            <TreeTableView fx:id="keuanganTable" prefHeight="408.0" prefWidth="2000.0" showRoot="false" tableMenuButtonVisible="true" GridPane.rowIndex="1">
+              <columns>
+                  <TreeTableColumn fx:id="noKeuanganColumn" maxWidth="1000.0" prefWidth="100.0" text="No Keuangan" />
+                  <TreeTableColumn fx:id="tglKeuanganColumn" maxWidth="1000.0" prefWidth="100.0" text="Time" visible="false" />
+                  <TreeTableColumn fx:id="kodeUserColumn" maxWidth="1000.0" prefWidth="100.0" text="User input" visible="false" />
+                  <TreeTableColumn fx:id="tipeKeuanganColumn" maxWidth="1000.0" prefWidth="100.0" text="Tipe Keuangan" visible="false" />
+                  <TreeTableColumn fx:id="kategoriColumn" maxWidth="1500.0" prefWidth="100.0" text="Kategori" />
+                  <TreeTableColumn fx:id="kodePropertyColumn" maxWidth="1000.0" prefWidth="100.0" text="Nama Property" />
+                  <TreeTableColumn fx:id="deskripsiColumn" maxWidth="3000.0" prefWidth="100.0" text="Deskripsi" />
+                  <TreeTableColumn fx:id="jumlahRpColumn" maxWidth="1000.0" prefWidth="100.0" text="Jumlah Rp" />
+              </columns>
+               <columnResizePolicy>
+                  <TreeTableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+               </columnResizePolicy>
+            </TreeTableView>
+            <HBox alignment="CENTER_RIGHT" prefHeight="100.0" spacing="10.0" GridPane.halignment="RIGHT" GridPane.rowIndex="2">
+               <children>
+                  <Label alignment="CENTER_RIGHT" prefHeight="30.0" prefWidth="150.0" text="Saldo Akhir">
+            </Label>
+                  <Label fx:id="saldoAkhirField" alignment="CENTER_RIGHT" prefHeight="30.0" style="-fx-font-weight: bold;" text="0" />
+               </children>
+            </HBox>
+         </children>
+         <padding>
+            <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
+         </padding>
+      </GridPane>
+   </children>
+</AnchorPane>

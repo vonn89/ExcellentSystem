@@ -1,0 +1,291 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="3796a2c1-df6f-403d-9ea1-7a25795a5e25">
+	<property name="ireport.zoom" value="1.2100000000000006"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<style name="columnHeader" mode="Opaque" forecolor="#FFFFFF" backcolor="#404040">
+		<box leftPadding="5" rightPadding="5">
+			<leftPen lineWidth="0.0"/>
+			<rightPen lineWidth="0.0"/>
+		</box>
+	</style>
+	<style name="groupHeader1" mode="Opaque" backcolor="#FFCBCB">
+		<box leftPadding="5" rightPadding="5"/>
+	</style>
+	<style name="groupHeader2" mode="Opaque" backcolor="#FFCCCC">
+		<box leftPadding="5" rightPadding="5">
+			<bottomPen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="detail" mode="Opaque">
+		<box leftPadding="5" rightPadding="5"/>
+	</style>
+	<style name="detailEven" mode="Opaque" backcolor="#EDEDED">
+		<box leftPadding="5" rightPadding="5"/>
+	</style>
+	<queryString>
+		<![CDATA[]]>
+	</queryString>
+	<field name="kodeUser" class="java.lang.String">
+		<fieldDescription><![CDATA[kodeUser]]></fieldDescription>
+	</field>
+	<field name="qty" class="java.lang.Double">
+		<fieldDescription><![CDATA[qty]]></fieldDescription>
+	</field>
+	<field name="satuan" class="java.lang.String">
+		<fieldDescription><![CDATA[satuan]]></fieldDescription>
+	</field>
+	<field name="keterangan" class="java.lang.String">
+		<fieldDescription><![CDATA[keterangan]]></fieldDescription>
+	</field>
+	<field name="jumlahRp" class="java.lang.Double">
+		<fieldDescription><![CDATA[jumlahRp]]></fieldDescription>
+	</field>
+	<field name="tglRealisasi" class="java.lang.String">
+		<fieldDescription><![CDATA[tglRealisasi]]></fieldDescription>
+	</field>
+	<field name="tipeKeuangan" class="java.lang.String">
+		<fieldDescription><![CDATA[tipeKeuangan]]></fieldDescription>
+	</field>
+	<field name="keterangan_1" class="java.lang.String">
+		<fieldDescription><![CDATA[rapHead.keterangan]]></fieldDescription>
+	</field>
+	<field name="noRap" class="java.lang.String">
+		<fieldDescription><![CDATA[rapHead.noRap]]></fieldDescription>
+	</field>
+	<field name="tglRap" class="java.lang.String">
+		<fieldDescription><![CDATA[rapHead.tglRap]]></fieldDescription>
+	</field>
+	<field name="totalAnggaran" class="java.lang.Double">
+		<fieldDescription><![CDATA[rapHead.totalAnggaran]]></fieldDescription>
+	</field>
+	<variable name="totalAnggaran" class="java.lang.Double" calculation="Sum">
+		<variableExpression><![CDATA[$F{jumlahRp}]]></variableExpression>
+	</variable>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="110" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="555" height="32" uuid="3a4969b2-1f8f-498c-ae1e-d7eac62c0366"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Serif" size="24"/>
+				</textElement>
+				<text><![CDATA[Realisasi Anggaran Proyek]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="32" width="65" height="20" uuid="527844e1-92bd-4064-b310-749901b2d6e7"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Serif"/>
+				</textElement>
+				<text><![CDATA[No RAP]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="52" width="65" height="20" uuid="3aca1c46-0db8-45f2-ba9e-5fa91786b59d"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Serif"/>
+				</textElement>
+				<text><![CDATA[Tgl RAP]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="71" width="65" height="20" uuid="a73d95e8-8f3d-44b6-a7ff-5c54c3440183"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Serif"/>
+				</textElement>
+				<text><![CDATA[Keterangan]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="75" y="32" width="480" height="20" uuid="ea560ce5-f24d-4790-b3a8-185a9e0b73d1"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Serif"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{noRap}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="75" y="71" width="480" height="20" uuid="6c5e2cf9-c1c0-4558-9b6f-55f020e2d005"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Serif"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{keterangan_1}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd MMM yyyy HH:mm">
+				<reportElement x="75" y="52" width="480" height="20" uuid="57b18145-d660-4919-9459-d93b4371ae6c"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Serif"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").parse($F{tglRap})]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="65" y="32" width="10" height="20" uuid="ba77ac6c-7d05-4124-b4a4-1fd996275768"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Serif"/>
+				</textElement>
+				<text><![CDATA[:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="65" y="52" width="10" height="20" uuid="73e2794d-4788-4179-920f-4c2eb447338d"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Serif"/>
+				</textElement>
+				<text><![CDATA[:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="65" y="71" width="10" height="20" uuid="940bd996-c904-4fe1-9c39-aa5550238e25"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Serif"/>
+				</textElement>
+				<text><![CDATA[:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="90" width="65" height="20" uuid="ee51ce38-7f1f-4152-ad34-a91cc637c1e6"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Serif"/>
+				</textElement>
+				<text><![CDATA[Total Anggaran]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="65" y="90" width="10" height="20" uuid="38038be4-a1da-4fb0-90ed-f0ad63a49df3"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Serif"/>
+				</textElement>
+				<text><![CDATA[:]]></text>
+			</staticText>
+			<textField pattern="#,##0">
+				<reportElement x="75" y="90" width="480" height="20" uuid="36f1ce3c-4587-41ff-8bb0-426659bc2db0"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Serif"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{totalAnggaran}]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<columnHeader>
+		<band height="20" splitType="Stretch">
+			<staticText>
+				<reportElement style="columnHeader" x="0" y="0" width="120" height="20" uuid="9b74cd59-55d2-44c3-aa8e-4ddf45eedaa0"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Serif" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Pekerjaan]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="columnHeader" x="120" y="0" width="215" height="20" uuid="26342bdc-a026-4894-a685-74502fe7700d"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Serif" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Keterangan]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="columnHeader" x="335" y="0" width="70" height="20" uuid="d710ecab-8a53-424a-9735-12c81cabbc29"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Serif" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Satuan]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="columnHeader" x="405" y="0" width="70" height="20" uuid="e4057187-9646-4426-aeb5-d9b5293f1f5b"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Serif" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Qty]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="columnHeader" x="475" y="0" width="80" height="20" uuid="9567b860-96e8-47f5-b3fd-28101b99b6e4"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Serif" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Total]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField>
+				<reportElement style="detail" x="120" y="0" width="215" height="20" uuid="b8725c6c-df11-4b1f-b137-81128d64fbfd"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Serif"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{keterangan}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd MMM yyyy HH:mm">
+				<reportElement style="detail" x="0" y="0" width="120" height="20" uuid="4ef769d8-6e8c-4c95-9d20-035da49b4bbf"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Serif"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").parse($F{tglRealisasi})]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="detail" x="335" y="0" width="70" height="20" uuid="3c4dad8c-180c-43d8-a8ac-42d4282c0047"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Serif"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{satuan}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.##">
+				<reportElement style="detail" x="405" y="0" width="70" height="20" uuid="0c820538-e763-4695-ae9d-c7287ac24bb3"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Serif"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{qty}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0">
+				<reportElement style="detail" x="475" y="0" width="80" height="20" uuid="00b89914-e517-4fde-a5b8-31f249eec091"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Serif"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{jumlahRp}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="20" splitType="Stretch">
+			<staticText>
+				<reportElement x="336" y="0" width="100" height="20" uuid="74f3f76f-6b9f-4963-aea0-8b6aa5d20cc0"/>
+				<textElement textAlignment="Right" verticalAlignment="Top">
+					<font fontName="Serif" size="8"/>
+				</textElement>
+				<text><![CDATA[Print Date :  ]]></text>
+			</staticText>
+			<textField pattern="EEEEE dd MMMMM yyyy HH:mm">
+				<reportElement x="436" y="0" width="119" height="20" uuid="e0710608-5bb5-4e90-9b8d-b9d21744b0d4"/>
+				<textElement textAlignment="Right">
+					<font fontName="Serif" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="0" width="36" height="20" uuid="96a30a59-ef20-4ecc-868b-0478d42facac"/>
+				<textElement textAlignment="Right">
+					<font fontName="Serif" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Page "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement x="36" y="0" width="34" height="20" uuid="6818c3e0-7a5b-476e-ab69-aece4e7c27ca"/>
+				<textElement>
+					<font fontName="Serif" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band height="20" splitType="Stretch">
+			<textField pattern="#,##0">
+				<reportElement style="columnHeader" x="475" y="0" width="80" height="20" uuid="43bbdc00-affa-457a-96ff-0bb51cbb6a41"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Serif" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{totalAnggaran}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement style="columnHeader" x="0" y="0" width="475" height="20" uuid="8998d4f3-145c-4e69-a05e-6111169dd6ae"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Serif" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Total Realisasi]]></text>
+			</staticText>
+		</band>
+	</summary>
+</jasperReport>

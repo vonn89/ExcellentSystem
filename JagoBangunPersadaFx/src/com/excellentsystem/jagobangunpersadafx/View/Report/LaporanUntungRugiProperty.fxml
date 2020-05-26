@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Hyperlink?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.StackPane?>
+
+<AnchorPane id="AnchorPane" prefHeight="700.0" prefWidth="1024.0" styleClass="stage" stylesheets="@../../Resource/MyTheme.css" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.excellentsystem.jagobangunpersadafx.View.Report.LaporanUntungRugiPropertyController">
+   <children>
+      <GridPane hgap="5.0" layoutX="164.0" layoutY="129.0" vgap="5.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+        <columnConstraints>
+          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+        </columnConstraints>
+        <rowConstraints>
+          <RowConstraints maxHeight="30.0" minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES" />
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+        </rowConstraints>
+         <padding>
+            <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
+         </padding>
+         <children>
+            <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="10.0">
+               <children>
+                  <Label text="Nama Property" />
+                  <Label fx:id="namaPropertyLabel" alignment="CENTER" prefHeight="30.0" prefWidth="200.0" style="-fx-background-color: seccolor5; -fx-font-weight: bold;" />
+                  <Button mnemonicParsing="false" onAction="#addProperty" prefHeight="30.0" prefWidth="120.0" text="Choose Property" />
+               </children>
+            </HBox>
+            <ScrollPane fitToHeight="true" fitToWidth="true" pannable="true" prefHeight="200.0" prefWidth="200.0" style="-fx-border-color: seccolor4;" GridPane.rowIndex="1">
+               <content>
+                  <StackPane prefHeight="150.0" prefWidth="200.0" style="-fx-background-color: seccolor6;">
+                     <children>
+                        <GridPane hgap="5.0" vgap="5.0">
+                          <columnConstraints>
+                            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                              <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                              <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" maxWidth="50.0" minWidth="0.0" prefWidth="50.0" />
+                              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                              <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                          </columnConstraints>
+                          <rowConstraints>
+                              <RowConstraints maxHeight="30.0" minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints maxHeight="30.0" minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints maxHeight="30.0" minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints maxHeight="30.0" minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                            <RowConstraints maxHeight="30.0" minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints maxHeight="5.0" minHeight="5.0" prefHeight="5.0" vgrow="SOMETIMES" />
+                            <RowConstraints maxHeight="30.0" minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                            <RowConstraints maxHeight="30.0" minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints maxHeight="30.0" minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints maxHeight="30.0" minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints maxHeight="30.0" minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints maxHeight="10.0" minHeight="10.0" prefHeight="10.0" vgrow="SOMETIMES" />
+                              <RowConstraints maxHeight="30.0" minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                          </rowConstraints>
+                           <padding>
+                              <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
+                           </padding>
+                           <children>
+                              <AnchorPane layoutX="25.0" layoutY="385.0" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: seccolor5;" GridPane.columnSpan="2147483647" GridPane.rowIndex="1" />
+                              <AnchorPane layoutX="25.0" layoutY="25.0" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: seccolor5;" GridPane.columnSpan="2147483647" GridPane.rowIndex="12" />
+                              <AnchorPane layoutX="25.0" layoutY="25.0" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: seccolor5;" GridPane.columnSpan="2147483647" GridPane.rowIndex="10" />
+                              <AnchorPane layoutX="25.0" layoutY="25.0" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: seccolor5;" GridPane.columnSpan="2147483647" GridPane.rowIndex="8" />
+                              <AnchorPane prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: seccolor5;" GridPane.columnSpan="2147483647" GridPane.rowIndex="6" />
+                              <Label style="-fx-font-weight: bold;" text="Pemasukan" GridPane.rowIndex="4" />
+                              <Label fx:id="terimaTandaJadiLabel" text="0" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+                              <Label fx:id="terimaDownPaymentLabel" text="0" GridPane.columnIndex="1" GridPane.rowIndex="7" />
+                              <Label fx:id="terimaPencairanKPRLabel" text="0" GridPane.columnIndex="1" GridPane.rowIndex="8" />
+                              <Label fx:id="terimaAngsuranLabel" text="0" GridPane.columnIndex="1" GridPane.rowIndex="9" />
+                              <Label fx:id="pendapatanLabel" text="0" GridPane.columnIndex="1" GridPane.rowIndex="10" />
+                              <Label style="-fx-font-weight: bold;" text="Pengeluaran" GridPane.columnIndex="3" GridPane.rowIndex="4" />
+                              <Label fx:id="pembelianTanahLabel" text="0" GridPane.columnIndex="4" GridPane.rowIndex="6" />
+                              <Label fx:id="pembangunanLabel" text="0" GridPane.columnIndex="4" GridPane.rowIndex="7" />
+                              <Label fx:id="realisasiProyekLabel" text="0" GridPane.columnIndex="4" GridPane.rowIndex="8" />
+                              <Label fx:id="bebanLabel" text="0" GridPane.columnIndex="4" GridPane.rowIndex="9" />
+                              <Label style="-fx-font-weight: bold;" text="Total Pemasukan" GridPane.rowIndex="12" />
+                              <Label style="-fx-font-weight: bold;" text="Total Pengeluaran" GridPane.columnIndex="3" GridPane.rowIndex="12" />
+                              <Hyperlink onAction="#viewDetailTerimaTandaJadi" style="-fx-text-fill: seccolor3; -fx-border-color: transparent;" text="Terima Tanda Jadi" GridPane.rowIndex="6" />
+                              <Hyperlink layoutX="25.0" layoutY="71.0" onAction="#viewDetailTerimaDownPayment" style="-fx-text-fill: seccolor3; -fx-border-color: transparent;" text="Terima Down Payment" GridPane.rowIndex="7" />
+                              <Hyperlink layoutX="25.0" layoutY="71.0" onAction="#viewDetailTerimaPencairanKPR" style="-fx-text-fill: seccolor3; -fx-border-color: transparent;" text="Terima Pencairan KPR" GridPane.rowIndex="8" />
+                              <Hyperlink layoutX="25.0" layoutY="26.0" onAction="#viewDetailTerimaAngsuran" style="-fx-text-fill: seccolor3; -fx-border-color: transparent;" text="Terima Angsuran" GridPane.rowIndex="9" />
+                              <Hyperlink layoutX="25.0" layoutY="26.0" onAction="#viewDetailPendapatan" style="-fx-text-fill: seccolor3; -fx-border-color: transparent;" text="Pendapatan" GridPane.rowIndex="10" />
+                              <Hyperlink layoutX="25.0" layoutY="26.0" onAction="#viewDetailPembelianTanah" style="-fx-text-fill: seccolor3; -fx-border-color: transparent;" text="Pembelian Tanah" GridPane.columnIndex="3" GridPane.rowIndex="6" />
+                              <Hyperlink layoutX="25.0" layoutY="26.0" onAction="#viewDetailPembangunan" style="-fx-text-fill: seccolor3; -fx-border-color: transparent;" text="Pembangunan" GridPane.columnIndex="3" GridPane.rowIndex="7" />
+                              <Hyperlink layoutX="25.0" layoutY="26.0" onAction="#viewDetailRealisasi" style="-fx-text-fill: seccolor3; -fx-border-color: transparent;" text="Realisasi Proyek" GridPane.columnIndex="3" GridPane.rowIndex="8" />
+                              <Hyperlink layoutX="25.0" layoutY="26.0" onAction="#viewDetailBeban" style="-fx-text-fill: seccolor3; -fx-border-color: transparent;" text="Beban" GridPane.columnIndex="3" GridPane.rowIndex="9" />
+                              <Label fx:id="totalPemasukanLabel" style="-fx-font-weight: bold;" text="0" GridPane.columnIndex="1" GridPane.rowIndex="12" />
+                              <Label fx:id="totalPengeluaranLabel" style="-fx-font-weight: bold;" text="0" GridPane.columnIndex="4" GridPane.rowIndex="12" />
+                              <Label text="Luas Tanah" />
+                              <Label fx:id="luasTanahLabel" alignment="CENTER" style="-fx-font-weight: bold;" text="0" GridPane.columnIndex="1" />
+                              <Label text="Luas Bangunan" GridPane.rowIndex="1" />
+                              <Label fx:id="luasBangunanLabel" alignment="CENTER" style="-fx-font-weight: bold;" text="0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                              <Label text="Nilai Property" GridPane.rowIndex="2" />
+                              <Label fx:id="nilaiPropertyLabel" alignment="CENTER" style="-fx-font-weight: bold;" text="0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                              <Label text="Nilai Property/m" GridPane.columnIndex="3" GridPane.rowIndex="2" />
+                              <Label fx:id="nilaiPropertyPerMeterLabel" alignment="CENTER" style="-fx-font-weight: bold;" text="0" GridPane.columnIndex="4" GridPane.rowIndex="2" />
+                              <Label text="Harga Property" GridPane.columnIndex="3" />
+                              <Label fx:id="hargaPropertyLabel" alignment="CENTER" style="-fx-font-weight: bold;" text="0" GridPane.columnIndex="4" />
+                              <Label text="Diskon" GridPane.columnIndex="3" GridPane.rowIndex="1" />
+                              <Label fx:id="diskonLabel" style="-fx-font-weight: bold;" text="0" GridPane.columnIndex="4" GridPane.rowIndex="1" />
+                              <Separator prefWidth="200.0" GridPane.columnSpan="2147483647" GridPane.rowIndex="3" />
+                           </children>
+                        </GridPane>
+                     </children>
+                  </StackPane>
+               </content>
+            </ScrollPane>
+         </children>
+      </GridPane>
+   </children>
+</AnchorPane>

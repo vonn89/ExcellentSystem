@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" pageWidth="595" pageHeight="842" columnWidth="483" leftMargin="56" rightMargin="56" topMargin="0" bottomMargin="0" uuid="f8c9b654-9433-4e9a-8452-4b1d3c07241b">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<queryString>
+		<![CDATA[]]>
+	</queryString>
+	<field name="jumlahRp" class="java.lang.Double">
+		<fieldDescription><![CDATA[jumlahRp]]></fieldDescription>
+	</field>
+	<field name="noSTJ" class="java.lang.String">
+		<fieldDescription><![CDATA[noSTJ]]></fieldDescription>
+	</field>
+	<field name="tahap" class="java.lang.String">
+		<fieldDescription><![CDATA[tahap]]></fieldDescription>
+	</field>
+	<field name="tglBayar" class="java.lang.String">
+		<fieldDescription><![CDATA[tglBayar]]></fieldDescription>
+	</field>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<detail>
+		<band height="40" splitType="Stretch">
+			<staticText>
+				<reportElement x="37" y="0" width="95" height="20" uuid="b4c2268c-a0e4-409f-aa41-da0727b51047"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="12" pdfFontName="Times-Roman" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[●   Down Payment ]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="132" y="0" width="52" height="20" uuid="641a21b4-ad53-4fde-b1cf-b4c05acd865f"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="12" pdfFontName="Times-Roman" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Tahap-"+$F{tahap}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="184" y="0" width="171" height="20" uuid="0324eef1-2d25-4204-a395-f7a265f4465e"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="12" pdfFontName="Times-Roman" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[Selambat-lambatnya pada tanggal]]></text>
+			</staticText>
+			<textField pattern="dd MMMMM yyyy">
+				<reportElement x="355" y="0" width="106" height="20" uuid="2b978949-125a-4805-b450-37f49b52eb94"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="12" isBold="true" pdfFontName="Times-Roman" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{tglBayar}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="56" y="20" width="40" height="20" uuid="1c797c6d-2e19-48a0-884d-6b7298b85f4b"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="12" pdfFontName="Times-Roman" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[Sebesar]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="96" y="20" width="20" height="20" uuid="9f379cc1-9d33-4819-8e15-569b0f7e8606"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="12" pdfFontName="Times-Roman" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[Rp]]></text>
+			</staticText>
+			<textField pattern="#,##0.00">
+				<reportElement x="116" y="20" width="124" height="20" uuid="c19161c2-89ca-4a8f-9399-c41d6ff49f5e"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="12" isBold="true" pdfFontName="Times-Roman" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{jumlahRp}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

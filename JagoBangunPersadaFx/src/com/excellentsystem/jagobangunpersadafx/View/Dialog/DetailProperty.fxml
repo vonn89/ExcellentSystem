@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+
+<AnchorPane id="AnchorPane" prefHeight="590.0" prefWidth="500.0" styleClass="dialog" stylesheets="@../../Resource/MyTheme.css" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.excellentsystem.jagobangunpersadafx.View.Dialog.DetailPropertyController">
+   <children>
+      <GridPane hgap="5.0" vgap="5.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <columnConstraints>
+            <ColumnConstraints fillWidth="false" hgrow="SOMETIMES" maxWidth="90.0" minWidth="90.0" prefWidth="90.0" />
+            <ColumnConstraints hgrow="SOMETIMES" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="110.0" minWidth="110.0" prefWidth="110.0" />
+            <ColumnConstraints hgrow="SOMETIMES" />
+         </columnConstraints>
+         <rowConstraints>
+            <RowConstraints fillHeight="false" maxHeight="30.0" minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="5.0" minHeight="5.0" prefHeight="5.0" vgrow="SOMETIMES" />
+            <RowConstraints fillHeight="false" maxHeight="30.0" minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints fillHeight="false" maxHeight="30.0" minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints fillHeight="false" maxHeight="30.0" minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints fillHeight="false" maxHeight="30.0" minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints fillHeight="false" maxHeight="30.0" minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints fillHeight="false" maxHeight="30.0" minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints fillHeight="false" maxHeight="30.0" minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints fillHeight="false" maxHeight="30.0" minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints fillHeight="false" maxHeight="30.0" minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints fillHeight="false" maxHeight="30.0" minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints fillHeight="false" maxHeight="30.0" minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints fillHeight="false" maxHeight="30.0" minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints fillHeight="false" maxHeight="30.0" minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints fillHeight="false" maxHeight="30.0" minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints fillHeight="false" maxHeight="30.0" minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES" />
+         </rowConstraints>
+         <children>
+            <Label text="Kode Property" textFill="MAROON" GridPane.rowIndex="2" />
+            <Label style="-fx-font-size: 24;" styleClass="label-header" text="Detail Property" textFill="MAROON" GridPane.columnSpan="2147483647" GridPane.halignment="LEFT" />
+            <Label text="Nama Property" textFill="MAROON" GridPane.rowIndex="4" />
+            <Label text="Alamat" textFill="MAROON" GridPane.rowIndex="6" />
+            <Label text="Spesifikasi" textFill="MAROON" GridPane.rowIndex="8" />
+            <Label text="Luas Tanah (m)" textFill="MAROON" GridPane.rowIndex="10" />
+            <Label fx:id="nilaiTanahLabel" text="Nilai Property" textFill="MAROON" GridPane.rowIndex="11" />
+            <Label fx:id="nilaiTanahPerMeterLabel" text="Nilai Property /m" textFill="MAROON" GridPane.columnIndex="2" GridPane.rowIndex="11" />
+            <Label fx:id="hargaJualLabel" text="Harga Jual" textFill="MAROON" GridPane.rowIndex="12" />
+            <Label text="Keterangan" textFill="MAROON" GridPane.rowIndex="13" />
+            <TextField fx:id="namaPropertyField" prefHeight="30.0" prefWidth="250.0" GridPane.columnIndex="1" GridPane.columnSpan="2147483647" GridPane.rowIndex="4" />
+            <TextArea fx:id="alamatField" prefHeight="200.0" prefWidth="250.0" GridPane.columnIndex="1" GridPane.columnSpan="2147483647" GridPane.rowIndex="6" GridPane.rowSpan="2" />
+            <TextArea fx:id="spesifikasiField" prefHeight="200.0" prefWidth="250.0" GridPane.columnIndex="1" GridPane.columnSpan="2147483647" GridPane.rowIndex="8" GridPane.rowSpan="2" />
+            <TextField fx:id="luasTanahField" disable="true" prefHeight="30.0" text="0" GridPane.columnIndex="1" GridPane.rowIndex="10" />
+            <TextField fx:id="nilaiPropertyField" disable="true" prefHeight="30.0" text="0" GridPane.columnIndex="1" GridPane.rowIndex="11" />
+            <TextField fx:id="nilaiPropertyPerMeterField" disable="true" prefHeight="30.0" text="0" GridPane.columnIndex="3" GridPane.rowIndex="11" />
+            <TextField fx:id="hargaJualField" prefHeight="30.0" text="0" GridPane.columnIndex="1" GridPane.rowIndex="12" />
+            <TextArea fx:id="keteranganField" prefHeight="200.0" prefWidth="250.0" GridPane.columnIndex="1" GridPane.columnSpan="2147483647" GridPane.rowIndex="13" GridPane.rowSpan="2" />
+            <TextField fx:id="kodePropertyField" disable="true" prefHeight="30.0" GridPane.columnIndex="1" GridPane.columnSpan="2147483647" GridPane.rowIndex="2" />
+            <Label fx:id="luasBangunanLabel" text="Luas Bangunan (m)" textFill="MAROON" GridPane.columnIndex="2" GridPane.rowIndex="10" />
+            <TextField fx:id="luasBangunanField" prefHeight="30.0" prefWidth="100.0" text="0" GridPane.columnIndex="3" GridPane.rowIndex="10" />
+            <TextField fx:id="hargaJualPerMeterField" disable="true" prefHeight="30.0" text="0" GridPane.columnIndex="3" GridPane.rowIndex="12" />
+            <Label text="Harga Jual /m" GridPane.columnIndex="2" GridPane.rowIndex="12" />
+            <Label text="Kode Kategori" GridPane.rowIndex="3" />
+            <ComboBox fx:id="kodeKategoriCombo" maxWidth="1.7976931348623157E308" prefHeight="30.0" GridPane.columnIndex="1" GridPane.columnSpan="2147483647" GridPane.rowIndex="3" />
+            <Button cancelButton="true" mnemonicParsing="false" onAction="#close" prefHeight="30.0" prefWidth="30.0" GridPane.columnIndex="3" GridPane.halignment="RIGHT">
+               <graphic>
+                  <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../Resource/close.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </Button>
+            <Button fx:id="saveButton" defaultButton="true" mnemonicParsing="false" prefHeight="30.0" prefWidth="100.0" text="Save" GridPane.columnIndex="3" GridPane.halignment="RIGHT" GridPane.rowIndex="16" />
+            <Label text="Tipe" GridPane.rowIndex="5" />
+            <TextField fx:id="tipeField" prefHeight="30.0" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+            <TextField fx:id="statusField" disable="true" prefHeight="30.0" GridPane.columnIndex="1" GridPane.rowIndex="15" />
+            <Label text="Status" GridPane.rowIndex="15" />
+         </children>
+         <padding>
+            <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
+         </padding>
+      </GridPane>
+   </children>
+</AnchorPane>

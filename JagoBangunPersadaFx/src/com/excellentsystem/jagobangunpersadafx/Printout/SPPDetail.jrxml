@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" pageWidth="595" pageHeight="842" columnWidth="483" leftMargin="56" rightMargin="56" topMargin="0" bottomMargin="0" uuid="7e7d7c15-23df-4744-ba23-763d0017a221">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<style name="style1">
+		<box leftPadding="3" rightPadding="3">
+			<leftPen lineWidth="1.0" lineColor="#000000"/>
+			<rightPen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<queryString>
+		<![CDATA[]]>
+	</queryString>
+	<field name="jumlahRp" class="java.lang.Double">
+		<fieldDescription><![CDATA[jumlahRp]]></fieldDescription>
+	</field>
+	<field name="noSPP" class="java.lang.String">
+		<fieldDescription><![CDATA[noSPP]]></fieldDescription>
+	</field>
+	<field name="tahap" class="java.lang.String">
+		<fieldDescription><![CDATA[tahap]]></fieldDescription>
+	</field>
+	<field name="tglBayar" class="java.lang.String">
+		<fieldDescription><![CDATA[tglBayar]]></fieldDescription>
+	</field>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField>
+				<reportElement style="style1" x="145" y="0" width="216" height="20" uuid="cc7adfee-3292-4dbe-b958-b9d165a8b6ba"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{tahap}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="style1" x="45" y="0" width="100" height="20" uuid="74986981-9ee8-4bea-b80b-2b3daa144bc9"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{tglBayar}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.-">
+				<reportElement style="style1" x="361" y="0" width="122" height="20" uuid="5818cf57-6fd6-4595-bb62-bb53d831ea10"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{jumlahRp}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="style1" x="0" y="0" width="45" height="20" uuid="c30c4eee-dff8-49ed-9df7-643eb6e70e40"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{COLUMN_COUNT}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

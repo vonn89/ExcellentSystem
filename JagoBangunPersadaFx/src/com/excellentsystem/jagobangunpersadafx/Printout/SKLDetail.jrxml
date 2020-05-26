@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" pageWidth="595" pageHeight="842" columnWidth="483" leftMargin="56" rightMargin="56" topMargin="0" bottomMargin="0" uuid="86186176-5f40-41ac-a87e-2a9771a73dfd">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<style name="style1">
+		<box leftPadding="3" rightPadding="3">
+			<leftPen lineWidth="1.0" lineColor="#000000"/>
+			<rightPen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<queryString>
+		<![CDATA[]]>
+	</queryString>
+	<field name="tglBayar" class="java.lang.String">
+		<fieldDescription><![CDATA[tglBayar]]></fieldDescription>
+	</field>
+	<field name="jumlahRp" class="java.lang.Double">
+		<fieldDescription><![CDATA[jumlahRp]]></fieldDescription>
+	</field>
+	<field name="tahap" class="java.lang.String">
+		<fieldDescription><![CDATA[tahap]]></fieldDescription>
+	</field>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField>
+				<reportElement style="style1" x="145" y="0" width="216" height="20" uuid="c80a98d1-0387-4630-94f7-bd88469f20cd"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{tahap}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd MMM yy">
+				<reportElement style="style1" x="45" y="0" width="100" height="20" uuid="32481def-b163-4770-8e79-5131a8b2cc61"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{tglBayar}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.-">
+				<reportElement style="style1" x="361" y="0" width="122" height="20" uuid="31415f78-4295-455d-95d1-57f2e9a0f85e"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{jumlahRp}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="style1" x="0" y="0" width="45" height="20" uuid="161a27dc-51f2-49ae-9894-9792d8e632a7"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{COLUMN_COUNT}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>
