@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="LaporanOmzet" language="groovy" printOrder="Horizontal" pageWidth="1008" pageHeight="612" orientation="Landscape" columnWidth="968" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="60adbbba-6f0e-45d7-9266-629e480d741e">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<style name="Crosstab Data Text" hAlign="Center">
+		<box leftPadding="5" rightPadding="5"/>
+	</style>
+	<style name="style1" style="Crosstab Data Text" mode="Opaque" backcolor="#FF9999" pattern=""/>
+	<parameter name="tanggal" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[]]>
+	</queryString>
+	<field name="kodeCabang" class="java.lang.String">
+		<fieldDescription><![CDATA[kodeCabang]]></fieldDescription>
+	</field>
+	<field name="kodeSales" class="java.lang.String">
+		<fieldDescription><![CDATA[kodeSales]]></fieldDescription>
+	</field>
+	<field name="qtyHutangLunas" class="java.lang.Integer">
+		<fieldDescription><![CDATA[qtyHutangLunas]]></fieldDescription>
+	</field>
+	<field name="qtyPembelian" class="java.lang.Integer">
+		<fieldDescription><![CDATA[qtyPembelian]]></fieldDescription>
+	</field>
+	<field name="qtyPenjualan" class="java.lang.Integer">
+		<fieldDescription><![CDATA[qtyPenjualan]]></fieldDescription>
+	</field>
+	<field name="qtyTerimaHutang" class="java.lang.Integer">
+		<fieldDescription><![CDATA[qtyTerimaHutang]]></fieldDescription>
+	</field>
+	<field name="status" class="java.lang.String">
+		<fieldDescription><![CDATA[status]]></fieldDescription>
+	</field>
+	<field name="tanggal" class="java.lang.String">
+		<fieldDescription><![CDATA[tanggal]]></fieldDescription>
+	</field>
+	<field name="tglAmbil" class="java.lang.String">
+		<fieldDescription><![CDATA[tglAmbil]]></fieldDescription>
+	</field>
+	<field name="totalHutangBunga" class="java.lang.Double">
+		<fieldDescription><![CDATA[totalHutangBunga]]></fieldDescription>
+	</field>
+	<field name="totalHutangLunas" class="java.lang.Double">
+		<fieldDescription><![CDATA[totalHutangLunas]]></fieldDescription>
+	</field>
+	<field name="totalPembelian" class="java.lang.Double">
+		<fieldDescription><![CDATA[totalPembelian]]></fieldDescription>
+	</field>
+	<field name="totalPenjualan" class="java.lang.Double">
+		<fieldDescription><![CDATA[totalPenjualan]]></fieldDescription>
+	</field>
+	<field name="totalTerimaHutang" class="java.lang.Double">
+		<fieldDescription><![CDATA[totalTerimaHutang]]></fieldDescription>
+	</field>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<summary>
+		<band height="572">
+			<staticText>
+				<reportElement x="0" y="0" width="813" height="46" uuid="926ac564-8425-4b8a-8119-082b0e63a8dd"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Serif" size="22" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Laporan Omzet Penjualan]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="3" y="46" width="69" height="20" uuid="c1878739-8364-47fc-a6fc-9aa4bfcbb132"/>
+				<textElement>
+					<font fontName="Serif" size="12"/>
+				</textElement>
+				<text><![CDATA[Tanggal  :  ]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="72" y="46" width="741" height="20" uuid="2d91c7a9-7700-4ce5-975e-2ba8adae7f90"/>
+				<textElement>
+					<font fontName="Serif" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{tanggal}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="3" y="69" width="810" height="15" uuid="01b10761-0739-4a17-a502-f8af4a8bb1a2"/>
+				<textElement>
+					<font fontName="Serif"/>
+				</textElement>
+				<text><![CDATA[(dalam ribuan)]]></text>
+			</staticText>
+			<line>
+				<reportElement x="3" y="86" width="965" height="1" uuid="e0003782-3a7c-4dca-9a6f-4706c6370c57"/>
+			</line>
+			<timeSeriesChart>
+				<chart>
+					<reportElement positionType="Float" x="20" y="93" width="928" height="479" uuid="dd837229-5345-4bf0-a834-4c5e378b912e"/>
+					<chartTitle/>
+					<chartSubtitle/>
+					<chartLegend/>
+				</chart>
+				<timeSeriesDataset>
+					<timeSeries>
+						<seriesExpression><![CDATA[$F{kodeCabang}]]></seriesExpression>
+						<timePeriodExpression><![CDATA[new SimpleDateFormat("yyyy-MM-dd").parse($F{tanggal})]]></timePeriodExpression>
+						<valueExpression><![CDATA[$F{totalPenjualan}]]></valueExpression>
+					</timeSeries>
+				</timeSeriesDataset>
+				<timeSeriesPlot isShowShapes="false">
+					<plot/>
+					<timeAxisFormat>
+						<axisFormat/>
+					</timeAxisFormat>
+					<valueAxisFormat>
+						<axisFormat/>
+					</valueAxisFormat>
+				</timeSeriesPlot>
+			</timeSeriesChart>
+			<image hAlign="Right" onErrorType="Blank">
+				<reportElement mode="Transparent" x="868" y="2" width="80" height="80" uuid="92fd40c5-fe56-4766-8a6e-9d8945c57495"/>
+				<imageExpression><![CDATA["icon.png"]]></imageExpression>
+			</image>
+		</band>
+	</summary>
+</jasperReport>

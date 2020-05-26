@@ -1,0 +1,306 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="LaporanOmzet" language="groovy" printOrder="Horizontal" pageWidth="1008" pageHeight="612" orientation="Landscape" columnWidth="968" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="60adbbba-6f0e-45d7-9266-629e480d741e">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<style name="Crosstab Data Text" hAlign="Center">
+		<box leftPadding="5" rightPadding="5"/>
+	</style>
+	<style name="style1" style="Crosstab Data Text" mode="Opaque" backcolor="#FF9999" pattern=""/>
+	<parameter name="tanggal" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[select * from tt_omzet_penjualan]]>
+	</queryString>
+	<field name="kodeCabang" class="java.lang.String">
+		<fieldDescription><![CDATA[kodeCabang]]></fieldDescription>
+	</field>
+	<field name="kodeSales" class="java.lang.String">
+		<fieldDescription><![CDATA[kodeSales]]></fieldDescription>
+	</field>
+	<field name="qtyHutangLunas" class="java.lang.Integer">
+		<fieldDescription><![CDATA[qtyHutangLunas]]></fieldDescription>
+	</field>
+	<field name="qtyPembelian" class="java.lang.Integer">
+		<fieldDescription><![CDATA[qtyPembelian]]></fieldDescription>
+	</field>
+	<field name="qtyPenjualan" class="java.lang.Integer">
+		<fieldDescription><![CDATA[qtyPenjualan]]></fieldDescription>
+	</field>
+	<field name="qtyTerimaHutang" class="java.lang.Integer">
+		<fieldDescription><![CDATA[qtyTerimaHutang]]></fieldDescription>
+	</field>
+	<field name="status" class="java.lang.String">
+		<fieldDescription><![CDATA[status]]></fieldDescription>
+	</field>
+	<field name="tanggal" class="java.lang.String">
+		<fieldDescription><![CDATA[tanggal]]></fieldDescription>
+	</field>
+	<field name="tglAmbil" class="java.lang.String">
+		<fieldDescription><![CDATA[tglAmbil]]></fieldDescription>
+	</field>
+	<field name="totalHutangBunga" class="java.lang.Double">
+		<fieldDescription><![CDATA[totalHutangBunga]]></fieldDescription>
+	</field>
+	<field name="totalHutangLunas" class="java.lang.Double">
+		<fieldDescription><![CDATA[totalHutangLunas]]></fieldDescription>
+	</field>
+	<field name="totalPembelian" class="java.lang.Double">
+		<fieldDescription><![CDATA[totalPembelian]]></fieldDescription>
+	</field>
+	<field name="totalPenjualan" class="java.lang.Double">
+		<fieldDescription><![CDATA[totalPenjualan]]></fieldDescription>
+	</field>
+	<field name="totalTerimaHutang" class="java.lang.Double">
+		<fieldDescription><![CDATA[totalTerimaHutang]]></fieldDescription>
+	</field>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<summary>
+		<band height="572">
+			<staticText>
+				<reportElement x="0" y="0" width="843" height="40" uuid="926ac564-8425-4b8a-8119-082b0e63a8dd"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Serif" size="22" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Laporan Omzet Penjualan]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="40" width="50" height="20" uuid="c1878739-8364-47fc-a6fc-9aa4bfcbb132"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="10"/>
+				</textElement>
+				<text><![CDATA[Tanggal  :  ]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="50" y="40" width="793" height="20" uuid="2d91c7a9-7700-4ce5-975e-2ba8adae7f90"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{tanggal}]]></textFieldExpression>
+			</textField>
+			<crosstab columnBreakOffset="555" ignoreWidth="false">
+				<reportElement mode="Opaque" x="0" y="102" width="968" height="470" uuid="da69698f-1d76-4b30-90b8-be8572a64ce1"/>
+				<rowGroup name="tanggalPenjualan" width="50" totalPosition="End">
+					<bucket class="java.util.Date">
+						<bucketExpression><![CDATA[new SimpleDateFormat("yyyy-MM-dd").parse($F{tanggal})]]></bucketExpression>
+					</bucket>
+					<crosstabRowHeader>
+						<cellContents backcolor="#99CCFF" mode="Opaque">
+							<box>
+								<pen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+							</box>
+							<textField pattern="dd MMM yyyy">
+								<reportElement style="Crosstab Data Text" mode="Transparent" x="0" y="0" width="50" height="25" backcolor="#99CCFF" uuid="bd336d7c-ac1d-432e-a43b-162e35e588b2"/>
+								<textElement verticalAlignment="Middle">
+									<font size="9"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$V{tanggalPenjualan}]]></textFieldExpression>
+							</textField>
+						</cellContents>
+					</crosstabRowHeader>
+					<crosstabTotalRowHeader>
+						<cellContents backcolor="#99CCFF" mode="Opaque">
+							<box>
+								<pen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+							</box>
+							<staticText>
+								<reportElement x="0" y="0" width="50" height="25" uuid="b3133038-ad15-438b-89cc-331fbbb7e771"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font size="9" isBold="true"/>
+								</textElement>
+								<text><![CDATA[Total]]></text>
+							</staticText>
+							<staticText>
+								<reportElement x="0" y="25" width="50" height="25" uuid="c9d8fe1c-8c82-4ffd-a782-a4262d754ef1"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font size="9"/>
+								</textElement>
+								<text><![CDATA[Rata-rata]]></text>
+							</staticText>
+							<line>
+								<reportElement style="Crosstab Data Text" x="0" y="25" width="50" height="1" uuid="7c7a6005-9cfb-4cd7-8cbf-d43d00ca6776"/>
+								<graphicElement>
+									<pen lineWidth="0.5"/>
+								</graphicElement>
+							</line>
+						</cellContents>
+					</crosstabTotalRowHeader>
+				</rowGroup>
+				<columnGroup name="kode_cabang" height="30" totalPosition="End">
+					<bucket class="java.lang.String">
+						<bucketExpression><![CDATA[$F{kodeCabang}]]></bucketExpression>
+					</bucket>
+					<crosstabColumnHeader>
+						<cellContents backcolor="#99CCFF" mode="Opaque">
+							<box>
+								<pen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+							</box>
+							<textField>
+								<reportElement style="Crosstab Data Text" mode="Transparent" x="0" y="0" width="60" height="30" backcolor="#99CCFF" uuid="8e757fda-6649-4720-91c7-a6d4d265e0a1"/>
+								<textElement verticalAlignment="Middle">
+									<font size="9"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$V{kode_cabang}]]></textFieldExpression>
+							</textField>
+						</cellContents>
+					</crosstabColumnHeader>
+					<crosstabTotalColumnHeader>
+						<cellContents backcolor="#99CCFF" mode="Opaque">
+							<box>
+								<pen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+							</box>
+							<staticText>
+								<reportElement x="0" y="0" width="65" height="30" uuid="d2be880d-f9da-462a-a4c3-d8d97927671a"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font size="9" isBold="true"/>
+								</textElement>
+								<text><![CDATA[Total]]></text>
+							</staticText>
+							<staticText>
+								<reportElement x="65" y="0" width="65" height="30" uuid="89d65fc2-fa2e-4007-a331-7d69505b9707"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font size="9"/>
+								</textElement>
+								<text><![CDATA[Rata-rata]]></text>
+							</staticText>
+							<line>
+								<reportElement style="Crosstab Data Text" x="65" y="0" width="1" height="30" uuid="df82ad1b-86fd-4a64-ae63-377e73eeba21"/>
+								<graphicElement>
+									<pen lineWidth="0.5"/>
+								</graphicElement>
+							</line>
+						</cellContents>
+					</crosstabTotalColumnHeader>
+				</columnGroup>
+				<measure name="jumlah_rpMeasure" class="java.lang.Double" calculation="Sum">
+					<measureExpression><![CDATA[$F{totalPenjualan}]]></measureExpression>
+				</measure>
+				<measure name="measure1" class="java.lang.Double" calculation="Average">
+					<measureExpression><![CDATA[$F{totalPenjualan}]]></measureExpression>
+				</measure>
+				<crosstabCell width="60" height="25">
+					<cellContents backcolor="#BFE1FF" mode="Transparent">
+						<box>
+							<pen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+						</box>
+						<textField pattern="#,##0">
+							<reportElement style="Crosstab Data Text" mode="Transparent" x="0" y="0" width="60" height="25" uuid="7acd5d90-b42f-4db5-bec2-5f03c03150b3"/>
+							<textElement verticalAlignment="Middle">
+								<font size="9"/>
+							</textElement>
+							<textFieldExpression><![CDATA[$V{jumlah_rpMeasure}]]></textFieldExpression>
+						</textField>
+						<textField pattern="#,##0">
+							<reportElement style="Crosstab Data Text" mode="Opaque" x="1" y="1" width="58" height="23" backcolor="#FFCCCC" uuid="b4110c11-c097-4cd0-926f-603b01e2145c">
+								<printWhenExpression><![CDATA[new SimpleDateFormat("EEE").format($V{tanggalPenjualan}
+).equals("Sun")]]></printWhenExpression>
+							</reportElement>
+							<textElement verticalAlignment="Middle">
+								<font size="9"/>
+							</textElement>
+							<textFieldExpression><![CDATA[$V{jumlah_rpMeasure}]]></textFieldExpression>
+						</textField>
+					</cellContents>
+				</crosstabCell>
+				<crosstabCell width="60" height="50" rowTotalGroup="tanggalPenjualan">
+					<cellContents backcolor="#BFE1FF" mode="Opaque">
+						<box>
+							<pen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+						</box>
+						<textField pattern="#,##0">
+							<reportElement style="Crosstab Data Text" x="0" y="0" width="60" height="25" uuid="5dd39990-0adc-49c8-bf99-0ca95fd5b540"/>
+							<textElement verticalAlignment="Middle">
+								<font size="9" isBold="true"/>
+							</textElement>
+							<textFieldExpression><![CDATA[$V{jumlah_rpMeasure}]]></textFieldExpression>
+						</textField>
+						<textField pattern="#,##0">
+							<reportElement style="Crosstab Data Text" x="0" y="25" width="60" height="25" uuid="fa2dc234-2b5b-4aa2-b586-bc47649e78b1"/>
+							<textElement verticalAlignment="Middle">
+								<font size="9"/>
+							</textElement>
+							<textFieldExpression><![CDATA[$V{measure1}]]></textFieldExpression>
+						</textField>
+						<line>
+							<reportElement style="Crosstab Data Text" x="0" y="25" width="60" height="1" uuid="1815414d-7a23-4fde-bbfe-851f360bf404"/>
+							<graphicElement>
+								<pen lineWidth="0.5"/>
+							</graphicElement>
+						</line>
+					</cellContents>
+				</crosstabCell>
+				<crosstabCell width="130" height="25" columnTotalGroup="kode_cabang">
+					<cellContents backcolor="#BFE1FF" mode="Opaque">
+						<box>
+							<pen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+						</box>
+						<textField pattern="#,##0">
+							<reportElement style="Crosstab Data Text" x="0" y="0" width="65" height="25" uuid="04003a5f-2aea-406d-9bba-08a075eeb0a6"/>
+							<textElement verticalAlignment="Middle">
+								<font size="9" isBold="true"/>
+							</textElement>
+							<textFieldExpression><![CDATA[$V{jumlah_rpMeasure}]]></textFieldExpression>
+						</textField>
+						<textField pattern="#,##0">
+							<reportElement style="Crosstab Data Text" x="65" y="0" width="65" height="25" uuid="fe6f5070-7bf4-48de-bbee-36b5a8c1ceee"/>
+							<textElement verticalAlignment="Middle">
+								<font size="9"/>
+							</textElement>
+							<textFieldExpression><![CDATA[$V{measure1}]]></textFieldExpression>
+						</textField>
+						<line>
+							<reportElement style="Crosstab Data Text" mode="Opaque" x="65" y="0" width="1" height="25" uuid="66540a44-d85b-42e7-9a62-3633235b4b21"/>
+							<graphicElement>
+								<pen lineWidth="0.5"/>
+							</graphicElement>
+						</line>
+					</cellContents>
+				</crosstabCell>
+				<crosstabCell width="130" height="50" rowTotalGroup="tanggalPenjualan" columnTotalGroup="kode_cabang">
+					<cellContents backcolor="#BFE1FF" mode="Opaque">
+						<box>
+							<pen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+						</box>
+						<textField pattern="#,##0">
+							<reportElement style="Crosstab Data Text" x="0" y="0" width="65" height="25" uuid="79027372-aff1-4d76-a95d-9b84ddbf8808"/>
+							<textElement verticalAlignment="Middle">
+								<font size="9" isBold="true"/>
+							</textElement>
+							<textFieldExpression><![CDATA[$V{jumlah_rpMeasure}]]></textFieldExpression>
+						</textField>
+						<line>
+							<reportElement style="Crosstab Data Text" x="65" y="0" width="1" height="50" uuid="c42891b7-d7d7-4f7b-94b3-7abe2e6764f3"/>
+							<graphicElement>
+								<pen lineWidth="0.5"/>
+							</graphicElement>
+						</line>
+						<line>
+							<reportElement style="Crosstab Data Text" x="0" y="25" width="130" height="1" uuid="5a71b96d-294c-406f-a6cd-07fad462974d"/>
+							<graphicElement>
+								<pen lineWidth="0.5"/>
+							</graphicElement>
+						</line>
+					</cellContents>
+				</crosstabCell>
+			</crosstab>
+			<staticText>
+				<reportElement x="0" y="72" width="843" height="15" uuid="01b10761-0739-4a17-a502-f8af4a8bb1a2"/>
+				<textElement>
+					<font fontName="Serif"/>
+				</textElement>
+				<text><![CDATA[(dalam ribuan)]]></text>
+			</staticText>
+			<image hAlign="Right" onErrorType="Blank">
+				<reportElement mode="Transparent" x="869" y="1" width="80" height="80" uuid="0b571596-911d-43db-ac5b-0091ef4bd6c0"/>
+				<imageExpression><![CDATA["icon.png"]]></imageExpression>
+			</image>
+			<line>
+				<reportElement x="0" y="87" width="968" height="3" uuid="ae5413a7-4bd9-4f3f-8324-65d78721e092"/>
+				<graphicElement>
+					<pen lineWidth="3.0" lineStyle="Double"/>
+				</graphicElement>
+			</line>
+		</band>
+	</summary>
+</jasperReport>

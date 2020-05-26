@@ -1,0 +1,262 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" isSummaryNewPage="true" isSummaryWithPageHeaderAndFooter="true" isFloatColumnFooter="true" uuid="2687ae68-4437-4e0b-ab32-25dbe26caf94">
+	<property name="ireport.zoom" value="1.6105100000000014"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<style name="columnHeader" mode="Opaque" forecolor="#FFFFFF" backcolor="#404040">
+		<box leftPadding="5" rightPadding="5">
+			<leftPen lineWidth="0.0"/>
+			<rightPen lineWidth="0.0"/>
+		</box>
+	</style>
+	<style name="groupHeader1" mode="Opaque" backcolor="#FFCBCB">
+		<box leftPadding="5" rightPadding="5"/>
+	</style>
+	<style name="groupHeader2" mode="Opaque">
+		<box leftPadding="5" rightPadding="5"/>
+	</style>
+	<style name="detail" mode="Opaque">
+		<box leftPadding="5" rightPadding="5"/>
+	</style>
+	<style name="detailEven" mode="Opaque" backcolor="#EDEDED">
+		<box leftPadding="5" rightPadding="5"/>
+	</style>
+	<parameter name="tanggal" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["2018-03-05"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="cabang" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["2018-04-05"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="subReportDetailPenjualanUmum" class="net.sf.jasperreports.engine.JasperReport" isForPrompting="false">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="listPenjualanUmum" class="java.util.List" isForPrompting="false"/>
+	<parameter name="jenisLaporan" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="listPenjualanCabang" class="java.util.List" isForPrompting="false"/>
+	<parameter name="subReportDetailPenjualanCabang" class="net.sf.jasperreports.engine.JasperReport" isForPrompting="false">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="subReportDetailPenjualanCiok" class="net.sf.jasperreports.engine.JasperReport" isForPrompting="false">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="listPenjualanCiok" class="java.util.List" isForPrompting="false"/>
+	<parameter name="subReportDetailKeuanganCabang" class="net.sf.jasperreports.engine.JasperReport" isForPrompting="false">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="listKeuanganCabang" class="java.util.List" isForPrompting="false"/>
+	<parameter name="subReportDetailKeuanganPusat" class="net.sf.jasperreports.engine.JasperReport" isForPrompting="false">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="listKeuanganPusat" class="java.util.List" isForPrompting="false"/>
+	<parameter name="totalPendapatanBeban" class="java.lang.Double" isForPrompting="false"/>
+	<queryString>
+		<![CDATA[]]>
+	</queryString>
+	<field name="jumlahDetail" class="java.lang.String">
+		<fieldDescription><![CDATA[jumlahDetail]]></fieldDescription>
+	</field>
+	<field name="jumlahTotal" class="java.lang.String">
+		<fieldDescription><![CDATA[jumlahTotal]]></fieldDescription>
+	</field>
+	<field name="keterangan" class="java.lang.String">
+		<fieldDescription><![CDATA[keterangan]]></fieldDescription>
+	</field>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="76" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="39" width="50" height="15" uuid="40fd626b-4309-4433-a984-9c24207be89d"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Serif"/>
+				</textElement>
+				<text><![CDATA[Tanggal]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="50" y="39" width="10" height="15" uuid="c374ce8a-5fac-42a7-8e58-8ccaa1568e68"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Serif"/>
+				</textElement>
+				<text><![CDATA[:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="50" y="54" width="10" height="15" uuid="b3473ba8-b3de-400b-9e88-8bb88dde3237"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Serif"/>
+				</textElement>
+				<text><![CDATA[:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="60" y="54" width="421" height="15" uuid="2e266323-1252-40af-9135-e302543bc206"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Serif"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{cabang}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="0" width="481" height="40" uuid="da387fce-1643-47c1-8e9a-05b7997dfe66"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Serif" size="22"/>
+				</textElement>
+				<text><![CDATA[Laporan Untung Rugi Cabang]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="60" y="39" width="421" height="15" uuid="5fc0341d-8fe0-49d1-9cc6-dffcd39d7cfc"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Serif"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{tanggal}]]></textFieldExpression>
+			</textField>
+			<image hAlign="Right" onErrorType="Blank">
+				<reportElement x="481" y="0" width="69" height="69" uuid="d9da3500-a19c-47a9-ab8b-a4ed2b7733cc"/>
+				<imageExpression><![CDATA["icon.png"]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement x="0" y="54" width="50" height="15" uuid="1b8a46d9-40d4-4d19-bdee-6eb7332d789e"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Serif"/>
+				</textElement>
+				<text><![CDATA[Cabang]]></text>
+			</staticText>
+			<line>
+				<reportElement x="0" y="75" width="555" height="1" forecolor="#000000" uuid="1fac1a6b-a582-46ac-b68e-e0cff6f9dacb"/>
+			</line>
+		</band>
+	</title>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<printWhenExpression><![CDATA[!$F{keterangan}.startsWith(" ")]]></printWhenExpression>
+			<textField>
+				<reportElement style="groupHeader2" x="0" y="0" width="355" height="20" forecolor="#000000" uuid="8a21157d-4baf-4ec8-ac94-7ec25262e38c"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{keterangan}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="groupHeader2" x="455" y="0" width="100" height="20" forecolor="#000000" uuid="042b0eb9-5496-4928-b9bb-e481357d8d3c"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Times New Roman" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{jumlahTotal}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="groupHeader2" x="355" y="0" width="100" height="20" uuid="a2b75aba-1f46-4032-9a6a-da5cce8752f0"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Times New Roman" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{jumlahDetail}]]></textFieldExpression>
+			</textField>
+		</band>
+		<band height="20">
+			<printWhenExpression><![CDATA[$F{keterangan}.startsWith(" ")]]></printWhenExpression>
+			<textField>
+				<reportElement style="detail" x="0" y="0" width="355" height="20" forecolor="#000000" uuid="6b07e38c-41fb-4ce8-bfef-0225a76a31cd"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{keterangan}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="detail" x="355" y="0" width="100" height="20" forecolor="#000000" uuid="e019bb31-98e3-4319-82f2-2bfef290d1c7"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Times New Roman"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{jumlahDetail}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="detail" x="455" y="0" width="100" height="20" forecolor="#000000" uuid="8c7129c4-205c-4a79-9433-abafc123a626"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Times New Roman"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{jumlahTotal}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="20" splitType="Stretch">
+			<textField pattern="EEEEE dd MMMMM yyyy HH:mm">
+				<reportElement x="436" y="0" width="119" height="20" uuid="4eee8c61-a3ff-4c17-9d4d-d0e26fc57c4e"/>
+				<textElement textAlignment="Right">
+					<font fontName="Times New Roman" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="336" y="0" width="100" height="20" uuid="d87785e9-ad1f-40e7-be5c-661dbfb02266"/>
+				<textElement textAlignment="Right" verticalAlignment="Top">
+					<font fontName="Times New Roman" size="8"/>
+				</textElement>
+				<text><![CDATA[Print Date :  ]]></text>
+			</staticText>
+			<textField evaluationTime="Report">
+				<reportElement x="36" y="0" width="34" height="20" uuid="2259159c-49e9-4439-a0c4-2407bdcdc11d"/>
+				<textElement>
+					<font fontName="Times New Roman" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="0" width="36" height="20" uuid="90ad9728-0359-46a1-93cb-ad588dde0bad"/>
+				<textElement textAlignment="Right">
+					<font fontName="Times New Roman" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Page "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band height="151">
+			<printWhenExpression><![CDATA[$P{jenisLaporan}.equals("Detail")]]></printWhenExpression>
+			<subreport isUsingCache="true">
+				<reportElement positionType="Float" x="-20" y="0" width="595" height="20" uuid="fb263202-b68a-45b9-b981-4e7969c00ae8"/>
+				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($P{listPenjualanUmum})]]></dataSourceExpression>
+				<subreportExpression><![CDATA[$P{subReportDetailPenjualanUmum}]]></subreportExpression>
+			</subreport>
+			<break>
+				<reportElement positionType="Float" x="0" y="22" width="555" height="1" uuid="aa717927-e931-4403-9ff3-f70d2d4c453c"/>
+			</break>
+			<subreport>
+				<reportElement positionType="Float" x="-20" y="25" width="595" height="20" uuid="db9f0a7f-96cf-416c-b476-8e5861b55e41"/>
+				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($P{listPenjualanCabang})]]></dataSourceExpression>
+				<subreportExpression><![CDATA[$P{subReportDetailPenjualanCabang}]]></subreportExpression>
+			</subreport>
+			<break>
+				<reportElement positionType="Float" x="0" y="47" width="555" height="1" uuid="e7d0fc98-091b-4fd2-b574-07ddc8c7809b"/>
+			</break>
+			<subreport>
+				<reportElement positionType="Float" x="-20" y="50" width="595" height="20" uuid="e20fc5ec-aa62-4d90-a004-ac801584d2f2"/>
+				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($P{listPenjualanCiok})]]></dataSourceExpression>
+				<subreportExpression><![CDATA[$P{subReportDetailPenjualanCiok}]]></subreportExpression>
+			</subreport>
+			<break>
+				<reportElement positionType="Float" x="0" y="72" width="555" height="1" uuid="a694a504-0c82-4617-9a37-b4e21fa7a0d3"/>
+			</break>
+			<subreport>
+				<reportElement positionType="Float" x="-20" y="75" width="595" height="20" uuid="304f55fa-6e45-4089-a806-52ef5711b99f"/>
+				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($P{listKeuanganCabang})]]></dataSourceExpression>
+				<subreportExpression><![CDATA[$P{subReportDetailKeuanganCabang}]]></subreportExpression>
+			</subreport>
+			<subreport>
+				<reportElement positionType="Float" x="-20" y="96" width="595" height="20" uuid="51e14342-2b2f-44bc-97bc-3f8daee1f571"/>
+				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($P{listKeuanganPusat})]]></dataSourceExpression>
+				<subreportExpression><![CDATA[$P{subReportDetailKeuanganPusat}]]></subreportExpression>
+			</subreport>
+			<textField pattern="#,##0">
+				<reportElement style="columnHeader" positionType="Float" x="455" y="124" width="100" height="20" uuid="910848e5-00e3-4e19-8345-c69d0bb24ea7"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Serif" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{totalPendapatanBeban}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement style="columnHeader" positionType="Float" x="0" y="124" width="455" height="20" uuid="19cadb04-9380-4da2-86b1-09372a236107"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Serif" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Total Pendapatan / Beban]]></text>
+			</staticText>
+		</band>
+	</summary>
+</jasperReport>

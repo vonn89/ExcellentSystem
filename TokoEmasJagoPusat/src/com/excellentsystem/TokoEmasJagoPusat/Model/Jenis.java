@@ -1,0 +1,80 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
+package com.excellentsystem.TokoEmasJagoPusat.Model;
+
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
+
+/**
+ *
+ * @author Xtreme
+ */
+public class Jenis {
+    //tm_jenis
+    private final StringProperty kodeJenis = new SimpleStringProperty();
+    private final StringProperty namaJenis = new SimpleStringProperty();
+    private final StringProperty kodeKategori = new SimpleStringProperty();
+    private final StringProperty kodeSubKategori = new SimpleStringProperty();
+    private Kategori kategori;
+
+    public Kategori getKategori() {
+        return kategori;
+    }
+
+    public void setKategori(Kategori kategori) {
+        this.kategori = kategori;
+    }
+    
+    
+    public String getKodeSubKategori() {
+        return kodeSubKategori.get();
+    }
+
+    public void setKodeSubKategori(String value) {
+        kodeSubKategori.set(value);
+    }
+
+    public StringProperty kodeSubKategoriProperty() {
+        return kodeSubKategori;
+    }
+
+    public String getKodeKategori() {
+        return kodeKategori.get();
+    }
+
+    public void setKodeKategori(String value) {
+        kodeKategori.set(value);
+    }
+
+    public StringProperty kodeKategoriProperty() {
+        return kodeKategori;
+    }
+
+    public String getNamaJenis() {
+        return namaJenis.get();
+    }
+
+    public void setNamaJenis(String value) {
+        namaJenis.set(value);
+    }
+
+    public StringProperty namaJenisProperty() {
+        return namaJenis;
+    }
+
+    public String getKodeJenis() {
+        return kodeJenis.get();
+    }
+
+    public void setKodeJenis(String value) {
+        kodeJenis.set(value);
+    }
+
+    public StringProperty kodeJenisProperty() {
+        return kodeJenis;
+    }
+}

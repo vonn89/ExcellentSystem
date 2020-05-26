@@ -1,0 +1,56 @@
+2019/09/02
+- Warning tutup toko/harga ciok
+- Pembelian supplier (penambahan/pengurangan stok pusat) - sementara
+- Stok barang pusat
+- Lebur rosok dan jual ciok
+- Laporan omzet
+- Dashboard
+- fix error batal pindah barang
+- fix error saat sp balenan mau revisi harus pilih kode jenis lagi
+2019/10/13
+- fix dashboard loader
+- kinerja barcode
+- notifikasi pindah barang belum diterima
+- notifikasi ambil balenan belum diterima
+- notifikasi setoran belum diterima
+- notifikasi tambah uang belum diterima
+- notifikasi penjualan cabang belum diterima
+- notifikasi permintaan barang
+- notif pusat (ambil barang, pindah barang, setoran cabang, tambah uang)
+- revisi, rosok window masih tetap ada setelah simpan
+2019/11/26
+- lebur rosok
+- notif pusat (permintaan barang) + print
+- user otoritas dashboard - database : tambah otoritas = "Pusat", "Dashboard" tiap user
+- batal tambah uang cabang
+2019/12/10
+- dashboard - permintaan barang - nama sales
+2020/05/26
+- ver. 2.0.10
+- laporan performa barcode
+- data user otomatis add otoritas
+- auto update to google server
+- pindah permintaan barang ke notif (sort by desc)
+- rapiin menu pusat
+- lebur rosok cabang - input berat jadi
+- penjualan ciok cabang
+- tambah & ambil barang pusat - error kode kategori
+- hancur barang cabang (fixed)
+- reset stok barang - beban penyusutan barang (fixed)
+- laporan neraca - detail terima down payment(fixed)
+- laporan neraca - detail gudang pindah (fixed)
+- laporan neraca - detail modal (delete)
+- laporan neraca & untung rugi reset pertama
+
+Error
+- hancur barang nilai pokok pembulatan (database fix)
+
+PLAN UPDATE:
+dashboard - performa cabang - list toko
+batal terima setoran cabang
+laporan managerial
+autoupdate
+print penjualan cabang
+check tgl system/harga emas
+
+

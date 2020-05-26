@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="0" bottomMargin="0" uuid="a2684c4c-28ad-473d-ba67-363a0791bd3b">
+	<property name="ireport.zoom" value="1.366026910730141"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<style name="columnHeader" mode="Opaque" forecolor="#FFFFFF" backcolor="#404040">
+		<box leftPadding="5" rightPadding="5">
+			<leftPen lineWidth="0.0"/>
+			<rightPen lineWidth="0.0"/>
+		</box>
+	</style>
+	<style name="groupHeader1" mode="Opaque" backcolor="#FFCBCB">
+		<box leftPadding="5" rightPadding="5"/>
+	</style>
+	<style name="groupHeader2" mode="Opaque" backcolor="#CBEDFF">
+		<box leftPadding="5" rightPadding="5"/>
+	</style>
+	<style name="detail" mode="Opaque">
+		<box leftPadding="5" rightPadding="5"/>
+	</style>
+	<style name="detailEven" mode="Opaque" backcolor="#EDEDED">
+		<box leftPadding="5" rightPadding="5"/>
+	</style>
+	<queryString>
+		<![CDATA[]]>
+	</queryString>
+	<field name="nilaiKeluar" class="java.lang.Double">
+		<fieldDescription><![CDATA[nilaiKeluar]]></fieldDescription>
+	</field>
+	<field name="beratPersenAwal" class="java.lang.Double">
+		<fieldDescription><![CDATA[beratPersenAwal]]></fieldDescription>
+	</field>
+	<field name="kodeCabang" class="java.lang.String">
+		<fieldDescription><![CDATA[kodeCabang]]></fieldDescription>
+	</field>
+	<field name="beratKeluar" class="java.lang.Double">
+		<fieldDescription><![CDATA[beratKeluar]]></fieldDescription>
+	</field>
+	<field name="kodeGudang" class="java.lang.String">
+		<fieldDescription><![CDATA[kodeGudang]]></fieldDescription>
+	</field>
+	<field name="beratPersenKeluar" class="java.lang.Double">
+		<fieldDescription><![CDATA[beratPersenKeluar]]></fieldDescription>
+	</field>
+	<field name="beratAkhir" class="java.lang.Double">
+		<fieldDescription><![CDATA[beratAkhir]]></fieldDescription>
+	</field>
+	<field name="beratAwal" class="java.lang.Double">
+		<fieldDescription><![CDATA[beratAwal]]></fieldDescription>
+	</field>
+	<field name="nilaiAwal" class="java.lang.Double">
+		<fieldDescription><![CDATA[nilaiAwal]]></fieldDescription>
+	</field>
+	<field name="tanggal" class="java.lang.String">
+		<fieldDescription><![CDATA[tanggal]]></fieldDescription>
+	</field>
+	<field name="beratMasuk" class="java.lang.Double">
+		<fieldDescription><![CDATA[beratMasuk]]></fieldDescription>
+	</field>
+	<field name="nilaiMasuk" class="java.lang.Double">
+		<fieldDescription><![CDATA[nilaiMasuk]]></fieldDescription>
+	</field>
+	<field name="nilaiAkhir" class="java.lang.Double">
+		<fieldDescription><![CDATA[nilaiAkhir]]></fieldDescription>
+	</field>
+	<field name="beratPersenMasuk" class="java.lang.Double">
+		<fieldDescription><![CDATA[beratPersenMasuk]]></fieldDescription>
+	</field>
+	<field name="beratPersenAkhir" class="java.lang.Double">
+		<fieldDescription><![CDATA[beratPersenAkhir]]></fieldDescription>
+	</field>
+	<variable name="totalBeratAkhir" class="java.lang.Double" calculation="Sum">
+		<variableExpression><![CDATA[$F{beratAkhir}]]></variableExpression>
+	</variable>
+	<variable name="totalBeratPersenAkhir" class="java.lang.Double" calculation="Sum">
+		<variableExpression><![CDATA[$F{beratPersenAkhir}]]></variableExpression>
+	</variable>
+	<variable name="totalNilaiAkhir" class="java.lang.Double" calculation="Sum">
+		<variableExpression><![CDATA[$F{nilaiAkhir}]]></variableExpression>
+	</variable>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<columnHeader>
+		<band height="20">
+			<staticText>
+				<reportElement style="columnHeader" x="255" y="0" width="100" height="20" uuid="e191f40b-1777-438f-9cd5-b2597d0e7248"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Serif" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Berat]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="columnHeader" x="455" y="0" width="100" height="20" uuid="75c25bd7-b406-49e4-9622-a6a84908ae65"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Serif" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Nilai Pokok]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="columnHeader" x="0" y="0" width="255" height="20" uuid="1faa0a49-a98b-4428-ab81-536b488594cb"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Serif" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Gudang]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="columnHeader" x="355" y="0" width="100" height="20" uuid="46249564-6efa-49f4-80f5-d887a58ad7a7"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Times New Roman" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Berat Persen]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20">
+			<printWhenExpression><![CDATA[$V{COLUMN_COUNT}%2==0]]></printWhenExpression>
+			<textField pattern="#,##0">
+				<reportElement style="detail" x="455" y="0" width="100" height="20" uuid="36d21722-4b5c-41f6-9f09-083e7989c8b1"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Serif"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nilaiAkhir}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.##">
+				<reportElement style="detail" x="355" y="0" width="100" height="20" uuid="f0254f66-f5cd-4577-a66a-fd427bff15ce"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Serif"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{beratPersenAkhir}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.##">
+				<reportElement style="detail" x="255" y="0" width="100" height="20" uuid="9d80a717-2984-4ef5-bcb3-822f00654331"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Serif"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{beratAkhir}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="detail" x="0" y="0" width="255" height="20" uuid="a95b7e38-695b-4d40-97fa-7b9cac01fed4"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Serif"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{kodeGudang}]]></textFieldExpression>
+			</textField>
+		</band>
+		<band height="20">
+			<printWhenExpression><![CDATA[$V{COLUMN_COUNT}%2!=0]]></printWhenExpression>
+			<textField>
+				<reportElement style="detailEven" x="0" y="0" width="255" height="20" uuid="70b5d8cf-25ed-4505-bd0f-39a4a171afc1"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Serif"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{kodeGudang}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0">
+				<reportElement style="detailEven" x="455" y="0" width="100" height="20" uuid="66626aae-ad3b-4224-88ac-4d077b7c6ffa"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Serif"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nilaiAkhir}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.##">
+				<reportElement style="detailEven" x="355" y="0" width="100" height="20" uuid="71fbd3c7-4b69-4aa7-bb58-bc46fa3cfc77"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Serif"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{beratPersenAkhir}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.##">
+				<reportElement style="detailEven" x="255" y="0" width="100" height="20" uuid="9991e6fc-ef8d-4f41-bdf8-bf0fcffacf4f"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Serif"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{beratAkhir}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<summary>
+		<band height="20">
+			<staticText>
+				<reportElement style="columnHeader" x="0" y="0" width="255" height="20" uuid="6768c51a-0eca-48da-87a6-6cd8b002280c"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Serif" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Grandtotal]]></text>
+			</staticText>
+			<textField pattern="#,##0.##">
+				<reportElement style="columnHeader" x="255" y="0" width="100" height="20" uuid="ed482c54-4ff9-4443-927d-60d91cb7ccf2"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Serif" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{totalBeratAkhir}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0">
+				<reportElement style="columnHeader" x="455" y="0" width="100" height="20" uuid="4e63fa97-c616-4538-bba1-4dda08964739"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Serif" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{totalNilaiAkhir}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.##">
+				<reportElement style="columnHeader" x="355" y="0" width="100" height="20" uuid="f17dd9b4-4c4a-42cd-bbc0-5f0ba6d7a2a1"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Times New Roman" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{totalBeratPersenAkhir}]]></textFieldExpression>
+			</textField>
+		</band>
+	</summary>
+</jasperReport>

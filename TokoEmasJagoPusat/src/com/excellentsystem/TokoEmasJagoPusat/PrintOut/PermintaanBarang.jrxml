@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="BuktiAmbilBarang" language="groovy" pageWidth="209" pageHeight="842" columnWidth="169" leftMargin="20" rightMargin="20" topMargin="0" bottomMargin="0" isIgnorePagination="true" uuid="5b10bbcd-ad86-4721-8dbf-10aaaf358142">
+	<property name="ireport.zoom" value="2.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<queryString>
+		<![CDATA[]]>
+	</queryString>
+	<field name="keterangan" class="java.lang.String">
+		<fieldDescription><![CDATA[keterangan]]></fieldDescription>
+	</field>
+	<field name="kodeCabang" class="java.lang.String">
+		<fieldDescription><![CDATA[kodeCabang]]></fieldDescription>
+	</field>
+	<field name="kodeSales" class="java.lang.String">
+		<fieldDescription><![CDATA[kodeSales]]></fieldDescription>
+	</field>
+	<field name="status" class="java.lang.String">
+		<fieldDescription><![CDATA[status]]></fieldDescription>
+	</field>
+	<field name="tanggal" class="java.lang.String">
+		<fieldDescription><![CDATA[tanggal]]></fieldDescription>
+	</field>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="36" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="20" width="169" height="16" uuid="25ba7788-b478-4106-adef-b14d15e63811"/>
+				<textElement textAlignment="Center">
+					<font fontName="Serif" size="12" isUnderline="false"/>
+				</textElement>
+				<text><![CDATA[Permintaan Barang]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="0" y="0" width="169" height="22" uuid="4b246f57-77a9-4c2c-8d0d-3759e5282322"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Serif" size="16" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{kodeCabang}]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="29" splitType="Stretch">
+			<textField pattern="dd MMM yyyy HH:mm" isBlankWhenNull="true">
+				<reportElement x="0" y="0" width="169" height="15" uuid="f2478d32-90ec-4d05-960a-97bfe78377d2"/>
+				<textElement textAlignment="Center">
+					<font fontName="Serif" size="10" isBold="false" isStrikeThrough="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").parse($F{tanggal})]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="0" y="14" width="169" height="15" uuid="cbc4e98a-ddd4-4984-ad00-71233c0e126f"/>
+				<textElement textAlignment="Center">
+					<font fontName="Serif" size="10" isBold="false" isStrikeThrough="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{kodeSales}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="0" y="0" width="169" height="1" uuid="4d377cc1-fdc2-4c81-8d12-48c93ff70cb6"/>
+			</line>
+		</band>
+	</pageHeader>
+	<summary>
+		<band height="15">
+			<line>
+				<reportElement x="0" y="0" width="169" height="1" uuid="e5ad054a-262f-4a19-9bb9-8aea9d2be9e7"/>
+			</line>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToTallestObject" x="0" y="0" width="169" height="15" uuid="5f03da06-a17a-4cb9-ac97-58773d364b67"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Serif"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{keterangan}]]></textFieldExpression>
+			</textField>
+		</band>
+	</summary>
+</jasperReport>

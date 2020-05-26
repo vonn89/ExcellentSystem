@@ -1,0 +1,682 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" isSummaryNewPage="true" isSummaryWithPageHeaderAndFooter="true" isFloatColumnFooter="true" uuid="cb43cc45-fd9b-4e82-ac61-9dbabd19820c">
+	<property name="ireport.zoom" value="1.210000000000003"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="305"/>
+	<style name="label" forecolor="#000000"/>
+	<style name="columnHeader" mode="Transparent" forecolor="#000000" backcolor="#FFFFFF"/>
+	<style name="columnHeader_1" mode="Opaque" forecolor="#FFFFFF" backcolor="#404040">
+		<box leftPadding="5" rightPadding="5">
+			<leftPen lineWidth="0.0"/>
+			<rightPen lineWidth="0.0"/>
+		</box>
+	</style>
+	<style name="groupHeader1" mode="Opaque" backcolor="#FFCBCB">
+		<box leftPadding="5" rightPadding="5"/>
+	</style>
+	<style name="groupHeader2" mode="Opaque" backcolor="#CBEDFF">
+		<box leftPadding="5" rightPadding="5"/>
+	</style>
+	<parameter name="tanggal" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["2018-03-05"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="cabang" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["2018-04-05"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="totalAktiva" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["0"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="totalPassiva" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["0"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="jenisLaporan" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="subReportKeuangan" class="net.sf.jasperreports.engine.JasperReport" isForPrompting="false"/>
+	<parameter name="listKas" class="java.util.List" isForPrompting="false"/>
+	<parameter name="saldoAwalKas" class="java.lang.Double" isForPrompting="false"/>
+	<parameter name="saldoAkhirKas" class="java.lang.Double" isForPrompting="false"/>
+	<parameter name="subReportKeuanganCabang" class="net.sf.jasperreports.engine.JasperReport" isForPrompting="false"/>
+	<parameter name="listBank" class="java.util.List" isForPrompting="false"/>
+	<parameter name="saldoAwalBank" class="java.lang.Double" isForPrompting="false"/>
+	<parameter name="saldoAkhirBank" class="java.lang.Double" isForPrompting="false"/>
+	<parameter name="listBankXXX" class="java.util.List" isForPrompting="false"/>
+	<parameter name="saldoAwalBankXXX" class="java.lang.Double" isForPrompting="false"/>
+	<parameter name="saldoAkhirBankXXX" class="java.lang.Double" isForPrompting="false"/>
+	<parameter name="subReportPiutangPenjualan" class="net.sf.jasperreports.engine.JasperReport" isForPrompting="false"/>
+	<parameter name="listPiutangPenjualan" class="java.util.List" isForPrompting="false"/>
+	<parameter name="subReportStokBarang" class="net.sf.jasperreports.engine.JasperReport" isForPrompting="false"/>
+	<parameter name="listStokBarangXXX" class="java.util.List" isForPrompting="false"/>
+	<parameter name="listStokBarangXXXBLN" class="java.util.List" isForPrompting="false"/>
+	<parameter name="subReportStokBarangCabang" class="net.sf.jasperreports.engine.JasperReport" isForPrompting="false"/>
+	<parameter name="listStokBarangXXXAmbil" class="java.util.List" isForPrompting="false"/>
+	<parameter name="listStokBarangBLNXXX" class="java.util.List" isForPrompting="false"/>
+	<parameter name="listStokBarangSPXXX" class="java.util.List" isForPrompting="false"/>
+	<parameter name="listStokBarangXXXSP" class="java.util.List" isForPrompting="false"/>
+	<parameter name="listStokBarangXXXNew" class="java.util.List" isForPrompting="false"/>
+	<parameter name="listStokBarangXXXPindah" class="java.util.List" isForPrompting="false"/>
+	<parameter name="subReportStokRosokCabang" class="net.sf.jasperreports.engine.JasperReport" isForPrompting="false"/>
+	<parameter name="listStokRosokCabang" class="java.util.List" isForPrompting="false"/>
+	<parameter name="subReportHutangTerimaDownPayment" class="net.sf.jasperreports.engine.JasperReport" isForPrompting="false"/>
+	<parameter name="listHutangTerimaDownPayment" class="java.util.List" isForPrompting="false"/>
+	<parameter name="subReportHutang" class="net.sf.jasperreports.engine.JasperReport" isForPrompting="false"/>
+	<parameter name="listHutangModal" class="java.util.List" isForPrompting="false"/>
+	<parameter name="listHutangPembelian" class="java.util.List" isForPrompting="false"/>
+	<queryString>
+		<![CDATA[]]>
+	</queryString>
+	<field name="aktiva" class="java.lang.String">
+		<fieldDescription><![CDATA[aktiva]]></fieldDescription>
+	</field>
+	<field name="jumlahAktiva" class="java.lang.String">
+		<fieldDescription><![CDATA[jumlahAktiva]]></fieldDescription>
+	</field>
+	<field name="jumlahPassiva" class="java.lang.String">
+		<fieldDescription><![CDATA[jumlahPassiva]]></fieldDescription>
+	</field>
+	<field name="passiva" class="java.lang.String">
+		<fieldDescription><![CDATA[passiva]]></fieldDescription>
+	</field>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="82" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="39" width="50" height="15" uuid="7826f71a-c1c2-4fde-a9fa-d7f662bedcee"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Serif"/>
+				</textElement>
+				<text><![CDATA[Tanggal]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="0" width="481" height="40" uuid="b9bb017a-2757-452c-b5cb-87c258b1113b"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Serif" size="22"/>
+				</textElement>
+				<text><![CDATA[Laporan Neraca Cabang]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="50" y="39" width="10" height="15" uuid="9d1fb482-b015-4e40-9c39-79302e4954c6"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Serif"/>
+				</textElement>
+				<text><![CDATA[:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="60" y="39" width="421" height="15" uuid="22e1debc-c17d-4ee9-888c-da201201ba5a"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Serif"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{tanggal}]]></textFieldExpression>
+			</textField>
+			<image hAlign="Right" onErrorType="Blank">
+				<reportElement x="481" y="0" width="69" height="69" uuid="dd958361-c4de-48f1-b575-434fd84231ac"/>
+				<imageExpression><![CDATA["icon.png"]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement x="50" y="54" width="10" height="15" uuid="5a0975a6-c49d-4d6c-a3ed-049dfb7313a3"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Serif"/>
+				</textElement>
+				<text><![CDATA[:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="60" y="54" width="421" height="15" uuid="98417874-714c-4ebd-a8d3-8f5abacef208"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Serif"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{cabang}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="54" width="50" height="15" uuid="eeb45d6e-afe3-40ca-b8d4-5339c21166e4"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Serif"/>
+				</textElement>
+				<text><![CDATA[Cabang]]></text>
+			</staticText>
+			<line>
+				<reportElement x="0" y="77" width="554" height="1" uuid="0f3f8fa3-bcce-4445-8e05-c6f20e048b77"/>
+			</line>
+		</band>
+	</title>
+	<columnHeader>
+		<band height="17" splitType="Stretch">
+			<staticText>
+				<reportElement style="columnHeader" x="0" y="0" width="272" height="15" uuid="cca3cb16-fc2d-47f7-884c-0e6e547a67f2"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman" isBold="false"/>
+				</textElement>
+				<text><![CDATA[AKTIVA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="columnHeader" x="283" y="0" width="271" height="15" uuid="a897d4f8-80af-491d-a8ea-af0004f9ed7a"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman" isBold="false"/>
+				</textElement>
+				<text><![CDATA[PASSIVA]]></text>
+			</staticText>
+			<line>
+				<reportElement x="0" y="15" width="272" height="1" uuid="3067d659-673b-46e2-b770-63aee44d74d9"/>
+			</line>
+			<line>
+				<reportElement x="283" y="16" width="272" height="1" uuid="bb377e7d-52cc-430a-b2e2-4a61de7646ce"/>
+			</line>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="0" width="177" height="20" uuid="c8908395-6fa6-400f-9ad5-0bfae17899c7">
+					<printWhenExpression><![CDATA[!$F{aktiva}.startsWith(" ")]]></printWhenExpression>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{aktiva}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="177" y="0" width="95" height="20" uuid="72134d0e-28fc-4291-bdea-913926d69086">
+					<printWhenExpression><![CDATA[!$F{jumlahAktiva}.startsWith(" ")]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Times New Roman" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{jumlahAktiva}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="283" y="0" width="172" height="20" uuid="ae53f3b0-818d-44ab-899c-5e28a9c0bb8c">
+					<printWhenExpression><![CDATA[!$F{passiva}.startsWith(" ")]]></printWhenExpression>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{passiva}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="455" y="0" width="95" height="20" uuid="9f7e2f58-1b55-4fef-96ed-647d59a32379">
+					<printWhenExpression><![CDATA[!$F{jumlahPassiva}.startsWith(" ")]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Times New Roman" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{jumlahPassiva}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="5" y="0" width="172" height="20" uuid="5fd3b78d-381d-485d-99f0-c8825827271e">
+					<printWhenExpression><![CDATA[$F{aktiva}.startsWith(" ")]]></printWhenExpression>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{aktiva}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="177" y="0" width="95" height="20" uuid="e28c1c73-91f5-4a7e-a7fa-f29f32cea71b">
+					<printWhenExpression><![CDATA[$F{jumlahAktiva}.startsWith(" ")]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Times New Roman"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{jumlahAktiva}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="283" y="0" width="172" height="20" uuid="aa01bf01-9506-4330-b6e0-8c00f775ee53">
+					<printWhenExpression><![CDATA[$F{passiva}.startsWith(" ")]]></printWhenExpression>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{passiva}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="455" y="0" width="95" height="20" uuid="168798d1-2ec9-4f09-a1bf-cd8e16022030">
+					<printWhenExpression><![CDATA[$F{jumlahPassiva}.startsWith(" ")]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Times New Roman"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{jumlahPassiva}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="30" splitType="Stretch">
+			<textField>
+				<reportElement style="columnHeader" x="177" y="14" width="95" height="15" uuid="450816dc-547f-457c-a039-ae8c36946e95"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Times New Roman" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{totalAktiva}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="columnHeader" x="455" y="14" width="99" height="15" uuid="b1275b32-5319-44b6-bf5e-ce89b4fc1f72"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Times New Roman" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{totalPassiva}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="14" width="177" height="15" uuid="15eee4a7-9707-4e39-9388-292e64bc50ce"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman"/>
+				</textElement>
+				<text><![CDATA[TOTAL AKTIVA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="283" y="14" width="172" height="15" uuid="ee9fe4cc-a73d-4350-a56f-a2b7d27c87ae"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman"/>
+				</textElement>
+				<text><![CDATA[TOTAL PASSIVA]]></text>
+			</staticText>
+			<line>
+				<reportElement x="0" y="29" width="272" height="1" uuid="351229ac-0ae1-4ea6-81b4-e9e4ee7a0e61"/>
+			</line>
+			<line>
+				<reportElement x="283" y="29" width="272" height="1" uuid="9fc8f0c2-b4ec-40a8-87c0-da3508f4625a"/>
+			</line>
+			<line>
+				<reportElement x="0" y="13" width="272" height="1" uuid="a1d8d956-960a-4a0d-ab7a-405c218c94ea"/>
+			</line>
+			<line>
+				<reportElement x="283" y="13" width="272" height="1" uuid="fdd9f357-958d-46b1-9a2c-a334a453ec53"/>
+			</line>
+		</band>
+	</columnFooter>
+	<pageFooter>
+		<band height="20" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="0" width="36" height="20" uuid="d987a1f0-3b52-48f9-864d-afccf4dd4c23"/>
+				<textElement textAlignment="Right">
+					<font fontName="Times New Roman" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Page "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="336" y="0" width="100" height="20" uuid="f8a7f981-9e41-415a-8d12-a99c77714ca7"/>
+				<textElement textAlignment="Right" verticalAlignment="Top">
+					<font fontName="Times New Roman" size="8"/>
+				</textElement>
+				<text><![CDATA[Print Date :  ]]></text>
+			</staticText>
+			<textField evaluationTime="Report">
+				<reportElement x="36" y="0" width="34" height="20" uuid="cfcda601-8c6e-4261-bd2b-f033e6979bec"/>
+				<textElement>
+					<font fontName="Times New Roman" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField pattern="EEEEE dd MMMMM yyyy HH:mm">
+				<reportElement x="436" y="0" width="119" height="20" uuid="e0d89895-4774-4ce6-b482-c0d450aca3ec"/>
+				<textElement textAlignment="Right">
+					<font fontName="Times New Roman" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band height="737">
+			<printWhenExpression><![CDATA[$P{jenisLaporan}.equals("Detail")]]></printWhenExpression>
+			<staticText>
+				<reportElement style="columnHeader" positionType="Float" x="0" y="0" width="555" height="20" uuid="4aec8db7-86cd-4b32-94f1-80c5a5938e41"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Serif" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Detail Kas]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="groupHeader2" positionType="Float" x="0" y="20" width="455" height="20" uuid="262bcbb2-522a-48cc-b712-b56b96092924"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Serif" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Saldo Awal]]></text>
+			</staticText>
+			<textField pattern="#,##0">
+				<reportElement style="groupHeader2" positionType="Float" x="455" y="20" width="100" height="20" uuid="52d406a2-cbda-4076-8bb7-a55c99801212"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Serif" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{saldoAwalKas}]]></textFieldExpression>
+			</textField>
+			<subreport>
+				<reportElement positionType="Float" x="-20" y="40" width="595" height="5" uuid="35504133-7a1b-49fc-b516-e5e582e82fd1"/>
+				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($P{listKas})]]></dataSourceExpression>
+				<subreportExpression><![CDATA[$P{subReportKeuangan}]]></subreportExpression>
+			</subreport>
+			<staticText>
+				<reportElement style="groupHeader2" positionType="Float" x="0" y="45" width="455" height="20" uuid="5b1f0e75-bed1-4223-a387-176d17183abc"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Serif" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Saldo Akhir]]></text>
+			</staticText>
+			<textField pattern="#,##0">
+				<reportElement style="groupHeader2" positionType="Float" x="455" y="45" width="100" height="20" uuid="016cf809-d827-4e2f-b88a-98423a28d180"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Serif" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{saldoAkhirKas}]]></textFieldExpression>
+			</textField>
+			<break>
+				<reportElement positionType="Float" x="0" y="66" width="555" height="1" uuid="8a3cfa2c-fca9-48ce-94c6-f47e048fd4c1"/>
+			</break>
+			<staticText>
+				<reportElement style="columnHeader" positionType="Float" x="0" y="67" width="555" height="20" uuid="71bb1b94-d181-4441-bb7a-af2ec153572f"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Serif" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Detail Bank]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="groupHeader2" positionType="Float" x="0" y="87" width="455" height="20" uuid="ef502a96-f0b9-445f-aa92-63709649ec20"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Serif" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Saldo Awal]]></text>
+			</staticText>
+			<textField pattern="#,##0">
+				<reportElement style="groupHeader2" positionType="Float" x="455" y="87" width="100" height="20" uuid="161d7548-6f03-464c-85e1-00470f6d9b90"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Serif" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{saldoAwalBank}]]></textFieldExpression>
+			</textField>
+			<subreport>
+				<reportElement positionType="Float" x="-20" y="107" width="595" height="5" uuid="d92ab1ed-3fa8-4b55-8bcb-f2ae3cc245f6"/>
+				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($P{listBank})]]></dataSourceExpression>
+				<subreportExpression><![CDATA[$P{subReportKeuanganCabang}]]></subreportExpression>
+			</subreport>
+			<textField pattern="#,##0">
+				<reportElement style="groupHeader2" positionType="Float" x="455" y="112" width="100" height="20" uuid="b47e6e09-4962-4d68-8853-c2806c6a19dc"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Serif" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{saldoAkhirBank}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement style="groupHeader2" positionType="Float" x="0" y="112" width="455" height="20" uuid="a7560985-a14b-4924-9ead-6906f4ad9e26"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Serif" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Saldo Akhir]]></text>
+			</staticText>
+			<break>
+				<reportElement positionType="Float" x="0" y="133" width="555" height="1" uuid="b13bd463-b358-4d68-ac93-4df7b3186317"/>
+			</break>
+			<textField>
+				<reportElement x="0" y="134" width="555" height="20" uuid="1bea5e6a-a023-4d4f-8175-c6a5436d5b5e"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Serif" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Detail Bank-"+$P{cabang}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement style="groupHeader2" positionType="Float" x="0" y="154" width="455" height="20" uuid="4430c6ce-8617-40f7-9b65-ba7cf5119c03"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Serif" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Saldo Awal]]></text>
+			</staticText>
+			<textField pattern="#,##0">
+				<reportElement style="groupHeader2" positionType="Float" x="455" y="154" width="100" height="20" uuid="1bd25772-5fd7-4290-9b28-8ad69a0f33e3"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Serif" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{saldoAwalBankXXX}]]></textFieldExpression>
+			</textField>
+			<subreport>
+				<reportElement positionType="Float" x="-20" y="174" width="595" height="5" uuid="7ddc2fc2-45f8-41a1-822e-e685d5f0a32e"/>
+				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($P{listBankXXX})]]></dataSourceExpression>
+				<subreportExpression><![CDATA[$P{subReportKeuanganCabang}]]></subreportExpression>
+			</subreport>
+			<staticText>
+				<reportElement style="groupHeader2" positionType="Float" x="0" y="179" width="455" height="20" uuid="f7e9914c-5d0a-461e-9703-9dc98478595c"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Serif" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Saldo Akhir]]></text>
+			</staticText>
+			<textField pattern="#,##0">
+				<reportElement style="groupHeader2" positionType="Float" x="455" y="179" width="100" height="20" uuid="59d9eff4-c69c-483b-bc21-eb5ff680bf30"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Serif" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{saldoAkhirBankXXX}]]></textFieldExpression>
+			</textField>
+			<break>
+				<reportElement positionType="Float" x="0" y="200" width="555" height="1" uuid="3d9e7892-e805-49ad-8247-6b486b894576"/>
+			</break>
+			<staticText>
+				<reportElement style="columnHeader" positionType="Float" x="0" y="201" width="555" height="20" uuid="41f668e8-17e7-4b3e-835d-2a1d09290472"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Serif" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Detail Piutang Penjualan]]></text>
+			</staticText>
+			<subreport>
+				<reportElement positionType="Float" x="-20" y="221" width="595" height="10" uuid="9743106d-91d0-49e6-8a72-d40e7c01bb6c"/>
+				<subreportParameter name="cabang">
+					<subreportParameterExpression><![CDATA[$P{cabang}]]></subreportParameterExpression>
+				</subreportParameter>
+				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($P{listPiutangPenjualan})]]></dataSourceExpression>
+				<subreportExpression><![CDATA[$P{subReportPiutangPenjualan}]]></subreportExpression>
+			</subreport>
+			<break>
+				<reportElement positionType="Float" x="0" y="234" width="555" height="1" uuid="45b62e24-b993-4277-81ea-7b98de0d5dcc"/>
+			</break>
+			<textField>
+				<reportElement style="columnHeader" positionType="Float" x="0" y="235" width="555" height="20" uuid="f689da17-fc2a-4207-9c21-51cd80b42c92"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Serif" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Detail Stok Barang "+$P{cabang}]]></textFieldExpression>
+			</textField>
+			<subreport>
+				<reportElement positionType="Float" x="-20" y="255" width="595" height="20" uuid="252d1563-9886-4fa8-86a7-065de0a391e4"/>
+				<subreportParameter name="cabang">
+					<subreportParameterExpression><![CDATA[$P{cabang}]]></subreportParameterExpression>
+				</subreportParameter>
+				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($P{listStokBarangXXX})]]></dataSourceExpression>
+				<subreportExpression><![CDATA[$P{subReportStokBarang}]]></subreportExpression>
+			</subreport>
+			<break>
+				<reportElement positionType="Float" x="0" y="276" width="555" height="1" uuid="8ea09230-61a7-49c6-941c-f8a18163cdd8"/>
+			</break>
+			<textField>
+				<reportElement style="columnHeader" positionType="Float" x="0" y="277" width="555" height="20" uuid="d264fcaa-a60a-4b62-8e80-1cedd51336ad"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Serif" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Detail Stok Barang "+$P{cabang}+"-BLN"]]></textFieldExpression>
+			</textField>
+			<subreport>
+				<reportElement positionType="Float" x="-20" y="297" width="595" height="20" uuid="5cdb1cde-e8de-4b5a-be1e-4c041507c927"/>
+				<subreportParameter name="cabang">
+					<subreportParameterExpression><![CDATA[$P{cabang}]]></subreportParameterExpression>
+				</subreportParameter>
+				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($P{listStokBarangXXXBLN})]]></dataSourceExpression>
+				<subreportExpression><![CDATA[$P{subReportStokBarang}]]></subreportExpression>
+			</subreport>
+			<break>
+				<reportElement positionType="Float" x="0" y="318" width="555" height="1" uuid="ff065fd8-a09c-4bb7-8904-6fc6457aae2b"/>
+			</break>
+			<textField>
+				<reportElement style="columnHeader" positionType="Float" x="0" y="319" width="555" height="20" uuid="1aafc779-fdce-418e-9981-abf819c7fe69"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Serif" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Detail Stok Barang "+$P{cabang}+"-Ambil"]]></textFieldExpression>
+			</textField>
+			<subreport>
+				<reportElement positionType="Float" x="-20" y="339" width="595" height="20" uuid="60e9fba4-d082-496f-81ae-a32f0dd0e2e6"/>
+				<subreportParameter name="cabang">
+					<subreportParameterExpression><![CDATA[$P{cabang}]]></subreportParameterExpression>
+				</subreportParameter>
+				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($P{listStokBarangXXXAmbil})]]></dataSourceExpression>
+				<subreportExpression><![CDATA[$P{subReportStokBarangCabang}]]></subreportExpression>
+			</subreport>
+			<break>
+				<reportElement positionType="Float" x="0" y="360" width="555" height="1" uuid="0b205b9d-2d70-4f66-bbbe-90a0b0c831f9"/>
+			</break>
+			<textField>
+				<reportElement style="columnHeader" positionType="Float" x="0" y="361" width="555" height="20" uuid="b3dde135-0236-444f-9acc-eaad6d61f280"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Serif" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Detail Stok Barang BLN-"+$P{cabang}]]></textFieldExpression>
+			</textField>
+			<subreport>
+				<reportElement positionType="Float" x="-20" y="381" width="595" height="20" uuid="b7dbdd87-682a-4fee-9398-196df2d2b312"/>
+				<subreportParameter name="cabang">
+					<subreportParameterExpression><![CDATA[$P{cabang}]]></subreportParameterExpression>
+				</subreportParameter>
+				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($P{listStokBarangBLNXXX})]]></dataSourceExpression>
+				<subreportExpression><![CDATA[$P{subReportStokBarangCabang}]]></subreportExpression>
+			</subreport>
+			<break>
+				<reportElement positionType="Float" x="0" y="402" width="555" height="1" uuid="176e4522-3cf3-418e-b38f-35b92102dafa"/>
+			</break>
+			<textField>
+				<reportElement style="columnHeader" positionType="Float" x="0" y="403" width="555" height="20" uuid="7d13a480-0291-46c7-a1de-0ff835fc2983"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Serif" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Detail Stok Barang SP-"+$P{cabang}]]></textFieldExpression>
+			</textField>
+			<subreport>
+				<reportElement positionType="Float" x="-20" y="423" width="595" height="20" uuid="10ce096a-c4b4-4f68-b81a-59b52abe14b9"/>
+				<subreportParameter name="cabang">
+					<subreportParameterExpression><![CDATA[$P{cabang}]]></subreportParameterExpression>
+				</subreportParameter>
+				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($P{listStokBarangSPXXX})]]></dataSourceExpression>
+				<subreportExpression><![CDATA[$P{subReportStokBarangCabang}]]></subreportExpression>
+			</subreport>
+			<break>
+				<reportElement positionType="Float" x="0" y="444" width="555" height="1" uuid="29d71790-96b2-4022-a407-55f899ba25e6"/>
+			</break>
+			<textField>
+				<reportElement style="columnHeader" positionType="Float" x="0" y="445" width="555" height="20" uuid="47f16371-ad05-49e3-8a0f-cb945c1ac751"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Serif" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Detail Stok Barang "+$P{cabang}+"-SP"]]></textFieldExpression>
+			</textField>
+			<subreport>
+				<reportElement positionType="Float" x="-20" y="465" width="595" height="20" uuid="36abb17d-334d-4147-a993-7f080cebc0af"/>
+				<subreportParameter name="cabang">
+					<subreportParameterExpression><![CDATA[$P{cabang}]]></subreportParameterExpression>
+				</subreportParameter>
+				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($P{listStokBarangXXXSP})]]></dataSourceExpression>
+				<subreportExpression><![CDATA[$P{subReportStokBarangCabang}]]></subreportExpression>
+			</subreport>
+			<break>
+				<reportElement positionType="Float" x="0" y="486" width="555" height="1" uuid="98f6657a-4b2e-4776-9009-853719272c08"/>
+			</break>
+			<textField>
+				<reportElement style="columnHeader" positionType="Float" x="0" y="487" width="555" height="20" uuid="79964cf2-3253-4929-a67e-7eac3faa0ed0"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Serif" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Detail Stok Barang "+$P{cabang}+"-New"]]></textFieldExpression>
+			</textField>
+			<subreport>
+				<reportElement positionType="Float" x="-20" y="507" width="595" height="20" uuid="53f916fa-bf5b-44a2-a61b-7da44e076d4a"/>
+				<subreportParameter name="cabang">
+					<subreportParameterExpression><![CDATA[$P{cabang}]]></subreportParameterExpression>
+				</subreportParameter>
+				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($P{listStokBarangXXXNew})]]></dataSourceExpression>
+				<subreportExpression><![CDATA[$P{subReportStokBarangCabang}]]></subreportExpression>
+			</subreport>
+			<break>
+				<reportElement positionType="Float" x="0" y="528" width="555" height="1" uuid="ff79f212-9b89-4996-a8d7-02cae0383066"/>
+			</break>
+			<textField>
+				<reportElement style="columnHeader" positionType="Float" x="0" y="530" width="555" height="20" uuid="5f11f88c-4b14-4c68-be67-24e1108cc248"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Serif" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Detail Stok Barang "+$P{cabang}+"-Pindah"]]></textFieldExpression>
+			</textField>
+			<subreport>
+				<reportElement positionType="Float" x="-20" y="550" width="595" height="20" uuid="8ba50017-c236-4c21-9813-a3074f190769"/>
+				<subreportParameter name="cabang">
+					<subreportParameterExpression><![CDATA[$P{cabang}]]></subreportParameterExpression>
+				</subreportParameter>
+				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($P{listStokBarangXXXPindah})]]></dataSourceExpression>
+				<subreportExpression><![CDATA[$P{subReportStokBarangCabang}]]></subreportExpression>
+			</subreport>
+			<break>
+				<reportElement positionType="Float" x="0" y="568" width="555" height="1" uuid="ea8b7ebf-99ef-42b2-a691-def7cb8ec9a7"/>
+			</break>
+			<textField>
+				<reportElement style="columnHeader" positionType="Float" x="-1" y="570" width="555" height="20" uuid="86f8cabd-2937-48c3-bba6-bf354b5caccb"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Serif" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Detail Stok Rosok "+$P{cabang}]]></textFieldExpression>
+			</textField>
+			<subreport>
+				<reportElement positionType="Float" x="-20" y="590" width="595" height="20" uuid="1fde02c6-7de5-46eb-b000-2438c554361a"/>
+				<subreportParameter name="cabang">
+					<subreportParameterExpression><![CDATA[$P{cabang}]]></subreportParameterExpression>
+				</subreportParameter>
+				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($P{listStokRosokCabang})]]></dataSourceExpression>
+				<subreportExpression><![CDATA[$P{subReportStokRosokCabang}]]></subreportExpression>
+			</subreport>
+			<break>
+				<reportElement positionType="Float" x="0" y="609" width="555" height="1" uuid="cab083d1-13a3-430d-993d-8b0e8c4c1d4d"/>
+			</break>
+			<textField>
+				<reportElement style="columnHeader" positionType="Float" x="0" y="611" width="555" height="20" uuid="678027fd-ce4f-4bc4-b572-01104e7bc2d0"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Serif" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Detail Hutang Terima Down Payment"]]></textFieldExpression>
+			</textField>
+			<subreport>
+				<reportElement positionType="Float" x="-20" y="631" width="595" height="20" uuid="5b9b6ad7-bef6-428b-83bd-2d96f6276dcd"/>
+				<subreportParameter name="cabang">
+					<subreportParameterExpression><![CDATA[$P{cabang}]]></subreportParameterExpression>
+				</subreportParameter>
+				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($P{listHutangTerimaDownPayment})]]></dataSourceExpression>
+				<subreportExpression><![CDATA[$P{subReportHutangTerimaDownPayment}]]></subreportExpression>
+			</subreport>
+			<break>
+				<reportElement positionType="Float" x="0" y="651" width="555" height="1" uuid="77a91b62-c869-4b5a-94ed-88d15843e1a8"/>
+			</break>
+			<textField>
+				<reportElement style="columnHeader" positionType="Float" x="0" y="653" width="555" height="20" uuid="df84ed7e-659f-4d0e-9767-274a169b0601"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Serif" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Detail Hutang Modal"]]></textFieldExpression>
+			</textField>
+			<subreport>
+				<reportElement positionType="Float" x="-20" y="673" width="595" height="20" uuid="4ba0b507-6a60-40a6-8b07-7ee43e28d9f4"/>
+				<subreportParameter name="cabang">
+					<subreportParameterExpression><![CDATA[$P{cabang}]]></subreportParameterExpression>
+				</subreportParameter>
+				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($P{listHutangModal})]]></dataSourceExpression>
+				<subreportExpression><![CDATA[$P{subReportHutang}]]></subreportExpression>
+			</subreport>
+			<break>
+				<reportElement positionType="Float" x="0" y="693" width="555" height="1" uuid="e1aa9d10-3f5e-4387-b35e-c2fe862e234b"/>
+			</break>
+			<textField>
+				<reportElement style="columnHeader" positionType="Float" x="-1" y="695" width="555" height="20" uuid="a776081b-a653-4f69-a1c3-ecc8914611f6"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Serif" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Detail Hutang Pembelian"]]></textFieldExpression>
+			</textField>
+			<subreport>
+				<reportElement positionType="Float" x="-20" y="715" width="595" height="20" uuid="16c0529b-aaf6-4fc1-b7bf-e83bc29f819f"/>
+				<subreportParameter name="cabang">
+					<subreportParameterExpression><![CDATA[$P{cabang}]]></subreportParameterExpression>
+				</subreportParameter>
+				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($P{listHutangPembelian})]]></dataSourceExpression>
+				<subreportExpression><![CDATA[$P{subReportHutang}]]></subreportExpression>
+			</subreport>
+		</band>
+	</summary>
+</jasperReport>
