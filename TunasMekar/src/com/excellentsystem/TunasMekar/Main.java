@@ -81,6 +81,7 @@ public class Main extends Application {
     
     private double x = 0;
     private double y = 0;
+    private double z = 0;
     
     public static DecimalFormat qty = new DecimalFormat("###,##0.##");
     public static DecimalFormat rp = new DecimalFormat("###,##0");
