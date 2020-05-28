@@ -20,7 +20,7 @@ public class Koneksi {
 //        Class.forName("com.mysql.jdbc.Driver");
 //        return DriverManager.getConnection(DbName,"admin","excellentsystem");
 //        
-        String ipServer = "35.247.170.159";
+        String ipServer = "34.87.153.33";
         String DbName = "jdbc:mysql://"+ipServer+":3306/jagobangunpersada?"
                 + "connectTimeout=0&socketTimeout=0&autoReconnect=true";
         Class.forName("com.mysql.jdbc.Driver");
