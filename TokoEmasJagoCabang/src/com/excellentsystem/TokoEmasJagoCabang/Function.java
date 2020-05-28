@@ -314,12 +314,12 @@ public class Function {
         System.out.println("start download");
         try{
             StorageOptions storageOptions = StorageOptions.newBuilder().
-                    setProjectId("auristeelmetalindo").
+                    setProjectId("excellentSystem").
                     setCredentials(GoogleCredentials.fromStream(Main.class.getResourceAsStream("Resource/credentials.json"))).build();
             Storage storage = storageOptions.getService();
             
             
-            Blob blob = storage.get(BlobId.of("auridata", filename));
+            Blob blob = storage.get(BlobId.of("jago", filename));
             blob.downloadTo(Paths.get(filename));
             status = "Update Success - please restart application";
         }catch(Exception e){
