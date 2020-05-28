@@ -130,9 +130,9 @@ public class TutupTokoController {
                         ps.setString(1, Main.sistem.getTglSystem());
                         ResultSet rs = ps.executeQuery();
                         while(rs.next()){
-                            String cabang = rs.getString(2);
-                            String gudang = rs.getString(3);
-                            double nilai = rs.getDouble(4);
+                            String cabang = rs.getString(1);
+                            String gudang = rs.getString(2);
+                            double nilai = rs.getDouble(3);
 
                             String noKeuangan = KeuanganCabangDAO.getId(con, cabang, besok.toString());
                             KeuanganCabang kc = new KeuanganCabang();
