@@ -628,6 +628,10 @@ public class MainAppController {
     public void menuLaporanUntungRugiPerpetual() {
         mainApp.showLaporanUntungRugi();
     }
+    @FXML
+    public void menuLaporanUntungRugiPeriode() {
+        mainApp.showLaporanUntungRugiPeriode();
+    }
 
 
     @FXML

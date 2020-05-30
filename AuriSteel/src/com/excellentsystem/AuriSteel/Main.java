@@ -71,6 +71,7 @@ import com.excellentsystem.AuriSteel.View.Report.LaporanPenyesuaianStokBarangCon
 import com.excellentsystem.AuriSteel.View.Report.LaporanPiutangController;
 import com.excellentsystem.AuriSteel.View.Report.LaporanProduksiBarangController;
 import com.excellentsystem.AuriSteel.View.Report.LaporanUntungRugiController;
+import com.excellentsystem.AuriSteel.View.Report.LaporanUntungRugiPeriodeController;
 import com.excellentsystem.AuriSteel.View.Report.LaporanUntungRugiSummaryController;
 import java.awt.Dimension;
 import java.awt.Toolkit;
@@ -109,7 +110,8 @@ import javax.crypto.spec.SecretKeySpec;
  */
 public class Main extends Application {
 
-    public static DecimalFormat df = new DecimalFormat("###,##0.##");
+    public static DecimalFormat df = new DecimalFormat("###,##0.##;(###,##0.##)");
+//    public static DecimalFormat df = new DecimalFormat("###,##0.##");
     public static DateFormat tglBarang = new SimpleDateFormat("yyyy-MM-dd");
     public static DateFormat tglSql = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     public static DateFormat tgl = new SimpleDateFormat("dd MMM yyyy");
@@ -567,6 +569,13 @@ public class Main extends Application {
         LaporanUntungRugiController controller = loader.getController();
         controller.setMainApp(this);
         setTitle("Laporan Untung Rugi");
+        return controller;
+    }
+    public LaporanUntungRugiPeriodeController showLaporanUntungRugiPeriode(){
+        FXMLLoader loader = changeStage("View/Report/LaporanUntungRugiPeriode.fxml");
+        LaporanUntungRugiPeriodeController controller = loader.getController();
+        controller.setMainApp(this);
+        setTitle("Laporan Untung Rugi Periode");
         return controller;
     }
     public LaporanUntungRugiSummaryController showLaporanUntungRugiSummary(){

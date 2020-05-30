@@ -317,6 +317,7 @@
                               <MenuButton fx:id="menuLaporanManagerial" layoutX="21.0" layoutY="111.0" mnemonicParsing="false" popupSide="RIGHT" prefHeight="35.0" prefWidth="270.0" text="Laporan Managerial">
                                  <items>
                                     <MenuItem mnemonicParsing="false" onAction="#menuLaporanUntungRugiPerpetual" text="Laporan Untung Rugi " />
+                                    <MenuItem mnemonicParsing="false" onAction="#menuLaporanUntungRugiPeriode" text="Laporan Untung Rugi Periode" />
                                     <MenuItem mnemonicParsing="false" onAction="#menuLaporanNeracaPerpetual" text="Laporan Neraca" />
                                     <MenuItem mnemonicParsing="false" onAction="#menuLaporanUntungRugiSummary" text="Laporan Untung Rugi Summary" />
                                  </items>
