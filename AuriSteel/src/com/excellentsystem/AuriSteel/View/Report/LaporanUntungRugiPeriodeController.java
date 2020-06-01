@@ -15,13 +15,11 @@ import static com.excellentsystem.AuriSteel.Main.tglSql;
 import com.excellentsystem.AuriSteel.Model.Keuangan;
 import java.sql.Connection;
 import java.sql.ResultSet;
-import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import javafx.collections.FXCollections;
@@ -30,11 +28,13 @@ import javafx.concurrent.Task;
 import javafx.concurrent.WorkerStateEvent;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.VPos;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.ContextMenu;
+import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.ScrollPane;
@@ -45,6 +45,7 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Modality;
+import javafx.stage.Stage;
 
 /**
  * FXML Controller class
@@ -179,10 +180,10 @@ public class LaporanUntungRugiPeriodeController  {
             
             AnchorPane ap = new AnchorPane();
             ap.setStyle("-fx-background-color: seccolor6");
-            ap.setMaxSize(250, 41);
+            ap.setMaxSize(300, 41);
             ap.setMouseTransparent(true);
             Label l = new Label("");
-            l.setPrefSize(250, 30);
+            l.setPrefSize(300, 30);
             l.setStyle("-fx-background-color: seccolor2;"
                     + "-fx-text-fill: seccolor6;"
                     + "-fx-font-weight: bold;");
@@ -311,7 +312,7 @@ public class LaporanUntungRugiPeriodeController  {
         gp.setMinHeight(30);
         gp.setPrefHeight(30);
         gp.setMaxHeight(30);
-        gp.getColumnConstraints().add(new ColumnConstraints(250, 250, 250, Priority.ALWAYS, HPos.LEFT, true));
+        gp.getColumnConstraints().add(new ColumnConstraints(300, 300, 300, Priority.ALWAYS, HPos.LEFT, true));
         for(int i = 1 ; i < columns ; i++){
             gp.getColumnConstraints().add(new ColumnConstraints(150, 150, Double.MAX_VALUE, Priority.ALWAYS, HPos.CENTER, true));
         }
@@ -398,7 +399,8 @@ public class LaporanUntungRugiPeriodeController  {
                     }
                 }
             }
-            addNormalText(df.format(pendapatanBeban), col, i);
+            addHyperLinkPendapatanBebanText(df.format(pendapatanBeban), col, i, temp, 
+                    LocalDate.parse(tglBarang.format(startDate),DateTimeFormatter.ISO_DATE), LocalDate.parse(tglBarang.format(endDate),DateTimeFormatter.ISO_DATE));
             i++;
         }
         addLeftHeaderText(gridPane, "", col, i);
@@ -451,60 +453,88 @@ public class LaporanUntungRugiPeriodeController  {
         label.setPadding(new Insets(0, 5, 0, 5));
         gridPane.add(label, column, row);
     }
-//    private void addPenjualanHyperLinkText(String text, int column, int row, Property p){
-//        AnchorPane anchorPane = new AnchorPane();
-//        anchorPane.setStyle("-fx-background-color:derive(seccolor5,50%);");
-//        gridPane.add(anchorPane, column, row, 1, 1);
-//        
-//        Hyperlink hyperlink = new Hyperlink(text);
-//        hyperlink.setStyle("-fx-text-fill:seccolor3;"
-//                + "-fx-border-color:transparent;");
-//        hyperlink.setOnAction((e) -> {
-//            Stage stage = new Stage();
-//            FXMLLoader loader = mainApp.showDialog(mainApp.MainStage, stage, "View/Dialog/DetailProperty.fxml");
-//            DetailPropertyController x = loader.getController();
-//            x.setMainApp(mainApp, mainApp.MainStage, stage);
-//            x.setProperty(p);
-//            x.viewOnly();
-//        });
-//        gridPane.add(hyperlink, column, row);
-//    }
-//    private void addBoldHyperLinkText(String text, int column, int row, List<Keuangan> keuangan){
-//        AnchorPane anchorPane = new AnchorPane();
-//        anchorPane.setStyle("-fx-background-color:derive(seccolor5,50%);");
-//        gridPane.add(anchorPane, column, row, 1, 1);
-//        
-//        Hyperlink hyperlink = new Hyperlink(text);
-//        hyperlink.setStyle("-fx-font-weight:bold;"
-//                + "-fx-text-fill:seccolor3;"
-//                + "-fx-border-color:transparent;");
-//        hyperlink.setOnAction((e) -> {
-//            Stage stage = new Stage();
-//            FXMLLoader loader = mainApp.showDialog(mainApp.MainStage, stage, "View/Report/DetailKeuangan.fxml");
-//            DetailKeuanganController x = loader.getController();
-//            x.setMainApp(mainApp, mainApp.MainStage, stage);
-//            x.setKeuangan(keuangan);
-//        });
-//        gridPane.add(hyperlink, column, row);
-//    }
-//    
-//    private void addHyperLinkText(String text, int column, int row, List<Keuangan> keuangan){
-//        AnchorPane anchorPane = new AnchorPane();
-//        anchorPane.setStyle("-fx-background-color:derive(seccolor5,50%);");
-//        gridPane.add(anchorPane, column, row, 1, 1);
-//        
-//        Hyperlink hyperlink = new Hyperlink(text);
-//        hyperlink.setStyle("-fx-text-fill:seccolor3;"
-//                + "-fx-border-color:transparent;");
-//        hyperlink.setOnAction((e) -> {
-//            Stage stage = new Stage();
-//            FXMLLoader loader = mainApp.showDialog(mainApp.MainStage, stage, "View/Report/DetailKeuangan.fxml");
-//            DetailKeuanganController x = loader.getController();
-//            x.setMainApp(mainApp, mainApp.MainStage, stage);
-//            x.setKeuangan(keuangan);
-//        });
-//        gridPane.add(hyperlink, column, row);
-//    }
+    private void addHyperLinkPenjualanText(String text, int column, int row, String tglAwal, String tglAkhir){
+        Hyperlink hyperlink = new Hyperlink(text);
+        hyperlink.setStyle("-fx-font-size:12;"
+                + "-fx-text-fill:seccolor3;"
+                + "-fx-border-color:transparent;");
+        hyperlink.setOnAction((e) -> {
+            Stage stage = new Stage();
+            FXMLLoader loader = mainApp.showDialog(mainApp.MainStage, stage, "View/Report/UntungRugiPenjualan.fxml");
+            UntungRugiPenjualanController x = loader.getController();
+            x.setMainApp(mainApp, mainApp.MainStage, stage);
+            x.getPenjualan(tglAwal, tglAkhir);
+        });
+        gridPane.add(hyperlink, column, row);
+    }
+    private void addHyperLinkHPPPenjualanText(String text, int column, int row, String tglAwal, String tglAkhir){
+        Hyperlink hyperlink = new Hyperlink(text);
+        hyperlink.setStyle("-fx-font-size:12;"
+                + "-fx-text-fill:seccolor3;"
+                + "-fx-border-color:transparent;");
+        hyperlink.setOnAction((e) -> {
+            Stage stage = new Stage();
+            FXMLLoader loader = mainApp.showDialog(mainApp.MainStage, stage, "View/Report/UntungRugiHPPPenjualan.fxml");
+            UntungRugiHPPPenjualanController x = loader.getController();
+            x.setMainApp(mainApp, mainApp.MainStage, stage);
+            x.getPenjualan(tglAwal, tglAkhir);
+        });
+        gridPane.add(hyperlink, column, row);
+    }
+    private void addHyperLinkPenjualanCoilText(String text, int column, int row, String tglAwal, String tglAkhir){
+        Hyperlink hyperlink = new Hyperlink(text);
+        hyperlink.setStyle("-fx-font-size:12;"
+                + "-fx-text-fill:seccolor3;"
+                + "-fx-border-color:transparent;");
+        hyperlink.setOnAction((e) -> {
+            Stage stage = new Stage();
+            FXMLLoader loader = mainApp.showDialog(mainApp.MainStage, stage, "View/Report/UntungRugiPenjualanCoil.fxml");
+            UntungRugiPenjualanCoilController x = loader.getController();
+            x.setMainApp(mainApp, mainApp.MainStage, stage);
+            x.getPenjualan(tglAwal, tglAkhir);
+        });
+        gridPane.add(hyperlink, column, row);
+    }
+    private void addHyperLinkHPPPenjualanCoilText(String text, int column, int row, String tglAwal, String tglAkhir){
+        Hyperlink hyperlink = new Hyperlink(text);
+        hyperlink.setStyle("-fx-font-size:12;"
+                + "-fx-text-fill:seccolor3;"
+                + "-fx-border-color:transparent;");
+        hyperlink.setOnAction((e) -> {
+            Stage stage = new Stage();
+            FXMLLoader loader = mainApp.showDialog(mainApp.MainStage, stage, "View/Report/UntungRugiHPPPenjualanCoil.fxml");
+            UntungRugiHPPPenjualanCoilController x = loader.getController();
+            x.setMainApp(mainApp, mainApp.MainStage, stage);
+            x.getPenjualan(tglAwal, tglAkhir);
+        });
+        gridPane.add(hyperlink, column, row);
+    }
+    private void addHyperLinkPendapatanBebanText(String text, int column, int row, List<Keuangan> keuangan, LocalDate tglAwal, LocalDate tglAkhir){
+        AnchorPane anchorPane = new AnchorPane();
+        anchorPane.setStyle("-fx-background-color:seccolor5;");
+        gridPane.add(anchorPane, column, row, 1, 1);
+        
+//        Label label = new Label(text);
+//        label.setStyle("-fx-font-weight:bold;"
+//                + "-fx-text-fill: seccolor2;");
+//        label.setPadding(new Insets(0, 5, 0, 5));
+//        gridPane.add(label, column, row);
+        
+        Hyperlink hyperlink = new Hyperlink(text);
+        hyperlink.setStyle("-fx-font-size:12;"
+                + "-fx-font-weight:bold;"
+                + "-fx-text-fill:seccolor2;"
+                + "-fx-border-color:transparent;");
+        hyperlink.setPadding(new Insets(0, 5, 0, 5));
+        hyperlink.setOnAction((e) -> {
+            Stage stage = new Stage();
+            FXMLLoader loader = mainApp.showDialog(mainApp.MainStage, stage, "View/Report/UntungRugiPendapatanBeban.fxml");
+            UntungRugiPendapatanBebanController x = loader.getController();
+            x.setMainApp(mainApp, mainApp.MainStage, stage);
+            x.setKeuangan(keuangan, tglAwal, tglAkhir);
+        });
+        gridPane.add(hyperlink, column, row);
+    }
     @FXML
     private void print(){
 //        List<UntungRugi> ur = new ArrayList<>();
