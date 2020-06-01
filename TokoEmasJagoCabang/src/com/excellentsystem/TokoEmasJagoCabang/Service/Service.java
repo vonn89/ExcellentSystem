@@ -3804,7 +3804,7 @@ public class Service {
             if(!sistemPusat.getTglSystem().equals(sistem.getTglSystem()))
                 status = "Tanggal sistem berbeda dengan tanggal sistem pusat";
             else{
-                if(TambahUangCabangDAO.get(con, tu.getNoTambahUang()).getStatusTerima().equals("true")){
+                if(TambahUangCabangDAO.get(conPusat, tu.getNoTambahUang()).getStatusTerima().equals("true")){
                     status = "Tambah uang cabang sudah pernah diterima";
                 }else{
                     TambahUangCabangDAO.update(conPusat, tu);
