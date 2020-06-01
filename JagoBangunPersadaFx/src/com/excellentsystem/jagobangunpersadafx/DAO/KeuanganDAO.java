@@ -86,7 +86,7 @@ public class KeuanganDAO {
     public static List<Keuangan> getAllByTipeKeuanganAndDate(
             Connection con, String tipeKeuangan, String tglMulai, String tglAkhir)throws Exception{
         PreparedStatement ps = con.prepareStatement("select * from tt_keuangan "
-                + " where left(tgl_keuangan,10) between ? and ? and tipe_keuangan = ? ");
+                + " where left(tgl_keuangan,10) between ? and ? and tipe_keuangan like ? ");
         ps.setString(1, tglMulai);
         ps.setString(2, tglAkhir);
         ps.setString(3, tipeKeuangan);

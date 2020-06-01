@@ -22,7 +22,6 @@ import com.excellentsystem.jagobangunpersadafx.Model.Otoritas;
 import com.excellentsystem.jagobangunpersadafx.Service.Service;
 import com.excellentsystem.jagobangunpersadafx.View.Dialog.NewModalController;
 import java.sql.Connection;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;

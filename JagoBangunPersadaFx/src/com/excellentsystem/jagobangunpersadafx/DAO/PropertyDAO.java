@@ -20,6 +20,30 @@ import java.util.List;
  * @author Xtreme
  */
 public class PropertyDAO {
+    public static List<Property> getAll(Connection con)throws Exception{
+        String sql = "select * from tm_property";
+        PreparedStatement ps = con.prepareStatement(sql);
+        ResultSet rs = ps.executeQuery();
+        List<Property> allProperty = new ArrayList<>();
+        while(rs.next()){
+            Property p = new Property();
+            p.setKodeProperty(rs.getString(1));
+            p.setKodeKategori(rs.getString(2));
+            p.setNamaProperty(rs.getString(3));
+            p.setAlamat(rs.getString(4));
+            p.setTipe(rs.getString(5));
+            p.setSpesifikasi(rs.getString(6));
+            p.setLuasTanah(rs.getDouble(7));
+            p.setLuasBangunan(rs.getDouble(8));
+            p.setNilaiProperty(rs.getDouble(9));
+            p.setHargaJual(rs.getDouble(10));
+            p.setDiskon(rs.getDouble(11));
+            p.setKeterangan(rs.getString(12));
+            p.setStatus(rs.getString(13));
+            allProperty.add(p);
+        }
+        return allProperty;
+    }
     public static List<Property> getAllByStatus(Connection con, List<String> status)throws Exception{
         String sql = "select * from tm_property where kode_property!='' ";
         if(!status.isEmpty()){

@@ -743,6 +743,13 @@ public class KeuanganController  {
         x.setMainApp(mainApp, mainApp.MainStage, stage);
         x.getPembangunan(noPembangunan);
     }
+    private void detailRealisasi(String noRealisasi, String noUrut){
+        Stage stage = new Stage();
+        FXMLLoader loader = mainApp.showDialog(mainApp.MainStage, stage, "View/Dialog/DetailRealisasiProyek.fxml");
+        DetailRealisasiProyekController x = loader.getController();
+        x.setMainApp(mainApp, mainApp.MainStage, stage);
+        x.getDetailRealisasi(noRealisasi, noUrut);
+    }
     private void detailTerimaPencairanKPR(Property p){
         Stage stage = new Stage();
         FXMLLoader loader = mainApp.showDialog(mainApp.MainStage, stage, "View/Dialog/DetailTerimaPencairanKPR.fxml");
@@ -770,12 +777,5 @@ public class KeuanganController  {
         DetailTerimaAngsuranPembayaranController x = loader.getController();
         x.setMainApp(mainApp, mainApp.MainStage, stage);
         x.getSAP(noSAP);
-    }
-    private void detailRealisasi(String noRealisasi, String noUrut){
-        Stage stage = new Stage();
-        FXMLLoader loader = mainApp.showDialog(mainApp.MainStage, stage, "View/Dialog/DetailRealisasiProyek.fxml");
-        DetailRealisasiProyekController x = loader.getController();
-        x.setMainApp(mainApp, mainApp.MainStage, stage);
-        x.getDetailRealisasi(noRealisasi, noUrut);
     }
 }

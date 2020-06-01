@@ -123,6 +123,30 @@ public class DetailPembelianTanahController  {
         });
         new Thread(task).start();
     }
+    public void getPembelian(String noPembelian){
+        Task<PembelianTanah> task = new Task<PembelianTanah>() {
+            @Override 
+            public PembelianTanah call() throws Exception{
+                try (Connection con = Koneksi.getConnection()) {
+                    PembelianTanah pt = PembelianTanahDAO.get(con, noPembelian);
+                    pt.setProperty(PropertyDAO.get(con, pt.getKodeProperty()));
+                    return pt;
+                }
+            }
+        };
+        task.setOnRunning((e) -> {
+            mainApp.showLoadingScreen();
+        });
+        task.setOnSucceeded((WorkerStateEvent e) -> {
+            mainApp.closeLoading();
+            setPembelian(task.getValue());
+        });
+        task.setOnFailed((e) -> {
+            mainApp.showMessage(Modality.NONE, "Error", task.getException().toString());
+            mainApp.closeLoading();
+        });
+        new Thread(task).start();
+    }
     public void getPembelian(Property p){
         Task<PembelianTanah> task = new Task<PembelianTanah>() {
             @Override 

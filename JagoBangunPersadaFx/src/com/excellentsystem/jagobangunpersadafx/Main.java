@@ -37,6 +37,7 @@ import com.excellentsystem.jagobangunpersadafx.View.RealisasiAnggaranProyekContr
 import com.excellentsystem.jagobangunpersadafx.View.RencanaAnggaranProyekController;
 import com.excellentsystem.jagobangunpersadafx.View.Report.LaporanNeracaController;
 import com.excellentsystem.jagobangunpersadafx.View.Report.LaporanUntungRugiController;
+import com.excellentsystem.jagobangunpersadafx.View.Report.LaporanUntungRugiPeriodeController;
 import com.excellentsystem.jagobangunpersadafx.View.Report.LaporanUntungRugiPropertyController;
 import com.excellentsystem.jagobangunpersadafx.View.TerimaAngsuranPembayaranController;
 import com.excellentsystem.jagobangunpersadafx.View.TerimaDownPaymentController;
@@ -75,7 +76,7 @@ import javax.crypto.spec.SecretKeySpec;
 public class Main extends Application {
     
     public static DecimalFormat qty = new DecimalFormat("###,##0.##");
-    public static DecimalFormat rp = new DecimalFormat("###,##0");
+    public static DecimalFormat rp = new DecimalFormat("###,##0;(###,##0)");
     public static DateFormat tglBarang = new SimpleDateFormat("yyyy-MM-dd");
     public static DateFormat tglSql = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     public static DateFormat tgl = new SimpleDateFormat("dd MMM yyyy");
@@ -370,6 +371,13 @@ public class Main extends Application {
         LaporanUntungRugiController controller = loader.getController();
         controller.setMainApp(this);
         setTitle("Laporan Untung-Rugi");
+        return controller;
+    }
+    public LaporanUntungRugiPeriodeController showLaporanUntungRugiPeriode(){
+        FXMLLoader loader = changeStage("View/Report/LaporanUntungRugiPeriode.fxml");
+        LaporanUntungRugiPeriodeController controller = loader.getController();
+        controller.setMainApp(this);
+        setTitle("Laporan Untung-Rugi Periode");
         return controller;
     }
     public LaporanUntungRugiPropertyController showLaporanUntungRugiProperty(){

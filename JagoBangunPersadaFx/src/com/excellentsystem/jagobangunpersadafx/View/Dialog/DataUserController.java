@@ -432,6 +432,9 @@ public class DataUserController {
             root.getChildren().add(createTreeItem("Laporan Untung-Rugi",
                 new ArrayList<>()
             ));
+            root.getChildren().add(createTreeItem("Laporan Untung-Rugi Periode",
+                new ArrayList<>()
+            ));
             root.getChildren().add(createTreeItem("Laporan Neraca",
                 new ArrayList<>()
             ));

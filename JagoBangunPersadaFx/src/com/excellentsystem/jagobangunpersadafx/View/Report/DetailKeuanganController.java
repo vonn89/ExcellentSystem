@@ -5,31 +5,21 @@
  */
 package com.excellentsystem.jagobangunpersadafx.View.Report;
 
-import com.excellentsystem.jagobangunpersadafx.DAO.CustomerDAO;
-import com.excellentsystem.jagobangunpersadafx.DAO.KPRDAO;
-import com.excellentsystem.jagobangunpersadafx.DAO.KaryawanDAO;
-import com.excellentsystem.jagobangunpersadafx.DAO.SAPDAO;
-import com.excellentsystem.jagobangunpersadafx.DAO.SDPDAO;
-import com.excellentsystem.jagobangunpersadafx.DAO.STJHeadDAO;
 import static com.excellentsystem.jagobangunpersadafx.Function.getTreeTableCell;
-import com.excellentsystem.jagobangunpersadafx.Koneksi;
 import com.excellentsystem.jagobangunpersadafx.Main;
 import static com.excellentsystem.jagobangunpersadafx.Main.rp;
 import static com.excellentsystem.jagobangunpersadafx.Main.tglLengkap;
 import static com.excellentsystem.jagobangunpersadafx.Main.tglSql;
-import com.excellentsystem.jagobangunpersadafx.Model.Customer;
-import com.excellentsystem.jagobangunpersadafx.Model.KPR;
-import com.excellentsystem.jagobangunpersadafx.Model.Karyawan;
 import com.excellentsystem.jagobangunpersadafx.Model.Keuangan;
-import com.excellentsystem.jagobangunpersadafx.Model.SAP;
-import com.excellentsystem.jagobangunpersadafx.Model.SDP;
-import com.excellentsystem.jagobangunpersadafx.Model.STJHead;
-import com.excellentsystem.jagobangunpersadafx.View.Dialog.DetailCustomerController;
-import com.excellentsystem.jagobangunpersadafx.View.Dialog.DetailKaryawanController;
+import com.excellentsystem.jagobangunpersadafx.Model.Property;
 import com.excellentsystem.jagobangunpersadafx.View.Dialog.DetailPembangunanController;
 import com.excellentsystem.jagobangunpersadafx.View.Dialog.DetailPembelianTanahController;
+import com.excellentsystem.jagobangunpersadafx.View.Dialog.DetailPropertyController;
+import com.excellentsystem.jagobangunpersadafx.View.Dialog.DetailRealisasiProyekController;
+import com.excellentsystem.jagobangunpersadafx.View.Dialog.DetailTerimaAngsuranPembayaranController;
+import com.excellentsystem.jagobangunpersadafx.View.Dialog.DetailTerimaDownPaymentController;
 import com.excellentsystem.jagobangunpersadafx.View.Dialog.DetailTerimaPencairanKPRController;
-import java.sql.Connection;
+import com.excellentsystem.jagobangunpersadafx.View.Dialog.DetailTerimaTandaJadiController;
 import java.util.List;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -38,12 +28,12 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.ContextMenu;
+import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeTableColumn;
 import javafx.scene.control.TreeTableRow;
 import javafx.scene.control.TreeTableView;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 /**
@@ -62,6 +52,9 @@ public class DetailKeuanganController  {
     @FXML private TreeTableColumn<Keuangan, String> deskripsiColumn;
     @FXML private TreeTableColumn<Keuangan, Number> jumlahRpColumn;
     @FXML private TreeTableColumn<Keuangan, String> kodeUserColumn;
+    
+    @FXML private Label totalLabel;
+    
     private ObservableList<Keuangan> allKeuangan = FXCollections.observableArrayList();
     private Main mainApp;   
     private Stage owner;
@@ -88,166 +81,76 @@ public class DetailKeuanganController  {
         });
         jumlahRpColumn.setCellValueFactory(param -> param.getValue().getValue().jumlahRpProperty());
         jumlahRpColumn.setCellFactory(col -> getTreeTableCell(rp));
+        
+        final ContextMenu rm = new ContextMenu();
+        MenuItem refresh = new MenuItem("Refresh");
+        refresh.setOnAction((ActionEvent event) -> {
+            setTable();
+        });
+        rm.getItems().addAll(refresh);
+        keuanganTable.setContextMenu(rm);
         keuanganTable.setRowFactory(ttv -> {
             TreeTableRow<Keuangan> row = new TreeTableRow<Keuangan>()  {
                 @Override
                 public void updateItem(Keuangan item, boolean empty) {
                     super.updateItem(item, empty);
                     if (empty) {
-                        setContextMenu(null);
+                        setContextMenu(rm);
                     } else {
                         if(item.getNoKeuangan().startsWith("KK")){
-                        ContextMenu rowMenu = new ContextMenu();
-                        MenuItem pembelian = new MenuItem("View Detail Pembelian");
-                        pembelian.setOnAction((ActionEvent event) -> {
-                            Stage child = new Stage();
-                            FXMLLoader loader = mainApp.showDialog(stage, child, "View/Dialog/DetailPembelianTanah.fxml");
-                            DetailPembelianTanahController x = loader.getController();
-                            x.setMainApp(mainApp, stage, child);
-                            x.getPembelian(item.getProperty());
-                        });
-                        MenuItem pembangunan = new MenuItem("Detail Pembangunan");
-                        pembangunan.setOnAction((ActionEvent event) -> {
-                            Stage child = new Stage();
-                            FXMLLoader loader = mainApp.showDialog(stage, child,  "View/Dialog/DetailPembangunan.fxml");
-                            DetailPembangunanController x = loader.getController();
-                            x.setMainApp(mainApp, stage, child);
-                            x.getPembangunan(item.getDeskripsi().split(" - ")[1]);
-                        });
-//                        MenuItem tj = new MenuItem("View Detail Surat Tanda Jadi");
-//                        tj.setOnAction((ActionEvent event) -> {
-//                            DetailTerimaTandaJadiController x = mainApp.showDetailTerimaTandaJadi();
-//                            x.getSTJ(item.getDeskripsi().split(" - ")[1]);
-//                            x.from = "Laporan Property";
-//                        });
-//                        MenuItem dp = new MenuItem("View Detail Surat Down Payment");
-//                        dp.setOnAction((ActionEvent event) -> {
-//                            DetailTerimaDownPaymentController x = mainApp.showDetailTerimaDownPayment();
-//                            x.getSDP(item.getDeskripsi().split(" - ")[1]);
-//                            x.from = "Laporan Property";
-//                        });
-                        MenuItem kpr = new MenuItem("View Detail Terima Pencairan KPR");
-                        kpr.setOnAction((ActionEvent event) -> {
-                            Stage child = new Stage();
-                            FXMLLoader loader = mainApp.showDialog(stage, child,  "View/Dialog/DetailTerimaPencairanKPR.fxml");
-                            DetailTerimaPencairanKPRController x = loader.getController();
-                            x.setMainApp(mainApp, stage, child);
-                            x.getKPR(item.getProperty());
-                        });
-//                        MenuItem sap = new MenuItem("View Detail Surat Angsuran Pembayaran");
-//                        sap.setOnAction((ActionEvent event) -> {
-//                            DetailTerimaAngsuranPembayaranController x = mainApp.showDetailTerimaAngsuranPembayaran();
-//                            x.getSAP(item.getDeskripsi().split(" - ")[1]);
-//                            x.from = "Laporan Property";
-//                        });
-                        if(item.getKategori().equals("Pembelian Tanah")||item.getKategori().equals("Batal Pembelian Tanah"))
-                            rowMenu.getItems().add(pembelian);
-                        else if(item.getKategori().equals("Pembangunan")||item.getKategori().equals("Batal Pembangunan"))
-                            rowMenu.getItems().add(pembangunan);
-                        else if(item.getKategori().equals("Terima Tanda Jadi")||item.getKategori().equals("Batal Terima Tanda Jadi")){
-//                            rowMenu.getItems().add(tj);
-                            MenuItem viewCustomer = new MenuItem("View Customer");
-                            viewCustomer.setOnAction((ActionEvent event) -> {
-                                try{
-                                    Stage child = new Stage();
-                                    FXMLLoader loader = mainApp.showDialog(stage, child,  "View/Dialog/DetailCustomer.fxml");
-                                    DetailCustomerController x = loader.getController();
-                                    x.setMainApp(mainApp, stage, child);
-                                    try(Connection con = Koneksi.getConnection()){
-                                        STJHead stj = STJHeadDAO.get(con, item.getDeskripsi().split(" - ")[1]);
-                                        Customer c = CustomerDAO.get(con, stj.getKodeCustomer());
-                                        x.setCustomer(c);
-                                        x.setViewOnly();
-                                    }
-                                }catch(Exception e){
-                                    mainApp.showMessage(Modality.NONE, "Error", e.toString());
-                                }
+                            ContextMenu rowMenu = new ContextMenu();
+                            MenuItem detailProperty = new MenuItem("Detail Property");
+                            detailProperty.setOnAction((ActionEvent event) -> {
+                                detailProperty(item.getProperty());
                             });
-                            rowMenu.getItems().add(viewCustomer);
-                            MenuItem viewSales = new MenuItem("View Sales");
-                            viewSales.setOnAction((ActionEvent event) -> {
-                                try{
-                                    Stage child = new Stage();
-                                    FXMLLoader loader = mainApp.showDialog(stage, child,  "View/Dialog/DetailKaryawan.fxml");
-                                    DetailKaryawanController x = loader.getController();
-                                    x.setMainApp(mainApp, stage, child);
-                                    try(Connection con = Koneksi.getConnection()){
-                                        STJHead stj = STJHeadDAO.get(con, item.getDeskripsi().split(" - ")[1]);
-                                        Karyawan s = KaryawanDAO.get(con, stj.getKodeSales());
-                                        x.setKaryawan(s);
-                                        x.setViewOnly();
-                                    }
-                                }catch(Exception e){
-                                    mainApp.showMessage(Modality.NONE, "Error", e.toString());
-                                }
+                            MenuItem pembelian = new MenuItem("Detail Pembelian");
+                            pembelian.setOnAction((ActionEvent event) -> {
+                                detailPembelian(item.getProperty());
                             });
-                            rowMenu.getItems().add(viewSales);
+                            MenuItem pembangunan = new MenuItem("Detail Pembangunan");
+                            pembangunan.setOnAction((ActionEvent event) -> {
+                                detailPembangunan(item.getDeskripsi().split(" - ")[1]);
+                            });
+                            MenuItem realisasi = new MenuItem("Detail Realisasi Proyek");
+                            realisasi.setOnAction((ActionEvent event) -> {
+                                detailRealisasi(item.getDeskripsi().split(" - ")[1], item.getDeskripsi().split(" - ")[2]);
+                            });
+                            MenuItem tj = new MenuItem("Detail Terima Tanda Jadi");
+                            tj.setOnAction((ActionEvent event) -> {
+                                detailTerimaTandaJadi(item.getDeskripsi().split(" - ")[1]);
+                            });
+                            MenuItem dp = new MenuItem("Detail Terima Down Payment");
+                            dp.setOnAction((ActionEvent event) -> {
+                                detailTerimaDownPayment(item.getDeskripsi().split(" - ")[1]);
+                            });
+                            MenuItem kpr = new MenuItem("Detail Terima Pencairan KPR");
+                            kpr.setOnAction((ActionEvent event) -> {
+                                detailTerimaPencairanKPR(item.getProperty());
+                            });
+                            MenuItem sap = new MenuItem("Detail Terima Angsuran Pembayaran");
+                            sap.setOnAction((ActionEvent event) -> {
+                                detailTerimaAngsuranPembayaran(item.getDeskripsi().split(" - ")[1]);
+                            });
+                            
+                            if(item.getProperty()!=null)
+                                rowMenu.getItems().add(detailProperty);
+                            
+                            if(item.getKategori().equals("Pembelian Tanah")||item.getKategori().equals("Batal Pembelian Tanah"))
+                                rowMenu.getItems().add(pembelian);
+                            else if(item.getKategori().equals("Pembangunan")||item.getKategori().equals("Batal Pembangunan"))
+                                rowMenu.getItems().add(pembangunan);
+                            else if(item.getKategori().equals("Realisasi Proyek")||item.getKategori().equals("Batal Realisasi Proyek"))
+                                rowMenu.getItems().add(realisasi);
+                            else if(item.getKategori().equals("Terima Tanda Jadi")||item.getKategori().equals("Batal Terima Tanda Jadi"))
+                                rowMenu.getItems().add(tj);
+                            else if(item.getKategori().equals("Terima Down Payment")||item.getKategori().equals("Batal Terima Down Payment"))
+                                rowMenu.getItems().add(dp);
+                            else if(item.getKategori().equals("Terima Pencairan KPR")||item.getKategori().equals("Batal Terima Pencairan KPR"))
+                                rowMenu.getItems().add(kpr);
+                            else if(item.getKategori().equals("Terima Angsuran")||item.getKategori().equals("Batal Terima Angsuran"))
+                                rowMenu.getItems().add(sap);
+                            setContextMenu(rowMenu);
                         }
-                        else if(item.getKategori().equals("Terima Down Payment")||item.getKategori().equals("Batal Terima Down Payment")){
-//                            rowMenu.getItems().add(dp);
-                            MenuItem viewCustomer = new MenuItem("View Customer");
-                            viewCustomer.setOnAction((ActionEvent event) -> {
-                                try{
-                                    Stage child = new Stage();
-                                    FXMLLoader loader = mainApp.showDialog(stage, child,  "View/Dialog/DetailCustomer.fxml");
-                                    DetailCustomerController x = loader.getController();
-                                    x.setMainApp(mainApp, stage, child);
-                                    try(Connection con = Koneksi.getConnection()){
-                                        SDP sdp = SDPDAO.get(con, item.getDeskripsi().split(" - ")[1]);
-                                        Customer c = CustomerDAO.get(con, sdp.getKodeCustomer());
-                                        x.setCustomer(c);
-                                        x.setViewOnly();
-                                    }
-                                }catch(Exception e){
-                                    mainApp.showMessage(Modality.NONE, "Error", e.toString());
-                                }
-                            });
-                            rowMenu.getItems().add(viewCustomer);
-                        }
-                        else if(item.getKategori().equals("Terima Pencairan KPR")||item.getKategori().equals("Batal Terima Pencairan KPR")){
-                            rowMenu.getItems().add(kpr);
-                            MenuItem viewCustomer = new MenuItem("View Customer");
-                            viewCustomer.setOnAction((ActionEvent event) -> {
-                                try{
-                                    Stage child = new Stage();
-                                    FXMLLoader loader = mainApp.showDialog(stage, child,  "View/Dialog/DetailCustomer.fxml");
-                                    DetailCustomerController x = loader.getController();
-                                    x.setMainApp(mainApp, stage, child);
-                                    try(Connection con = Koneksi.getConnection()){
-                                        KPR k = KPRDAO.getByKodeProperty(con, item.getProperty().getKodeProperty());
-                                        Customer c = CustomerDAO.get(con, k.getKodeCustomer());
-                                        x.setCustomer(c);
-                                        x.setViewOnly();
-                                    }
-                                }catch(Exception e){
-                                    mainApp.showMessage(Modality.NONE, "Error", e.toString());
-                                }
-                            });
-                            rowMenu.getItems().add(viewCustomer);
-                        }
-                        else if(item.getKategori().equals("Terima Angsuran")||item.getKategori().equals("Batal Terima Angsuran")){
-//                            rowMenu.getItems().add(sap);
-                            MenuItem viewCustomer = new MenuItem("View Customer");
-                            viewCustomer.setOnAction((ActionEvent event) -> {
-                                try{
-                                    Stage child = new Stage();
-                                    FXMLLoader loader = mainApp.showDialog(stage, child,  "View/Dialog/DetailCustomer.fxml");
-                                    DetailCustomerController x = loader.getController();
-                                    x.setMainApp(mainApp, stage, child);
-                                    try(Connection con = Koneksi.getConnection()){
-                                        SAP s = SAPDAO.get(con, item.getDeskripsi().split(" - ")[1]);
-                                        Customer c = CustomerDAO.get(con, s.getKodeCustomer());
-                                        x.setCustomer(c);
-                                        x.setViewOnly();
-                                    }
-                                }catch(Exception e){
-                                    mainApp.showMessage(Modality.NONE, "Error", e.toString());
-                                }
-                            });
-                            rowMenu.getItems().add(viewCustomer);
-                        }
-                        setContextMenu(rowMenu);
-                    }
                     }
                 }
             };
@@ -311,7 +214,72 @@ public class DetailKeuanganController  {
             }
         }
         keuanganTable.setRoot(root);
+        hitungTotal();
     } 
+    private void hitungTotal(){
+        double total = 0;
+        for(Keuangan k : allKeuangan){
+            total = total + k.getJumlahRp();
+        }
+        totalLabel.setText(rp.format(total));
+    }
+    private void detailProperty(Property p){
+        Stage child = new Stage();
+        FXMLLoader loader = mainApp.showDialog(stage, child, "View/Dialog/DetailProperty.fxml");
+        DetailPropertyController x = loader.getController();
+        x.setMainApp(mainApp, stage, child);
+        x.setProperty(p);
+        x.viewOnly();
+    }
+    private void detailPembelian(Property p){
+        Stage child = new Stage();
+        FXMLLoader loader = mainApp.showDialog(stage, child, "View/Dialog/DetailPembelianTanah.fxml");
+        DetailPembelianTanahController x = loader.getController();
+        x.setMainApp(mainApp, stage, child);
+        x.getPembelian(p);
+    }
+    private void detailPembangunan(String noPembangunan){
+        Stage child = new Stage();
+        FXMLLoader loader = mainApp.showDialog(stage, child, "View/Dialog/DetailPembangunan.fxml");
+        DetailPembangunanController x = loader.getController();
+        x.setMainApp(mainApp, stage, child);
+        x.getPembangunan(noPembangunan);
+    }
+    private void detailRealisasi(String noRealisasi, String noUrut){
+        Stage child = new Stage();
+        FXMLLoader loader = mainApp.showDialog(stage, child, "View/Dialog/DetailRealisasiProyek.fxml");
+        DetailRealisasiProyekController x = loader.getController();
+        x.setMainApp(mainApp, stage, child);
+        x.getDetailRealisasi(noRealisasi, noUrut);
+    }
+    private void detailTerimaTandaJadi(String noSTJ){
+        Stage child = new Stage();
+        FXMLLoader loader = mainApp.showDialog(stage, child, "View/Dialog/DetailTerimaTandaJadi.fxml");
+        DetailTerimaTandaJadiController x = loader.getController();
+        x.setMainApp(mainApp, stage, child);
+        x.getSTJ(noSTJ);
+    }
+    private void detailTerimaDownPayment(String noSDP){
+        Stage child = new Stage();
+        FXMLLoader loader = mainApp.showDialog(stage, child, "View/Dialog/DetailTerimaDownPayment.fxml");
+        DetailTerimaDownPaymentController x = loader.getController();
+        x.setMainApp(mainApp, stage, child);
+        x.getSDP(noSDP);
+    }
+    private void detailTerimaAngsuranPembayaran(String noSAP){
+        Stage child = new Stage();
+        FXMLLoader loader = mainApp.showDialog(stage, child, "View/Dialog/DetailTerimaAngsuranPembayaran.fxml");
+        DetailTerimaAngsuranPembayaranController x = loader.getController();
+        x.setMainApp(mainApp, stage, child);
+        x.getSAP(noSAP);
+    }
+    private void detailTerimaPencairanKPR(Property p){
+        Stage child = new Stage();
+        FXMLLoader loader = mainApp.showDialog(stage, child, "View/Dialog/DetailTerimaPencairanKPR.fxml");
+        DetailTerimaPencairanKPRController x = loader.getController();
+        x.setMainApp(mainApp, stage, child);
+        x.getKPR(p);
+    }
     @FXML 
     private void close(){
         mainApp.closeDialog(owner, stage);

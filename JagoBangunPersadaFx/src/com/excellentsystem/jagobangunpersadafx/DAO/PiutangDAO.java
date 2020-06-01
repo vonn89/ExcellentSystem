@@ -21,7 +21,35 @@ import java.util.List;
  * @author Xtreme
  */
 public class PiutangDAO{
-    public List<Piutang> getAllByDate(Connection con,String tglMulai,String tglAkhir)throws Exception{
+    public static List<Piutang> getAllByDateAndKategoriAndStatus(Connection con,String tglMulai,String tglAkhir, String kategori, String status)throws Exception{
+        String sql = "select * from tm_piutang where left(tgl_piutang,10) between ? and ?  ";
+        if(!kategori.equals("%"))
+            sql = sql + " and kategori = '"+kategori+"'";
+        if(!status.equals("%"))
+            sql = sql + " and status = '"+status+"'";
+        else
+            sql = sql + " and status != 'false' ";
+        PreparedStatement ps = con.prepareStatement(sql);
+        ps.setString(1, tglMulai);
+        ps.setString(2, tglAkhir);
+        ResultSet rs = ps.executeQuery();
+        List<Piutang> allPiutang = new ArrayList<>();
+        while(rs.next()){
+            Piutang p = new Piutang();
+            p.setNoPiutang(rs.getString(1));
+            p.setTglPiutang(rs.getString(2));
+            p.setKategori(rs.getString(3));
+            p.setKeterangan(rs.getString(4));
+            p.setJumlahPiutang(rs.getDouble(5));
+            p.setPembayaran(rs.getDouble(6));
+            p.setSisaPiutang(rs.getDouble(7));
+            p.setJatuhTempo(rs.getString(8));
+            p.setStatus(rs.getString(9));
+            allPiutang.add(p);
+        }
+        return allPiutang;
+    }
+    public static List<Piutang> getAllByDate(Connection con,String tglMulai,String tglAkhir)throws Exception{
         PreparedStatement ps = con.prepareStatement("select * from tm_piutang "
                 + " where left(tgl_piutang,10) between '"+tglMulai+"' and '"+tglAkhir+"' and status != 'false'");
         ResultSet rs = ps.executeQuery();

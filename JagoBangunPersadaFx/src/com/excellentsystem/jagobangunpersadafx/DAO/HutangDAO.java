@@ -21,6 +21,35 @@ import java.util.List;
  * @author Xtreme
  */
 public class HutangDAO {
+    public static List<Hutang> getAllByTanggalAndKategoriAndStatus(Connection con, 
+            String tglMulai, String tglAkhir, String kategori, String status)throws Exception{
+        String sql = "select * from tm_hutang where left(tgl_hutang,10) between ? and ?  ";
+        if(!kategori.equals("%"))
+            sql = sql + " and kategori = '"+kategori+"'";
+        if(!status.equals("%"))
+            sql = sql + " and status = '"+status+"'";
+        else
+            sql = sql + " and status != 'false' ";
+        PreparedStatement ps = con.prepareStatement(sql);
+        ps.setString(1, tglMulai);
+        ps.setString(2, tglAkhir);
+        ResultSet rs = ps.executeQuery();
+        List<Hutang> listHutang = new ArrayList<>();
+        while(rs.next()){
+            Hutang h = new Hutang();
+            h.setNoHutang(rs.getString(1));
+            h.setTglHutang(rs.getString(2));
+            h.setKategori(rs.getString(3));
+            h.setKeterangan(rs.getString(4));
+            h.setJumlahHutang(rs.getDouble(5));
+            h.setPembayaran(rs.getDouble(6));
+            h.setSisaHutang(rs.getDouble(7));
+            h.setJatuhTempo(rs.getString(8));
+            h.setStatus(rs.getString(9));
+            listHutang.add(h);
+        }
+        return listHutang;
+    }
     public static List<Hutang> getAllByDate(Connection con,String tglMulai, String tglAkhir)throws Exception{
         PreparedStatement ps = con.prepareStatement("select * from tm_hutang "
                 + " where left(tgl_hutang,10) between ? and ? and status!='false'");

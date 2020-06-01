@@ -281,6 +281,11 @@
                                     <Insets right="-1.0" />
                                  </VBox.margin>
                               </MenuButton>
+                              <MenuButton fx:id="laporanUntungRugiPeriode" layoutX="11.0" layoutY="40.0" mnemonicParsing="false" onMouseClicked="#showLaporanUntungRugiPeriode" prefHeight="30.0" prefWidth="230.0" text="Laporan Untung-Rugi Periode">
+                                 <padding>
+                                    <Insets left="30.0" />
+                                 </padding>
+                              </MenuButton>
                               <MenuButton fx:id="laporanNeraca" layoutX="11.0" layoutY="40.0" mnemonicParsing="false" onMouseClicked="#showLaporanNeraca" prefHeight="30.0" prefWidth="230.0" text="Laporan Neraca">
                                  <padding>
                                     <Insets left="30.0" />

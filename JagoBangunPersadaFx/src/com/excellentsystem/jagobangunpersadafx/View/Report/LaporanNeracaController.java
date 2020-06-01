@@ -6,6 +6,7 @@
 package com.excellentsystem.jagobangunpersadafx.View.Report;
 
 import com.excellentsystem.jagobangunpersadafx.DAO.KeuanganDAO;
+import com.excellentsystem.jagobangunpersadafx.DAO.PropertyDAO;
 import com.excellentsystem.jagobangunpersadafx.Function;
 import static com.excellentsystem.jagobangunpersadafx.Function.getDateCellAkhir;
 import static com.excellentsystem.jagobangunpersadafx.Function.getDateCellMulai;
@@ -16,6 +17,7 @@ import static com.excellentsystem.jagobangunpersadafx.Main.tgl;
 import static com.excellentsystem.jagobangunpersadafx.Main.tglBarang;
 import com.excellentsystem.jagobangunpersadafx.Model.Keuangan;
 import com.excellentsystem.jagobangunpersadafx.Model.Neraca;
+import com.excellentsystem.jagobangunpersadafx.Model.Property;
 import com.excellentsystem.jagobangunpersadafx.Printout.PrintOut;
 import java.sql.Connection;
 import java.time.LocalDate;
@@ -92,6 +94,9 @@ public class LaporanNeracaController  {
         pane.setOnContextMenuRequested((e) -> {
             rm.show(pane, e.getScreenX(), e.getScreenY());
         });
+        pane.setOnMouseClicked((event) -> {
+            rm.hide();
+        });
     }   
     public void setMainApp(Main mainApp) {
         this.mainApp = mainApp;
@@ -103,8 +108,9 @@ public class LaporanNeracaController  {
             @Override 
             public Void call() throws Exception{
                 try (Connection con = Koneksi.getConnection()) {
-                    
+                    List<Property> listProperty = PropertyDAO.getAll(con);
                     keuangan.clear();
+                    kategoriAsetLancar = Function.getKategoriProperty();
                     kategoriKeuangan = Function.getAllTipeKeuangan();
                     for(String s : kategoriKeuangan){
                         keuangan.addAll(KeuanganDAO.getAllByTipeKeuanganAndDate(con, s, "", tglAkhirPicker.getValue().toString()));
@@ -120,8 +126,11 @@ public class LaporanNeracaController  {
                     asetLancar.clear();
                     asetLancar.addAll(KeuanganDAO.getAllByTipeKeuanganAndDate(con, "ASET LANCAR", "", tglAkhirPicker.getValue().toString()));
                     for(Keuangan k : asetLancar){
-                        if(!kategoriAsetLancar.contains(k.getKategori()))
-                            kategoriAsetLancar.add(k.getKategori());
+                        for(Property p : listProperty){
+                            if(k.getKodeProperty().equals(p.getKodeProperty())){
+                                k.setProperty(p);
+                            }
+                        }
                     }
                     
                     asetTetap.clear();
@@ -186,6 +195,191 @@ public class LaporanNeracaController  {
         });
         new Thread(task).start();
     } 
+//    public void setGridPane(){
+//        try(Connection con = Koneksi.getConnection()){
+//            kategoriKeuangan = Function.getAllTipeKeuangan();
+//            kategoriPiutang = Function.getKategoriPiutang();
+//            kategoriHutang = Function.getKategoriHutang();
+//            kategoriAsetLancar = Function.getKategoriProperty();
+//            kategoriAsetTetap = Function.getKategoriAset();
+//            List<Property> listProperty = PropertyDAO.getAll(con);
+//            kategoriPiutang.add("Piutang Penjualan");
+//            kategoriHutang.add("Terima Tanda Jadi");
+//            kategoriHutang.add("Terima Down Payment");
+//            
+//            keuangan.clear();
+//            keuangan.addAll(KeuanganDAO.getAllByTipeKeuanganAndDate(con, "%", "2000-01-01", tglAkhirPicker.getValue().toString()));
+//            
+//            pane.getChildren().clear();
+//            gridPane = new GridPane();
+//            
+//            gridPane.getColumnConstraints().add(new ColumnConstraints(10, 100, Double.MAX_VALUE, Priority.ALWAYS, HPos.LEFT, true));
+//            gridPane.getColumnConstraints().add(new ColumnConstraints(200, 200, 250, Priority.ALWAYS, HPos.RIGHT, true));
+//            gridPane.getColumnConstraints().add(new ColumnConstraints(50, 50, 50, Priority.ALWAYS, HPos.RIGHT, true));
+//            gridPane.getColumnConstraints().add(new ColumnConstraints(10, 100, Double.MAX_VALUE, Priority.ALWAYS, HPos.LEFT, true));
+//            gridPane.getColumnConstraints().add(new ColumnConstraints(200, 200, 250, Priority.ALWAYS, HPos.RIGHT, true));
+//            
+//            int row = 14 + kategoriKeuangan.size() + kategoriPiutang.size() + kategoriAsetLancar.size() + kategoriAsetTetap.size();
+//            for(int i = 0 ; i<row ; i++){
+//                gridPane.getRowConstraints().add(new RowConstraints(30,30,30));
+//                if(i%2==0)
+//                    addBackground(i);
+//            }
+//            
+//            addHeaderText("Aktiva", 0, 0);
+//            int rowAktiva = 2;
+//            
+//            addBoldText("Kas/Bank", 0, rowAktiva);
+//            rowAktiva = rowAktiva + 1;
+//            double totalKasBank = 0;
+//            for(String s : kategoriKeuangan){
+//                double jumlahRp = 0;
+//                List<Keuangan> listKeuangan = new ArrayList<>();
+//                for(Keuangan k : keuangan){
+//                    if(k.getTipeKeuangan().equals(s)){
+//                        listKeuangan.add(k);
+//                        jumlahRp = jumlahRp + k.getJumlahRp();
+//                    }
+//                }
+//                addHyperLinkKeuanganText(s, 0, rowAktiva, listKeuangan);
+//                addNormalText(rp.format(jumlahRp), 1, rowAktiva);
+//                totalKasBank = totalKasBank + jumlahRp;
+//                rowAktiva = rowAktiva + 1;
+//            }
+//            addBoldText("Total Kas/Bank", 0, rowAktiva);
+//            addBoldText(rp.format(totalKasBank), 1, rowAktiva);
+//            rowAktiva = rowAktiva + 1;
+//            
+//            rowAktiva = rowAktiva + 1;
+//            addBoldText("Piutang", 0, rowAktiva);
+//            rowAktiva = rowAktiva + 1;
+//            double totalPiutang = 0;
+//            for(String s : kategoriPiutang){
+//                double jumlahRp = 0;
+//                for(Keuangan k : keuangan){
+//                    if(k.getTipeKeuangan().equals("PIUTANG") && k.getKategori().equals(s))
+//                        jumlahRp = jumlahRp + k.getJumlahRp();
+//                }
+//                addHyperLinkPiutangText(s, 0, rowAktiva);
+//                addNormalText(rp.format(jumlahRp), 1, rowAktiva);
+//                totalPiutang = totalPiutang + jumlahRp;
+//                rowAktiva = rowAktiva + 1;
+//            }
+//            addBoldText("Total Piutang", 0, rowAktiva);
+//            addBoldText(rp.format(totalPiutang), 1, rowAktiva);
+//            rowAktiva = rowAktiva + 1;
+//            
+//            rowAktiva = rowAktiva + 1;
+//            addBoldText("Aset Lancar", 0, rowAktiva);
+//            rowAktiva = rowAktiva + 1;
+//            double totalAsetLancar = 0;
+//            for(String s : kategoriAsetLancar){
+//                double jumlahRp = 0;
+//                for(Keuangan k : keuangan){
+//                    if(k.getTipeKeuangan().equals("ASET LANCAR")){
+//                        for(Property p : listProperty){
+//                            if(k.getKodeProperty().equals(p.getKodeProperty())){
+//                                k.setProperty(p);
+//                            }
+//                        }
+//                        if(k.getProperty()!=null){
+//                            if(k.getProperty().getKodeKategori().equals(s)){
+//                                jumlahRp = jumlahRp + k.getJumlahRp();
+//                            }
+//                        }
+//                    }
+//                }
+//                addNormalText(s, 0, rowAktiva);
+//                addNormalText(rp.format(jumlahRp), 1, rowAktiva);
+//                totalAsetLancar = totalAsetLancar + jumlahRp;
+//                rowAktiva = rowAktiva + 1;
+//            }
+//            addBoldText("Total Aset Lancar", 0, rowAktiva);
+//            addBoldText(rp.format(totalAsetLancar), 1, rowAktiva);
+//            rowAktiva = rowAktiva + 1;
+//            
+//            rowAktiva = rowAktiva + 1;
+//            addBoldText("Aset Tetap", 0, rowAktiva);
+//            rowAktiva = rowAktiva + 1;
+//            double totalAsetTetap = 0;
+//            for(String s : kategoriAsetTetap){
+//                double jumlahRp = 0;
+//                List<Keuangan> listKeuangan = new ArrayList<>();
+//                for(Keuangan k : keuangan){
+//                    if(k.getTipeKeuangan().equals("ASET TETAP") && k.getKategori().equals(s)){
+//                        listKeuangan.add(k);
+//                        jumlahRp = jumlahRp + k.getJumlahRp();
+//                    }
+//                }
+//                addHyperLinkAsetTetapText(s, 0, rowAktiva, listKeuangan);
+//                addNormalText(rp.format(jumlahRp), 1, rowAktiva);
+//                totalAsetTetap = totalAsetTetap + jumlahRp;
+//                rowAktiva = rowAktiva + 1;
+//            }
+//            addBoldText("Total Aset Tetap", 0, rowAktiva);
+//            addBoldText(rp.format(totalAsetTetap), 1, rowAktiva);
+//            
+//            addHeaderText("Passiva", 3, 0);
+//            int rowPassiva = 2;
+//            
+//            addBoldText("Hutang", 3, rowPassiva);
+//            rowPassiva = rowPassiva + 1;
+//            double totalHutang = 0;
+//            for(String s : kategoriHutang){
+//                double jumlahRp = 0;
+//                for(Keuangan k : keuangan){
+//                    if(k.getTipeKeuangan().equals("HUTANG") && k.getKategori().equalsIgnoreCase(s)){
+//                        System.out.println(k.getKategori()+"  -  "+k.getDeskripsi()+" -  "+rp.format(k.getJumlahRp()));
+//                        jumlahRp = jumlahRp + k.getJumlahRp();
+//                    }
+//                }
+//                addHyperLinkHutangText(s, 3, rowPassiva);
+//                addNormalText(rp.format(jumlahRp), 4, rowPassiva);
+//                totalHutang = totalHutang + jumlahRp;
+//                rowPassiva = rowPassiva + 1;
+//            }
+//            addBoldText("Total Hutang", 3, rowPassiva);
+//            addBoldText(rp.format(totalHutang), 4, rowPassiva);
+//            rowPassiva = rowPassiva + 1;
+//            
+//            rowPassiva = rowPassiva + 1;
+//            double totalModal = 0;
+//            double totalUr = 0;
+//            for(Keuangan k : keuangan){
+//                if(k.getTipeKeuangan().equals("MODAL"))
+//                    totalModal = totalModal + k.getJumlahRp();
+//                if(tglAwalPicker.getValue().isBefore(LocalDate.parse(k.getTglKeuangan().substring(0, 10), DateTimeFormatter.ISO_DATE))||
+//                        tglAwalPicker.getValue().isEqual(LocalDate.parse(k.getTglKeuangan().substring(0, 10), DateTimeFormatter.ISO_DATE))){
+//                    if(k.getTipeKeuangan().equals("HPP")||k.getTipeKeuangan().equals("BEBAN"))
+//                        totalUr = totalUr - k.getJumlahRp();
+//                    else if(k.getTipeKeuangan().equals("PENJUALAN")||k.getTipeKeuangan().equals("PENDAPATAN"))
+//                        totalUr = totalUr + k.getJumlahRp();
+//                }else{
+//                    if(k.getTipeKeuangan().equals("HPP")||k.getTipeKeuangan().equals("BEBAN"))
+//                        totalModal = totalModal - k.getJumlahRp();
+//                    else if(k.getTipeKeuangan().equals("PENJUALAN")||k.getTipeKeuangan().equals("PENDAPATAN"))
+//                        totalModal = totalModal + k.getJumlahRp();
+//                }
+//            }
+//            addBoldText("Modal", 3, rowPassiva);
+//            addBoldText(rp.format(totalModal), 4, rowPassiva);
+//            rowPassiva = rowPassiva + 1;
+//            
+//            rowPassiva = rowPassiva + 1;
+//            addBoldText("Untung-Rugi", 3, rowPassiva);
+//            addBoldText(rp.format(totalUr), 4, rowPassiva);
+//            
+//            totalAktivaLabel.setText(rp.format(totalKasBank+totalPiutang+totalAsetLancar+totalAsetTetap));
+//            totalPassivaLabel.setText(rp.format(totalHutang+totalModal+totalUr));
+//            
+//            gridPane.setHgap(5);
+//            gridPane.setVgap(5);
+//            gridPane.setPadding(new Insets(15));
+//            pane.getChildren().add(gridPane);
+//        } catch (Exception ex) {
+//            mainApp.showMessage(Modality.NONE, "Error", ex.toString());
+//        }
+//    }
     public void setGridPane(){
         try {
             pane.getChildren().clear();
@@ -219,7 +413,7 @@ public class LaporanNeracaController  {
                         jumlahRp = jumlahRp + k.getJumlahRp();
                     }
                 }
-                addHyperLinkText(s, 0, rowAktiva, listKeuangan);
+                addHyperLinkKeuanganText(s, 0, rowAktiva, listKeuangan);
                 addNormalText(rp.format(jumlahRp), 1, rowAktiva);
                 totalKasBank = totalKasBank + jumlahRp;
                 rowAktiva = rowAktiva + 1;
@@ -234,14 +428,11 @@ public class LaporanNeracaController  {
             double totalPiutang = 0;
             for(String s : kategoriPiutang){
                 double jumlahRp = 0;
-                List<Keuangan> listKeuangan = new ArrayList<>();
                 for(Keuangan k : piutang){
-                    if(k.getKategori().equals(s)){
-                        listKeuangan.add(k);
+                    if(k.getKategori().equals(s))
                         jumlahRp = jumlahRp + k.getJumlahRp();
-                    }
                 }
-                addHyperLinkText(s, 0, rowAktiva, listKeuangan);
+                addHyperLinkPiutangText(s, 0, rowAktiva);
                 addNormalText(rp.format(jumlahRp), 1, rowAktiva);
                 totalPiutang = totalPiutang + jumlahRp;
                 rowAktiva = rowAktiva + 1;
@@ -256,14 +447,14 @@ public class LaporanNeracaController  {
             double totalAsetLancar = 0;
             for(String s : kategoriAsetLancar){
                 double jumlahRp = 0;
-                List<Keuangan> listKeuangan = new ArrayList<>();
                 for(Keuangan k : asetLancar){
-                    if(k.getKategori().equals(s)){
-                        listKeuangan.add(k);
-                        jumlahRp = jumlahRp + k.getJumlahRp();
+                    if(k.getProperty()!=null){
+                        if(k.getProperty().getKodeKategori().equals(s)){
+                            jumlahRp = jumlahRp + k.getJumlahRp();
+                        }
                     }
                 }
-                addHyperLinkText(s, 0, rowAktiva, listKeuangan);
+                addNormalText(s, 0, rowAktiva);
                 addNormalText(rp.format(jumlahRp), 1, rowAktiva);
                 totalAsetLancar = totalAsetLancar + jumlahRp;
                 rowAktiva = rowAktiva + 1;
@@ -285,7 +476,7 @@ public class LaporanNeracaController  {
                         jumlahRp = jumlahRp + k.getJumlahRp();
                     }
                 }
-                addHyperLinkText(s, 0, rowAktiva, listKeuangan);
+                addHyperLinkAsetTetapText(s, 0, rowAktiva, listKeuangan);
                 addNormalText(rp.format(jumlahRp), 1, rowAktiva);
                 totalAsetTetap = totalAsetTetap + jumlahRp;
                 rowAktiva = rowAktiva + 1;
@@ -301,14 +492,11 @@ public class LaporanNeracaController  {
             double totalHutang = 0;
             for(String s : kategoriHutang){
                 double jumlahRp = 0;
-                List<Keuangan> listKeuangan = new ArrayList<>();
                 for(Keuangan k : hutang){
-                    if(k.getKategori().equals(s)){
-                        listKeuangan.add(k);
+                    if(k.getKategori().equals(s))
                         jumlahRp = jumlahRp + k.getJumlahRp();
-                    }
                 }
-                addHyperLinkText(s, 3, rowPassiva, listKeuangan);
+                addHyperLinkHutangText(s, 3, rowPassiva);
                 addNormalText(rp.format(jumlahRp), 4, rowPassiva);
                 totalHutang = totalHutang + jumlahRp;
                 rowPassiva = rowPassiva + 1;
@@ -325,7 +513,7 @@ public class LaporanNeracaController  {
                 else
                     totalModal = totalModal + k.getJumlahRp();
             }
-            addBoldHyperLinkText("Modal", 3, rowPassiva, modal);
+            addBoldText("Modal", 3, rowPassiva);
             addBoldText(rp.format(totalModal), 4, rowPassiva);
             rowPassiva = rowPassiva + 1;
             
@@ -337,7 +525,7 @@ public class LaporanNeracaController  {
                 else
                     totalUr = totalUr + k.getJumlahRp();
             }
-            addBoldHyperLinkText("Untung-Rugi", 3, rowPassiva, untungRugi);
+            addBoldText("Untung-Rugi", 3, rowPassiva);
             addBoldText(rp.format(totalUr), 4, rowPassiva);
             
             totalAktivaLabel.setText(rp.format(totalKasBank+totalPiutang+totalAsetLancar+totalAsetTetap));
@@ -371,32 +559,74 @@ public class LaporanNeracaController  {
         label.setStyle("-fx-font-weight:bold;");
         gridPane.add(label, column, row);
     }
-    private void addBoldHyperLinkText(String text, int column, int row, List<Keuangan> keuangan){
-        Hyperlink hyperlink = new Hyperlink(text);
-        hyperlink.setStyle("-fx-font-weight:bold;"
-                + "-fx-text-fill:seccolor3;"
-                + "-fx-border-color:transparent;");
-        hyperlink.setOnAction((e) -> {
-            Stage stage = new Stage();
-            FXMLLoader loader = mainApp.showDialog(mainApp.MainStage, stage, "View/Report/DetailKeuangan.fxml");
-            DetailKeuanganController x = loader.getController();
-            x.setMainApp(mainApp, mainApp.MainStage, stage);
-            x.setKeuangan(keuangan);
-        });
-        gridPane.add(hyperlink, column, row);
-    }
-    private void addHyperLinkText(String text, int column, int row, List<Keuangan> keuangan){
+    private void addHyperLinkKeuanganText(String text, int column, int row, List<Keuangan> keuangan){
         Hyperlink hyperlink = new Hyperlink(text);
         hyperlink.setStyle("-fx-text-fill:seccolor3;"
                 + "-fx-border-color:transparent;");
         hyperlink.setOnAction((e) -> {
             Stage stage = new Stage();
-            FXMLLoader loader = mainApp.showDialog(mainApp.MainStage, stage, "View/Report/DetailKeuangan.fxml");
-            DetailKeuanganController x = loader.getController();
+            FXMLLoader loader = mainApp.showDialog(mainApp.MainStage, stage, "View/Report/NeracaKeuangan.fxml");
+            NeracaKeuanganController x = loader.getController();
+            x.setMainApp(mainApp, mainApp.MainStage, stage);
+            x.setKeuangan(keuangan, tglAwalPicker.getValue(), tglAkhirPicker.getValue());
+        });
+        gridPane.add(hyperlink, column, row);
+    }
+    private void addHyperLinkPiutangText(String text, int column, int row){
+        Hyperlink hyperlink = new Hyperlink(text);
+        hyperlink.setStyle("-fx-font-size:12;"
+                + "-fx-text-fill:seccolor3;"
+                + "-fx-border-color:transparent;");
+        hyperlink.setOnAction((e) -> {
+            Stage stage = new Stage();
+            FXMLLoader loader = mainApp.showDialog(mainApp.MainStage, stage, "View/Report/NeracaPiutang.fxml");
+            NeracaPiutangController x = loader.getController();
+            x.setMainApp(mainApp, mainApp.MainStage, stage);
+            x.setPiutang(tglAkhirPicker.getValue().toString(), text);
+        });
+        gridPane.add(hyperlink, column, row);
+    }
+    private void addHyperLinkHutangText(String text, int column, int row){
+        Hyperlink hyperlink = new Hyperlink(text);
+        hyperlink.setStyle("-fx-font-size:12;"
+                + "-fx-text-fill:seccolor3;"
+                + "-fx-border-color:transparent;");
+        hyperlink.setOnAction((e) -> {
+            Stage stage = new Stage();
+            FXMLLoader loader = mainApp.showDialog(mainApp.MainStage, stage, "View/Report/NeracaHutang.fxml");
+            NeracaHutangController x = loader.getController();
+            x.setMainApp(mainApp, mainApp.MainStage, stage);
+            x.setHutang(tglAkhirPicker.getValue().toString(), text);
+        });
+        gridPane.add(hyperlink, column, row);
+    }
+    private void addHyperLinkAsetTetapText(String text, int column, int row, List<Keuangan> keuangan){
+        Hyperlink hyperlink = new Hyperlink(text);
+        hyperlink.setStyle("-fx-font-size:12;"
+                + "-fx-text-fill:seccolor3;"
+                + "-fx-border-color:transparent;");
+        hyperlink.setOnAction((e) -> {
+            Stage stage = new Stage();
+            FXMLLoader loader = mainApp.showDialog(mainApp.MainStage, stage, "View/Report/NeracaAsetTetap.fxml");
+            NeracaAsetTetapController x = loader.getController();
             x.setMainApp(mainApp, mainApp.MainStage, stage);
             x.setKeuangan(keuangan);
         });
         gridPane.add(hyperlink, column, row);
+    }
+    private void addHyperLinkAsetLancarText(String text, int column, int row, List<Keuangan> keuangan){
+//        Hyperlink hyperlink = new Hyperlink(text);
+//        hyperlink.setStyle("-fx-font-size:12;"
+//                + "-fx-text-fill:seccolor3;"
+//                + "-fx-border-color:transparent;");
+//        hyperlink.setOnAction((e) -> {
+//            Stage stage = new Stage();
+//            FXMLLoader loader = mainApp.showDialog(mainApp.MainStage, stage, "View/Report/NeracaAsetLancar.fxml");
+//            NeracaAsetLancarController x = loader.getController();
+//            x.setMainApp(mainApp, mainApp.MainStage, stage);
+//            x.setKeuangan(keuangan);
+//        });
+//        gridPane.add(hyperlink, column, row);
     }
     @FXML
     private void print(){

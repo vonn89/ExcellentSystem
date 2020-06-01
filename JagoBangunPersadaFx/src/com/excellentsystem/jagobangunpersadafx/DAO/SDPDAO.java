@@ -50,7 +50,7 @@ public class SDPDAO {
     }
     public static List<SDP> getAllByDateAndStatus(Connection con, String tglMulai, String tglAkhir, String status)throws Exception{
         PreparedStatement ps = con.prepareStatement("select * from tt_sdp "
-                + " where left(tgl_sdp,10) between ? and ? and status=? ");
+                + " where left(tgl_sdp,10) between ? and ? and status like ? ");
         ps.setString(1, tglMulai);
         ps.setString(2, tglAkhir);
         ps.setString(3, status);

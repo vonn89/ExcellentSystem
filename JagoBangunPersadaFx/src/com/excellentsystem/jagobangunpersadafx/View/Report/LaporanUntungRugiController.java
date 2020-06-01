@@ -17,10 +17,12 @@ import com.excellentsystem.jagobangunpersadafx.Model.Keuangan;
 import com.excellentsystem.jagobangunpersadafx.Model.Property;
 import com.excellentsystem.jagobangunpersadafx.Model.UntungRugi;
 import com.excellentsystem.jagobangunpersadafx.Printout.PrintOut;
+import java.net.URL;
 import java.sql.Connection;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
@@ -28,6 +30,7 @@ import javafx.concurrent.WorkerStateEvent;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.scene.control.ContextMenu;
@@ -47,7 +50,7 @@ import javafx.stage.Stage;
 /**
  * FXML Controller class
  *
- * @author yunaz
+ * @author Excellent
  */
 public class LaporanUntungRugiController  {
     @FXML private StackPane pane; 
@@ -81,6 +84,9 @@ public class LaporanUntungRugiController  {
         rm.getItems().addAll(refresh);
         pane.setOnContextMenuRequested((e) -> {
             rm.show(pane, e.getScreenX(), e.getScreenY());
+        });
+        pane.setOnMouseClicked((event) -> {
+            rm.hide();
         });
     }
     public void setMainApp(Main mainApp) {

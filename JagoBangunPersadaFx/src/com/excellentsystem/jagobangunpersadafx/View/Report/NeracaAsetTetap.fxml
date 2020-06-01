@@ -13,7 +13,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
 
-<AnchorPane id="AnchorPane" prefHeight="600.0" prefWidth="1000.0" styleClass="dialog" stylesheets="@../../Resource/MyTheme.css" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.excellentsystem.jagobangunpersadafx.View.Report.DetailKeuanganController">
+<AnchorPane id="AnchorPane" prefHeight="600.0" prefWidth="1000.0" styleClass="dialog" stylesheets="@../../Resource/MyTheme.css" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.excellentsystem.jagobangunpersadafx.View.Report.NeracaAsetTetapController">
    <children>
       <GridPane hgap="5.0" layoutX="113.0" layoutY="130.0" vgap="5.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <columnConstraints>
@@ -21,7 +21,7 @@
         </columnConstraints>
         <rowConstraints>
           <RowConstraints maxHeight="30.0" minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES" />
-          <RowConstraints maxHeight="5.0" minHeight="5.0" prefHeight="5.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="5.0" minHeight="5.0" prefHeight="5.0" vgrow="SOMETIMES" />
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
             <RowConstraints maxHeight="30.0" minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
@@ -29,7 +29,7 @@
             <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
          </padding>
          <children>
-            <Label style="-fx-font-size: 24;" styleClass="label-header" text="Detail Keuangan" />
+            <Label style="-fx-font-size: 24;" styleClass="label-header" text="Detail Aset Tetap" />
             <Button mnemonicParsing="false" onAction="#close" prefHeight="30.0" prefWidth="30.0" GridPane.halignment="RIGHT">
                <graphic>
                   <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
@@ -41,24 +41,23 @@
             </Button>
             <TreeTableView fx:id="keuanganTable" prefHeight="200.0" prefWidth="200.0" showRoot="false" tableMenuButtonVisible="true" GridPane.rowIndex="2">
               <columns>
-                <TreeTableColumn fx:id="noKeuanganColumn" maxWidth="1000.0" prefWidth="75.0" text="No Keuangan" />
-                <TreeTableColumn fx:id="tglKeuanganColumn" maxWidth="1000.0" prefWidth="75.0" text="Tgl Keuangan" />
-                  <TreeTableColumn fx:id="tipeKeuanganColumn" maxWidth="1000.0" prefWidth="75.0" text="Tipe Keuangan" visible="false" />
-                  <TreeTableColumn fx:id="kodePropertyColumn" maxWidth="1000.0" prefWidth="75.0" text="Property" visible="false" />
-                  <TreeTableColumn fx:id="kategoriColumn" maxWidth="1500.0" prefWidth="75.0" text="Kategori" visible="false" />
-                  <TreeTableColumn fx:id="deskripsiColumn" maxWidth="3000.0" prefWidth="75.0" text="Deskripsi" />
-                  <TreeTableColumn fx:id="jumlahRpColumn" maxWidth="1000.0" prefWidth="75.0" text="Jumlah Rp" />
-                  <TreeTableColumn fx:id="kodeUserColumn" maxWidth="1000.0" prefWidth="75.0" text="Kode User" visible="false" />
+                <TreeTableColumn fx:id="noKeuanganColumn" maxWidth="2000.0" prefWidth="75.0" text="No Keuangan" />
+                <TreeTableColumn fx:id="tglKeuanganColumn" maxWidth="2000.0" prefWidth="75.0" text="Tgl Keuangan" />
+                  <TreeTableColumn fx:id="deskripsiColumn" maxWidth="2000.0" prefWidth="75.0" text="Keterangan" />
+                  <TreeTableColumn fx:id="jumlahRpColumn" maxWidth="2000.0" prefWidth="75.0" text="Jumlah Rp" />
               </columns>
                <columnResizePolicy>
                   <TreeTableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                </columnResizePolicy>
             </TreeTableView>
-            <HBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="200.0" spacing="5.0" GridPane.rowIndex="3">
+            <HBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="200.0" spacing="10.0" style="-fx-background-color: seccolor6;" GridPane.rowIndex="3">
                <children>
-                  <Label text="Total" />
-                  <Label fx:id="totalLabel" style="-fx-font-weight: bold;" text="0" />
+                  <Label alignment="CENTER_RIGHT" text="Total Aset Tetap" />
+                  <Label fx:id="saldoAkhirLabel" alignment="CENTER_RIGHT" style="-fx-font-weight: bold;" text="0" />
                </children>
+               <padding>
+                  <Insets right="10.0" />
+               </padding>
             </HBox>
          </children>
       </GridPane>
