@@ -1241,6 +1241,19 @@ public class Service {
             hstj.setStatus("close");
             HutangDAO.update(con, hstj);
             
+            Pembayaran pstj = new Pembayaran();
+            pstj.setNoPembayaran(PembayaranDAO.getId(con));
+            pstj.setTglPembayaran(tglSql.format(new Date()));
+            pstj.setNoHutang(hstj.getNoHutang());
+            pstj.setJumlahPembayaran(hstj.getJumlahHutang());
+            pstj.setTipeKeuangan("Penjualan");
+            pstj.setCatatan("");
+            pstj.setKodeUser(sistem.getUser().getUsername());
+            pstj.setTglBatal("2000-01-01 00:00:00");
+            pstj.setUserBatal("");
+            pstj.setStatus("true");
+            PembayaranDAO.insert(con, pstj);
+            
             insertKeuangan(con, noKeuangan, tglSql.format(new Date()), "HUTANG", "Terima Tanda Jadi", skl.getKodeProperty(),
                     "Penjualan - "+skl.getNoSKL(), -hstj.getJumlahHutang(), sistem.getUser().getUsername());
             
@@ -1252,6 +1265,20 @@ public class Service {
                 h.setSisaHutang(0);
                 h.setStatus("close");
                 HutangDAO.update(con, h);
+                
+                Pembayaran psdp = new Pembayaran();
+                psdp.setNoPembayaran(PembayaranDAO.getId(con));
+                psdp.setTglPembayaran(tglSql.format(new Date()));
+                psdp.setNoHutang(h.getNoHutang());
+                psdp.setJumlahPembayaran(h.getJumlahHutang());
+                psdp.setTipeKeuangan("Penjualan");
+                psdp.setCatatan("");
+                psdp.setKodeUser(sistem.getUser().getUsername());
+                psdp.setTglBatal("2000-01-01 00:00:00");
+                psdp.setUserBatal("");
+                psdp.setStatus("true");
+                PembayaranDAO.insert(con, psdp);
+                
                 totaldp = totaldp + h.getJumlahHutang();
             }
             insertKeuangan(con, noKeuangan, tglSql.format(new Date()), "HUTANG", "Terima Down Payment", skl.getKodeProperty(),
@@ -1317,6 +1344,14 @@ public class Service {
             hstj.setStatus("open");
             HutangDAO.update(con, hstj);
             
+            List<Pembayaran> listPstj = PembayaranDAO.getAllByNoHutangAndStatus(con, hstj.getNoHutang(), "true");
+            for(Pembayaran p : listPstj){
+                p.setStatus("false");
+                p.setUserBatal(skl.getUserBatal());
+                p.setTglBatal(skl.getTglBatal());
+                PembayaranDAO.update(con, p);
+            }
+            
             List<SDP> allSDP = SDPDAO.getAllByKodeProperty(con, skl.getKodeProperty(), "true");
             double totaldp = 0;
             for(SDP sdp : allSDP){
@@ -1325,6 +1360,15 @@ public class Service {
                 h.setSisaHutang(h.getJumlahHutang());
                 h.setStatus("open");
                 HutangDAO.update(con, h);
+                
+                List<Pembayaran> listPsdp = PembayaranDAO.getAllByNoHutangAndStatus(con, h.getNoHutang(), "true");
+                for(Pembayaran p : listPsdp){
+                    p.setStatus("false");
+                    p.setUserBatal(skl.getUserBatal());
+                    p.setTglBatal(skl.getTglBatal());
+                    PembayaranDAO.update(con, p);
+                }
+                
                 totaldp = totaldp + h.getJumlahHutang();
             }
             Piutang p = PiutangDAO.getByKategoriAndKeteranganAndStatus(con, "Piutang Penjualan", skl.getNoSKL(),"open");
@@ -1401,6 +1445,19 @@ public class Service {
             p.setStatus("close");
             PiutangDAO.update(con, p);
             
+            TerimaPembayaran tp = new TerimaPembayaran();
+            tp.setNoTerimaPembayaran(TerimaPembayaranDAO.getId(con));
+            tp.setTglTerima(tglSql.format(new Date()));
+            tp.setNoPiutang(p.getNoPiutang());
+            tp.setJumlahPembayaran(p.getJumlahPiutang());
+            tp.setTipeKeuangan(kpr.getTipeKeuangan());
+            tp.setCatatan("");
+            tp.setKodeUser(sistem.getUser().getUsername());
+            tp.setTglBatal("2000-01-01 00:00:00");
+            tp.setUserBatal("");
+            tp.setStatus("true");
+            TerimaPembayaranDAO.insert(con, tp);
+            
             insertKeuangan(con, noKeuangan, tglSql.format(new Date()), "PIUTANG", "Piutang Penjualan", kpr.getKodeProperty(),
                     "Pencairan KPR - "+kpr.getNoKPR(), -kpr.getJumlahRp(), sistem.getUser().getUsername());
                         
@@ -1441,6 +1498,14 @@ public class Service {
             p.setStatus("open");
             PiutangDAO.update(con, p);
             
+            List<TerimaPembayaran> listTerima = TerimaPembayaranDAO.getAllByNoPiutang(con, p.getNoPiutang(), "true");
+            for(TerimaPembayaran t : listTerima){
+                t.setStatus("false");
+                t.setUserBatal(kpr.getUserBatal());
+                t.setTglBatal(kpr.getTglBatal());
+                TerimaPembayaranDAO.update(con, t);
+            }
+            
             if(status.equals("true"))
                 con.commit();
             else
@@ -1478,6 +1543,19 @@ public class Service {
             if(p.getSisaPiutang()==0)
                 p.setStatus("close");
             PiutangDAO.update(con, p);
+            
+            TerimaPembayaran tp = new TerimaPembayaran();
+            tp.setNoTerimaPembayaran(TerimaPembayaranDAO.getId(con));
+            tp.setTglTerima(tglSql.format(new Date()));
+            tp.setNoPiutang(p.getNoPiutang());
+            tp.setJumlahPembayaran(p.getJumlahPiutang());
+            tp.setTipeKeuangan(sap.getTipeKeuangan());
+            tp.setCatatan("");
+            tp.setKodeUser(sistem.getUser().getUsername());
+            tp.setTglBatal("2000-01-01 00:00:00");
+            tp.setUserBatal("");
+            tp.setStatus("true");
+            TerimaPembayaranDAO.insert(con, tp);
             
             insertKeuangan(con, noKeuangan, tglSql.format(new Date()), "PIUTANG", "Piutang Penjualan", sap.getKodeProperty(),
                     "Terima Pembayaran Angsuran - "+sap.getNoSAP(), -sap.getJumlahRp(), sistem.getUser().getUsername());
@@ -1517,6 +1595,14 @@ public class Service {
             p.setSisaPiutang(p.getSisaPiutang()+sap.getJumlahRp());
             p.setStatus("open");
             PiutangDAO.update(con, p);
+            
+            List<TerimaPembayaran> listTerima = TerimaPembayaranDAO.getAllByNoPiutang(con, p.getNoPiutang(), "true");
+            for(TerimaPembayaran t : listTerima){
+                t.setStatus("false");
+                t.setUserBatal(sap.getUserBatal());
+                t.setTglBatal(sap.getTglBatal());
+                TerimaPembayaranDAO.update(con, t);
+            }
             
             if(status.equals("true"))
                 con.commit();
@@ -1883,6 +1969,7 @@ public class Service {
             }
         }
     }
+    
     public static String savePembelianAsetTetap(Connection con, AsetTetap aset, Double jumlahBayar, String tipeKeuangan){
         try{
             con.setAutoCommit(false);
