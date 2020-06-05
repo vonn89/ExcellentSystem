@@ -43,6 +43,7 @@ public class PemecahanPropertyHeadDAO {
             p.setNilaiPropertyPerMeter(rs.getDouble(10));
             p.setKodeUser(rs.getString(11));
             p.setStatus(rs.getString(12));
+            listPemecahan.add(p);
         }
         return listPemecahan;
     }

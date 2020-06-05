@@ -607,3 +607,13 @@ and open the template in the editor.
     -fx-background-radius: 15;
     -fx-padding: 4;
 }
+.progress-bar > .bar {
+    -fx-background-insets: 0;
+    -fx-padding: 0.20em;
+    -fx-background-radius: 0;
+    -fx-accent: seccolor1;
+}
+.progress-bar .track {
+    -fx-background-color: seccolor5;
+    -fx-background-radius: 0;
+}

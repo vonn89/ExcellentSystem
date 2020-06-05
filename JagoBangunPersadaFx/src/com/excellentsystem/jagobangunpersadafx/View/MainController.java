@@ -65,6 +65,7 @@ public class MainController {
     @FXML private MenuButton kategoriKeuangan;
     
     @FXML private MenuButton laporanProperty;
+    @FXML private MenuButton laporanKategoriProperty;
     @FXML private MenuButton laporanUntungRugi;
     @FXML private MenuButton laporanUntungRugiPeriode;
     @FXML private MenuButton laporanNeraca;
@@ -147,6 +148,7 @@ public class MainController {
             kategoriKeuangan.setVisible(false);
             
             laporanProperty.setVisible(false);
+            laporanKategoriProperty.setVisible(false);
             laporanUntungRugi.setVisible(false);
             laporanUntungRugiPeriode.setVisible(false);
             laporanNeraca.setVisible(false);
@@ -207,6 +209,8 @@ public class MainController {
                     kategoriKeuangan.setVisible(o.isStatus());
                 }else if(o.getJenis().equals("Laporan Property")){
                     laporanProperty.setVisible(o.isStatus());
+                }else if(o.getJenis().equals("Laporan KategoriProperty")){
+                    laporanKategoriProperty.setVisible(o.isStatus());
                 }else if(o.getJenis().equals("Laporan Untung Rugi")){
                     laporanUntungRugi.setVisible(o.isStatus());
                 }else if(o.getJenis().equals("Laporan Untung Rugi Periode")){
@@ -389,6 +393,10 @@ public class MainController {
     @FXML
     private void showLaporanUntungRugiProperty(){
         mainApp.showLaporanUntungRugiProperty();
+    }
+    @FXML
+    private void showLaporanProperty(){
+        mainApp.showLaporanProperty();
     }
     @FXML
     private void showLaporanNeraca(){

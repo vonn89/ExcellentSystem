@@ -21,6 +21,7 @@ import com.excellentsystem.jagobangunpersadafx.View.Dialog.KategoriPropertyContr
 import com.excellentsystem.jagobangunpersadafx.View.Dialog.KategoriTransaksiController;
 import com.excellentsystem.jagobangunpersadafx.View.Dialog.MessageController;
 import com.excellentsystem.jagobangunpersadafx.View.Dialog.NewTipeKeuanganController;
+import com.excellentsystem.jagobangunpersadafx.View.Dialog.SplashScreenController;
 import com.excellentsystem.jagobangunpersadafx.View.Dialog.UbahPasswordController;
 import com.excellentsystem.jagobangunpersadafx.View.HutangController;
 import com.excellentsystem.jagobangunpersadafx.View.KeuanganController;
@@ -36,6 +37,7 @@ import com.excellentsystem.jagobangunpersadafx.View.PiutangController;
 import com.excellentsystem.jagobangunpersadafx.View.RealisasiAnggaranProyekController;
 import com.excellentsystem.jagobangunpersadafx.View.RencanaAnggaranProyekController;
 import com.excellentsystem.jagobangunpersadafx.View.Report.LaporanNeracaController;
+import com.excellentsystem.jagobangunpersadafx.View.Report.LaporanPropertyController;
 import com.excellentsystem.jagobangunpersadafx.View.Report.LaporanUntungRugiController;
 import com.excellentsystem.jagobangunpersadafx.View.Report.LaporanUntungRugiPeriodeController;
 import com.excellentsystem.jagobangunpersadafx.View.Report.LaporanUntungRugiPropertyController;
@@ -52,11 +54,14 @@ import java.text.SimpleDateFormat;
 import javafx.animation.Animation;
 import javafx.animation.Transition;
 import javafx.application.Application;
+import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Label;
+import javafx.scene.control.ProgressBar;
 import javafx.scene.effect.ColorAdjust;
 import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
@@ -99,64 +104,80 @@ public class Main extends Application {
     public static SecretKeySpec key;
     @Override
     public void start(Stage stage) {
-        try(Connection con = Koneksi.getConnection()){
-            String password = "password";
-            byte[] salt = "12345678".getBytes();
-            key = createSecretKey(password.toCharArray(), salt, 40000, 128);
-            
-            MainStage = stage;
-            MainStage.setTitle("Jago Bangun Persada");
-            MainStage.setMaximized(true);
-            MainStage.getIcons().add(new Image(Main.class.getResourceAsStream("Resource/icon.png"),90,90,true,true));
-            screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-            
-            sistem = SistemDAO.get(con);
-            if(!version.equals(sistem.getVersion())){
-                String status = Function.downloadUpdateGoogleStorage("Jago Bangun Persada.exe");
-                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setTitle("Information");
-                alert.setContentText(status);
+        screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        MainStage = stage;
+        MainStage.setTitle("Jago Bangun Persada");
+        MainStage.setMaximized(true);
+        MainStage.getIcons().add(new Image(Main.class.getResourceAsStream("Resource/icon.png"),90,90,true,true));
+        ProgressBar progress = new ProgressBar();
+        Label updateLabel = new Label();
+        Task<String> task = new Task<String>() {
+            @Override 
+            public String call() throws Exception{
+                updateMessage("connecting to server...");
+                updateProgress(10, 100);
+                try (Connection con = Koneksi.getConnection()) {
+                    updateProgress(20, 100);
+                    Thread.sleep(500);
+                    updateProgress(30, 100);
+                    Thread.sleep(500);
+                    updateProgress(40, 100);
+                    Thread.sleep(500);
+                    updateMessage("checking for updates...");
+                    String password = "password";
+                    byte[] salt = "12345678".getBytes();
+                    key = createSecretKey(password.toCharArray(), salt, 40000, 128);
+                    sistem = SistemDAO.get(con);
+                    if(!version.equals(sistem.getVersion())){
+                        updateMessage("updating software...");
+                        updateProgress(50, 100);
+                        String status = Function.downloadUpdateGoogleStorage("Jago Bangun Persada.exe");
+                        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                        alert.setTitle("Information");
+                        alert.setContentText(status);
+                        alert.showAndWait();
+                        System.exit(0);
+                    }
+                    Service.setPenyusutanAset(con);
+                    updateProgress(70, 100);
+                    updateMessage("initializing system...");
+                    updateProgress(80, 100);
+                    Thread.sleep(500);
+                    updateProgress(90, 100);
+                    Thread.sleep(500);
+                    updateProgress(100, 100);
+                    return "true";
+                }
+            }
+        };
+        task.setOnRunning((e) -> {
+            showSplashScreen(progress, updateLabel);
+        });
+        task.setOnSucceeded((e) -> {
+            splash.close();
+            if(task.getValue().equals("true")){
+                showLoginScene();
+            }else{
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error");
+                alert.setContentText("Application Failed - \n" +task.getValue());
                 alert.showAndWait();
                 System.exit(0);
             }
-            Service.setPenyusutanAset(con);
-            showLoginScene();
-        }catch(Exception e){
-            e.printStackTrace();
+        });
+        task.setOnFailed((e) -> {
+            task.getException().printStackTrace();
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error");
-            alert.setContentText("Application error - \n" +e);
+            alert.setContentText("Application error - \n" +task.getException());
             alert.showAndWait();
             System.exit(0);
-        }
+            splash.close();
+        });
+        progress.progressProperty().bind(task.progressProperty());
+        updateLabel.textProperty().bind(task.messageProperty());
+        new Thread(task).start();
     }
-//    public void showLoginDialog(){
-//        try{
-//            login = new Stage();
-//            login.setTitle("Jago Bangun Persada");
-//            login.setMaximized(true);
-//            login.initOwner(MainStage);
-//            login.getIcons().add(new Image(Main.class.getResourceAsStream("Resource/icon.png"),90,90,true,true));
-//            login.initModality(Modality.NONE);
-//            login.initStyle(StageStyle.TRANSPARENT);
-//            
-//            FXMLLoader loader = new FXMLLoader();
-//            loader.setLocation(Main.class.getResource("View/Login.fxml"));
-//            AnchorPane container = (AnchorPane) loader.load();
-//
-//            Scene scene = new Scene(container);
-//            scene.setFill(Color.TRANSPARENT);
-//            
-//            login.hide();
-//            login.setScene(scene);
-//            login.show();
-//            
-//            LoginController controller = loader.getController();
-//            controller.setMainApp(this);
-//        }catch(IOException e){
-//            showMessage(Modality.NONE, "Error", e.toString());
-//        }
-//    }
     public void showLoginScene() {
         try{
             FXMLLoader loader = new FXMLLoader();
@@ -164,27 +185,11 @@ public class Main extends Application {
             AnchorPane container = (AnchorPane) loader.load();
             
             Scene scene = new Scene(container);
-            final Animation animationshow = new Transition() {
-                { setCycleDuration(Duration.millis(1000)); }
-                @Override
-                protected void interpolate(double frac) {
-                    MainStage.setOpacity(1-frac);
-                }
-            };
-            animationshow.onFinishedProperty().set((EventHandler<ActionEvent>) (ActionEvent actionEvent) -> {
-                final Animation animation = new Transition() {
-                    { setCycleDuration(Duration.millis(500)); }
-                    @Override
-                    protected void interpolate(double frac) {
-                        MainStage.setOpacity(frac);
-                    }
-                };
-                animation.play();
-                MainStage.hide();
-                MainStage.setScene(scene);
-                MainStage.show();
-            });
-            animationshow.play();
+            
+            MainStage.hide();
+            MainStage.setScene(scene);
+            MainStage.show();
+            
             LoginController controller = loader.getController();
             controller.setMainApp(this);
         }catch(Exception e){
@@ -387,6 +392,13 @@ public class Main extends Application {
         setTitle("Laporan Property");
         return controller;
     }
+    public LaporanPropertyController showLaporanProperty(){
+        FXMLLoader loader = changeStage("View/Report/LaporanProperty.fxml");
+        LaporanPropertyController controller = loader.getController();
+        controller.setMainApp(this);
+        setTitle("Laporan Property");
+        return controller;
+    }
     public LaporanNeracaController showLaporanNeraca(){
         FXMLLoader loader = changeStage("View/Report/LaporanNeraca.fxml");
         LaporanNeracaController controller = loader.getController();
@@ -483,6 +495,46 @@ public class Main extends Application {
     }
     public void closeLoading(){
         loading.close();
+    }
+    private Stage splash;
+    public void showSplashScreen(ProgressBar progressBar, Label updateLabel){
+        try{
+            if(splash!=null)
+                splash.close();
+            splash = new Stage();
+            splash.initModality(Modality.WINDOW_MODAL);
+            splash.initOwner(MainStage);
+            splash.initStyle(StageStyle.TRANSPARENT);
+            splash.setOnCloseRequest((event) -> {
+                event.consume();
+            });
+            
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(Main.class.getResource("View/Dialog/SplashScreen.fxml"));
+            AnchorPane container = (AnchorPane) loader.load();
+            SplashScreenController controller = loader.getController();
+            progressBar.setPrefWidth(475);
+            updateLabel.setStyle("-fx-text-fill: white");
+            controller.setSplashScreen(progressBar, updateLabel);
+
+            Scene scene = new Scene(container);
+            scene.setFill(Color.TRANSPARENT);
+            
+            splash.hide();
+            splash.setScene(scene);
+            splash.show();
+            
+            splash.setHeight(screenSize.getHeight());
+            splash.setWidth(screenSize.getWidth());
+            splash.setX((screenSize.getWidth() - splash.getWidth()) / 2);
+            splash.setY((screenSize.getHeight() - splash.getHeight()) / 2);
+        }catch(Exception e){
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.initOwner(MainStage);
+            alert.setTitle("Error");
+            alert.setContentText("Application error - \n" +e);
+            alert.showAndWait();
+        }
     }
     public FXMLLoader changeStage(String URL){
         try{

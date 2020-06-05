@@ -311,7 +311,7 @@ public class LaporanUntungRugiPeriodeController  {
         i++;
         addText(gp, "Untung-Rugi Kotor", 0, i, "seccolor3", "seccolor6");
         i++;
-        gp.getRowConstraints().add(i, new RowConstraints(5,3,3));
+        gp.getRowConstraints().add(i, new RowConstraints(3,3,3));
         gridPane.getRowConstraints().add(i, new RowConstraints(3,3,3));
         addText(gp, "", 0, i, "seccolor3", "seccolor6");
         i++;

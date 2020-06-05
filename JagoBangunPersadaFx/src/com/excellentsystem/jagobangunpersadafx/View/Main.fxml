@@ -273,6 +273,11 @@
                                     <Insets right="-1.0" />
                                  </VBox.margin>
                               </MenuButton>
+                              <MenuButton fx:id="laporanKategoriProperty" layoutX="11.0" layoutY="10.0" mnemonicParsing="false" onMouseClicked="#showLaporanProperty" prefHeight="30.0" prefWidth="230.0" text="Laporan Kategori Property">
+                                 <padding>
+                                    <Insets left="30.0" />
+                                 </padding>
+                              </MenuButton>
                               <MenuButton fx:id="laporanUntungRugi" mnemonicParsing="false" onMouseClicked="#showLaporanUntungRugi" prefHeight="30.0" prefWidth="230.0" text="Laporan Untung-Rugi">
                                  <padding>
                                     <Insets left="30.0" />

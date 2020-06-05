@@ -18,7 +18,7 @@ import java.util.List;
  */
 public class PemecahanPropertyDetailDAO {
     
-    public List<PemecahanPropertyDetail> getAllByDateAndStatus(Connection con, String tglMulai, String tglAkhir, String status)throws Exception{
+    public static List<PemecahanPropertyDetail> getAllByDateAndStatus(Connection con, String tglMulai, String tglAkhir, String status)throws Exception{
         PreparedStatement ps = con.prepareStatement("select * from tt_pemecahan_property_detail where no_pemecahan in ("
                 + "select no_pemecahan from tt_pemecahan_property_head where left(tgl_pemecahan,10) between ? and ? and status =? )");
         ps.setString(1, tglMulai);
@@ -38,7 +38,7 @@ public class PemecahanPropertyDetailDAO {
         }
         return allPemecahanPropertyDetail;
     }
-    public List<PemecahanPropertyDetail> getAllByNoPemecahan(Connection con, String noPemecahan)throws Exception{
+    public static List<PemecahanPropertyDetail> getAllByNoPemecahan(Connection con, String noPemecahan)throws Exception{
         PreparedStatement ps = con.prepareStatement("select * from tt_pemecahan_property_detail where no_pemecahan=?");
         ps.setString(1, noPemecahan);
         ResultSet rs = ps.executeQuery();
