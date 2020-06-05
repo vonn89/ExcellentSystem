@@ -43,6 +43,7 @@ import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import javafx.concurrent.WorkerStateEvent;
 import javafx.fxml.FXML;
+import javafx.scene.Cursor;
 import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.StackedBarChart;
@@ -57,6 +58,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.StackPane;
 import javafx.stage.Modality;
 
 /**
@@ -160,6 +162,8 @@ public class DashboardController {
         topCustomerTable.setItems(customer);
         bestSellingItemsTable.setItems(listBestSellingItems);
         pendingItemsTable.setItems(listPendingItems);
+        omzetPenjualanChart.setCursor(Cursor.CROSSHAIR);
+        salesPerformanceChart.setCursor(Cursor.CROSSHAIR);
         getData();
     }
     @FXML
@@ -464,8 +468,12 @@ public class DashboardController {
                         x = x + k.getJumlahRp();
                 }
             }
+            XYChart.Data<String, Double> data = new XYChart.Data<>(s, x);
+            data.setNode(
+                new HoveredThresholdNode(x)
+            );
             if(x!=0)
-                series.getData().add(new XYChart.Data<>(s, x));
+                series.getData().add(data);
         }
         return series;
     }
@@ -490,8 +498,31 @@ public class DashboardController {
         XYChart.Series series2 = getXYChartSeriesStore(periodeOmzetAxis, listKeuangan, "Penjualan Coil");
         if(!series2.getData().isEmpty())
             dataStorePerformance.add(series2);
-
+        
         omzetPenjualanChart.setData(dataStorePerformance);
+    }
+    class HoveredThresholdNode extends StackPane {
+        
+        HoveredThresholdNode(double value) {
+            setPrefSize(15, 15);
+            final Label label = createDataThresholdLabel(value);
+            setOnMouseEntered((MouseEvent mouseEvent) -> {
+                getChildren().setAll(label);
+                setCursor(Cursor.NONE);
+                toFront();
+            });
+            setOnMouseExited((MouseEvent mouseEvent) -> {
+                getChildren().clear();
+                setCursor(Cursor.CROSSHAIR);
+            });
+        }
+        private Label createDataThresholdLabel(double value) {
+            final Label label = new Label(df.format(value));
+            label.getStyleClass().addAll("default-color0", "chart-line-symbol", "chart-series-line");
+            label.setStyle("-fx-font-size: 14; -font-weight: bold;");
+            label.setMinSize(Label.USE_PREF_SIZE, Label.USE_PREF_SIZE);
+            return label;
+        }
     }
     private void setSalesPerformance(List<PenjualanHead> listPenjualan, List<PenjualanCoilHead> listPenjualanCoil) throws Exception{
         salesPerformanceChart.getData().clear();
@@ -513,9 +544,12 @@ public class DashboardController {
                 if(s.equals(p.getSales().getNama()))
                     totalPenjualan = totalPenjualan + p.getTotalPenjualan();
             }
-            if(totalPenjualan!=0){
-                series1.getData().add(new XYChart.Data<>(s, totalPenjualan));
-            }
+            XYChart.Data<String, Double> data = new XYChart.Data<>(s, totalPenjualan);
+            data.setNode(
+                new HoveredThresholdNode(totalPenjualan)
+            );
+            if(totalPenjualan!=0)
+                series1.getData().add(data);
         }
         if(!series1.getData().isEmpty())
             salesPerformanceChart.getData().add(series1);
@@ -528,8 +562,12 @@ public class DashboardController {
                 if(s.equals(p.getSales().getNama()))
                     totalPenjualan = totalPenjualan + p.getTotalPenjualan();
             }
+            XYChart.Data<String, Double> data = new XYChart.Data<>(s, totalPenjualan);
+            data.setNode(
+                new HoveredThresholdNode(totalPenjualan)
+            );
             if(totalPenjualan!=0)
-                series2.getData().add(new XYChart.Data<>(s, totalPenjualan));
+                series2.getData().add(data);
         }
         if(!series2.getData().isEmpty())
             salesPerformanceChart.getData().add(series2);

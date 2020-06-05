@@ -238,7 +238,7 @@ public class LaporanBarangDiproduksiController  {
             @Override 
             public List<ProduksiDetailBarang> call() throws Exception{
                 try(Connection con = Koneksi.getConnection()){
-//                    List<ProduksiHead> produksiHead = ProduksiHeadDAO.get(con, 
+//                    List<ProduksiHead> produksiHead = ProduksiHeadDAO.getAllByDateAndJenisProduksiAndStatus(con, 
 //                            tglProduksiMulaiPicker.getValue().toString(), tglProduksiAkhirPicker.getValue().toString(),"true");
 //                    List<ProduksiDetailBarang> allProduksi = ProduksiDetailBarangDAO.getAllByDateAndStatus(con, 
 //                            tglProduksiMulaiPicker.getValue().toString(), tglProduksiAkhirPicker.getValue().toString(),"true");
