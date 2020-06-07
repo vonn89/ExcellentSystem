@@ -157,7 +157,7 @@ public class LaporanPropertyController {
                         r.setListRapRealisasi(listRapRealisasi);
                     }
                     rows = 13;
-                    columns = 1;
+                    columns = 2;
                     for(Property p : listProperty){
                         columns = columns+1;
                     }
@@ -212,6 +212,7 @@ public class LaporanPropertyController {
                 setDetail(p, i);
                 i++;
             }
+            setTotal(i);
             
             stackPane.getChildren().add(gridPane);
         } catch (Exception ex) {
@@ -317,6 +318,7 @@ public class LaporanPropertyController {
             addText(gp, p.getNamaProperty(), i, 0, "seccolor1", "seccolor6");
             i++;
         }
+        addText(gp, "Total "+kategoriCombo.getSelectionModel().getSelectedItem(), i, 0, "seccolor1", "seccolor6");
         
         StackPane.setMargin(gp, new Insets(5 , 5 , 1, 5));
         st.getChildren().add(gp);
@@ -512,6 +514,200 @@ public class LaporanPropertyController {
         addText(gridPane, "", col, i, "seccolor1", "seccolor6");
         i++;
         addText(gridPane, rp.format(nilaiTanah+pengurusanSertifikat+infrastruktur+pagarBumi+gate+taman+fasum+urugan+bangunanRumah+addendum+lainlain), col, i, "seccolor5", "seccolor3");
+        i++;
+
+    }
+    private void setTotal(int col) throws ParseException{
+        int i = 1;
+        
+        double nilaiTanah = 0;
+        for(PembelianTanah pt : allPembelian){
+            for(Property p : listProperty){
+                if(pt.getKodeProperty().equals(p.getKodeProperty())){
+                    nilaiTanah = nilaiTanah + pt.getHargaBeli();
+                }
+            }
+        }
+        for(PemecahanPropertyHead pp : allPemecahanProperty){
+            for(Property p : listProperty){
+                if(pp.getKodeProperty().equals(p.getKodeProperty())){
+                    nilaiTanah = nilaiTanah - pp.getNilaiProperty();
+                }
+            }
+            for(PemecahanPropertyDetail d : pp.getAllDetail()){
+                for(Property p : listProperty){
+                    if(d.getKodeProperty().equals(p.getKodeProperty())){
+                        nilaiTanah = nilaiTanah + d.getNilaiProperty();
+                    }
+                }
+            }
+        }
+        addText(gridPane, rp.format(nilaiTanah), col, i, "seccolor3", "seccolor6");
+        i++;
+        addText(gridPane, "", col, i, "seccolor1", "seccolor6");
+        i++;
+        double pengurusanSertifikat = 0;
+        double infrastruktur = 0;
+        double pagarBumi = 0;
+        double gate = 0;
+        double taman = 0;
+        double fasum = 0;
+        double urugan = 0;
+        double bangunanRumah = 0;
+        double addendum = 0;
+        double lainlain = 0;
+        for(PembangunanHead pb : allPembangunan){
+            if(pb.getKategori().equals("PENGURUSAN SERTIFIKAT")){
+                for(PembangunanDetail d : pb.getAllDetail()){for(Property p : listProperty)
+                    if(d.getKodeProperty().equals(p.getKodeProperty()))
+                        pengurusanSertifikat = pengurusanSertifikat + d.getBiaya();
+                }
+            }
+            if(pb.getKategori().equals("INFRASTRUKTUR")){
+                for(PembangunanDetail d : pb.getAllDetail()){for(Property p : listProperty)
+                    if(d.getKodeProperty().equals(p.getKodeProperty()))
+                        infrastruktur = infrastruktur + d.getBiaya();
+                }
+            }
+            if(pb.getKategori().equals("PAGAR BUMI")){
+                for(PembangunanDetail d : pb.getAllDetail()){for(Property p : listProperty)
+                    if(d.getKodeProperty().equals(p.getKodeProperty()))
+                        pagarBumi = pagarBumi + d.getBiaya();
+                }
+            }
+            if(pb.getKategori().equals("GATE")){
+                for(PembangunanDetail d : pb.getAllDetail()){for(Property p : listProperty)
+                    if(d.getKodeProperty().equals(p.getKodeProperty()))
+                        gate = gate + d.getBiaya();
+                }
+            }
+            if(pb.getKategori().equals("TAMAN")){
+                for(PembangunanDetail d : pb.getAllDetail()){for(Property p : listProperty)
+                    if(d.getKodeProperty().equals(p.getKodeProperty()))
+                        taman = taman + d.getBiaya();
+                }
+            }
+            if(pb.getKategori().equals("FASUM")){
+                for(PembangunanDetail d : pb.getAllDetail()){for(Property p : listProperty)
+                    if(d.getKodeProperty().equals(p.getKodeProperty()))
+                        fasum = fasum + d.getBiaya();
+                }
+            }
+            if(pb.getKategori().equals("URUGAN")){
+                for(PembangunanDetail d : pb.getAllDetail()){for(Property p : listProperty)
+                    if(d.getKodeProperty().equals(p.getKodeProperty()))
+                        urugan = urugan + d.getBiaya();
+                }
+            }
+            if(pb.getKategori().equals("BANGUNAN RUMAH")){
+                for(PembangunanDetail d : pb.getAllDetail()){for(Property p : listProperty)
+                    if(d.getKodeProperty().equals(p.getKodeProperty()))
+                        bangunanRumah = bangunanRumah + d.getBiaya();
+                }
+            }
+            if(pb.getKategori().equals("ADDENDUM")){
+                for(PembangunanDetail d : pb.getAllDetail()){for(Property p : listProperty)
+                    if(d.getKodeProperty().equals(p.getKodeProperty()))
+                        addendum = addendum + d.getBiaya();
+                }
+            }
+            if(pb.getKategori().equals("LAIN-LAIN")){
+                for(PembangunanDetail d : pb.getAllDetail()){for(Property p : listProperty)
+                    if(d.getKodeProperty().equals(p.getKodeProperty()))
+                        lainlain = lainlain + d.getBiaya();
+                }
+            }
+        }
+        for(RAPHead r : allRap){
+            double total = 0;
+            for(RAPRealisasi rr : r.getListRapRealisasi()){
+                if(rr.getStatus().equals("true"))
+                    total = total + rr.getJumlahRp();
+            }
+            if(r.getKategoriPembangunan().equals("PENGURUSAN SERTIFIKAT")){
+                for(RAPDetailProperty d : r.getListRapPropertyDetail()){for(Property p : listProperty)
+                    if(d.getKodeProperty().equals(p.getKodeProperty()))
+                        pengurusanSertifikat = pengurusanSertifikat + (total*d.getPersentase()/100);
+                }
+            }
+            if(r.getKategoriPembangunan().equals("INFRASTRUKTUR")){
+                for(RAPDetailProperty d : r.getListRapPropertyDetail()){for(Property p : listProperty)
+                    if(d.getKodeProperty().equals(p.getKodeProperty()))
+                        pengurusanSertifikat = pengurusanSertifikat + (total*d.getPersentase()/100);
+                }
+            }
+            if(r.getKategoriPembangunan().equals("PAGAR BUMI")){
+                for(RAPDetailProperty d : r.getListRapPropertyDetail()){for(Property p : listProperty)
+                    if(d.getKodeProperty().equals(p.getKodeProperty()))
+                        pengurusanSertifikat = pengurusanSertifikat + (total*d.getPersentase()/100);
+                }
+            }
+            if(r.getKategoriPembangunan().equals("GATE")){
+                for(RAPDetailProperty d : r.getListRapPropertyDetail()){for(Property p : listProperty)
+                    if(d.getKodeProperty().equals(p.getKodeProperty()))
+                        pengurusanSertifikat = pengurusanSertifikat + (total*d.getPersentase()/100);
+                }
+            }
+            if(r.getKategoriPembangunan().equals("TAMAN")){
+                for(RAPDetailProperty d : r.getListRapPropertyDetail()){for(Property p : listProperty)
+                    if(d.getKodeProperty().equals(p.getKodeProperty()))
+                        pengurusanSertifikat = pengurusanSertifikat + (total*d.getPersentase()/100);
+                }
+            }
+            if(r.getKategoriPembangunan().equals("FASUM")){
+                for(RAPDetailProperty d : r.getListRapPropertyDetail()){for(Property p : listProperty)
+                    if(d.getKodeProperty().equals(p.getKodeProperty()))
+                        pengurusanSertifikat = pengurusanSertifikat + (total*d.getPersentase()/100);
+                }
+            }
+            if(r.getKategoriPembangunan().equals("URUGAN")){
+                for(RAPDetailProperty d : r.getListRapPropertyDetail()){for(Property p : listProperty)
+                    if(d.getKodeProperty().equals(p.getKodeProperty()))
+                        pengurusanSertifikat = pengurusanSertifikat + (total*d.getPersentase()/100);
+                }
+            }
+            if(r.getKategoriPembangunan().equals("BANGUNAN RUMAH")){
+                for(RAPDetailProperty d : r.getListRapPropertyDetail()){for(Property p : listProperty)
+                    if(d.getKodeProperty().equals(p.getKodeProperty()))
+                        pengurusanSertifikat = pengurusanSertifikat + (total*d.getPersentase()/100);
+                }
+            }
+            if(r.getKategoriPembangunan().equals("ADDENDUM")){
+                for(RAPDetailProperty d : r.getListRapPropertyDetail()){for(Property p : listProperty)
+                    if(d.getKodeProperty().equals(p.getKodeProperty()))
+                        pengurusanSertifikat = pengurusanSertifikat + (total*d.getPersentase()/100);
+                }
+            }
+            if(r.getKategoriPembangunan().equals("LAIN-LAIN")){
+                for(RAPDetailProperty d : r.getListRapPropertyDetail()){for(Property p : listProperty)
+                    if(d.getKodeProperty().equals(p.getKodeProperty()))
+                        pengurusanSertifikat = pengurusanSertifikat + (total*d.getPersentase()/100);
+                }
+            }
+        }
+        addText(gridPane, rp.format(pengurusanSertifikat), col, i, "seccolor3", "seccolor6");
+        i++;
+        addText(gridPane, rp.format(infrastruktur), col, i, "seccolor3", "seccolor6");
+        i++;
+        addText(gridPane, rp.format(pagarBumi), col, i, "seccolor3", "seccolor6");
+        i++;
+        addText(gridPane, rp.format(gate), col, i, "seccolor3", "seccolor6");
+        i++;
+        addText(gridPane, rp.format(taman), col, i, "seccolor3", "seccolor6");
+        i++;
+        addText(gridPane, rp.format(fasum), col, i, "seccolor3", "seccolor6");
+        i++;
+        addText(gridPane, rp.format(urugan), col, i, "seccolor3", "seccolor6");
+        i++;
+        addText(gridPane, rp.format(bangunanRumah), col, i, "seccolor3", "seccolor6");
+        i++;
+        addText(gridPane, rp.format(addendum), col, i, "seccolor3", "seccolor6");
+        i++;
+        addText(gridPane, rp.format(lainlain), col, i, "seccolor3", "seccolor6");
+        i++;
+        addText(gridPane, "", col, i, "seccolor1", "seccolor6");
+        i++;
+        addText(gridPane, rp.format(nilaiTanah+pengurusanSertifikat+infrastruktur+pagarBumi+gate+taman+fasum+urugan+bangunanRumah+addendum+lainlain), col, i, "seccolor3", "seccolor6");
         i++;
 
     }

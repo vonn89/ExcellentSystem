@@ -617,6 +617,7 @@ public class Service {
             
             Property p = head.getProperty();
             p.setNamaProperty(head.getNamaProperty());
+            p.setNilaiProperty(0);
             p.setStatus("Mapped");
             PropertyDAO.update(con, p);
             
@@ -625,7 +626,7 @@ public class Service {
             
             for(PemecahanPropertyDetail detail : head.getAllDetail()){
                 String kodeProperty = PropertyDAO.getId(con);
-                detail.setKodeProperty(kodeProperty);
+                detail.setKodeProperty(kodeProperty); 
                 PemecahanPropertyDetailDAO.insert(con, detail);
                 
                 detail.getProperty().setKodeProperty(kodeProperty);
