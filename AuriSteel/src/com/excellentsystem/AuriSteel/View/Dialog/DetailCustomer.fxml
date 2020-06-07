@@ -62,7 +62,7 @@
             <TextField fx:id="kontakPersonField" prefHeight="40.0" GridPane.columnIndex="4" GridPane.rowIndex="2" />
             <TextField fx:id="noTelpField" prefHeight="40.0" GridPane.columnIndex="4" GridPane.rowIndex="3" />
             <TextField fx:id="noHandphoneField" prefHeight="40.0" GridPane.columnIndex="4" GridPane.rowIndex="4" />
-            <ComboBox fx:id="kodeSalesCombo" maxWidth="1.7976931348623157E308" onAction="#getSales" prefHeight="40.0" GridPane.columnIndex="4" GridPane.rowIndex="8" />
+            <ComboBox fx:id="kodeSalesCombo" maxWidth="1.7976931348623157E308" prefHeight="40.0" GridPane.columnIndex="4" GridPane.rowIndex="8" />
             <TextField fx:id="bankField" prefHeight="40.0" GridPane.columnIndex="4" GridPane.rowIndex="5" />
             <TextField fx:id="atasNamaRekeningField" prefHeight="40.0" GridPane.columnIndex="4" GridPane.rowIndex="6" />
             <TextField fx:id="noRekeningField" prefHeight="40.0" GridPane.columnIndex="4" GridPane.rowIndex="7" />
