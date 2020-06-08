@@ -7,31 +7,20 @@
 package com.excellentsystem.AuriSteel.View;
 
 
-import com.excellentsystem.AuriSteel.DAO.OtoritasDAO;
-import com.excellentsystem.AuriSteel.DAO.UserDAO;
 import static com.excellentsystem.AuriSteel.Function.decrypt;
-import com.excellentsystem.AuriSteel.Koneksi;
 import com.excellentsystem.AuriSteel.Main;
 import static com.excellentsystem.AuriSteel.Main.key;
 import static com.excellentsystem.AuriSteel.Main.sistem;
-import com.excellentsystem.AuriSteel.Model.Otoritas;
 import com.excellentsystem.AuriSteel.Model.User;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
-import java.sql.Connection;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 import javafx.fxml.FXML;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.scene.layout.StackPane;
 import javafx.stage.Modality;
 
 /**
@@ -91,15 +80,9 @@ public class LoginController  {
             }
         }
     }
-    @FXML private StackPane pane;
     public void setMainApp(Main mainApp){
         try{
             this.mainApp = mainApp;
-            ImageView img = new ImageView();
-            img.setImage(new Image(Main.class.getResourceAsStream("Resource/background.png")));
-            img.fitWidthProperty().bind(mainApp.MainStage.widthProperty()); 
-            img.fitHeightProperty().bind(mainApp.MainStage.widthProperty()); 
-            pane.getChildren().add(img);
             versionLabel.setText("Ver. "+mainApp.version);
             
             BufferedReader text = new BufferedReader(new FileReader("password"));

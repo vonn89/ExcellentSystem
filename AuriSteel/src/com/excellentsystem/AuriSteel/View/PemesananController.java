@@ -212,7 +212,7 @@ public class PemesananController {
                         });
                         MenuItem edit = new MenuItem("Edit Pemesanan");
                         edit.setOnAction((ActionEvent e)->{
-                            lihatDetailPemesanan(item);
+                            editPemesanan(item);
                         });
                         MenuItem batal = new MenuItem("Batal Pemesanan");
                         batal.setOnAction((ActionEvent e)->{
@@ -511,6 +511,68 @@ public class PemesananController {
         NewPemesananController controller = loader.getController();
         controller.setMainApp(mainApp,mainApp.MainStage, stage);
         controller.setDetailPemesanan(p.getNoPemesanan());
+    }
+    private void editPemesanan(PemesananHead p){
+        Stage stage = new Stage();
+        FXMLLoader loader = mainApp.showDialog(mainApp.MainStage, stage, "View/Dialog/NewPemesanan.fxml");
+        NewPemesananController controller = loader.getController();
+        controller.setMainApp(mainApp,mainApp.MainStage, stage);
+        controller.editPemesanan(p.getNoPemesanan());
+        controller.saveButton.setOnAction((event) -> {
+            if(controller.customer==null)
+                mainApp.showMessage(Modality.NONE, "Warning", "Customer belum dipilih");
+            else if(controller.paymentTermCombo.getSelectionModel().getSelectedItem()==null)
+                mainApp.showMessage(Modality.NONE, "Warning", "Payment term belum dipilih");
+            else if(controller.allPemesananDetail.isEmpty())
+                mainApp.showMessage(Modality.NONE, "Warning", "Barang tidak ada");
+            else if(Double.parseDouble(controller.grandtotalField.getText().replaceAll(",", ""))<p.getSisaDownPayment())
+                mainApp.showMessage(Modality.NONE, "Warning", "Tidak dapat disimpan karena jumlah dp lebih besar dari total penjualan");
+            else{
+                Task<String> task = new Task<String>() {
+                    @Override 
+                    public String call() throws Exception{
+                        try (Connection con = Koneksi.getConnection()) {
+                            p.setKodeCustomer(controller.customer.getKodeCustomer());
+                            p.setKodeCustomerInvoice(controller.customerInvoice.getKodeCustomer());
+                            p.setPaymentTerm(controller.paymentTermCombo.getSelectionModel().getSelectedItem());
+                            p.setTotalPemesanan(Double.parseDouble(controller.grandtotalField.getText().replaceAll(",", "")));
+                            p.setCatatan(controller.catatanField.getText());
+                            p.setKodeSales(controller.customer.getKodeSales());
+                            p.setKodeUser(sistem.getUser().getKodeUser());
+                            p.setTglBatal("2000-01-01 00:00:00");
+                            p.setUserBatal("");
+                            p.setStatus("open");
+                            int noUrut = 1;
+                            for(PemesananDetail temp : controller.allPemesananDetail){
+                                temp.setNoPemesanan(p.getNoPemesanan());
+                                temp.setNoUrut(noUrut);
+                                noUrut = noUrut + 1;
+                            }
+                            p.setListPemesananDetail(controller.allPemesananDetail);
+                            return Service.editPemesanan(con, p);
+                        }
+                    }
+                };
+                task.setOnRunning((ex) -> {
+                    mainApp.showLoadingScreen();
+                });
+                task.setOnSucceeded((WorkerStateEvent ex) -> {
+                    mainApp.closeLoading();
+                    getPemesanan();
+                    if(task.getValue().equals("true")){
+                        mainApp.closeDialog(mainApp.MainStage, stage);
+                        mainApp.showMessage(Modality.NONE, "Success", "Data pemesanan berhasil disimpan");
+                    }else{
+                        mainApp.showMessage(Modality.NONE, "Error", task.getValue());
+                    }
+                });
+                task.setOnFailed((ex) -> {
+                    mainApp.showMessage(Modality.NONE, "Error", task.getException().toString());
+                    mainApp.closeLoading();
+                });
+                new Thread(task).start();
+            }
+        });
     }
     private void batalPemesanan(PemesananHead p){
         boolean statusBarang = false;

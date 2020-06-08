@@ -123,4 +123,9 @@ public class PemesananDetailDAO {
         ps.setInt(11, d.getNoUrut());
         ps.executeUpdate();
     }
+    public static void delete(Connection con, String noPemesanan)throws Exception{
+        PreparedStatement ps = con.prepareStatement("delete from tt_pemesanan_detail where no_pemesanan=? ");
+        ps.setString(1, noPemesanan);
+        ps.executeUpdate();
+    }
 }
