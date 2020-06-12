@@ -289,6 +289,7 @@ public class DataUserController  {
                 Arrays.asList(
                     "Add New Pemesanan",
                     "Detail Pemesanan",
+                    "Edit Pemesanan",
                     "Batal Pemesanan",
                     "Pemesanan Selesai",
                     "Terima Pembayaran DP",

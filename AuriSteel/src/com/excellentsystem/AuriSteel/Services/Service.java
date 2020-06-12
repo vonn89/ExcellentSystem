@@ -1076,6 +1076,35 @@ public class Service {
             }
         }
     }
+    
+    public static String editPemesanan(Connection con, PemesananHead p){
+        try{
+            con.setAutoCommit(false);
+            String status = "true";
+            
+            PemesananHeadDAO.update(con, p);
+            PemesananDetailDAO.delete(con, p.getNoPemesanan());
+            for(PemesananDetail detail : p.getListPemesananDetail()){
+                PemesananDetailDAO.insert(con, detail);
+            }
+            
+            if(status.equals("true"))
+                con.commit();
+            else 
+                con.rollback();
+            con.setAutoCommit(true);
+            
+            return status;
+        }catch(Exception e){
+            try{
+                con.rollback();
+                con.setAutoCommit(true);
+                return e.toString();
+            }catch(SQLException ex){
+                return ex.toString();
+            }
+        }
+    }
     public static String batalPemesanan(Connection con, PemesananHead pemesanan){
         try{
             con.setAutoCommit(false);

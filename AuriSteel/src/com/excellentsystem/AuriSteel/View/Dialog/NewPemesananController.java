@@ -67,7 +67,7 @@ public class NewPemesananController  {
     @FXML private TableColumn<PemesananDetail, Number> totalColumn;
     
     @FXML private GridPane gridPane;
-    @FXML private Label noPemesananField;
+    @FXML public Label noPemesananField;
     @FXML private Label tglPemesananField;
     
     @FXML private TextField namaField;
@@ -140,17 +140,20 @@ public class NewPemesananController  {
                         addBarang.setOnAction((ActionEvent e)->{
                             addBarang();
                         });
+                        MenuItem edit = new MenuItem("Edit Barang");
+                        edit.setOnAction((ActionEvent e)->{
+                            editBarang(item);
+                        });
                         MenuItem delete = new MenuItem("Delete Barang");
                         delete.setOnAction((ActionEvent e)->{
-                            allPemesananDetail.remove(item);
-                            hitungTotal();
+                            deleteBarang(item);
                         });
                         MenuItem refresh = new MenuItem("Refresh");
                         refresh.setOnAction((ActionEvent e)->{
                             pemesananDetailTable.refresh();
                         });
                         if(saveButton.isVisible())
-                            rm.getItems().addAll(addBarang, delete);
+                            rm.getItems().addAll(addBarang, edit, delete);
                         rm.getItems().addAll(refresh);
                         setContextMenu(rm);
                     }
@@ -256,6 +259,53 @@ public class NewPemesananController  {
         });
         new Thread(task).start();
     }
+    public void editPemesanan(String noPemesanan){
+        Task<PemesananHead> task = new Task<PemesananHead>() {
+            @Override 
+            public PemesananHead call() throws Exception{
+                try (Connection con = Koneksi.getConnection()) {
+                    PemesananHead pemesanan = PemesananHeadDAO.get(con, noPemesanan);
+                    pemesanan.setCustomer(CustomerDAO.get(con, pemesanan.getKodeCustomer()));
+                    pemesanan.setCustomerInvoice(CustomerDAO.get(con, pemesanan.getKodeCustomerInvoice()));
+                    pemesanan.setSales(PegawaiDAO.get(con, pemesanan.getKodeSales()));
+                    pemesanan.setListPemesananDetail(PemesananDetailDAO.getAllByNoPemesanan(con, noPemesanan));
+                    customer = pemesanan.getCustomer();
+                    customerInvoice = pemesanan.getCustomerInvoice();
+                    return pemesanan;
+                }
+            }
+        };
+        task.setOnRunning((e) -> {
+            mainApp.showLoadingScreen();
+        });
+        task.setOnSucceeded((ev) -> {
+            try{
+                mainApp.closeLoading();
+                
+                PemesananHead pemesanan = task.getValue();
+                customerInvoice = pemesanan.getCustomerInvoice();
+                noPemesananField.setText(pemesanan.getNoPemesanan());
+                tglPemesananField.setText(tglLengkap.format(tglSql.parse(pemesanan.getTglPemesanan())));
+                namaField.setText(pemesanan.getCustomer().getNama());
+                alamatField.setText(pemesanan.getCustomer().getAlamat());
+                paymentTermCombo.getSelectionModel().select(pemesanan.getPaymentTerm());
+                namaSalesField.setText(pemesanan.getSales().getNama());
+                catatanField.setText(pemesanan.getCatatan());
+                allPemesananDetail.addAll(pemesanan.getListPemesananDetail());
+                totalPemesananField.setText(df.format(pemesanan.getTotalPemesanan()/1.1));
+                ppnField.setText(df.format(pemesanan.getTotalPemesanan()/1.1*0.1));
+                grandtotalField.setText(df.format(pemesanan.getTotalPemesanan()));
+                hitungTotal();
+            }catch(Exception e){
+                mainApp.showMessage(Modality.NONE, "Error", e.toString());
+            }
+        });
+        task.setOnFailed((e) -> {
+            mainApp.showMessage(Modality.NONE, "Error", task.getException().toString());
+            mainApp.closeLoading();
+        });
+        new Thread(task).start();
+    }
     @FXML
     private void close(){
         mainApp.closeDialog(owner, stage);
@@ -304,6 +354,50 @@ public class NewPemesananController  {
                     pemesananDetailTable.refresh();
                     hitungTotal();
                 }
+            }
+        });
+    }
+    @FXML 
+    private void deleteBarang(PemesananDetail d){
+        if(d.getQtyTerkirim()>0){
+            mainApp.showMessage(Modality.NONE, "Warning", "Qty barang sudah ada yeng terkirim, tidak dapat di hapus");
+        }else{
+            allPemesananDetail.remove(d);
+            hitungTotal();
+            pemesananDetailTable.refresh();
+        }
+    }
+    @FXML
+    private void editBarang(PemesananDetail detail){
+        Stage child = new Stage();
+        FXMLLoader loader = mainApp.showDialog(stage, child, "View/Dialog/EditBarangPemesanan.fxml");
+        EditBarangPemesananController controller = loader.getController();
+        controller.setMainApp(mainApp, stage, child);
+        controller.editBarang(detail);
+        controller.addButton.setOnAction((ActionEvent event) -> {
+            if(controller.barang==null)
+                mainApp.showMessage(Modality.NONE, "Warning", "Barang belum dipilih atau kode barang masih kosong");
+            else if(controller.qtyField.getText().equals("0")||controller.qtyField.getText().equals(""))
+                mainApp.showMessage(Modality.NONE, "Warning", "Qty tidak boleh kosong");
+            else if(detail.getQtyTerkirim()>0)
+                mainApp.showMessage(Modality.NONE, "Warning", "Qty barang sudah ada yeng terkirim, tidak dapat di ubah");
+            else if(controller.totalField.getText().equals("0")||controller.totalField.getText().equals(""))
+                mainApp.showMessage(Modality.NONE, "Warning", "Total tidak boleh kosong");
+            else if(!sistem.getUser().getLevel().equals("Manager")&&
+                controller.barang.getHargaJual()>Double.parseDouble(controller.hargaJualField.getText().replaceAll(",", "")))
+                mainApp.showMessage(Modality.NONE, "Warning", "Harga jual tidak boleh di bawah batas harga");
+            else{
+                mainApp.closeDialog(stage,child);
+                detail.setKodeBarang(controller.barang.getKodeBarang());
+                detail.setNamaBarang(controller.barang.getNamaBarang());
+                detail.setKeterangan(controller.keteranganField.getText());
+                detail.setCatatanIntern(controller.catatanInternField.getText());
+                detail.setSatuan(controller.barang.getSatuan());
+                detail.setQty(Double.parseDouble(controller.qtyField.getText().replaceAll(",", "")));
+                detail.setHargaJual(Double.parseDouble(controller.hargaJualField.getText().replaceAll(",", "")));
+                detail.setTotal(Double.parseDouble(controller.totalField.getText().replaceAll(",", "")));
+                hitungTotal();
+                pemesananDetailTable.refresh();
             }
         });
     }
