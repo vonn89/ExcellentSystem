@@ -5,6 +5,7 @@
  */
 package com.excellentsystem.jagobangunpersadafx.View.Report;
 
+import com.excellentsystem.jagobangunpersadafx.DAO.KPRDAO;
 import com.excellentsystem.jagobangunpersadafx.DAO.PembangunanDetailDAO;
 import com.excellentsystem.jagobangunpersadafx.DAO.PembangunanHeadDAO;
 import com.excellentsystem.jagobangunpersadafx.DAO.PembelianTanahDAO;
@@ -14,10 +15,14 @@ import com.excellentsystem.jagobangunpersadafx.DAO.PropertyDAO;
 import com.excellentsystem.jagobangunpersadafx.DAO.RAPDetailPropertyDAO;
 import com.excellentsystem.jagobangunpersadafx.DAO.RAPHeadDAO;
 import com.excellentsystem.jagobangunpersadafx.DAO.RAPRealisasiDAO;
+import com.excellentsystem.jagobangunpersadafx.DAO.SAPDAO;
+import com.excellentsystem.jagobangunpersadafx.DAO.SDPDAO;
+import com.excellentsystem.jagobangunpersadafx.DAO.STJHeadDAO;
 import com.excellentsystem.jagobangunpersadafx.Function;
 import com.excellentsystem.jagobangunpersadafx.Koneksi;
 import com.excellentsystem.jagobangunpersadafx.Main;
 import static com.excellentsystem.jagobangunpersadafx.Main.rp;
+import com.excellentsystem.jagobangunpersadafx.Model.KPR;
 import com.excellentsystem.jagobangunpersadafx.Model.PembangunanDetail;
 import com.excellentsystem.jagobangunpersadafx.Model.PembangunanHead;
 import com.excellentsystem.jagobangunpersadafx.Model.PembelianTanah;
@@ -27,6 +32,9 @@ import com.excellentsystem.jagobangunpersadafx.Model.Property;
 import com.excellentsystem.jagobangunpersadafx.Model.RAPDetailProperty;
 import com.excellentsystem.jagobangunpersadafx.Model.RAPHead;
 import com.excellentsystem.jagobangunpersadafx.Model.RAPRealisasi;
+import com.excellentsystem.jagobangunpersadafx.Model.SAP;
+import com.excellentsystem.jagobangunpersadafx.Model.SDP;
+import com.excellentsystem.jagobangunpersadafx.Model.STJHead;
 import java.sql.Connection;
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -68,6 +76,10 @@ public class LaporanPropertyController {
     private List<RAPHead> allRap;
     private List<PembelianTanah> allPembelian;
     private List<PemecahanPropertyHead> allPemecahanProperty;
+    private List<STJHead> allSTJ;
+    private List<SDP> allSDP;
+    private List<KPR> allKPR;
+    private List<SAP> allSAP;
     private List<Property> listProperty;
     private int rows = 0;
     private int columns = 0;
@@ -156,7 +168,11 @@ public class LaporanPropertyController {
                         }
                         r.setListRapRealisasi(listRapRealisasi);
                     }
-                    rows = 13;
+                    allSTJ = STJHeadDAO.getAllByDateAndStatus(con, "2000-01-01", "2100-01-01", "true");
+                    allSDP = SDPDAO.getAllByDateAndStatus(con, "2000-01-01", "2100-01-01", "true");
+                    allKPR = KPRDAO.getAllByDate(con, "2000-01-01", "2100-01-01", "true");
+                    allSAP = SAPDAO.getAllByDateAndStatus(con, "2000-01-01", "2100-01-01", "true");
+                    rows = 20;
                     columns = 2;
                     for(Property p : listProperty){
                         columns = columns+1;
@@ -245,37 +261,53 @@ public class LaporanPropertyController {
         }
         int i = 1;
         addText(gp, "PEMBELIAN TANAH", 0, i, "seccolor3", "seccolor6");
-        i++;
+        i++;//2
         gp.getRowConstraints().add(i, new RowConstraints(3,3,3));
         gridPane.getRowConstraints().add(i, new RowConstraints(3,3,3));
         addText(gp, "", 0, i, "seccolor3", "seccolor6");
-        i++;
+        i++;//3
         addText(gp, "PENGURUSAN SERTIFIKAT", 0, i, "seccolor3", "seccolor6");
-        i++;
+        i++;//4
         addText(gp, "INFRASTRUKTUR", 0, i, "seccolor3", "seccolor6");
-        i++;
+        i++;//5
         addText(gp, "PAGAR BUMI", 0, i, "seccolor3", "seccolor6");
-        i++;
+        i++;//6
         addText(gp, "GATE", 0, i, "seccolor3", "seccolor6");
-        i++;
+        i++;//7
         addText(gp, "TAMAN", 0, i, "seccolor3", "seccolor6");
-        i++;
+        i++;//8
         addText(gp, "FASUM", 0, i, "seccolor3", "seccolor6");
-        i++;
+        i++;//9
         addText(gp, "URUGAN", 0, i, "seccolor3", "seccolor6");
-        i++;
+        i++;//10
         addText(gp, "BANGUNAN RUMAH", 0, i, "seccolor3", "seccolor6");
-        i++;
+        i++;//11
         addText(gp, "ADDENDUM", 0, i, "seccolor3", "seccolor6");
-        i++;
+        i++;//12
         addText(gp, "LAIN - LAIN", 0, i, "seccolor3", "seccolor6");
-        i++;
+        i++;//13
         gp.getRowConstraints().add(i, new RowConstraints(3,3,3));
         gridPane.getRowConstraints().add(i, new RowConstraints(3,3,3));
         addText(gp, "", 0, i, "seccolor3", "seccolor6");
-        i++;
-        addText(gp, "TOTAL", 0, i, "seccolor3", "seccolor6");
-        i++;
+        i++;//14
+        addText(gp, "TOTAL NILAI POKOK", 0, i, "seccolor3", "seccolor6");
+        i++;//15
+        i++;//16
+        addText(gp, "", 0, i, "seccolor3", "seccolor6");
+        i++;//17
+        addText(gp, "TERIMA TANDA JADI", 0, i, "seccolor3", "seccolor6");
+        i++;//18
+        addText(gp, "TERIMA DOWN PAYMENT", 0, i, "seccolor3", "seccolor6");
+        i++;//19
+        addText(gp, "PENCAIRAN KPR", 0, i, "seccolor3", "seccolor6");
+        i++;//20
+        addText(gp, "TERIMA ANGSURAN", 0, i, "seccolor3", "seccolor6");
+        i++;//21
+        gp.getRowConstraints().add(i, new RowConstraints(3,3,3));
+        gridPane.getRowConstraints().add(i, new RowConstraints(3,3,3));
+        addText(gp, "", 0, i, "seccolor3", "seccolor6");
+        i++;//22
+        addText(gp, "TOTAL PEMASUKAN", 0, i, "seccolor3", "seccolor6");
         StackPane.setMargin(gp, new Insets(5, 1, 5, 5));
         st.getChildren().add(gp);
         sp.setContent(st);
@@ -348,10 +380,6 @@ public class LaporanPropertyController {
                 }
             }
         }
-        addText(gridPane, rp.format(nilaiTanah), col, i, "seccolor5", "seccolor3");
-        i++;
-        addText(gridPane, "", col, i, "seccolor1", "seccolor6");
-        i++;
         double pengurusanSertifikat = 0;
         double infrastruktur = 0;
         double pagarBumi = 0;
@@ -491,30 +519,72 @@ public class LaporanPropertyController {
                 }
             }
         }
-        addText(gridPane, rp.format(pengurusanSertifikat), col, i, "seccolor5", "seccolor3");
-        i++;
-        addText(gridPane, rp.format(infrastruktur), col, i, "seccolor5", "seccolor3");
-        i++;
-        addText(gridPane, rp.format(pagarBumi), col, i, "seccolor5", "seccolor3");
-        i++;
-        addText(gridPane, rp.format(gate), col, i, "seccolor5", "seccolor3");
-        i++;
-        addText(gridPane, rp.format(taman), col, i, "seccolor5", "seccolor3");
-        i++;
-        addText(gridPane, rp.format(fasum), col, i, "seccolor5", "seccolor3");
-        i++;
-        addText(gridPane, rp.format(urugan), col, i, "seccolor5", "seccolor3");
-        i++;
-        addText(gridPane, rp.format(bangunanRumah), col, i, "seccolor5", "seccolor3");
-        i++;
-        addText(gridPane, rp.format(addendum), col, i, "seccolor5", "seccolor3");
-        i++;
-        addText(gridPane, rp.format(lainlain), col, i, "seccolor5", "seccolor3");
-        i++;
+        double stj = 0;
+        for(STJHead s : allSTJ){
+            if(s.getKodeProperty().equals(p.getKodeProperty())){
+                stj = stj + s.getJumlahRp();
+            }
+        }
+        double sdp = 0;
+        for(SDP s : allSDP){
+            if(s.getKodeProperty().equals(p.getKodeProperty())){
+                sdp = sdp + s.getJumlahRp();
+            }
+        }
+        double kpr = 0;
+        for(KPR k : allKPR){
+            if(k.getKodeProperty().equals(p.getKodeProperty())){
+                kpr = kpr + k.getJumlahRp();
+            }
+        }
+        double sap = 0;
+        for(SAP s : allSAP){
+            if(s.getKodeProperty().equals(p.getKodeProperty())){
+                sap = sap + s.getJumlahRp();
+            }
+        }
+        addText(gridPane, rp.format(nilaiTanah), col, i, "seccolor5", "seccolor3");
+        i++;//2
         addText(gridPane, "", col, i, "seccolor1", "seccolor6");
-        i++;
+        i++;//3
+        addText(gridPane, rp.format(pengurusanSertifikat), col, i, "seccolor5", "seccolor3");
+        i++;//4
+        addText(gridPane, rp.format(infrastruktur), col, i, "seccolor5", "seccolor3");
+        i++;//5
+        addText(gridPane, rp.format(pagarBumi), col, i, "seccolor5", "seccolor3");
+        i++;//6
+        addText(gridPane, rp.format(gate), col, i, "seccolor5", "seccolor3");
+        i++;//7
+        addText(gridPane, rp.format(taman), col, i, "seccolor5", "seccolor3");
+        i++;//8
+        addText(gridPane, rp.format(fasum), col, i, "seccolor5", "seccolor3");
+        i++;//9
+        addText(gridPane, rp.format(urugan), col, i, "seccolor5", "seccolor3");
+        i++;//10
+        addText(gridPane, rp.format(bangunanRumah), col, i, "seccolor5", "seccolor3");
+        i++;//11
+        addText(gridPane, rp.format(addendum), col, i, "seccolor5", "seccolor3");
+        i++;//12
+        addText(gridPane, rp.format(lainlain), col, i, "seccolor5", "seccolor3");
+        i++;//13
+        addText(gridPane, "", col, i, "seccolor1", "seccolor6");
+        i++;//14
         addText(gridPane, rp.format(nilaiTanah+pengurusanSertifikat+infrastruktur+pagarBumi+gate+taman+fasum+urugan+bangunanRumah+addendum+lainlain), col, i, "seccolor5", "seccolor3");
-        i++;
+        i++;//15
+        i++;//16
+        addText(gridPane, p.getNamaProperty(), col, i, "seccolor1", "seccolor6");
+        i++;//17
+        addText(gridPane, rp.format(stj), col, i, "seccolor5", "seccolor3");
+        i++;//18
+        addText(gridPane, rp.format(sdp), col, i, "seccolor5", "seccolor3");
+        i++;//19
+        addText(gridPane, rp.format(kpr), col, i, "seccolor5", "seccolor3");
+        i++;//20
+        addText(gridPane, rp.format(sap), col, i, "seccolor5", "seccolor3");
+        i++;//21
+        addText(gridPane, "", col, i, "seccolor1", "seccolor6");
+        i++;//22
+        addText(gridPane, rp.format(stj+sdp+kpr+sap), col, i, "seccolor5", "seccolor3");
 
     }
     private void setTotal(int col) throws ParseException{
@@ -685,6 +755,31 @@ public class LaporanPropertyController {
                 }
             }
         }
+        double stj = 0;
+        for(STJHead s : allSTJ){
+            for(Property p : listProperty)
+            if(s.getKodeProperty().equals(p.getKodeProperty())){
+                stj = stj + s.getJumlahRp();
+            }
+        }
+        double sdp = 0;
+        for(SDP s : allSDP){for(Property p : listProperty)
+            if(s.getKodeProperty().equals(p.getKodeProperty())){
+                sdp = sdp + s.getJumlahRp();
+            }
+        }
+        double kpr = 0;
+        for(KPR k : allKPR){for(Property p : listProperty)
+            if(k.getKodeProperty().equals(p.getKodeProperty())){
+                kpr = kpr + k.getJumlahRp();
+            }
+        }
+        double sap = 0;
+        for(SAP s : allSAP){for(Property p : listProperty)
+            if(s.getKodeProperty().equals(p.getKodeProperty())){
+                sap = sap + s.getJumlahRp();
+            }
+        }
         addText(gridPane, rp.format(pengurusanSertifikat), col, i, "seccolor3", "seccolor6");
         i++;
         addText(gridPane, rp.format(infrastruktur), col, i, "seccolor3", "seccolor6");
@@ -703,12 +798,26 @@ public class LaporanPropertyController {
         i++;
         addText(gridPane, rp.format(addendum), col, i, "seccolor3", "seccolor6");
         i++;
-        addText(gridPane, rp.format(lainlain), col, i, "seccolor3", "seccolor6");
+        addText(gridPane, rp.format(lainlain), col, i, "seccolor3", "seccolor3");
         i++;
         addText(gridPane, "", col, i, "seccolor1", "seccolor6");
         i++;
         addText(gridPane, rp.format(nilaiTanah+pengurusanSertifikat+infrastruktur+pagarBumi+gate+taman+fasum+urugan+bangunanRumah+addendum+lainlain), col, i, "seccolor3", "seccolor6");
         i++;
+        i++;//16
+        addText(gridPane, "Total "+kategoriCombo.getSelectionModel().getSelectedItem(), col, i, "seccolor1", "seccolor6");
+        i++;//17
+        addText(gridPane, rp.format(stj), col, i, "seccolor3", "seccolor3");
+        i++;//18
+        addText(gridPane, rp.format(sdp), col, i, "seccolor3", "seccolor3");
+        i++;//19
+        addText(gridPane, rp.format(kpr), col, i, "seccolor3", "seccolor3");
+        i++;//20
+        addText(gridPane, rp.format(sap), col, i, "seccolor3", "seccolor3");
+        i++;//21
+        addText(gridPane, "", col, i, "seccolor3", "seccolor6");
+        i++;//22
+        addText(gridPane, rp.format(stj+sdp+kpr+sap), col, i, "seccolor3", "seccolor3");
 
     }
     private void addText(GridPane gridPane, String text, int column, int row, String backgroundColor, String textColor){

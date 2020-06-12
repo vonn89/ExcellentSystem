@@ -31,7 +31,7 @@
                   <ComboBox fx:id="kategoriCombo" onAction="#getData" prefHeight="30.0" prefWidth="150.0" />
                </children>
             </HBox>
-            <ScrollPane fx:id="scrollPane" fitToHeight="true" fitToWidth="true" pannable="true" prefHeight="200.0" prefWidth="200.0" style="-fx-border-color: seccolor3;" GridPane.rowIndex="1">
+            <ScrollPane fx:id="scrollPane" fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" pannable="true" prefHeight="200.0" prefWidth="200.0" style="-fx-border-color: seccolor3;" vbarPolicy="NEVER" GridPane.rowIndex="1">
                <content>
                   <StackPane fx:id="stackPane">
                      <padding>
