@@ -807,17 +807,17 @@ public class LaporanPropertyController {
         i++;//16
         addText(gridPane, "Total "+kategoriCombo.getSelectionModel().getSelectedItem(), col, i, "seccolor1", "seccolor6");
         i++;//17
-        addText(gridPane, rp.format(stj), col, i, "seccolor3", "seccolor3");
+        addText(gridPane, rp.format(stj), col, i, "seccolor3", "seccolor6");
         i++;//18
-        addText(gridPane, rp.format(sdp), col, i, "seccolor3", "seccolor3");
+        addText(gridPane, rp.format(sdp), col, i, "seccolor3", "seccolor6");
         i++;//19
-        addText(gridPane, rp.format(kpr), col, i, "seccolor3", "seccolor3");
+        addText(gridPane, rp.format(kpr), col, i, "seccolor3", "seccolor6");
         i++;//20
-        addText(gridPane, rp.format(sap), col, i, "seccolor3", "seccolor3");
+        addText(gridPane, rp.format(sap), col, i, "seccolor3", "seccolor6");
         i++;//21
-        addText(gridPane, "", col, i, "seccolor3", "seccolor6");
+        addText(gridPane, "", col, i, "seccolor1", "seccolor6");
         i++;//22
-        addText(gridPane, rp.format(stj+sdp+kpr+sap), col, i, "seccolor3", "seccolor3");
+        addText(gridPane, rp.format(stj+sdp+kpr+sap), col, i, "seccolor3", "seccolor6");
 
     }
     private void addText(GridPane gridPane, String text, int column, int row, String backgroundColor, String textColor){

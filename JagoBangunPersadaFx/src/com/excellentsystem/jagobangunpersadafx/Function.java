@@ -352,6 +352,23 @@ public class Function {
             return e.toString();
         }
     }
+    public static String uploadFile(String filename){
+        try{
+            String status = "";
+            System.out.println("start upload");
+            StorageOptions storageOptions = StorageOptions.newBuilder().
+                    setProjectId("excellentSystem").
+                    setCredentials(GoogleCredentials.fromStream(Main.class.getResourceAsStream("Resource/credentials.json"))).build();
+            Storage storage = storageOptions.getService();
+
+            Blob blob = storage.get(BlobId.of("jagobangunpersada", filename));
+            blob.downloadTo(Paths.get(filename));
+            status = "Upload Success";
+            return status;
+        }catch(Exception e){
+            return e.toString();
+        }
+    }
     public static void shutdown() throws RuntimeException, IOException {
         String shutdownCommand;
         String operatingSystem = System.getProperty("os.name");

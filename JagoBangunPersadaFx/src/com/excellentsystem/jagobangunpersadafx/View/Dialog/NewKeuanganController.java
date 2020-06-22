@@ -290,12 +290,12 @@ public class NewKeuanganController  {
     @FXML
     private void showDetailProperty() {
         final Animation hideSidebar = new Transition() {
-            { setCycleDuration(Duration.millis(1)); }
+            { setCycleDuration(Duration.millis(1000)); }
             @Override
             protected void interpolate(double frac) {
-                final double h = 310 * (1.0 - frac);
+                final double h = 300 * (1.0 - frac);
                 gridPane.setPrefHeight(h);
-                stage.setHeight(580-(310*frac));
+                stage.setHeight(600-(300*frac));
             }
         };
         hideSidebar.onFinishedProperty().set((EventHandler<ActionEvent>) (ActionEvent actionEvent) -> {
@@ -307,12 +307,12 @@ public class NewKeuanganController  {
                     + "-fx-text-fill:white");
         });
         final Animation showSidebar = new Transition() {
-            { setCycleDuration(Duration.millis(1)); }
+            { setCycleDuration(Duration.millis(1000)); }
             @Override
             protected void interpolate(double frac) {
-                final double h = 310 * frac;
+                final double h = 300 * frac;
                 gridPane.setPrefHeight(h);
-                stage.setHeight(270+h);
+                stage.setHeight(300+h);
             }
         };
         showSidebar.onFinishedProperty().set((EventHandler<ActionEvent>) (ActionEvent actionEvent) -> {
