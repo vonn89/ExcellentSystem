@@ -26,7 +26,7 @@
                <columnConstraints>
                   <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                   <ColumnConstraints hgrow="SOMETIMES" maxWidth="100.0" minWidth="10.0" prefWidth="100.0" />
-                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="150.0" minWidth="10.0" prefWidth="100.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="200.0" minWidth="10.0" prefWidth="100.0" />
                </columnConstraints>
                <rowConstraints>
                   <RowConstraints maxHeight="30.0" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
@@ -36,9 +36,7 @@
                   <RowConstraints maxHeight="30.0" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                   <RowConstraints maxHeight="40.0" minHeight="40.0" prefHeight="40.0" vgrow="SOMETIMES" />
                   <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                  <RowConstraints maxHeight="30.0" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                  <RowConstraints maxHeight="30.0" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                  <RowConstraints maxHeight="30.0" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints maxHeight="40.0" minHeight="10.0" prefHeight="40.0" vgrow="SOMETIMES" />
                   <RowConstraints maxHeight="30.0" minHeight="0.0" prefHeight="0.0" vgrow="SOMETIMES" />
                </rowConstraints>
                <padding>
@@ -64,6 +62,11 @@
                         <TableColumn fx:id="qtyColumn" maxWidth="1000.0" prefWidth="75.0" text="Qty" />
                         <TableColumn fx:id="qtyStokColumn" maxWidth="1000.0" prefWidth="75.0" text="Stok Masuk" visible="false" />
                         <TableColumn fx:id="hargaColumn" maxWidth="1000.0" prefWidth="75.0" text="Harga" />
+                        <TableColumn fx:id="checkPPNColumn" maxWidth="50.0" minWidth="50.0" prefWidth="50.0">
+                           <graphic>
+                              <CheckBox fx:id="checkAll" mnemonicParsing="false" onAction="#checkAllHandle" />
+                           </graphic></TableColumn>
+                        <TableColumn fx:id="hargaPPNColumn" maxWidth="1000.0" prefWidth="75.0" text="Harga + PPN" />
                         <TableColumn fx:id="totalColumn" maxWidth="1000.0" prefWidth="75.0" text="Total" />
                      </columns>
                      <columnResizePolicy>
@@ -82,7 +85,7 @@
                         <TextField fx:id="tglPembelianField" disable="true" prefHeight="30.0" HBox.hgrow="ALWAYS" />
                      </children>
                   </HBox>
-                  <HBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="200.0" spacing="1.0" GridPane.columnSpan="2147483647" GridPane.rowIndex="10">
+                  <HBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="200.0" spacing="1.0" GridPane.columnSpan="2147483647" GridPane.rowIndex="8">
                      <children>
                         <HBox alignment="BOTTOM_LEFT" minHeight="0.0" prefHeight="100.0" prefWidth="200.0" HBox.hgrow="ALWAYS">
                            <children>
@@ -112,17 +115,8 @@
                         </Button>
                      </children>
                   </AnchorPane>
-                  <HBox alignment="CENTER_LEFT" layoutX="25.0" layoutY="360.0" prefHeight="100.0" prefWidth="200.0" spacing="10.0" GridPane.columnIndex="1" GridPane.rowIndex="8">
-                     <children>
-                        <CheckBox fx:id="ppnCheck" mnemonicParsing="false" onAction="#hitungTotal" />
-                        <Label text="PPN 10 %" />
-                     </children>
-                  </HBox>
                   <TextField fx:id="totalPembelianField" alignment="CENTER_RIGHT" disable="true" prefHeight="40.0" text="0" GridPane.columnIndex="2" GridPane.rowIndex="7" />
-                  <TextField fx:id="ppnField" alignment="CENTER_RIGHT" disable="true" prefHeight="40.0" text="0" GridPane.columnIndex="2" GridPane.rowIndex="8" />
-                  <TextField fx:id="grandtotalField" alignment="CENTER_RIGHT" disable="true" prefHeight="40.0" text="0" GridPane.columnIndex="2" GridPane.rowIndex="9" />
                   <Label text="Total Pembelian" GridPane.columnIndex="1" GridPane.rowIndex="7" />
-                  <Label text="Grandtotal" GridPane.columnIndex="1" GridPane.rowIndex="9" />
                </children>
                <StackPane.margin>
                   <Insets bottom="50.0" left="50.0" right="50.0" top="50.0" />

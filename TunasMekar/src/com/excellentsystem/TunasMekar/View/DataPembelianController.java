@@ -303,10 +303,10 @@ public class DataPembelianController  {
                             p.setSupplier(controller.supplierField.getText());
 ;
                             p.setTotalPembelian(Double.parseDouble(controller.totalPembelianField.getText().replaceAll(",", "")));
-                            p.setPpn(Double.parseDouble(controller.ppnField.getText().replaceAll(",", "")));
-                            p.setGrandtotal(Double.parseDouble(controller.grandtotalField.getText().replaceAll(",", "")));
+                            p.setPpn(0);
+                            p.setGrandtotal(Double.parseDouble(controller.totalPembelianField.getText().replaceAll(",", "")));
                             p.setPembayaran(0);
-                            p.setSisaPembayaran(Double.parseDouble(controller.grandtotalField.getText().replaceAll(",", "")));
+                            p.setSisaPembayaran(Double.parseDouble(controller.totalPembelianField.getText().replaceAll(",", "")));
                             p.setKodeUser(user.getKodeUser());
                             p.setStatus("true");
                             p.setTglBatal("2000-01-01 00:00:00");
@@ -324,10 +324,8 @@ public class DataPembelianController  {
                                 detail.setQty(d.getQty());
                                 detail.setQtyMasuk(pembulatan(d.getQty()*d.getBarang().getSatuan().getQty()));
                                 detail.setHargaBeli(d.getHargaBeli());
-                                detail.setHargaPpn(d.getHargaBeli());
-                                detail.setTotal(detail.getHargaBeli()*detail.getQty());
-                                if(controller.ppnCheck.isSelected())
-                                    detail.setHargaPpn(d.getHargaBeli()*1.1);
+                                detail.setHargaPpn(d.getHargaPpn());
+                                detail.setTotal(detail.getHargaPpn()*detail.getQty());
                                 i++;
                                 allDetail.add(detail);
                             }
@@ -371,7 +369,7 @@ public class DataPembelianController  {
         controller.setMainApp(mainApp, stage);
         controller.setEditPembelian(p.getNoPembelian());
         controller.saveButton.setOnAction((event) -> {
-            if(p.getPembayaran()>Double.parseDouble(controller.grandtotalField.getText().replaceAll(",", ""))){
+            if(p.getPembayaran()>Double.parseDouble(controller.totalPembelianField.getText().replaceAll(",", ""))){
                 mainApp.showMessage(Modality.NONE, "Warning", "Pembayaran yang sudah diterima melebihi total pembelian yang di edit");
             }else{
                 Task<String> task = new Task<String>() {
@@ -387,8 +385,8 @@ public class DataPembelianController  {
                             pbNew.setTglPembelian(Function.getSystemDate());
                             pbNew.setSupplier(controller.supplierField.getText());
                             pbNew.setTotalPembelian(Double.parseDouble(controller.totalPembelianField.getText().replaceAll(",", "")));
-                            pbNew.setPpn(Double.parseDouble(controller.ppnField.getText().replaceAll(",", "")));
-                            pbNew.setGrandtotal(Double.parseDouble(controller.grandtotalField.getText().replaceAll(",", "")));
+                            pbNew.setPpn(0);
+                            pbNew.setGrandtotal(Double.parseDouble(controller.totalPembelianField.getText().replaceAll(",", "")));
 
                             List<Pembayaran> listPembayaran = new ArrayList<>();
                             Pembayaran pp = new Pembayaran();
@@ -399,7 +397,7 @@ public class DataPembelianController  {
                             pbNew.setListPembayaran(listPembayaran);
 
                             pbNew.setPembayaran(p.getPembayaran());
-                            pbNew.setSisaPembayaran(Double.parseDouble(controller.grandtotalField.getText().replaceAll(",", "")) - p.getPembayaran());
+                            pbNew.setSisaPembayaran(Double.parseDouble(controller.totalPembelianField.getText().replaceAll(",", "")) - p.getPembayaran());
                             pbNew.setKodeUser(user.getKodeUser());
                             pbNew.setStatus("true");
                             pbNew.setTglBatal("2000-01-01 00:00:00");
@@ -418,10 +416,8 @@ public class DataPembelianController  {
                                 detail.setQty(d.getQty());
                                 detail.setQtyMasuk(pembulatan(d.getQty()*d.getBarang().getSatuan().getQty()));
                                 detail.setHargaBeli(d.getHargaBeli());
-                                detail.setHargaPpn(d.getHargaBeli());
-                                detail.setTotal(detail.getHargaBeli()*detail.getQty());
-                                if(controller.ppnCheck.isSelected())
-                                    detail.setHargaPpn(d.getHargaBeli()*1.1);
+                                detail.setHargaPpn(d.getHargaPpn());
+                                detail.setTotal(detail.getHargaPpn()*detail.getQty());
                                 i++;
                                 allDetail.add(detail);
                             }

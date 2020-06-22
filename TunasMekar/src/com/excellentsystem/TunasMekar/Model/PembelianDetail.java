@@ -5,8 +5,10 @@
  */
 package com.excellentsystem.TunasMekar.Model;
 
+import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -30,6 +32,19 @@ public class PembelianDetail {
     private final DoubleProperty total = new SimpleDoubleProperty();
     private PembelianHead pembelianHead;
     private Barang barang;
+    private final BooleanProperty ppn = new SimpleBooleanProperty();
+
+    public boolean isPpn() {
+        return ppn.get();
+    }
+
+    public void setPpn(boolean value) {
+        ppn.set(value);
+    }
+
+    public BooleanProperty ppnProperty() {
+        return ppn;
+    }
 
     public double getHargaPpn() {
         return hargaPpn.get();

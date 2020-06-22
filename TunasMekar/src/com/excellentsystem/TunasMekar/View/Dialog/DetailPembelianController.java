@@ -44,6 +44,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.cell.CheckBoxTableCell;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseButton;
@@ -69,7 +70,9 @@ public class DetailPembelianController  {
     @FXML private TableColumn<PembelianDetail, String> satuanColumn;
     @FXML private TableColumn<PembelianDetail, Number> qtyColumn;
     @FXML private TableColumn<PembelianDetail, Number> qtyStokColumn;
+    @FXML private TableColumn<PembelianDetail, Boolean> checkPPNColumn;
     @FXML private TableColumn<PembelianDetail, Number> hargaColumn;
+    @FXML private TableColumn<PembelianDetail, Number> hargaPPNColumn;
     @FXML private TableColumn<PembelianDetail, Number> totalColumn;
     
     @FXML private TextField noPembelianField;
@@ -80,10 +83,8 @@ public class DetailPembelianController  {
     @FXML private Button searchButton;
     @FXML private Button cariButton;
     @FXML public TextField totalPembelianField;
-    @FXML public CheckBox ppnCheck;
-    @FXML public TextField ppnField;
-    @FXML public TextField grandtotalField;
     @FXML public Button saveButton;
+    @FXML private CheckBox checkAll;
     
     private PembelianHead p;
     private Stage stage;
@@ -107,7 +108,7 @@ public class DetailPembelianController  {
                         try{
                             PembelianDetail detail = (PembelianDetail) getTableView().getItems().get(getIndex());
                             detail.setQty(Double.parseDouble(textField.getText().replaceAll(",", "")));
-                            detail.setTotal(Function.pembulatan(detail.getQty()*detail.getHargaBeli()));
+                            detail.setTotal(Function.pembulatan(detail.getQty()*detail.getHargaPpn()));
                             hitungTotal();
                         }catch(NumberFormatException e){
                             textField.undo();
@@ -173,7 +174,13 @@ public class DetailPembelianController  {
                         try{
                             PembelianDetail detail = (PembelianDetail) getTableView().getItems().get(getIndex());
                             detail.setTotal(Double.parseDouble(textField.getText().replaceAll(",", "")));
-                            detail.setHargaBeli(Function.pembulatan(detail.getTotal()/detail.getQty()));
+                            if(detail.isPpn()){
+                                detail.setHargaBeli(Function.pembulatan(detail.getTotal()/detail.getQty())/1.1);
+                                detail.setHargaPpn(Function.pembulatan(detail.getTotal()/detail.getQty()));
+                            }else{
+                                detail.setHargaBeli(Function.pembulatan(detail.getTotal()/detail.getQty()));
+                                detail.setHargaPpn(Function.pembulatan(detail.getTotal()/detail.getQty()));
+                            }
                             hitungTotal();
                         }catch(NumberFormatException e){
                             textField.undo();
@@ -200,6 +207,9 @@ public class DetailPembelianController  {
         kodeBarangColumn.setCellValueFactory(cellData -> cellData.getValue().kodeBarangProperty());
         namaBarangColumn.setCellValueFactory(cellData -> cellData.getValue().namaBarangProperty());
         satuanColumn.setCellValueFactory(cellData -> cellData.getValue().satuanProperty());
+        checkPPNColumn.setCellValueFactory(cellData -> cellData.getValue().ppnProperty());
+        checkPPNColumn.setCellFactory(CheckBoxTableCell.forTableColumn(
+                (Integer param) -> pembelianDetailTable.getItems().get(param).ppnProperty()));
         qtyColumn.setCellValueFactory(cellData -> cellData.getValue().qtyProperty());
 //        qtyColumn.setCellFactory(col -> getTableCell(qty));
         qtyColumn.setCellFactory(getQtyTableCell());
@@ -207,6 +217,8 @@ public class DetailPembelianController  {
         qtyStokColumn.setCellFactory(col -> getTableCell(qty));
         hargaColumn.setCellValueFactory(cellData -> cellData.getValue().hargaBeliProperty());
         hargaColumn.setCellFactory(col -> getTableCell(rp));
+        hargaPPNColumn.setCellValueFactory(cellData -> cellData.getValue().hargaPpnProperty());
+        hargaPPNColumn.setCellFactory(col -> getTableCell(rp));
 //        hargaColumn.setCellFactory(getHargaTableCell());
         totalColumn.setCellValueFactory(cellData -> cellData.getValue().totalProperty());
 //        totalColumn.setCellFactory(col -> getTableCell(rp));
@@ -221,8 +233,7 @@ public class DetailPembelianController  {
         refresh.setOnAction((ActionEvent e)->{
             pembelianDetailTable.refresh();
         });
-        if(saveButton.isVisible())
-            rm.getItems().add(tambah);
+        rm.getItems().add(tambah);
         rm.getItems().addAll(refresh);
         pembelianDetailTable.setContextMenu(rm);
         pembelianDetailTable.setRowFactory(ttv -> {
@@ -266,13 +277,21 @@ public class DetailPembelianController  {
                     }
                 }
             };
+//            row.setOnMouseClicked((MouseEvent mouseEvent) -> {
+//                if(mouseEvent.getButton().equals(MouseButton.PRIMARY)&&mouseEvent.getClickCount() == 2){
+//                    if(row.getItem()!=null){
+//                        if(saveButton.isVisible())
+//                            ubahBarang(row.getItem());
+//                        else
+//                            detailBarang(row.getItem());
+//                    }
+//                }
+//            });
             row.setOnMouseClicked((MouseEvent mouseEvent) -> {
                 if(mouseEvent.getButton().equals(MouseButton.PRIMARY)&&mouseEvent.getClickCount() == 2){
-                    if(row.getItem()!=null){
-                        if(saveButton.isVisible())
-                            ubahBarang(row.getItem());
-                        else
-                            detailBarang(row.getItem());
+                    if(checkPPNColumn.isVisible()){
+                        row.getItem().setPpn(!row.getItem().isPpn());
+                        hitungTotal();
                     }
                 }
             });
@@ -345,8 +364,6 @@ public class DetailPembelianController  {
                 tglPembelianField.setText(tglLengkap.format(tglSql.parse(Function.getSystemDate())));
                 supplierField.setText("");
                 totalPembelianField.setText(rp.format(0));
-                ppnField.setText(rp.format(0));
-                grandtotalField.setText(rp.format(0));
                 allBarang.clear();
             }catch(Exception e){
                 mainApp.showMessage(Modality.NONE, "Error", e.toString());
@@ -379,24 +396,28 @@ public class DetailPembelianController  {
                 noPembelianField.setText(p.getNoPembelian());
                 tglPembelianField.setText(tglLengkap.format(tglSql.parse(p.getTglPembelian())));
                 supplierField.setText(p.getSupplier());
-                totalPembelianField.setText(rp.format(p.getTotalPembelian()));
-                ppnField.setText(rp.format(p.getPpn()));
-                grandtotalField.setText(rp.format(p.getGrandtotal()));
+                totalPembelianField.setText(rp.format(p.getGrandtotal()));
                 allBarang.clear();
                 allBarang.addAll(p.getListPembelianDetail());
+                List<MenuItem> removeMenu = new ArrayList<>();
+                for(MenuItem m : pembelianDetailTable.getContextMenu().getItems()){
+                    if(m.getText().equals("Tambah Barang"))
+                        removeMenu.add(m);
+                }
+                pembelianDetailTable.getContextMenu().getItems().removeAll(removeMenu);
                 
                 supplierField.setDisable(true);
                 searchField.setVisible(false);
                 searchButton.setVisible(false);
                 saveButton.setVisible(false);
                 cariButton.setVisible(false);
-                ppnCheck.setVisible(false);
+                checkPPNColumn.setVisible(false);
                 gridPane.getRowConstraints().get(5).setMinHeight(0);
                 gridPane.getRowConstraints().get(5).setPrefHeight(0);
                 gridPane.getRowConstraints().get(5).setMaxHeight(0);
-                gridPane.getRowConstraints().get(10).setMinHeight(0);
-                gridPane.getRowConstraints().get(10).setPrefHeight(0);
-                gridPane.getRowConstraints().get(10).setMaxHeight(0);
+                gridPane.getRowConstraints().get(8).setMinHeight(0);
+                gridPane.getRowConstraints().get(8).setPrefHeight(0);
+                gridPane.getRowConstraints().get(8).setMaxHeight(0);
             }catch(Exception e){
                 mainApp.showMessage(Modality.NONE, "Error", e.toString());
             }
@@ -433,15 +454,15 @@ public class DetailPembelianController  {
                 noPembelianField.setText(p.getNoPembelian());
                 tglPembelianField.setText(tglLengkap.format(tglSql.parse(p.getTglPembelian())));
                 supplierField.setText(p.getSupplier());
-                totalPembelianField.setText(rp.format(p.getTotalPembelian()));
-                ppnField.setText(rp.format(p.getPpn()));
-                if(ppnField.getText().equals("0"))
-                    ppnCheck.setSelected(false);
-                else
-                    ppnCheck.setSelected(true);
-                grandtotalField.setText(rp.format(p.getGrandtotal()));
+                totalPembelianField.setText(rp.format(p.getGrandtotal()));
                 allBarang.clear();
                 allBarang.addAll(p.getListPembelianDetail());
+                for(PembelianDetail d : p.getListPembelianDetail()){
+                    if(d.getHargaBeli()!=d.getHargaPpn())
+                        d.setPpn(true);
+                    else
+                        d.setPpn(false);
+                }
                 qtyStokColumn.setVisible(false);
             }catch(Exception e){
                 mainApp.showMessage(Modality.NONE, "Error", e.toString());
@@ -586,7 +607,7 @@ public class DetailPembelianController  {
         for(PembelianDetail d : allBarang){
             if(d.getKodeBarang().equals(b.getKodeBarang()) && d.getSatuan().equals(b.getSatuan().getKodeSatuan())){
                 d.setQty(pembulatan(d.getQty() + 1));
-                d.setTotal(pembulatan(d.getHargaBeli()*d.getQty()));
+                d.setTotal(pembulatan(d.getHargaPpn()*d.getQty()));
                 statusBarang = false;
                 pembelianDetailTable.refresh();
                 pembelianDetailTable.getSelectionModel().clearSelection();
@@ -603,7 +624,8 @@ public class DetailPembelianController  {
             d.setSatuan(b.getSatuan().getKodeSatuan());
             d.setQty(1);
             d.setHargaBeli(0);
-            d.setTotal(pembulatan(d.getHargaBeli()*d.getQty()));
+            d.setHargaPpn(0);
+            d.setTotal(pembulatan(d.getHargaPpn()*d.getQty()));
             allBarang.add(0, d);
             pembelianDetailTable.refresh();
             pembelianDetailTable.getSelectionModel().clearSelection();
@@ -630,7 +652,11 @@ public class DetailPembelianController  {
                 d.getBarang().setSatuan(satuan);
                 d.setQty(Double.parseDouble(controller.qtyField.getText().replaceAll(",", "")));
                 d.setHargaBeli(Double.parseDouble(controller.nilaiField.getText().replaceAll(",", "")));
-                d.setTotal(pembulatan(d.getHargaBeli()*d.getQty()));
+                if(d.isPpn())
+                    d.setHargaPpn(Double.parseDouble(controller.nilaiField.getText().replaceAll(",", ""))*1.1);
+                else
+                    d.setHargaPpn(Double.parseDouble(controller.nilaiField.getText().replaceAll(",", "")));
+                d.setTotal(pembulatan(d.getHargaPpn()*d.getQty()));
                              
                 pembelianDetailTable.refresh();
                 pembelianDetailTable.getSelectionModel().clearSelection();
@@ -657,19 +683,25 @@ public class DetailPembelianController  {
         });
     }
     @FXML
+    private void checkAllHandle(){
+        for(PembelianDetail d: allBarang){
+            d.setPpn(checkAll.isSelected());
+        }
+        hitungTotal();
+    }
+    @FXML
     private void hitungTotal(){
         double total = 0;
         for(PembelianDetail d : allBarang){
+            if(d.isPpn()){
+                d.setHargaPpn(d.getHargaBeli()*1.1);
+            }else{
+                d.setHargaPpn(d.getHargaBeli());
+            }
+            d.setTotal(d.getQty()*d.getHargaPpn());
             total = total + d.getTotal();
         }
         totalPembelianField.setText(rp.format(total));
-        if(ppnCheck.isSelected()){
-            ppnField.setText(rp.format(Double.parseDouble(totalPembelianField.getText().replaceAll(",", ""))*0.1));
-            grandtotalField.setText(rp.format(Double.parseDouble(totalPembelianField.getText().replaceAll(",", ""))*1.1));
-        }else{
-            ppnField.setText("0");
-            grandtotalField.setText(rp.format(Double.parseDouble(totalPembelianField.getText().replaceAll(",", ""))));
-        }
     }
     @FXML
     private void close() {
