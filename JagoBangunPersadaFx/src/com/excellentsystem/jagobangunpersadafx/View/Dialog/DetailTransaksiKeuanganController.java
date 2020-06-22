@@ -37,7 +37,7 @@ public class DetailTransaksiKeuanganController  {
     private Main mainApp;   
     private Stage owner;
     private Stage stage;
-    private String metode;
+    public String metode = "Rata-rata";
     public ObservableList<Keuangan> allDetail = FXCollections.observableArrayList();
     public void initialize(){
         Function.setNumberField(jumlahRpField);
@@ -78,6 +78,14 @@ public class DetailTransaksiKeuanganController  {
             }
             totalPropertyField.setText(rp.format(total));
         });
+    }
+    @FXML
+    private void setImage(){
+        Stage child = new Stage();
+        FXMLLoader loader = mainApp.showDialog(stage, child, "View/Dialog/DetailTransaksiKeuanganImage.fxml");
+        DetailTransaksiKeuanganImageController x = loader.getController();
+        x.setMainApp(mainApp, stage, child);
+        x.refresh();
     }
     public void close(){
         mainApp.closeDialog(owner, stage);

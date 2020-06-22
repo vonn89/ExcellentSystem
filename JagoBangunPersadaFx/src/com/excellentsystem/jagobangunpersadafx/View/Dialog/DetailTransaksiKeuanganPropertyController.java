@@ -110,8 +110,10 @@ public class DetailTransaksiKeuanganPropertyController  {
             };
             row.setOnMouseClicked((MouseEvent mouseEvent) -> {
                 if(mouseEvent.getButton().equals(MouseButton.PRIMARY)&&mouseEvent.getClickCount() == 2){
-                    row.getItem().setStatus(!row.getItem().isStatus());
-                    hitungTotal();
+                    if(checkColumn.isVisible()){
+                        row.getItem().setStatus(!row.getItem().isStatus());
+                        hitungTotal();
+                    }
                 }
             });
             return row;

@@ -594,7 +594,7 @@ public class KeuanganController {
                                 }
                             }
                             List<Keuangan> listKeuangan = new ArrayList<>();
-                            if (Double.parseDouble(x.totalPropertyField.getText())==0) {
+                            if (Double.parseDouble(x.totalPropertyField.getText()) == 0) {
                                 Keuangan k = new Keuangan();
                                 k.setTglKeuangan(tglSql.format(new Date()));
                                 k.setTipeKeuangan(x.tipeKeuanganCombo.getSelectionModel().getSelectedItem());
@@ -624,36 +624,50 @@ public class KeuanganController {
 
                                 listKeuangan.add(k);
                                 listKeuangan.add(k2);
-                            }else{
-                                for (Keuangan keu : x.allDetail) {
-                                    Keuangan k = new Keuangan();
-                                    k.setTglKeuangan(tglSql.format(new Date()));
-                                    k.setKodeProperty(keu.getKodeProperty());
-                                    k.setKategori(x.kategoriCombo.getSelectionModel().getSelectedItem());
-                                    k.setDeskripsi(x.keteranganField.getText());
-                                    k.setTipeKeuangan(x.tipeKeuanganCombo.getSelectionModel().getSelectedItem());
-                                    if (tipe.equals("D")) {
-                                        k.setJumlahRp(keu.getJumlahRp());
-                                    } else {
-                                        k.setJumlahRp(-keu.getJumlahRp());
+                            } else {
+                                double total = Double.parseDouble(x.jumlahRpField.getText().replaceAll(",", ""));
+                                double totalProp = 0;
+                                double totalLuas = 0;
+                                for (Keuangan d : x.allDetail) {
+                                    if (d.isStatus()) {
+                                        totalProp = totalProp + 1;
+                                        totalLuas = totalLuas + d.getProperty().getLuasTanah();
                                     }
-                                    k.setKodeUser(sistem.getUser().getUsername());
+                                }
+                                for (Keuangan d : x.allDetail) {
+                                    if (d.isStatus()) {
+                                        if (x.metode.equals("Rata-rata")) {
+                                            d.setJumlahRp(total / totalProp);
+                                        } else if (x.metode.equals("Luas Tanah")) {
+                                            d.setJumlahRp(total * d.getProperty().getLuasTanah() / totalLuas);
+                                        }
+                                        Keuangan k = new Keuangan();
+                                        k.setTglKeuangan(tglSql.format(new Date()));
+                                        k.setKodeProperty(d.getKodeProperty());
+                                        k.setKategori(x.kategoriCombo.getSelectionModel().getSelectedItem());
+                                        k.setDeskripsi(x.keteranganField.getText());
+                                        k.setTipeKeuangan(x.tipeKeuanganCombo.getSelectionModel().getSelectedItem());
+                                        if (tipe.equals("D")) {
+                                            k.setJumlahRp(d.getJumlahRp());
+                                        } else {
+                                            k.setJumlahRp(-d.getJumlahRp());
+                                        }
+                                        k.setKodeUser(sistem.getUser().getUsername());
 
-                                    Keuangan k2 = new Keuangan();
-                                    k2.setTglKeuangan(tglSql.format(new Date()));
-                                    k2.setKodeProperty(keu.getKodeProperty());
-                                    k2.setKategori(x.kategoriCombo.getSelectionModel().getSelectedItem());
-                                    k2.setDeskripsi(x.keteranganField.getText());
-                                    if (tipe.equals("D")) {
-                                        k2.setTipeKeuangan("PENDAPATAN");
-                                        k2.setJumlahRp(keu.getJumlahRp());
-                                    } else {
-                                        k2.setTipeKeuangan("BEBAN");
-                                        k2.setJumlahRp(keu.getJumlahRp());
-                                    }
-                                    k2.setKodeUser(sistem.getUser().getUsername());
+                                        Keuangan k2 = new Keuangan();
+                                        k2.setTglKeuangan(tglSql.format(new Date()));
+                                        k2.setKodeProperty(d.getKodeProperty());
+                                        k2.setKategori(x.kategoriCombo.getSelectionModel().getSelectedItem());
+                                        k2.setDeskripsi(x.keteranganField.getText());
+                                        if (tipe.equals("D")) {
+                                            k2.setTipeKeuangan("PENDAPATAN");
+                                            k2.setJumlahRp(d.getJumlahRp());
+                                        } else {
+                                            k2.setTipeKeuangan("BEBAN");
+                                            k2.setJumlahRp(d.getJumlahRp());
+                                        }
+                                        k2.setKodeUser(sistem.getUser().getUsername());
 
-                                    if (keu.isStatus()) {
                                         listKeuangan.add(k);
                                         listKeuangan.add(k2);
                                     }

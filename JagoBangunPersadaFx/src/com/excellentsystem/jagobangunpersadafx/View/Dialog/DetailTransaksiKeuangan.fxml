@@ -64,7 +64,7 @@
             <TextField fx:id="totalPropertyField" disable="true" prefHeight="30.0" text="0" GridPane.columnIndex="1" GridPane.rowIndex="6" />
             <TextField disable="true" prefHeight="30.0" text="0" GridPane.columnIndex="1" GridPane.rowIndex="7" />
             <Button mnemonicParsing="false" onAction="#setDetailProperty" prefHeight="30.0" prefWidth="30.0" text="..." GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="6" />
-            <Button mnemonicParsing="false" prefHeight="30.0" prefWidth="30.0" text="..." GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="7" />
+            <Button mnemonicParsing="false" onAction="#setImage" prefHeight="30.0" prefWidth="30.0" text="..." GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="7" />
          </children>
       </GridPane>
    </children>
