@@ -132,6 +132,8 @@ public class PemesananController {
                 return new SimpleStringProperty("Wait");
             else if(cellData.getValue().getStatus().equals("false"))
                 return new SimpleStringProperty("Cancel");
+            else if(cellData.getValue().getStatus().equals("wait"))
+                return new SimpleStringProperty("On Review");
             else
                 return null;
         });
@@ -210,6 +212,10 @@ public class PemesananController {
                         detail.setOnAction((ActionEvent e)->{
                             lihatDetailPemesanan(item);
                         });
+                        MenuItem approve = new MenuItem("Approve Pemesanan");
+                        approve.setOnAction((ActionEvent e)->{
+                            approvePemesanan(item);
+                        });
                         MenuItem edit = new MenuItem("Edit Pemesanan");
                         edit.setOnAction((ActionEvent e)->{
                             editPemesanan(item);
@@ -253,8 +259,11 @@ public class PemesananController {
                                 rm.getItems().add(detail);
                             if(o.getJenis().equals("Edit Pemesanan")&&o.isStatus())
                                 rm.getItems().add(edit);
+                            if(o.getJenis().equals("Approve Pemesanan")&&o.isStatus()&&
+                                    item.getStatus().equals("wait"))
+                                rm.getItems().add(approve);
                             if(o.getJenis().equals("Batal Pemesanan")&&o.isStatus()&&
-                                    item.getStatus().equals("open")&&item.getDownPayment()==0)
+                                    (item.getStatus().equals("open")||item.getStatus().equals("wait"))&&item.getDownPayment()==0)
                                 rm.getItems().add(batal);
                             if(o.getJenis().equals("Pemesanan Selesai")&&o.isStatus()&&
                                     item.getStatus().equals("open")&&item.getSisaDownPayment()==0)
@@ -318,6 +327,7 @@ public class PemesananController {
         this.mainApp = mainApp;
         ObservableList<String> groupBy = FXCollections.observableArrayList();
         groupBy.clear();
+        groupBy.add("On Review");
         groupBy.add("Wait");
         groupBy.add("Done");
         groupBy.add("Cancel");
@@ -339,6 +349,8 @@ public class PemesananController {
                         status = "open";
                     }else if(groupByCombo.getSelectionModel().getSelectedItem().equals("Cancel")){
                         status = "false";
+                    }else if(groupByCombo.getSelectionModel().getSelectedItem().equals("On Review")){
+                        status = "wait";
                     }
                     List<Customer> allCustomer = CustomerDAO.getAllByStatus(con, "%");
                     List<Pegawai> allSales = PegawaiDAO.getAllByStatus(con, "%");
@@ -626,7 +638,39 @@ public class PemesananController {
                 public String call() throws Exception{
                     try (Connection con = Koneksi.getConnection()) {
                         p.setStatus("close");
-                        return Service.selesaiPemesanan(con, p);
+                        return Service.selesaiApprovePemesanan(con, p);
+                    }
+                }
+            };
+            task.setOnRunning((e) -> {
+                mainApp.showLoadingScreen();
+            });
+            task.setOnSucceeded((we) -> {
+                mainApp.closeLoading();
+                getPemesanan();
+                if(task.getValue().equals("true")){
+                    mainApp.showMessage(Modality.NONE, "Success", "Data pemesanan berhasil disimpan");
+                }else{
+                    mainApp.showMessage(Modality.NONE, "Error", task.getValue());
+                }
+            });
+            task.setOnFailed((e) -> {
+                mainApp.showMessage(Modality.NONE, "Error", task.getException().toString());
+                mainApp.closeLoading();
+            });
+            new Thread(task).start();
+        });
+    }
+    private void approvePemesanan(PemesananHead p){
+        MessageController controller = mainApp.showMessage(Modality.WINDOW_MODAL, "Confirmation",
+            "Menyetujui pemesanan "+p.getNoPemesanan()+" , anda yakin ?");
+        controller.OK.setOnAction((ActionEvent evt) -> {
+            Task<String> task = new Task<String>() {
+                @Override 
+                public String call() throws Exception{
+                    try (Connection con = Koneksi.getConnection()) {
+                        p.setStatus("open");
+                        return Service.selesaiApprovePemesanan(con, p);
                     }
                 }
             };

@@ -1128,7 +1128,7 @@ public class Service {
             }
         }
     }
-    public static String selesaiPemesanan(Connection con, PemesananHead pemesanan){
+    public static String selesaiApprovePemesanan(Connection con, PemesananHead pemesanan){
         try{
             con.setAutoCommit(false);
             String status = "true";

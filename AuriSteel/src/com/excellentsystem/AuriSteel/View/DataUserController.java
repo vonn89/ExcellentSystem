@@ -291,6 +291,7 @@ public class DataUserController  {
                     "Detail Pemesanan",
                     "Edit Pemesanan",
                     "Batal Pemesanan",
+                    "Approve Pemesanan",
                     "Pemesanan Selesai",
                     "Terima Pembayaran DP",
                     "Detail Terima Pembayaran DP",

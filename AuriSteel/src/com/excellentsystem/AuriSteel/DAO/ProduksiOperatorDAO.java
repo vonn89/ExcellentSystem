@@ -58,7 +58,7 @@ public class ProduksiOperatorDAO {
     public static void insert(Connection con, ProduksiOperator d)throws Exception{
         PreparedStatement ps = con.prepareStatement("insert into tt_produksi_operator values(?,?)");
         ps.setString(1, d.getKodeProduksi());
-        ps.setString(2, d.getKodeProduksi());
+        ps.setString(2, d.getKodePegawai());
         ps.executeUpdate();
     }
 }
