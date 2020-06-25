@@ -17,6 +17,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
+import javafx.scene.image.ImageView;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
@@ -32,6 +33,7 @@ public class DetailTransaksiKeuanganController  {
     @FXML public ComboBox<String> kategoriCombo;
     @FXML public ComboBox<String> tipeKeuanganCombo;
     @FXML public TextField totalPropertyField;
+    @FXML public TextField totalImageField;
     
     @FXML public Button saveButton;
     private Main mainApp;   
@@ -39,6 +41,7 @@ public class DetailTransaksiKeuanganController  {
     private Stage stage;
     public String metode = "Rata-rata";
     public ObservableList<Keuangan> allDetail = FXCollections.observableArrayList();
+    public ObservableList<ImageView> listImage = FXCollections.observableArrayList();
     public void initialize(){
         Function.setNumberField(jumlahRpField);
     }
@@ -85,7 +88,11 @@ public class DetailTransaksiKeuanganController  {
         FXMLLoader loader = mainApp.showDialog(stage, child, "View/Dialog/DetailTransaksiKeuanganImage.fxml");
         DetailTransaksiKeuanganImageController x = loader.getController();
         x.setMainApp(mainApp, stage, child);
-        x.refresh();
+        x.setImage(listImage);
+        x.closeButton.setOnAction((event) -> {
+            mainApp.closeDialog(stage, child);
+            totalImageField.setText(rp.format(listImage.size()));
+        });
     }
     public void close(){
         mainApp.closeDialog(owner, stage);

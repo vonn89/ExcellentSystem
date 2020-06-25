@@ -252,8 +252,4 @@ public class DetailTransaksiKeuanganPropertyController  {
         }
         hitungTotal();
     }
-    @FXML 
-    private void close(){
-        mainApp.closeDialog(owner, stage);
-    }
 }

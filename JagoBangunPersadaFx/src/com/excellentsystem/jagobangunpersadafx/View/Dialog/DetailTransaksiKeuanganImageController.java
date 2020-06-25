@@ -8,6 +8,7 @@ package com.excellentsystem.jagobangunpersadafx.View.Dialog;
 import com.excellentsystem.jagobangunpersadafx.Main;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.List;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -37,8 +38,10 @@ public class DetailTransaksiKeuanganImageController {
     private HBox hbox;
     @FXML
     private StackPane stackPane;
-    @FXML private ImageView imageView;
-    @FXML private Slider zoomLevel;
+    @FXML
+    private ImageView imageView;
+    @FXML
+    private Slider zoomLevel;
     private double zoomFactor;
     private double imageHeight;
     private double imageWidth;
@@ -47,7 +50,7 @@ public class DetailTransaksiKeuanganImageController {
     private Main mainApp;
     private Stage owner;
     private Stage stage;
-    private ArrayList<ImageView> listImage = new ArrayList<>();
+    public List<ImageView> listImage = new ArrayList<>();
 
     public void initialize() {
         final ContextMenu rm = new ContextMenu();
@@ -57,14 +60,16 @@ public class DetailTransaksiKeuanganImageController {
         });
         MenuItem delete = new MenuItem("Delete Image");
         delete.setOnAction((ActionEvent event) -> {
-            addImage();
+            deleteImage();
         });
         MenuItem refresh = new MenuItem("Refresh");
         refresh.setOnAction((ActionEvent event) -> {
             refresh();
         });
         rm.getItems().addAll(addImage);
-        rm.getItems().addAll(delete);
+        if (selectedImage != null) {
+            rm.getItems().addAll(delete);
+        }
         rm.getItems().addAll(refresh);
         stackPane.setOnContextMenuRequested((e) -> {
             rm.show(stackPane, e.getScreenX(), e.getScreenY());
@@ -72,12 +77,12 @@ public class DetailTransaksiKeuanganImageController {
         stackPane.setOnMouseClicked((event) -> {
             rm.hide();
         });
-        zoomFactor = 2d;
+        zoomFactor = 1d;
         zoomLevel.setValue(100d);
         imageView.setX(0);
         imageView.setY(0);
         zoomLevel.valueProperty().addListener((ObservableValue<? extends Number> observable, Number oldValue, Number newValue) -> {
-            zoomFactor = newValue.doubleValue() / 100 *2;
+            zoomFactor = newValue.doubleValue() / 100 * 1;
             imageView.setFitHeight(imageHeight * zoomFactor);
             imageView.setFitWidth(imageWidth * zoomFactor);
         });
@@ -95,18 +100,27 @@ public class DetailTransaksiKeuanganImageController {
             stage.setWidth((mainApp.screenSize.getWidth() - 80));
             stage.setX((mainApp.screenSize.getWidth() - stage.getWidth()) / 2);
             stage.setY((mainApp.screenSize.getHeight() - stage.getHeight()) / 2);
-        imageHeight = (mainApp.screenSize.getHeight() - 400);
-        imageWidth = (mainApp.screenSize.getWidth() - 200);
+            imageHeight = (mainApp.screenSize.getHeight() - 400);
+            imageWidth = (mainApp.screenSize.getWidth() - 200);
+            imageView.setFitHeight(imageHeight);
+            imageView.setFitWidth(imageWidth);
         } catch (Exception e) {
             mainApp.showMessage(Modality.NONE, "Error", e.toString());
         }
 
     }
 
-    public void refresh(){
-        imageView.setImage(new Image(Main.class.getResourceAsStream("Resource/noImage.jpg"), 400, 400, true, true));
+    public void setImage(List<ImageView> i) {
+        listImage = i;
+        refresh();
+    }
+
+    public void refresh() {
+        selectedImage = null;
+        imageView.setImage(new Image(Main.class.getResourceAsStream("Resource/noImage.jpg")));
         getListImage();
     }
+
     private void addImage() {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Select image file");
@@ -114,11 +128,10 @@ public class DetailTransaksiKeuanganImageController {
         File file = fileChooser.showOpenDialog(stage);
         if (file != null) {
             try {
-                imageView.setImage(new Image("file:" + file.getPath()));
-                
-                ImageView i2 = new ImageView();
-                i2.setImage(new Image("file:" + file.getPath()));
-                listImage.add(i2);
+                selectedImage = new ImageView(new Image("file:" + file.getPath()));
+                imageView.setImage(selectedImage.getImage());
+
+                listImage.add(selectedImage);
                 getListImage();
             } catch (Exception e) {
                 e.printStackTrace();
@@ -126,12 +139,13 @@ public class DetailTransaksiKeuanganImageController {
             }
         }
     }
+
     private void getListImage() {
         hbox.getChildren().clear();
         for (ImageView i : listImage) {
             StackPane pane = new StackPane();
             pane.setPrefSize(120, 120);
-            
+
             i.setEffect(new ColorAdjust(0, 0, -0.25, 0));
             i.setFitWidth(120);
             i.setFitHeight(120);
@@ -166,15 +180,18 @@ public class DetailTransaksiKeuanganImageController {
                 }
             });
             pane.setOnMouseClicked((MouseEvent event) -> {
-                imageView.setImage(i.getImage());
+                selectedImage = i;
+                imageView.setImage(selectedImage.getImage());
             });
 
             hbox.getChildren().add(pane);
         }
     }
+    private ImageView selectedImage;
 
-    @FXML
-    private void close() {
-        mainApp.closeDialog(owner, stage);
+    private void deleteImage() {
+        listImage.remove(selectedImage);
+        refresh();
     }
+
 }

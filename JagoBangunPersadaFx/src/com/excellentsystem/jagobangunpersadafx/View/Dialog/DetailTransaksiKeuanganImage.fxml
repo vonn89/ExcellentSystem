@@ -32,7 +32,7 @@
          </padding>
          <children>
             <Label styleClass="label-header" text="Detail Image" />
-            <Button fx:id="closeButton" mnemonicParsing="false" onAction="#close" prefHeight="30.0" prefWidth="30.0" GridPane.halignment="RIGHT">
+            <Button fx:id="closeButton" mnemonicParsing="false" prefHeight="30.0" prefWidth="30.0" GridPane.halignment="RIGHT">
                <graphic>
                   <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
                      <image>
