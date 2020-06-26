@@ -24,23 +24,76 @@ public class Keuangan {
     private final StringProperty kategori = new SimpleStringProperty();
     private final StringProperty kodeProperty = new SimpleStringProperty();
     private final StringProperty deskripsi = new SimpleStringProperty();
-    private final StringProperty kodeUser = new SimpleStringProperty();
     private final DoubleProperty jumlahRp = new SimpleDoubleProperty();
-    private final BooleanProperty status = new SimpleBooleanProperty();
+    private final StringProperty kodeUser = new SimpleStringProperty();
+    private final StringProperty tglInput = new SimpleStringProperty();
+    private final StringProperty status = new SimpleStringProperty();
+    private final StringProperty userBatal = new SimpleStringProperty();
+    private final StringProperty tglBatal = new SimpleStringProperty();
     private Property property;
+    private final BooleanProperty checked = new SimpleBooleanProperty();
 
-    
-    public boolean isStatus() {
+    public boolean isChecked() {
+        return checked.get();
+    }
+
+    public void setChecked(boolean value) {
+        checked.set(value);
+    }
+
+    public BooleanProperty checkedProperty() {
+        return checked;
+    }
+
+    public String getStatus() {
         return status.get();
     }
 
-    public void setStatus(boolean value) {
+    public void setStatus(String value) {
         status.set(value);
     }
 
-    public BooleanProperty statusProperty() {
+    public StringProperty statusProperty() {
         return status;
     }
+
+    public String getUserBatal() {
+        return userBatal.get();
+    }
+
+    public void setUserBatal(String value) {
+        userBatal.set(value);
+    }
+
+    public StringProperty userBatalProperty() {
+        return userBatal;
+    }
+
+    public String getTglBatal() {
+        return tglBatal.get();
+    }
+
+    public void setTglBatal(String value) {
+        tglBatal.set(value);
+    }
+
+    public StringProperty tglBatalProperty() {
+        return tglBatal;
+    }
+
+    public String getTglInput() {
+        return tglInput.get();
+    }
+
+    public void setTglInput(String value) {
+        tglInput.set(value);
+    }
+
+    public StringProperty tglInputProperty() {
+        return tglInput;
+    }
+
+    
 
     public Property getProperty() {
         return property;

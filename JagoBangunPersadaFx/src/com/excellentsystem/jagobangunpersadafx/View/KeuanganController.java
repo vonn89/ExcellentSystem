@@ -267,7 +267,7 @@ public class KeuanganController {
                                 }
                                 if (o.getJenis().equals("Edit Keterangan") && o.isStatus() && status) {
                                     rowMenu.getItems().add(edit);
-                                }
+                                } 
                                 if (o.getJenis().equals("Batal Keuangan") && o.isStatus() && status) {
                                     if (sistem.getUser().getLevel().equals("Manager")) {
                                         rowMenu.getItems().add(batal);
@@ -629,13 +629,13 @@ public class KeuanganController {
                                 double totalProp = 0;
                                 double totalLuas = 0;
                                 for (Keuangan d : x.allDetail) {
-                                    if (d.isStatus()) {
+                                    if (d.isChecked()) {
                                         totalProp = totalProp + 1;
                                         totalLuas = totalLuas + d.getProperty().getLuasTanah();
                                     }
                                 }
                                 for (Keuangan d : x.allDetail) {
-                                    if (d.isStatus()) {
+                                    if (d.isChecked()) {
                                         if (x.metode.equals("Rata-rata")) {
                                             d.setJumlahRp(total / totalProp);
                                         } else if (x.metode.equals("Luas Tanah")) {

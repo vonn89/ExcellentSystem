@@ -76,7 +76,7 @@ public class DetailTransaksiKeuanganController  {
             allDetail = x.allDetail;
             double total = 0;
             for(Keuangan d : allDetail){
-                if(d.isStatus())
+                if(d.isChecked())
                     total = total + 1;
             }
             totalPropertyField.setText(rp.format(total));

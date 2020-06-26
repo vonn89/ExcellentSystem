@@ -1708,30 +1708,17 @@ public class Service {
             }
         }
     }
-    public static String batalTransaksiKeuangan(Connection con, Keuangan k){
+    public static String batalTransaksiKeuangan(Connection con, String noKeuangan){
         try{
             con.setAutoCommit(false);
             String status = "true";
             
-            if(k.getKodeProperty().equals("")){
-                KeuanganDAO.deleteAllByNoKeuangan(con, k.getNoKeuangan());
-            }else{
-                Keuangan k2 = new Keuangan();
-                k2.setNoKeuangan(k.getNoKeuangan());
-                k2.setTglKeuangan(k.getTglKeuangan());
-                k2.setKategori(k.getKategori());
-                k2.setKodeProperty(k.getKodeProperty());
-                k2.setDeskripsi(k.getDeskripsi());
-                k2.setKodeUser(k.getKodeUser());
-                if(k.getJumlahRp()>0){
-                    k2.setTipeKeuangan("PENDAPATAN");
-                    k2.setJumlahRp(-k.getJumlahRp());
-                }else if(k.getJumlahRp()<0){
-                    k2.setTipeKeuangan("BEBAN");
-                    k2.setJumlahRp(k.getJumlahRp());
-                }
-                KeuanganDAO.delete(con, k);
-                KeuanganDAO.delete(con, k2);
+            List<Keuangan> listKeuangan = KeuanganDAO.getAllByNoKeuangan(con, noKeuangan);
+            for(Keuangan k : listKeuangan){ 
+                k.setStatus("false");
+                k.setUserBatal(sistem.getUser().getUsername());
+                k.setTglBatal(tglSql.format(new Date()));
+                KeuanganDAO.update(con, k);
             }
             
             if(status.equals("true"))
