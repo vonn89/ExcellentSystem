@@ -53,7 +53,7 @@ public class DetailTransaksiKeuanganImageController {
     public List<ImageView> listImage = new ArrayList<>();
 
     public void initialize() {
-        final ContextMenu rm = new ContextMenu();
+        ContextMenu rm = new ContextMenu();
         MenuItem addImage = new MenuItem("Add Image");
         addImage.setOnAction((ActionEvent event) -> {
             addImage();
@@ -66,12 +66,20 @@ public class DetailTransaksiKeuanganImageController {
         refresh.setOnAction((ActionEvent event) -> {
             refresh();
         });
-        rm.getItems().addAll(addImage);
-        if (selectedImage != null) {
-            rm.getItems().addAll(delete);
-        }
-        rm.getItems().addAll(refresh);
         stackPane.setOnContextMenuRequested((e) -> {
+            rm.getItems().clear();
+            if (selectedImage != null) {
+                if (!isViewOnly) {
+                    rm.getItems().add(addImage);
+                    rm.getItems().add(delete);
+                }
+                rm.getItems().add(refresh);
+            } else {
+                if (!isViewOnly) {
+                    rm.getItems().add(addImage);
+                }
+                rm.getItems().add(refresh);
+            }
             rm.show(stackPane, e.getScreenX(), e.getScreenY());
         });
         stackPane.setOnMouseClicked((event) -> {
@@ -109,8 +117,10 @@ public class DetailTransaksiKeuanganImageController {
         }
 
     }
+    private boolean isViewOnly = false;
 
-    public void setImage(List<ImageView> i) {
+    public void setImage(List<ImageView> i, boolean isViewOnly) {
+        this.isViewOnly = isViewOnly;
         listImage = i;
         refresh();
     }
@@ -130,7 +140,6 @@ public class DetailTransaksiKeuanganImageController {
             try {
                 selectedImage = new ImageView(new Image("file:" + file.getPath()));
                 imageView.setImage(selectedImage.getImage());
-
                 listImage.add(selectedImage);
                 getListImage();
             } catch (Exception e) {

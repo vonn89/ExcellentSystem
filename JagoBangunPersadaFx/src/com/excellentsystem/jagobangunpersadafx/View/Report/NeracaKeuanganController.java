@@ -8,8 +8,8 @@ package com.excellentsystem.jagobangunpersadafx.View.Report;
 import com.excellentsystem.jagobangunpersadafx.Function;
 import com.excellentsystem.jagobangunpersadafx.Main;
 import static com.excellentsystem.jagobangunpersadafx.Main.rp;
-import static com.excellentsystem.jagobangunpersadafx.Main.tglLengkap;
-import static com.excellentsystem.jagobangunpersadafx.Main.tglSql;
+import static com.excellentsystem.jagobangunpersadafx.Main.tgl;
+import static com.excellentsystem.jagobangunpersadafx.Main.tglBarang;
 import com.excellentsystem.jagobangunpersadafx.Model.Keuangan;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -54,12 +54,12 @@ public class NeracaKeuanganController  {
         deskripsiColumn.setCellValueFactory(param -> param.getValue().getValue().deskripsiProperty());
         tglKeuanganColumn.setCellValueFactory(cellData -> { 
             try {
-                return new SimpleStringProperty(tglLengkap.format(tglSql.parse(cellData.getValue().getValue().getTglKeuangan())));
+                return new SimpleStringProperty(tgl.format(tglBarang.parse(cellData.getValue().getValue().getTglKeuangan())));
             } catch (Exception ex) {
                 return null;
             }
         });
-        tglKeuanganColumn.setComparator(Function.sortDate(tglLengkap));
+        tglKeuanganColumn.setComparator(Function.sortDate(tgl));
         jumlahRpColumn.setCellValueFactory(param -> param.getValue().getValue().jumlahRpProperty());
         jumlahRpColumn.setCellFactory(col -> Function.getTreeTableCell(rp));
         

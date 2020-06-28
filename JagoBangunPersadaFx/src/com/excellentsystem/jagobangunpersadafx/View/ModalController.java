@@ -15,6 +15,8 @@ import com.excellentsystem.jagobangunpersadafx.Koneksi;
 import com.excellentsystem.jagobangunpersadafx.Main;
 import static com.excellentsystem.jagobangunpersadafx.Main.rp;
 import static com.excellentsystem.jagobangunpersadafx.Main.sistem;
+import static com.excellentsystem.jagobangunpersadafx.Main.tgl;
+import static com.excellentsystem.jagobangunpersadafx.Main.tglBarang;
 import static com.excellentsystem.jagobangunpersadafx.Main.tglLengkap;
 import static com.excellentsystem.jagobangunpersadafx.Main.tglSql;
 import com.excellentsystem.jagobangunpersadafx.Model.Keuangan;
@@ -61,6 +63,7 @@ public class ModalController  {
     @FXML private TableColumn<Keuangan, String> deskripsiColumn;
     @FXML private TableColumn<Keuangan, Number> jumlahRpColumn;
     @FXML private TableColumn<Keuangan, String> kodeUserColumn;
+    @FXML private TableColumn<Keuangan, String> tglInputColumn;
     @FXML private TextField searchField;
     @FXML private Label modalAwalField;
     @FXML private Label modalAkhirField;
@@ -77,7 +80,7 @@ public class ModalController  {
         
         tglPerubahanModalColumn.setCellValueFactory(cellData -> { 
             try {
-                return new SimpleStringProperty(tglLengkap.format(tglSql.parse(cellData.getValue().getTglKeuangan())));
+                return new SimpleStringProperty(tgl.format(tglBarang.parse(cellData.getValue().getTglKeuangan())));
             } catch (Exception ex) {
                 return null;
             }
@@ -93,6 +96,16 @@ public class ModalController  {
         
         kodeUserColumn.setCellValueFactory(cellData -> cellData.getValue().kodeUserProperty());
         kodeUserColumn.setCellFactory(col -> Function.getWrapTableCell(kodeUserColumn));
+        
+        tglInputColumn.setCellValueFactory(cellData -> { 
+            try {
+                return new SimpleStringProperty(tglLengkap.format(tglSql.parse(cellData.getValue().getTglInput())));
+            } catch (Exception ex) {
+                return null;
+            }
+        });
+        tglInputColumn.setCellFactory(col -> Function.getWrapTableCell(tglInputColumn));
+        tglInputColumn.setComparator(Function.sortDate(tglLengkap));
         
         jumlahRpColumn.setCellValueFactory(cellData -> cellData.getValue().jumlahRpProperty());
         jumlahRpColumn.setCellFactory(col -> getTableCell(rp));
@@ -186,7 +199,8 @@ public class ModalController  {
                     filterData.add(temp);
                 else{
                     if(checkColumn(temp.getNoKeuangan())||
-                        checkColumn(tglLengkap.format(tglSql.parse(temp.getTglKeuangan())))||
+                        checkColumn(tgl.format(tglBarang.parse(temp.getTglKeuangan())))||
+                        checkColumn(tglLengkap.format(tglSql.parse(temp.getTglInput())))||
                         checkColumn(temp.getKategori())||
                         checkColumn(temp.getDeskripsi())||
                         checkColumn(rp.format(temp.getJumlahRp()))||
@@ -216,22 +230,30 @@ public class ModalController  {
                     public String call() throws Exception{
                         try (Connection con = Koneksi.getConnection()) {
                             Keuangan modal = new Keuangan();
-                            modal.setTglKeuangan(tglSql.format(new Date()));
+                            modal.setTglKeuangan(tglBarang.format(new Date()));
                             modal.setTipeKeuangan("MODAL");
                             modal.setKodeProperty("");
                             modal.setKategori("Tambah Modal");
                             modal.setDeskripsi(x.keteranganField.getText());
                             modal.setJumlahRp(Double.parseDouble(x.jumlahRpField.getText().replaceAll(",", "")));
                             modal.setKodeUser(sistem.getUser().getUsername());
+                            modal.setTglInput(tglSql.format(new Date()));
+                            modal.setStatus("true");
+                            modal.setTglBatal("2000-01-01 00:00:00");
+                            modal.setUserBatal("");
                             
                             Keuangan keu = new Keuangan();
-                            keu.setTglKeuangan(tglSql.format(new Date()));
+                            keu.setTglKeuangan(tglBarang.format(new Date()));
                             keu.setTipeKeuangan(x.tipeKeuanganCombo.getSelectionModel().getSelectedItem());
                             keu.setKodeProperty("");
                             keu.setKategori("Tambah Modal");
                             keu.setDeskripsi(x.keteranganField.getText());
                             keu.setJumlahRp(Double.parseDouble(x.jumlahRpField.getText().replaceAll(",", "")));
                             keu.setKodeUser(sistem.getUser().getUsername());
+                            keu.setTglInput(tglSql.format(new Date()));
+                            keu.setStatus("true");
+                            keu.setTglBatal("2000-01-01 00:00:00");
+                            keu.setUserBatal("");
                             
                             List<Keuangan> listKeuangan = new ArrayList<>();
                             listKeuangan.add(modal);
@@ -284,22 +306,30 @@ public class ModalController  {
                     public String call() throws Exception{
                         try (Connection con = Koneksi.getConnection()) {
                             Keuangan modal = new Keuangan();
-                            modal.setTglKeuangan(tglSql.format(new Date()));
+                            modal.setTglKeuangan(tglBarang.format(new Date()));
                             modal.setTipeKeuangan("MODAL");
                             modal.setKodeProperty("");
                             modal.setKategori("Ambil Modal");
                             modal.setDeskripsi(x.keteranganField.getText());
                             modal.setJumlahRp(-Double.parseDouble(x.jumlahRpField.getText().replaceAll(",", "")));
                             modal.setKodeUser(sistem.getUser().getUsername());
+                            modal.setTglInput(tglSql.format(new Date()));
+                            modal.setStatus("true");
+                            modal.setTglBatal("2000-01-01 00:00:00");
+                            modal.setUserBatal("");
                             
                             Keuangan keu = new Keuangan();
-                            keu.setTglKeuangan(tglSql.format(new Date()));
+                            keu.setTglKeuangan(tglBarang.format(new Date()));
                             keu.setTipeKeuangan(x.tipeKeuanganCombo.getSelectionModel().getSelectedItem());
                             keu.setKodeProperty("");
                             keu.setKategori("Ambil Modal");
                             keu.setDeskripsi(x.keteranganField.getText());
                             keu.setJumlahRp(-Double.parseDouble(x.jumlahRpField.getText().replaceAll(",", "")));
                             keu.setKodeUser(sistem.getUser().getUsername());
+                            keu.setTglInput(tglSql.format(new Date()));
+                            keu.setStatus("true");
+                            keu.setTglBatal("2000-01-01 00:00:00");
+                            keu.setUserBatal("");
                             
                             List<Keuangan> listKeuangan = new ArrayList<>();
                             listKeuangan.add(modal);

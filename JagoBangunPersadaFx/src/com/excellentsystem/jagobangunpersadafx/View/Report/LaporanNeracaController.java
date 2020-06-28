@@ -163,6 +163,10 @@ public class LaporanNeracaController  {
                     keuurditahan.setDeskripsi("Untung-Rugi Ditahan");
                     keuurditahan.setJumlahRp(urditahan);
                     keuurditahan.setKodeUser("System");
+                    keuurditahan.setTglInput(tglAwalPicker.getValue().toString());
+                    keuurditahan.setStatus("true");
+                    keuurditahan.setTglBatal("2000-01-01 00:00:00");
+                    keuurditahan.setUserBatal("");
                     modal.add(keuurditahan);
                     
                     untungRugi.clear();

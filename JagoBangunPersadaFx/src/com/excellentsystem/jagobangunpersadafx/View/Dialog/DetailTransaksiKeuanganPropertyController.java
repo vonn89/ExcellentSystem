@@ -77,10 +77,10 @@ public class DetailTransaksiKeuanganPropertyController  {
         jumlahRpColumn.setCellValueFactory(cellData -> cellData.getValue().jumlahRpProperty());
         jumlahRpColumn.setCellFactory(col -> getTableCell(qty));
         
-        checkColumn.setCellValueFactory(cellData -> cellData.getValue().statusProperty());
+        checkColumn.setCellValueFactory(cellData -> cellData.getValue().checkedProperty());
         checkColumn.setCellFactory(CheckBoxTableCell.forTableColumn((Integer param) -> {
             hitungTotal();
-            return propertyTable.getItems().get(param).statusProperty();
+            return propertyTable.getItems().get(param).checkedProperty();
         }));
         
         final ContextMenu rm = new ContextMenu();
@@ -111,7 +111,7 @@ public class DetailTransaksiKeuanganPropertyController  {
             row.setOnMouseClicked((MouseEvent mouseEvent) -> {
                 if(mouseEvent.getButton().equals(MouseButton.PRIMARY)&&mouseEvent.getClickCount() == 2){
                     if(checkColumn.isVisible()){
-                        row.getItem().setStatus(!row.getItem().isStatus());
+                        row.getItem().setChecked(!row.getItem().isChecked());
                         hitungTotal();
                     }
                 }
@@ -158,7 +158,7 @@ public class DetailTransaksiKeuanganPropertyController  {
         double totalProp = 0;
         double totalLuas = 0;
         for(Keuangan d: allDetail){
-            if(d.isStatus()){
+            if(d.isChecked()){
                 totalProp = totalProp + 1;
                 totalLuas = totalLuas + d.getProperty().getLuasTanah();
             }
@@ -198,7 +198,7 @@ public class DetailTransaksiKeuanganPropertyController  {
                 for(Property p : task.getValue()){
                     Keuangan d = new Keuangan();
                     d.setKodeProperty(p.getKodeProperty());
-                    d.setStatus(checkAll.isSelected());
+                    d.setChecked(checkAll.isSelected());
                     d.setProperty(p);
                     if(p.getKodeKategori().equals(kategoriPropertyCombo.getSelectionModel().getSelectedItem())||
                             kategoriPropertyCombo.getSelectionModel().getSelectedItem().equals("Semua"))
@@ -219,7 +219,7 @@ public class DetailTransaksiKeuanganPropertyController  {
         double totalProp = 0;
         double totalLuas = 0;
         for(Keuangan d: allDetail){
-            if(d.isStatus()){
+            if(d.isChecked()){
                 totalProp = totalProp + 1;
                 totalLuas = totalLuas + d.getProperty().getLuasTanah();
             }
@@ -230,14 +230,14 @@ public class DetailTransaksiKeuanganPropertyController  {
         double totalBiaya = Double.parseDouble(totalTransaksiLabel.getText().replaceAll(",", ""));
         if(metodeCombo.getSelectionModel().getSelectedItem().equals("Rata-rata")){
             for(Keuangan d: allDetail){
-                if(d.isStatus())
+                if(d.isChecked())
                     d.setJumlahRp(totalBiaya/totalProp);
                 else
                     d.setJumlahRp(0);
             }
         }else if(metodeCombo.getSelectionModel().getSelectedItem().equals("Luas Tanah")){
             for(Keuangan d: allDetail){
-                if(d.isStatus())
+                if(d.isChecked())
                     d.setJumlahRp(totalBiaya*d.getProperty().getLuasTanah()/totalLuas);
                 else
                     d.setJumlahRp(0);
@@ -248,7 +248,7 @@ public class DetailTransaksiKeuanganPropertyController  {
     @FXML
     private void checkAllHandle(){
         for(Keuangan d: allDetail){
-            d.setStatus(checkAll.isSelected());
+            d.setChecked(checkAll.isSelected());
         }
         hitungTotal();
     }

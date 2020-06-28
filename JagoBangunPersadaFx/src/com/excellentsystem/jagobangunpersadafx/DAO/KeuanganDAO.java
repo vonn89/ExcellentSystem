@@ -197,27 +197,18 @@ public class KeuanganDAO {
 //        ps.setString(8, k.getKodeUser());
 //        ps.executeUpdate();
 //    }
-//    public static void deleteAllByNoKeuangan(Connection con, String noKeuangan)throws Exception{
-//        PreparedStatement ps = con.prepareStatement("delete from tt_keuangan where no_keuangan=?");
-//        ps.setString(1, noKeuangan);
-//        ps.executeUpdate();
-//    }
-    public static String getId(Connection con)throws Exception{
+    public static void deleteAllByNoKeuangan(Connection con, String noKeuangan)throws Exception{
+        PreparedStatement ps = con.prepareStatement("delete from tt_keuangan where no_keuangan=?");
+        ps.setString(1, noKeuangan);
+        ps.executeUpdate();
+    }
+    public static String getIdByDate(Connection con, Date date)throws Exception{
         PreparedStatement ps =  con.prepareStatement("select max(right(no_keuangan,4)) from tt_keuangan "
-                + " where mid(no_keuangan,4,6)='"+new SimpleDateFormat("yyMMdd").format(new Date())+"'");
+                + " where mid(no_keuangan,4,6)='"+new SimpleDateFormat("yyMMdd").format(date)+"'");
         ResultSet rs = ps.executeQuery();
         if (rs.next()) 
-            return "KK-"+new SimpleDateFormat("yyMMdd").format(new Date())+"-" + new DecimalFormat("0000").format(rs.getInt(1) + 1);
+            return "KK-"+new SimpleDateFormat("yyMMdd").format(date)+"-" + new DecimalFormat("0000").format(rs.getInt(1) + 1);
         else 
-            return "KK-"+new SimpleDateFormat("yyMMdd").format(new Date())+"-0001";
+            return "KK-"+new SimpleDateFormat("yyMMdd").format(date)+"-0001";
     }
-//    public static String getIdByDate(Connection con, Date date)throws Exception{
-//        PreparedStatement ps =  con.prepareStatement("select max(right(no_keuangan,4)) from tt_keuangan "
-//                + " where mid(no_keuangan,4,6)='"+new SimpleDateFormat("yyMMdd").format(date)+"'");
-//        ResultSet rs = ps.executeQuery();
-//        if (rs.next()) 
-//            return "KK-"+new SimpleDateFormat("yyMMdd").format(date)+"-" + new DecimalFormat("0000").format(rs.getInt(1) + 1);
-//        else 
-//            return "KK-"+new SimpleDateFormat("yyMMdd").format(date)+"-0001";
-//    }
 }

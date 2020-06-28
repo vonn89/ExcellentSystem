@@ -45,6 +45,7 @@ import com.excellentsystem.jagobangunpersadafx.DAO.TerimaPembayaranDAO;
 import com.excellentsystem.jagobangunpersadafx.DAO.TipeKeuanganDAO;
 import com.excellentsystem.jagobangunpersadafx.DAO.TukangDAO;
 import com.excellentsystem.jagobangunpersadafx.DAO.UserDAO;
+import com.excellentsystem.jagobangunpersadafx.Main;
 import static com.excellentsystem.jagobangunpersadafx.Main.sistem;
 import static com.excellentsystem.jagobangunpersadafx.Main.tglBarang;
 import static com.excellentsystem.jagobangunpersadafx.Main.tglSql;
@@ -88,12 +89,24 @@ import com.excellentsystem.jagobangunpersadafx.Model.TerimaPembayaran;
 import com.excellentsystem.jagobangunpersadafx.Model.TipeKeuangan;
 import com.excellentsystem.jagobangunpersadafx.Model.Tukang;
 import com.excellentsystem.jagobangunpersadafx.Model.User;
+import com.google.auth.oauth2.GoogleCredentials;
+import com.google.cloud.storage.BlobId;
+import com.google.cloud.storage.BlobInfo;
+import com.google.cloud.storage.Storage;
+import com.google.cloud.storage.StorageOptions;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.List;
+import javafx.embed.swing.SwingFXUtils;
+import javafx.scene.image.ImageView;
+import javax.imageio.ImageIO;
 
 /**
  *
@@ -102,7 +115,8 @@ import java.util.List;
 public class Service {
     
     private static void insertKeuangan(Connection con, String noKeuangan, String tanggal, String tipeKeuangan, 
-            String kategori, String kodeProperty, String deskripsi, double jumlahRp, String kodeUser)throws Exception{
+            String kategori, String kodeProperty, String deskripsi, double jumlahRp, String kodeUser, 
+            String tglInput, String status, String tglBatal, String userBatal)throws Exception{
         Keuangan k = new Keuangan();
         k.setNoKeuangan(noKeuangan);
         k.setTglKeuangan(tanggal);
@@ -112,6 +126,10 @@ public class Service {
         k.setDeskripsi(deskripsi);
         k.setJumlahRp(jumlahRp);
         k.setKodeUser(kodeUser);
+        k.setTglInput(tglInput);
+        k.setStatus(status);
+        k.setTglBatal(tglBatal);
+        k.setUserBatal(userBatal);
         KeuanganDAO.insert(con, k);
     }
     public static void setPenyusutanAset(Connection con)throws Exception{
@@ -133,11 +151,13 @@ public class Service {
                                     status = false;
                             }
                             if(status){
-                                String noKeuangan = KeuanganDAO.getId(con);
-                                insertKeuangan(con, noKeuangan, tglSusut.toString()+" 00:00:00", "ASET TETAP", aset.getKategori(), "", 
-                                        "Penyusutan Aset Tetap Ke-"+i+" ("+aset.getNoAset()+")", -penyusutanPerbulan, "System");
-                                insertKeuangan(con, noKeuangan, tglSusut.toString()+" 00:00:00", "BEBAN", "Beban Penyusutan Aset Tetap", "", 
-                                        "Penyusutan Aset Tetap Ke-"+i+" ("+aset.getNoAset()+")", penyusutanPerbulan, "System");
+                                String noKeuangan = KeuanganDAO.getIdByDate(con, tglBarang.parse(tglSusut.toString()));
+                                insertKeuangan(con, noKeuangan, tglSusut.toString(), "ASET TETAP", aset.getKategori(), "", 
+                                        "Penyusutan Aset Tetap Ke-"+i+" ("+aset.getNoAset()+")", -penyusutanPerbulan, "System", 
+                                        tglSql.format(new Date()), "true", "2000-01-01 00:00:00", "");
+                                insertKeuangan(con, noKeuangan, tglSusut.toString(), "BEBAN", "Beban Penyusutan Aset Tetap", "", 
+                                        "Penyusutan Aset Tetap Ke-"+i+" ("+aset.getNoAset()+")", penyusutanPerbulan, "System", 
+                                        tglSql.format(new Date()), "true", "2000-01-01 00:00:00", "");
                             }
                             totalPenyusutan = totalPenyusutan + penyusutanPerbulan;
                         }
@@ -612,7 +632,7 @@ public class Service {
             con.setAutoCommit(false);
             String status = "true";
             
-            String noKeuangan = KeuanganDAO.getId(con);
+            String noKeuangan = KeuanganDAO.getIdByDate(con, new Date());
             PemecahanPropertyHeadDAO.insert(con, head);
             
             Property p = head.getProperty();
@@ -621,8 +641,9 @@ public class Service {
             p.setStatus("Mapped");
             PropertyDAO.update(con, p);
             
-            insertKeuangan(con, noKeuangan, tglSql.format(new Date()), "ASET LANCAR", "Tanah & Bangunan", p.getKodeProperty(),  
-                    "Pemecahan Property - "+head.getNoPemecahan(), -head.getNilaiProperty(), sistem.getUser().getUsername());
+            insertKeuangan(con, noKeuangan, tglBarang.format(new Date()), "ASET LANCAR", "Tanah & Bangunan", p.getKodeProperty(),  
+                    "Pemecahan Property - "+head.getNoPemecahan(), -head.getNilaiProperty(), sistem.getUser().getUsername(), 
+                                        tglSql.format(new Date()), "true", "2000-01-01 00:00:00", "");
             
             for(PemecahanPropertyDetail detail : head.getAllDetail()){
                 String kodeProperty = PropertyDAO.getId(con);
@@ -632,8 +653,9 @@ public class Service {
                 detail.getProperty().setKodeProperty(kodeProperty);
                 PropertyDAO.insert(con, detail.getProperty());
                 
-                insertKeuangan(con, noKeuangan, tglSql.format(new Date()), "ASET LANCAR", "Tanah & Bangunan", detail.getProperty().getKodeProperty(), 
-                        "Pemecahan Property - "+head.getNoPemecahan(), detail.getProperty().getNilaiProperty(), sistem.getUser().getUsername());
+                insertKeuangan(con, noKeuangan, tglBarang.format(new Date()), "ASET LANCAR", "Tanah & Bangunan", detail.getProperty().getKodeProperty(), 
+                        "Pemecahan Property - "+head.getNoPemecahan(), detail.getProperty().getNilaiProperty(), sistem.getUser().getUsername(), 
+                                        tglSql.format(new Date()), "true", "2000-01-01 00:00:00", "");
             }
             if(status.equals("true"))
                 con.commit();
@@ -656,7 +678,7 @@ public class Service {
             con.setAutoCommit(false);
             String status = "true";
             
-            String noKeuangan = KeuanganDAO.getId(con);
+            String noKeuangan = KeuanganDAO.getIdByDate(con, new Date());
             String kodeProperty = PropertyDAO.getId(con);
             
             head.setKodeProperty(kodeProperty);
@@ -665,8 +687,9 @@ public class Service {
             head.getProperty().setKodeProperty(kodeProperty);
             PropertyDAO.insert(con, head.getProperty());
             
-            insertKeuangan(con, noKeuangan, tglSql.format(new Date()), "ASET LANCAR", "Tanah & Bangunan",  head.getProperty().getKodeProperty(),
-                    "Penggabungan Property - "+head.getNoPenggabungan(), head.getProperty().getNilaiProperty(), sistem.getUser().getUsername());
+            insertKeuangan(con, noKeuangan, tglBarang.format(new Date()), "ASET LANCAR", "Tanah & Bangunan",  head.getProperty().getKodeProperty(),
+                    "Penggabungan Property - "+head.getNoPenggabungan(), head.getProperty().getNilaiProperty(), sistem.getUser().getUsername(), 
+                                        tglSql.format(new Date()), "true", "2000-01-01 00:00:00", "");
                         
             for(PenggabunganPropertyDetail d : head.getAllDetail()){
                 PenggabunganPropertyDetailDAO.insert(con, d);
@@ -674,8 +697,9 @@ public class Service {
                 d.getProperty().setStatus("Combined");
                 PropertyDAO.update(con, d.getProperty());
                 
-                insertKeuangan(con, noKeuangan, tglSql.format(new Date()), "ASET LANCAR", "Tanah & Bangunan",  d.getProperty().getKodeProperty(),
-                        "Penggabungan Property - "+head.getNoPenggabungan(), -d.getProperty().getNilaiProperty(), sistem.getUser().getUsername());
+                insertKeuangan(con, noKeuangan, tglBarang.format(new Date()), "ASET LANCAR", "Tanah & Bangunan",  d.getProperty().getKodeProperty(),
+                        "Penggabungan Property - "+head.getNoPenggabungan(), -d.getProperty().getNilaiProperty(), sistem.getUser().getUsername(), 
+                                        tglSql.format(new Date()), "true", "2000-01-01 00:00:00", "");
             }
             if(status.equals("true"))
                 con.commit();
@@ -699,16 +723,18 @@ public class Service {
             con.setAutoCommit(false);
             String status = "true";
             
-            String noKeuangan = KeuanganDAO.getId(con);
+            String noKeuangan = KeuanganDAO.getIdByDate(con, new Date());
             PembelianTanahDAO.insert(con, pembelian);
             PropertyDAO.insert(con, pembelian.getProperty());
             
-            insertKeuangan(con, noKeuangan, tglSql.format(new Date()), "ASET LANCAR", "Tanah & Bangunan", pembelian.getProperty().getKodeProperty(),
-                    "Pembelian Tanah - "+pembelian.getNoPembelian(), pembelian.getHargaBeli(), sistem.getUser().getUsername());
+            insertKeuangan(con, noKeuangan, tglBarang.format(new Date()), "ASET LANCAR", "Tanah & Bangunan", pembelian.getProperty().getKodeProperty(),
+                    "Pembelian Tanah - "+pembelian.getNoPembelian(), pembelian.getHargaBeli(), sistem.getUser().getUsername(), 
+                                        tglSql.format(new Date()), "true", "2000-01-01 00:00:00", "");
             
             if(jumlahBayar!=0){
-                insertKeuangan(con, noKeuangan, tglSql.format(new Date()), pembelian.getTipeKeuangan(), "Pembelian Tanah", pembelian.getProperty().getKodeProperty(),
-                        "Pembelian Tanah - "+pembelian.getNoPembelian(), -jumlahBayar, sistem.getUser().getUsername());
+                insertKeuangan(con, noKeuangan, tglBarang.format(new Date()), pembelian.getTipeKeuangan(), "Pembelian Tanah", pembelian.getProperty().getKodeProperty(),
+                        "Pembelian Tanah - "+pembelian.getNoPembelian(), -jumlahBayar, sistem.getUser().getUsername(), 
+                                        tglSql.format(new Date()), "true", "2000-01-01 00:00:00", "");
             }
             
             if(pembelian.getHargaBeli()>jumlahBayar){
@@ -724,8 +750,9 @@ public class Service {
                 h.setStatus("open");
                 HutangDAO.insert(con, h);
                 
-                insertKeuangan(con, noKeuangan, tglSql.format(new Date()), "HUTANG", "Hutang Pembelian Tanah", pembelian.getKodeProperty(),
-                        "Pembelian Tanah - "+pembelian.getNoPembelian(), pembelian.getHargaBeli()-jumlahBayar, sistem.getUser().getUsername());
+                insertKeuangan(con, noKeuangan, tglBarang.format(new Date()), "HUTANG", "Hutang Pembelian Tanah", pembelian.getKodeProperty(),
+                        "Pembelian Tanah - "+pembelian.getNoPembelian(), pembelian.getHargaBeli()-jumlahBayar, sistem.getUser().getUsername(), 
+                                        tglSql.format(new Date()), "true", "2000-01-01 00:00:00", "");
             }
             
             if(status.equals("true"))
@@ -791,7 +818,7 @@ public class Service {
             con.setAutoCommit(false);
             String status = "true";
             
-            String noKeuangan = KeuanganDAO.getId(con);
+            String noKeuangan = KeuanganDAO.getIdByDate(con, new Date());
             PembangunanHeadDAO.insert(con, p);
             
             for(PembangunanDetail d : p.getAllDetail()){
@@ -801,11 +828,13 @@ public class Service {
                 prop.setNilaiProperty(prop.getNilaiProperty()+d.getBiaya());
                 PropertyDAO.update(con, prop);
                 
-                insertKeuangan(con, noKeuangan, tglSql.format(new Date()), "ASET LANCAR", "Tanah & Bangunan", d.getKodeProperty(),
-                        "Pembangunan - "+p.getNoPembangunan(), d.getBiaya(), sistem.getUser().getUsername());
+                insertKeuangan(con, noKeuangan, tglBarang.format(new Date()), "ASET LANCAR", "Tanah & Bangunan", d.getKodeProperty(),
+                        "Pembangunan - "+p.getNoPembangunan(), d.getBiaya(), sistem.getUser().getUsername(), 
+                                        tglSql.format(new Date()), "true", "2000-01-01 00:00:00", "");
 
-                insertKeuangan(con, noKeuangan, tglSql.format(new Date()), p.getTipeKeuangan(), "Pembangunan", d.getKodeProperty(),
-                        "Pembangunan - "+p.getNoPembangunan(), -d.getBiaya(), sistem.getUser().getUsername());
+                insertKeuangan(con, noKeuangan, tglBarang.format(new Date()), p.getTipeKeuangan(), "Pembangunan", d.getKodeProperty(),
+                        "Pembangunan - "+p.getNoPembangunan(), -d.getBiaya(), sistem.getUser().getUsername(), 
+                                        tglSql.format(new Date()), "true", "2000-01-01 00:00:00", "");
             }
             if(status.equals("true"))
                 con.commit();
@@ -981,7 +1010,7 @@ public class Service {
             r.setNoUrut(noUrut);
             RAPRealisasiDAO.insert(con, r);
             
-            String noKeuangan = KeuanganDAO.getId(con);
+            String noKeuangan = KeuanganDAO.getIdByDate(con, new Date());
             
             for(RAPDetailProperty d : rapHead.getListRapPropertyDetail()){
                 double nilai = r.getJumlahRp()*d.getPersentase()/100;
@@ -990,11 +1019,13 @@ public class Service {
                 prop.setNilaiProperty(prop.getNilaiProperty()+nilai);
                 PropertyDAO.update(con, prop);
                 
-                insertKeuangan(con, noKeuangan, tglSql.format(new Date()), "ASET LANCAR", "Tanah & Bangunan", d.getKodeProperty(),
-                        "Realisasi Proyek - "+r.getNoRap()+" - "+r.getNoUrut(), nilai, sistem.getUser().getUsername());
+                insertKeuangan(con, noKeuangan, tglBarang.format(new Date()), "ASET LANCAR", "Tanah & Bangunan", d.getKodeProperty(),
+                        "Realisasi Proyek - "+r.getNoRap()+" - "+r.getNoUrut(), nilai, sistem.getUser().getUsername(), 
+                                        tglSql.format(new Date()), "true", "2000-01-01 00:00:00", "");
 
-                insertKeuangan(con, noKeuangan, tglSql.format(new Date()), r.getTipeKeuangan(), "Realisasi Proyek", d.getKodeProperty(),
-                        "Realisasi Proyek - "+r.getNoRap()+" - "+r.getNoUrut(), -nilai, sistem.getUser().getUsername());
+                insertKeuangan(con, noKeuangan, tglBarang.format(new Date()), r.getTipeKeuangan(), "Realisasi Proyek", d.getKodeProperty(),
+                        "Realisasi Proyek - "+r.getNoRap()+" - "+r.getNoUrut(), -nilai, sistem.getUser().getUsername(), 
+                                        tglSql.format(new Date()), "true", "2000-01-01 00:00:00", "");
             }
             
             if(status.equals("true"))
@@ -1056,7 +1087,7 @@ public class Service {
             con.setAutoCommit(false);
             String status = "true";
             
-            String noKeuangan = KeuanganDAO.getId(con);
+            String noKeuangan = KeuanganDAO.getIdByDate(con, new Date());
             String noStj = STJHeadDAO.getId(con, stj.getProperty().getNamaProperty().substring(0, 3).toUpperCase());
             stj.setNoSTJ(noStj);
             stj.setTglSTJ(tglSql.format(new Date()));
@@ -1070,11 +1101,13 @@ public class Service {
             stj.getProperty().setStatus("Reserved");
             PropertyDAO.update(con, stj.getProperty());
             
-            insertKeuangan(con, noKeuangan, tglSql.format(new Date()), stj.getTipeKeuangan(), "Terima Tanda Jadi", stj.getKodeProperty(),
-                    "Terima Tanda Jadi - "+stj.getNoSTJ(), stj.getJumlahRp(), sistem.getUser().getUsername());
+            insertKeuangan(con, noKeuangan, tglBarang.format(new Date()), stj.getTipeKeuangan(), "Terima Tanda Jadi", stj.getKodeProperty(),
+                    "Terima Tanda Jadi - "+stj.getNoSTJ(), stj.getJumlahRp(), sistem.getUser().getUsername(), 
+                                        tglSql.format(new Date()), "true", "2000-01-01 00:00:00", "");
 
-            insertKeuangan(con, noKeuangan, tglSql.format(new Date()), "HUTANG", "Terima Tanda Jadi", stj.getKodeProperty(),
-                    "Terima Tanda Jadi - "+stj.getNoSTJ(), stj.getJumlahRp(), sistem.getUser().getUsername());
+            insertKeuangan(con, noKeuangan, tglBarang.format(new Date()), "HUTANG", "Terima Tanda Jadi", stj.getKodeProperty(),
+                    "Terima Tanda Jadi - "+stj.getNoSTJ(), stj.getJumlahRp(), sistem.getUser().getUsername(), 
+                                        tglSql.format(new Date()), "true", "2000-01-01 00:00:00", "");
             
             Hutang h = new Hutang();
             h.setNoHutang(HutangDAO.getId(con));
@@ -1146,17 +1179,19 @@ public class Service {
             con.setAutoCommit(false);
             String status = "true";
             
-            String noKeuangan = KeuanganDAO.getId(con);
+            String noKeuangan = KeuanganDAO.getIdByDate(con, new Date());
             String noSdp = SDPDAO.getId(con, sdp.getProperty().getNamaProperty().substring(0, 3).toUpperCase());
             sdp.setNoSDP(noSdp);
             sdp.setTglSDP(tglSql.format(new Date()));
             SDPDAO.insert(con, sdp);
             
-            insertKeuangan(con, noKeuangan, tglSql.format(new Date()), sdp.getTipeKeuangan(), "Terima Down Payment", sdp.getKodeProperty(),
-                    "Terima Down Payment - "+sdp.getNoSDP(), sdp.getJumlahRp(), sistem.getUser().getUsername());
+            insertKeuangan(con, noKeuangan, tglBarang.format(new Date()), sdp.getTipeKeuangan(), "Terima Down Payment", sdp.getKodeProperty(),
+                    "Terima Down Payment - "+sdp.getNoSDP(), sdp.getJumlahRp(), sistem.getUser().getUsername(), 
+                                        tglSql.format(new Date()), "true", "2000-01-01 00:00:00", "");
 
-            insertKeuangan(con, noKeuangan, tglSql.format(new Date()), "HUTANG", "Terima Down Payment", sdp.getKodeProperty(),
-                    "Terima Down Payment - "+sdp.getNoSDP(), sdp.getJumlahRp(), sistem.getUser().getUsername());
+            insertKeuangan(con, noKeuangan, tglBarang.format(new Date()), "HUTANG", "Terima Down Payment", sdp.getKodeProperty(),
+                    "Terima Down Payment - "+sdp.getNoSDP(), sdp.getJumlahRp(), sistem.getUser().getUsername(), 
+                                        tglSql.format(new Date()), "true", "2000-01-01 00:00:00", "");
                         
             Hutang h = new Hutang();
             h.setNoHutang(HutangDAO.getId(con));
@@ -1223,7 +1258,7 @@ public class Service {
             con.setAutoCommit(false);
             String status = "true";
             
-            String noKeuangan = KeuanganDAO.getId(con);
+            String noKeuangan = KeuanganDAO.getIdByDate(con, new Date());
             
             String noSKl = SKLHeadDAO.getId(con, skl.getProperty().getNamaProperty().substring(0, 3).toUpperCase());
             skl.setNoSKL(noSKl);
@@ -1255,8 +1290,9 @@ public class Service {
             pstj.setStatus("true");
             PembayaranDAO.insert(con, pstj);
             
-            insertKeuangan(con, noKeuangan, tglSql.format(new Date()), "HUTANG", "Terima Tanda Jadi", skl.getKodeProperty(),
-                    "Penjualan - "+skl.getNoSKL(), -hstj.getJumlahHutang(), sistem.getUser().getUsername());
+            insertKeuangan(con, noKeuangan, tglBarang.format(new Date()), "HUTANG", "Terima Tanda Jadi", skl.getKodeProperty(),
+                    "Penjualan - "+skl.getNoSKL(), -hstj.getJumlahHutang(), sistem.getUser().getUsername(), 
+                                        tglSql.format(new Date()), "true", "2000-01-01 00:00:00", "");
             
             List<SDP> allSDP = SDPDAO.getAllByKodeProperty(con, skl.getKodeProperty(), "true");
             double totaldp = 0;
@@ -1282,20 +1318,25 @@ public class Service {
                 
                 totaldp = totaldp + h.getJumlahHutang();
             }
-            insertKeuangan(con, noKeuangan, tglSql.format(new Date()), "HUTANG", "Terima Down Payment", skl.getKodeProperty(),
-                    "Penjualan - "+skl.getNoSKL(), -totaldp, sistem.getUser().getUsername());
+            insertKeuangan(con, noKeuangan, tglBarang.format(new Date()), "HUTANG", "Terima Down Payment", skl.getKodeProperty(),
+                    "Penjualan - "+skl.getNoSKL(), -totaldp, sistem.getUser().getUsername(), 
+                                        tglSql.format(new Date()), "true", "2000-01-01 00:00:00", "");
             
-            insertKeuangan(con, noKeuangan, tglSql.format(new Date()), "PENJUALAN", "Penjualan", skl.getKodeProperty(),
-                    "Penjualan - "+skl.getNoSKL(), skl.getProperty().getHargaJual()-skl.getProperty().getDiskon(), sistem.getUser().getUsername());
+            insertKeuangan(con, noKeuangan, tglBarang.format(new Date()), "PENJUALAN", "Penjualan", skl.getKodeProperty(),
+                    "Penjualan - "+skl.getNoSKL(), skl.getProperty().getHargaJual()-skl.getProperty().getDiskon(), sistem.getUser().getUsername(), 
+                                        tglSql.format(new Date()), "true", "2000-01-01 00:00:00", "");
 
-            insertKeuangan(con, noKeuangan, tglSql.format(new Date()), "HPP", "HPP", skl.getKodeProperty(),
-                    "Penjualan - "+skl.getNoSKL(), skl.getProperty().getNilaiProperty(), sistem.getUser().getUsername());
+            insertKeuangan(con, noKeuangan, tglBarang.format(new Date()), "HPP", "HPP", skl.getKodeProperty(),
+                    "Penjualan - "+skl.getNoSKL(), skl.getProperty().getNilaiProperty(), sistem.getUser().getUsername(), 
+                                        tglSql.format(new Date()), "true", "2000-01-01 00:00:00", "");
 
-            insertKeuangan(con, noKeuangan, tglSql.format(new Date()), "ASET LANCAR", "Tanah & Bangunan", skl.getKodeProperty(),
-                    "Penjualan - "+skl.getNoSKL(), -skl.getProperty().getNilaiProperty(), sistem.getUser().getUsername());
+            insertKeuangan(con, noKeuangan, tglBarang.format(new Date()), "ASET LANCAR", "Tanah & Bangunan", skl.getKodeProperty(),
+                    "Penjualan - "+skl.getNoSKL(), -skl.getProperty().getNilaiProperty(), sistem.getUser().getUsername(), 
+                                        tglSql.format(new Date()), "true", "2000-01-01 00:00:00", "");
 
-            insertKeuangan(con, noKeuangan, tglSql.format(new Date()), "PIUTANG", "Piutang Penjualan", skl.getKodeProperty(),
-                    "Penjualan - "+skl.getNoSKL(), skl.getSisaPelunasan(), sistem.getUser().getUsername());
+            insertKeuangan(con, noKeuangan, tglBarang.format(new Date()), "PIUTANG", "Piutang Penjualan", skl.getKodeProperty(),
+                    "Penjualan - "+skl.getNoSKL(), skl.getSisaPelunasan(), sistem.getUser().getUsername(), 
+                                        tglSql.format(new Date()), "true", "2000-01-01 00:00:00", "");
 
             Piutang p = new Piutang();
             p.setNoPiutang(PiutangDAO.getId(con));
@@ -1428,7 +1469,7 @@ public class Service {
             con.setAutoCommit(false);
             String status = "true";
             
-            String noKeuangan = KeuanganDAO.getId(con);
+            String noKeuangan = KeuanganDAO.getIdByDate(con, new Date());
             String noKpr = KPRDAO.getId(con);
             kpr.setNoKPR(noKpr);
             kpr.setTglKPR(tglSql.format(new Date()));
@@ -1437,8 +1478,9 @@ public class Service {
             kpr.getProperty().setStatus("Sold - Full Paid");
             PropertyDAO.update(con, kpr.getProperty());
             
-            insertKeuangan(con, noKeuangan, tglSql.format(new Date()), kpr.getTipeKeuangan(), "Pencairan KPR", kpr.getKodeProperty(),
-                    "Pencairan KPR - "+kpr.getNoKPR(), kpr.getJumlahRp(), sistem.getUser().getUsername());
+            insertKeuangan(con, noKeuangan, tglBarang.format(new Date()), kpr.getTipeKeuangan(), "Pencairan KPR", kpr.getKodeProperty(),
+                    "Pencairan KPR - "+kpr.getNoKPR(), kpr.getJumlahRp(), sistem.getUser().getUsername(), 
+                                        tglSql.format(new Date()), "true", "2000-01-01 00:00:00", "");
                         
             Piutang p = PiutangDAO.getByKategoriAndKeteranganAndStatus(con,  "Piutang Penjualan", kpr.getNoSKL(),"open");
             p.setPembayaran(p.getPembayaran()+kpr.getJumlahRp());
@@ -1459,8 +1501,9 @@ public class Service {
             tp.setStatus("true");
             TerimaPembayaranDAO.insert(con, tp);
             
-            insertKeuangan(con, noKeuangan, tglSql.format(new Date()), "PIUTANG", "Piutang Penjualan", kpr.getKodeProperty(),
-                    "Pencairan KPR - "+kpr.getNoKPR(), -kpr.getJumlahRp(), sistem.getUser().getUsername());
+            insertKeuangan(con, noKeuangan, tglBarang.format(new Date()), "PIUTANG", "Piutang Penjualan", kpr.getKodeProperty(),
+                    "Pencairan KPR - "+kpr.getNoKPR(), -kpr.getJumlahRp(), sistem.getUser().getUsername(), 
+                                        tglSql.format(new Date()), "true", "2000-01-01 00:00:00", "");
                         
             if(status.equals("true"))
                 con.commit();
@@ -1529,14 +1572,15 @@ public class Service {
             con.setAutoCommit(false);
             String status = "true";
             
-            String noKeuangan = KeuanganDAO.getId(con);
+            String noKeuangan = KeuanganDAO.getIdByDate(con, new Date());
             String nosap = SAPDAO.getId(con, sap.getProperty().getNamaProperty().substring(0, 3).toUpperCase());
             sap.setNoSAP(nosap);
             sap.setTglSAP(tglSql.format(new Date()));
             SAPDAO.insert(con, sap);
             
-            insertKeuangan(con, noKeuangan, tglSql.format(new Date()), sap.getTipeKeuangan(), "Terima Pembayaran Angsuran", sap.getKodeProperty(),
-                    "Terima Pembayaran Angsuran - "+sap.getNoSAP(), sap.getJumlahRp(), sistem.getUser().getUsername());
+            insertKeuangan(con, noKeuangan, tglBarang.format(new Date()), sap.getTipeKeuangan(), "Terima Pembayaran Angsuran", sap.getKodeProperty(),
+                    "Terima Pembayaran Angsuran - "+sap.getNoSAP(), sap.getJumlahRp(), sistem.getUser().getUsername(), 
+                                        tglSql.format(new Date()), "true", "2000-01-01 00:00:00", "");
                         
             Piutang p = PiutangDAO.getByKategoriAndKeteranganAndStatus(con,  "Piutang Penjualan", sap.getNoSKL(),"open");
             p.setPembayaran(p.getPembayaran()+sap.getJumlahRp());
@@ -1558,8 +1602,9 @@ public class Service {
             tp.setStatus("true");
             TerimaPembayaranDAO.insert(con, tp);
             
-            insertKeuangan(con, noKeuangan, tglSql.format(new Date()), "PIUTANG", "Piutang Penjualan", sap.getKodeProperty(),
-                    "Terima Pembayaran Angsuran - "+sap.getNoSAP(), -sap.getJumlahRp(), sistem.getUser().getUsername());
+            insertKeuangan(con, noKeuangan, tglBarang.format(new Date()), "PIUTANG", "Piutang Penjualan", sap.getKodeProperty(),
+                    "Terima Pembayaran Angsuran - "+sap.getNoSAP(), -sap.getJumlahRp(), sistem.getUser().getUsername(), 
+                                        tglSql.format(new Date()), "true", "2000-01-01 00:00:00", "");
             
             if(status.equals("true"))
                 con.commit();
@@ -1687,11 +1732,58 @@ public class Service {
             con.setAutoCommit(false);
             String status = "true";
             
-            String noKeuangan = KeuanganDAO.getId(con);
+            String noKeuangan = KeuanganDAO.getIdByDate(con, new Date());
             for(Keuangan k : listKeuangan){
                 k.setNoKeuangan(noKeuangan);
                 KeuanganDAO.insert(con, k);
             }
+            
+            if(status.equals("true"))
+                con.commit();
+            else
+                con.rollback();
+            con.setAutoCommit(true);
+            return status;
+        }catch(Exception e){
+            try {
+                con.rollback();
+                con.setAutoCommit(true);
+                return e.toString();
+            } catch (SQLException ex) {
+                return ex.toString();
+            }
+        }
+    }
+    public static String saveAllTransaksiKeuanganWithImage(Connection con, List<Keuangan> listKeuangan, List<ImageView> listImage){
+        try{
+            con.setAutoCommit(false);
+            String status = "true";
+            
+            String noKeuangan = KeuanganDAO.getIdByDate(con, tglBarang.parse(listKeuangan.get(0).getTglKeuangan()));
+            for(Keuangan k : listKeuangan){
+                k.setNoKeuangan(noKeuangan);
+                KeuanganDAO.insert(con, k);
+            }
+            int noUrut = 1;
+            for(ImageView i : listImage){
+                File tempFile = new File(noKeuangan+" - "+noUrut+".png");
+                BufferedImage bImage = SwingFXUtils.fromFXImage(i.getImage(), null);
+                ImageIO.write(bImage, "png", tempFile);
+                
+                StorageOptions storageOptions = StorageOptions.newBuilder().
+                        setProjectId("auristeel-280420").
+                        setCredentials(GoogleCredentials.fromStream(Main.class.getResourceAsStream("Resource/credentials.json"))).build();
+                Storage storage = storageOptions.getService();
+                
+                BlobId blobId = BlobId.of("jagobangunpersada", tempFile.getName());
+                BlobInfo blobInfo = BlobInfo.newBuilder(blobId).build();
+                storage.create(blobInfo, Files.readAllBytes(Paths.get(tempFile.getPath())));
+                
+                Files.deleteIfExists(tempFile.toPath()); 
+                
+                noUrut = noUrut + 1;
+            }
+            
             if(status.equals("true"))
                 con.commit();
             else
@@ -1743,14 +1835,16 @@ public class Service {
             con.setAutoCommit(false);
             String status = "true";
             
-            String noKeuangan = KeuanganDAO.getId(con);
+            String noKeuangan = KeuanganDAO.getIdByDate(con, new Date());
             HutangDAO.insert(con, hutang);
             
-            insertKeuangan(con, noKeuangan, tglSql.format(new Date()), "HUTANG", hutang.getKategori(), "",
-                    hutang.getNoHutang()+" - "+hutang.getKeterangan(), hutang.getJumlahHutang(), sistem.getUser().getUsername());
+            insertKeuangan(con, noKeuangan, tglBarang.format(new Date()), "HUTANG", hutang.getKategori(), "",
+                    hutang.getNoHutang()+" - "+hutang.getKeterangan(), hutang.getJumlahHutang(), sistem.getUser().getUsername(), 
+                                        tglSql.format(new Date()), "true", "2000-01-01 00:00:00", "");
             
-            insertKeuangan(con, noKeuangan, tglSql.format(new Date()), tipeKeuangan, hutang.getKategori(), "",
-                    hutang.getNoHutang()+" - "+hutang.getKeterangan(), hutang.getJumlahHutang(), sistem.getUser().getUsername());
+            insertKeuangan(con, noKeuangan, tglBarang.format(new Date()), tipeKeuangan, hutang.getKategori(), "",
+                    hutang.getNoHutang()+" - "+hutang.getKeterangan(), hutang.getJumlahHutang(), sistem.getUser().getUsername(), 
+                                        tglSql.format(new Date()), "true", "2000-01-01 00:00:00", "");
             
             
             if(status.equals("true"))
@@ -1775,7 +1869,7 @@ public class Service {
             con.setAutoCommit(false);
             String status = "true";
             
-            String noKeuangan = KeuanganDAO.getId(con);
+            String noKeuangan = KeuanganDAO.getIdByDate(con, new Date());
             PembayaranDAO.insert(con, pembayaran);
             
             Hutang hutang = pembayaran.getHutang();
@@ -1790,11 +1884,13 @@ public class Service {
             if(hutang.getKategori().equals("Hutang Pembelian Tanah"))
                 kodeProperty = PembelianTanahDAO.get(con, hutang.getKeterangan()).getKodeProperty();
             
-            insertKeuangan(con, noKeuangan, tglSql.format(new Date()), "HUTANG", hutang.getKategori(), kodeProperty,
-                    "Pembayaran - "+hutang.getNoHutang()+" - "+hutang.getKeterangan(), -pembayaran.getJumlahPembayaran(), sistem.getUser().getUsername());
+            insertKeuangan(con, noKeuangan, tglBarang.format(new Date()), "HUTANG", hutang.getKategori(), kodeProperty,
+                    "Pembayaran - "+hutang.getNoHutang()+" - "+hutang.getKeterangan(), -pembayaran.getJumlahPembayaran(), sistem.getUser().getUsername(), 
+                                        tglSql.format(new Date()), "true", "2000-01-01 00:00:00", "");
             
-            insertKeuangan(con, noKeuangan, tglSql.format(new Date()), pembayaran.getTipeKeuangan(), hutang.getKategori(), kodeProperty,
-                    "Pembayaran - "+hutang.getNoHutang()+" - "+hutang.getKeterangan(), -pembayaran.getJumlahPembayaran(), sistem.getUser().getUsername());
+            insertKeuangan(con, noKeuangan, tglBarang.format(new Date()), pembayaran.getTipeKeuangan(), hutang.getKategori(), kodeProperty,
+                    "Pembayaran - "+hutang.getNoHutang()+" - "+hutang.getKeterangan(), -pembayaran.getJumlahPembayaran(), sistem.getUser().getUsername(), 
+                                        tglSql.format(new Date()), "true", "2000-01-01 00:00:00", "");
             
 
             if(status.equals("true"))
@@ -1855,13 +1951,15 @@ public class Service {
             con.setAutoCommit(false);
             String status = "true";
             
-            String noKeuangan = KeuanganDAO.getId(con);
+            String noKeuangan = KeuanganDAO.getIdByDate(con, new Date());
             
-            insertKeuangan(con, noKeuangan, tglSql.format(new Date()), "PIUTANG", piutang.getKategori(), "",
-                    piutang.getNoPiutang()+" - "+piutang.getKeterangan(), piutang.getJumlahPiutang(), sistem.getUser().getUsername());
+            insertKeuangan(con, noKeuangan, tglBarang.format(new Date()), "PIUTANG", piutang.getKategori(), "",
+                    piutang.getNoPiutang()+" - "+piutang.getKeterangan(), piutang.getJumlahPiutang(), sistem.getUser().getUsername(), 
+                                        tglSql.format(new Date()), "true", "2000-01-01 00:00:00", "");
             
-            insertKeuangan(con, noKeuangan, tglSql.format(new Date()), tipeKeuangan, piutang.getKategori(), "",
-                    piutang.getNoPiutang()+" - "+piutang.getKeterangan(), -piutang.getJumlahPiutang(), sistem.getUser().getUsername());
+            insertKeuangan(con, noKeuangan, tglBarang.format(new Date()), tipeKeuangan, piutang.getKategori(), "",
+                    piutang.getNoPiutang()+" - "+piutang.getKeterangan(), -piutang.getJumlahPiutang(), sistem.getUser().getUsername(), 
+                                        tglSql.format(new Date()), "true", "2000-01-01 00:00:00", "");
             
             PiutangDAO.insert(con, piutang);
             
@@ -1887,7 +1985,7 @@ public class Service {
             con.setAutoCommit(false);
             String status = "true";
             
-            String noKeuangan = KeuanganDAO.getId(con);
+            String noKeuangan = KeuanganDAO.getIdByDate(con, new Date());
             TerimaPembayaranDAO.insert(con, terimaPembayaran);
             
             Piutang piutang = terimaPembayaran.getPiutang();
@@ -1898,11 +1996,13 @@ public class Service {
                 piutang.setStatus("close");
             PiutangDAO.update(con, piutang);
             
-            insertKeuangan(con, noKeuangan, tglSql.format(new Date()), "PIUTANG", piutang.getKategori(), "",
-                    "Terima Pembayaran - "+piutang.getNoPiutang()+" - "+piutang.getKeterangan(), -terimaPembayaran.getJumlahPembayaran(), sistem.getUser().getUsername());
+            insertKeuangan(con, noKeuangan, tglBarang.format(new Date()), "PIUTANG", piutang.getKategori(), "",
+                    "Terima Pembayaran - "+piutang.getNoPiutang()+" - "+piutang.getKeterangan(), -terimaPembayaran.getJumlahPembayaran(), sistem.getUser().getUsername(), 
+                                        tglSql.format(new Date()), "true", "2000-01-01 00:00:00", "");
             
-            insertKeuangan(con, noKeuangan, tglSql.format(new Date()), terimaPembayaran.getTipeKeuangan(), piutang.getKategori(), "",
-                    "Terima Pembayaran - "+piutang.getNoPiutang()+" - "+piutang.getKeterangan(), terimaPembayaran.getJumlahPembayaran(), sistem.getUser().getUsername());
+            insertKeuangan(con, noKeuangan, tglBarang.format(new Date()), terimaPembayaran.getTipeKeuangan(), piutang.getKategori(), "",
+                    "Terima Pembayaran - "+piutang.getNoPiutang()+" - "+piutang.getKeterangan(), terimaPembayaran.getJumlahPembayaran(), sistem.getUser().getUsername(), 
+                                        tglSql.format(new Date()), "true", "2000-01-01 00:00:00", "");
             
             
             if(status.equals("true"))
@@ -1963,14 +2063,16 @@ public class Service {
             con.setAutoCommit(false);
             String status = "true";
             
-            String noKeuangan = KeuanganDAO.getId(con);
+            String noKeuangan = KeuanganDAO.getIdByDate(con, new Date());
             AsetTetapDAO.insert(con, aset);
             
-            insertKeuangan(con, noKeuangan, tglSql.format(new Date()), tipeKeuangan, "Pembelian Aset Tetap", "",
-                    "Pembelian Aset Tetap - "+aset.getNoAset(), -jumlahBayar, sistem.getUser().getUsername());
+            insertKeuangan(con, noKeuangan, tglBarang.format(new Date()), tipeKeuangan, "Pembelian Aset Tetap", "",
+                    "Pembelian Aset Tetap - "+aset.getNoAset(), -jumlahBayar, sistem.getUser().getUsername(), 
+                                        tglSql.format(new Date()), "true", "2000-01-01 00:00:00", "");
             
-            insertKeuangan(con, noKeuangan, tglSql.format(new Date()), "ASET TETAP", aset.getKategori(), "",
-                    "Pembelian Aset Tetap - "+aset.getNoAset(), aset.getNilaiAwal(), sistem.getUser().getUsername());
+            insertKeuangan(con, noKeuangan, tglBarang.format(new Date()), "ASET TETAP", aset.getKategori(), "",
+                    "Pembelian Aset Tetap - "+aset.getNoAset(), aset.getNilaiAwal(), sistem.getUser().getUsername(), 
+                                        tglSql.format(new Date()), "true", "2000-01-01 00:00:00", "");
                         
             if(aset.getNilaiAwal()>jumlahBayar){
                 Hutang h = new Hutang();
@@ -1985,8 +2087,9 @@ public class Service {
                 h.setStatus("open");
                 HutangDAO.insert(con, h);
 
-                insertKeuangan(con, noKeuangan, tglSql.format(new Date()), "HUTANG", "Hutang Pembelian Aset Tetap", "",
-                        "Pembelian Aset Tetap - "+aset.getNoAset(), aset.getNilaiAwal()-jumlahBayar, sistem.getUser().getUsername());
+                insertKeuangan(con, noKeuangan, tglBarang.format(new Date()), "HUTANG", "Hutang Pembelian Aset Tetap", "",
+                        "Pembelian Aset Tetap - "+aset.getNoAset(), aset.getNilaiAwal()-jumlahBayar, sistem.getUser().getUsername(), 
+                                        tglSql.format(new Date()), "true", "2000-01-01 00:00:00", "");
             }
             
             if(status.equals("true"))
@@ -2010,21 +2113,25 @@ public class Service {
             con.setAutoCommit(false);
             String status = "true";
             
-            String noKeuangan = KeuanganDAO.getId(con);
+            String noKeuangan = KeuanganDAO.getIdByDate(con, new Date());
             AsetTetapDAO.update(con, aset);
                         
-            insertKeuangan(con, noKeuangan, tglSql.format(new Date()), tipeKeuangan, "Penjualan Aset Tetap", "",
-                    "Penjualan Aset Tetap - "+aset.getNoAset(), jumlahBayar, sistem.getUser().getUsername());
+            insertKeuangan(con, noKeuangan, tglBarang.format(new Date()), tipeKeuangan, "Penjualan Aset Tetap", "",
+                    "Penjualan Aset Tetap - "+aset.getNoAset(), jumlahBayar, sistem.getUser().getUsername(), 
+                                        tglSql.format(new Date()), "true", "2000-01-01 00:00:00", "");
                         
-            insertKeuangan(con, noKeuangan, tglSql.format(new Date()), "ASET TETAP", aset.getKategori(), "",
-                    "Penjualan Aset Tetap - "+aset.getNoAset(), -aset.getNilaiAkhir(), sistem.getUser().getUsername());
+            insertKeuangan(con, noKeuangan, tglBarang.format(new Date()), "ASET TETAP", aset.getKategori(), "",
+                    "Penjualan Aset Tetap - "+aset.getNoAset(), -aset.getNilaiAkhir(), sistem.getUser().getUsername(), 
+                                        tglSql.format(new Date()), "true", "2000-01-01 00:00:00", "");
                         
             if(aset.getHargaJual() > aset.getNilaiAkhir()){
-                insertKeuangan(con, noKeuangan, tglSql.format(new Date()), "PENDAPATAN", "Pendapatan Penjualan Aset Tetap", "",
-                        "Penjualan Aset Tetap - "+aset.getNoAset(), aset.getHargaJual()-aset.getNilaiAkhir(), sistem.getUser().getUsername());
+                insertKeuangan(con, noKeuangan, tglBarang.format(new Date()), "PENDAPATAN", "Pendapatan Penjualan Aset Tetap", "",
+                        "Penjualan Aset Tetap - "+aset.getNoAset(), aset.getHargaJual()-aset.getNilaiAkhir(), sistem.getUser().getUsername(), 
+                                        tglSql.format(new Date()), "true", "2000-01-01 00:00:00", "");
             }else if(aset.getHargaJual() < aset.getNilaiAkhir()){
-                insertKeuangan(con, noKeuangan, tglSql.format(new Date()), "BEBAN", "Beban Penjualan Aset Tetap", "",
-                        "Penjualan Aset Tetap - "+aset.getNoAset(), aset.getNilaiAkhir()-aset.getHargaJual(), sistem.getUser().getUsername());
+                insertKeuangan(con, noKeuangan, tglBarang.format(new Date()), "BEBAN", "Beban Penjualan Aset Tetap", "",
+                        "Penjualan Aset Tetap - "+aset.getNoAset(), aset.getNilaiAkhir()-aset.getHargaJual(), sistem.getUser().getUsername(), 
+                                        tglSql.format(new Date()), "true", "2000-01-01 00:00:00", "");
             }
             
             if(aset.getHargaJual()>jumlahBayar){
@@ -2040,8 +2147,9 @@ public class Service {
                 p.setStatus("open");
                 PiutangDAO.insert(con, p);
 
-                insertKeuangan(con, noKeuangan, tglSql.format(new Date()), "PIUTANG", "Piutang Penjualan Aset Tetap", "",
-                        "Penjualan Aset Tetap - "+aset.getNoAset(), aset.getHargaJual()-jumlahBayar, sistem.getUser().getUsername());
+                insertKeuangan(con, noKeuangan, tglBarang.format(new Date()), "PIUTANG", "Piutang Penjualan Aset Tetap", "",
+                        "Penjualan Aset Tetap - "+aset.getNoAset(), aset.getHargaJual()-jumlahBayar, sistem.getUser().getUsername(), 
+                                        tglSql.format(new Date()), "true", "2000-01-01 00:00:00", "");
             }
             if(status.equals("true"))
                 con.commit();

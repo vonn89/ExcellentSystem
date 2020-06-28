@@ -43,8 +43,8 @@
             <TreeTableView fx:id="keuanganTable" prefHeight="408.0" prefWidth="2000.0" showRoot="false" tableMenuButtonVisible="true" GridPane.rowIndex="1">
               <columns>
                   <TreeTableColumn fx:id="noKeuanganColumn" maxWidth="1000.0" prefWidth="100.0" text="No Keuangan" />
-                  <TreeTableColumn fx:id="tglKeuanganColumn" maxWidth="1000.0" prefWidth="100.0" text="Time" visible="false" />
                   <TreeTableColumn fx:id="kodeUserColumn" maxWidth="1000.0" prefWidth="100.0" text="User input" visible="false" />
+                  <TreeTableColumn fx:id="tglInputColumn" maxWidth="1000.0" prefWidth="100.0" text="Tgl Input" visible="false" />
                   <TreeTableColumn fx:id="tipeKeuanganColumn" maxWidth="1000.0" prefWidth="100.0" text="Tipe Keuangan" visible="false" />
                   <TreeTableColumn fx:id="kategoriColumn" maxWidth="1500.0" prefWidth="100.0" text="Kategori" />
                   <TreeTableColumn fx:id="kodePropertyColumn" maxWidth="1000.0" prefWidth="100.0" text="Nama Property" />

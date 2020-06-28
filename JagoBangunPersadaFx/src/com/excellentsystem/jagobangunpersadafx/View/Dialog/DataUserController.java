@@ -391,7 +391,8 @@ public class DataUserController {
             ));
             root.getChildren().add(createTreeItem("Data Keuangan",
                 Arrays.asList(                    
-                    "Add New Keuangan",
+                    "Add New Keuangan",  
+                    "Detail Transaksi Keuangan",
                     "Transfer Keuangan",
                     "Edit Keterangan",
                     "Batal Keuangan"

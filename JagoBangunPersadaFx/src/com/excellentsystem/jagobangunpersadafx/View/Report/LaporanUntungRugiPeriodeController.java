@@ -12,7 +12,6 @@ import com.excellentsystem.jagobangunpersadafx.Koneksi;
 import com.excellentsystem.jagobangunpersadafx.Main;
 import static com.excellentsystem.jagobangunpersadafx.Main.rp;
 import static com.excellentsystem.jagobangunpersadafx.Main.tglBarang;
-import static com.excellentsystem.jagobangunpersadafx.Main.tglSql;
 import com.excellentsystem.jagobangunpersadafx.Model.Keuangan;
 import com.excellentsystem.jagobangunpersadafx.Model.Property;
 import com.excellentsystem.jagobangunpersadafx.Model.UntungRugi;
@@ -410,7 +409,7 @@ public class LaporanUntungRugiPeriodeController  {
         
         double totalPenjualan = 0;
         for(Keuangan k : allPenjualan){
-            Date date = tglSql.parse(k.getTglKeuangan());
+            Date date = tglBarang.parse(k.getTglKeuangan());
             if(date.after(startDate)&&date.before(endDate))
                 totalPenjualan = totalPenjualan + k.getJumlahRp();
         }
@@ -419,7 +418,7 @@ public class LaporanUntungRugiPeriodeController  {
 
         double totalHPP = 0;
         for(Keuangan k : allNilaiTanahDanBangunan){
-            Date date = tglSql.parse(k.getTglKeuangan());
+            Date date = tglBarang.parse(k.getTglKeuangan());
             if(date.after(startDate)&&date.before(endDate))
                 totalHPP = totalHPP - k.getJumlahRp();
         }
@@ -436,7 +435,7 @@ public class LaporanUntungRugiPeriodeController  {
             double pendapatanBeban = 0;
             List<Keuangan> temp = new ArrayList<>();
             for(Keuangan k : allPendapatan){
-                Date date = tglSql.parse(k.getTglKeuangan());
+                Date date = tglBarang.parse(k.getTglKeuangan());
                 if(date.after(startDate)&&date.before(endDate)){
                     if(k.getKategori().equals(s)){
                         pendapatanBeban = pendapatanBeban + k.getJumlahRp();
@@ -446,7 +445,7 @@ public class LaporanUntungRugiPeriodeController  {
                 }
             }
             for(Keuangan k : allBeban){
-                Date date = tglSql.parse(k.getTglKeuangan());
+                Date date = tglBarang.parse(k.getTglKeuangan());
                 if(date.after(startDate)&&date.before(endDate)){
                     if(k.getKategori().equals(s)){
                         pendapatanBeban = pendapatanBeban - k.getJumlahRp();

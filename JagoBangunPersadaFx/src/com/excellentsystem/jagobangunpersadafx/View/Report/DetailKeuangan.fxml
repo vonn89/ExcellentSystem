@@ -49,6 +49,7 @@
                   <TreeTableColumn fx:id="deskripsiColumn" maxWidth="3000.0" prefWidth="75.0" text="Deskripsi" />
                   <TreeTableColumn fx:id="jumlahRpColumn" maxWidth="1000.0" prefWidth="75.0" text="Jumlah Rp" />
                   <TreeTableColumn fx:id="kodeUserColumn" maxWidth="1000.0" prefWidth="75.0" text="Kode User" visible="false" />
+                  <TreeTableColumn fx:id="tglInputColumn" maxWidth="1000.0" prefWidth="75.0" text="Tgl Input" visible="false" />
               </columns>
                <columnResizePolicy>
                   <TreeTableView fx:constant="CONSTRAINED_RESIZE_POLICY" />

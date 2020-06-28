@@ -87,10 +87,10 @@ public class NewKeuanganController  {
         biayaColumn.setCellValueFactory(cellData -> cellData.getValue().jumlahRpProperty());
         biayaColumn.setCellFactory(col -> getTableCell(rp));
         
-        checkColumn.setCellValueFactory(cellData -> cellData.getValue().statusProperty());
+        checkColumn.setCellValueFactory(cellData -> cellData.getValue().checkedProperty());
         checkColumn.setCellFactory(CheckBoxTableCell.forTableColumn((Integer param) -> {
             hitungTotal();
-            return propertyTable.getItems().get(param).statusProperty();
+            return propertyTable.getItems().get(param).checkedProperty();
         }));
         jumlahRpField.setOnKeyReleased((event) -> {
             try{
@@ -135,7 +135,7 @@ public class NewKeuanganController  {
             };
             row.setOnMouseClicked((MouseEvent mouseEvent) -> {
                 if(mouseEvent.getButton().equals(MouseButton.PRIMARY)&&mouseEvent.getClickCount() == 2){
-                    row.getItem().setStatus(!row.getItem().isStatus());
+                    row.getItem().setChecked(!row.getItem().isChecked());
                     hitungTotal();
                 }
             });
@@ -187,7 +187,7 @@ public class NewKeuanganController  {
                         Keuangan k = new Keuangan();
                         k.setKodeProperty(p.getKodeProperty());
                         k.setProperty(p);
-                        k.setStatus(checkAll.isSelected());
+                        k.setChecked(checkAll.isSelected());
                         if(p.getKodeKategori().equals(kategoriPropertyCombo.getSelectionModel().getSelectedItem())||
                                 kategoriPropertyCombo.getSelectionModel().getSelectedItem().equals("Semua"))
                             temp.add(k);
@@ -226,7 +226,7 @@ public class NewKeuanganController  {
             metodeCombo.getSelectionModel().select("Manual");
             k.setJumlahRp(Double.parseDouble(x.textField.getText().replaceAll(",", "")));
             hitungTotal();
-            k.setStatus(true);
+            k.setChecked(true);
             mainApp.closeDialog(stage, child);
         });
     }
@@ -236,7 +236,7 @@ public class NewKeuanganController  {
         double totalProp = 0;
         double totalLuas = 0;
         for(Keuangan k: allDetail){
-            if(k.isStatus()){
+            if(k.isChecked()){
                 totalProp = totalProp + 1;
                 totalLuas = totalLuas + k.getProperty().getLuasTanah();
             }
@@ -248,14 +248,14 @@ public class NewKeuanganController  {
         double totalBiaya = Double.parseDouble(jumlahRpField.getText().replaceAll(",", ""));
         if(metodeCombo.getSelectionModel().getSelectedItem().equals("Rata-rata")){
             for(Keuangan d: allDetail){
-                if(d.isStatus())
+                if(d.isChecked())
                     d.setJumlahRp(totalBiaya/totalProp);
                 else
                     d.setJumlahRp(0);
             }
         }else if(metodeCombo.getSelectionModel().getSelectedItem().equals("Luas Tanah")){
             for(Keuangan d: allDetail){
-                if(d.isStatus())
+                if(d.isChecked())
                     d.setJumlahRp(totalBiaya*d.getProperty().getLuasTanah()/totalLuas);
                 else
                     d.setJumlahRp(0);
@@ -263,7 +263,7 @@ public class NewKeuanganController  {
         }else{
             jumlahRpField.setVisible(false);
             for(Keuangan d: allDetail){
-                if(d.isStatus())
+                if(d.isChecked())
                     d.setJumlahRp(d.getJumlahRp()/d.getProperty().getLuasTanah());
                 else
                     d.setJumlahRp(0);
@@ -279,7 +279,7 @@ public class NewKeuanganController  {
     @FXML
     private void checkAllHandle(){
         for(Keuangan d: allDetail){
-            d.setStatus(checkAll.isSelected());
+            d.setChecked(checkAll.isSelected());
         }
         propertyTable.refresh();
         hitungTotal();

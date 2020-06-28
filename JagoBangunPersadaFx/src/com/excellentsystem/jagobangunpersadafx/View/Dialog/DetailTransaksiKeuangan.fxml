@@ -6,6 +6,7 @@
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
@@ -17,7 +18,7 @@
 
 <AnchorPane id="AnchorPane" prefWidth="400.0" styleClass="dialog" stylesheets="@../../Resource/MyTheme.css" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.excellentsystem.jagobangunpersadafx.View.Dialog.DetailTransaksiKeuanganController">
    <children>
-      <GridPane hgap="5.0" vgap="5.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <GridPane fx:id="gridpane" hgap="5.0" vgap="5.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <columnConstraints>
             <ColumnConstraints hgrow="SOMETIMES" maxWidth="110.0" minWidth="110.0" prefWidth="110.0" />
             <ColumnConstraints hgrow="SOMETIMES" />
@@ -27,10 +28,11 @@
             <RowConstraints maxHeight="5.0" minHeight="5.0" prefHeight="5.0" vgrow="SOMETIMES" />
             <RowConstraints maxHeight="30.0" minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES" />
             <RowConstraints maxHeight="30.0" minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="30.0" minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES" />
             <RowConstraints maxHeight="5.0" minHeight="5.0" prefHeight="5.0" vgrow="SOMETIMES" />
             <RowConstraints maxHeight="30.0" minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES" />
             <RowConstraints maxHeight="30.0" minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES" />
-            <RowConstraints maxHeight="30.0" minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="60.0" minHeight="60.0" prefHeight="60.0" vgrow="SOMETIMES" />
             <RowConstraints maxHeight="30.0" minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES" />
             <RowConstraints maxHeight="30.0" minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES" />
             <RowConstraints maxHeight="30.0" minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES" />
@@ -42,12 +44,11 @@
          </padding>
          <children>
             <Label style="-fx-font-size: 24;" styleClass="label-header" text="Detail Transaksi Keuangan" GridPane.columnSpan="2147483647" GridPane.halignment="LEFT" />
-            <Label text="Kategori" GridPane.rowIndex="6" />
-            <Label text="Keterangan" GridPane.rowIndex="7" />
-            <Label text="Jumlah Rp" GridPane.rowIndex="8" />
-            <ComboBox fx:id="kategoriCombo" maxWidth="1.7976931348623157E308" prefHeight="30.0" GridPane.columnIndex="1" GridPane.rowIndex="6" />
-            <TextField fx:id="keteranganField" prefHeight="30.0" GridPane.columnIndex="1" GridPane.rowIndex="7" />
-            <TextField fx:id="jumlahRpField" prefHeight="30.0" text="0" GridPane.columnIndex="1" GridPane.rowIndex="8" />
+            <Label text="Kategori" GridPane.rowIndex="7" />
+            <Label text="Keterangan" GridPane.rowIndex="8" />
+            <Label text="Jumlah Rp" GridPane.rowIndex="9" />
+            <ComboBox fx:id="kategoriCombo" maxWidth="1.7976931348623157E308" prefHeight="30.0" GridPane.columnIndex="1" GridPane.rowIndex="7" />
+            <TextField fx:id="jumlahRpField" prefHeight="30.0" text="0" GridPane.columnIndex="1" GridPane.rowIndex="9" />
             <Button mnemonicParsing="false" onAction="#close" prefHeight="30.0" prefWidth="30.0" GridPane.columnIndex="1" GridPane.halignment="RIGHT">
                <graphic>
                   <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
@@ -57,27 +58,30 @@
                   </ImageView>
                </graphic>
             </Button>
-            <Label text="Tipe Keuangan" GridPane.rowIndex="9" />
-            <ComboBox fx:id="tipeKeuanganCombo" maxWidth="1.7976931348623157E308" prefHeight="30.0" GridPane.columnIndex="1" GridPane.rowIndex="9" />
-            <HBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="200.0" spacing="1.0" GridPane.columnSpan="2147483647" GridPane.rowIndex="12">
+            <Label text="Tipe Keuangan" GridPane.rowIndex="10" />
+            <ComboBox fx:id="tipeKeuanganCombo" maxWidth="1.7976931348623157E308" prefHeight="30.0" GridPane.columnIndex="1" GridPane.rowIndex="10" />
+            <HBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="200.0" spacing="1.0" GridPane.columnSpan="2147483647" GridPane.rowIndex="13">
                <children>
                   <Button fx:id="saveButton" mnemonicParsing="false" prefHeight="30.0" prefWidth="100.0" text="Save" />
-                  <Button mnemonicParsing="false" prefHeight="30.0" prefWidth="100.0" text="Cancel" />
+                  <Button fx:id="cancelButton" mnemonicParsing="false" onAction="#close" prefHeight="30.0" prefWidth="100.0" text="Cancel" />
                </children>
             </HBox>
-            <Label text="Total Property" GridPane.rowIndex="10" />
-            <Label text="Total Bukti Gambar" GridPane.rowIndex="11" />
-            <TextField fx:id="totalPropertyField" disable="true" prefHeight="30.0" text="0" GridPane.columnIndex="1" GridPane.rowIndex="10" />
-            <TextField fx:id="totalImageField" disable="true" prefHeight="30.0" text="0" GridPane.columnIndex="1" GridPane.rowIndex="11" />
-            <Button mnemonicParsing="false" onAction="#setDetailProperty" prefHeight="30.0" prefWidth="30.0" text="..." GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="10" />
-            <Button mnemonicParsing="false" onAction="#setImage" prefHeight="30.0" prefWidth="30.0" text="..." GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="11" />
+            <Label text="Total Property" GridPane.rowIndex="11" />
+            <Label text="Total Bukti Gambar" GridPane.rowIndex="12" />
+            <TextField fx:id="totalPropertyField" disable="true" prefHeight="30.0" text="0" GridPane.columnIndex="1" GridPane.rowIndex="11" />
+            <TextField fx:id="totalImageField" disable="true" prefHeight="30.0" text="0" GridPane.columnIndex="1" GridPane.rowIndex="12" />
+            <Button mnemonicParsing="false" onAction="#setDetailProperty" prefHeight="30.0" prefWidth="30.0" text="..." GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="11" />
+            <Button mnemonicParsing="false" onAction="#setImage" prefHeight="30.0" prefWidth="30.0" text="..." GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="12" />
             <Label text="No Keuangan" GridPane.rowIndex="2" />
             <Label text="Tgl Input" GridPane.rowIndex="3" />
-            <Label text="Tgl Transaksi" GridPane.rowIndex="5" />
-            <Separator prefWidth="200.0" GridPane.columnSpan="2147483647" GridPane.rowIndex="4" />
-            <TextField disable="true" prefHeight="30.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-            <TextField disable="true" prefHeight="30.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-            <DatePicker maxWidth="1.7976931348623157E308" prefHeight="30.0" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+            <Label text="Tgl Transaksi" GridPane.rowIndex="6" />
+            <Separator prefWidth="200.0" GridPane.columnSpan="2147483647" GridPane.rowIndex="5" />
+            <TextField fx:id="noKeuanganField" disable="true" prefHeight="30.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+            <TextField fx:id="tglInputField" disable="true" prefHeight="30.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+            <DatePicker fx:id="tglKeuanganPicker" maxWidth="1.7976931348623157E308" prefHeight="30.0" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+            <Label text="User Input" GridPane.rowIndex="4" />
+            <TextField fx:id="userInputField" disable="true" prefHeight="30.0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+            <TextArea fx:id="keteranganField" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="8" />
          </children>
       </GridPane>
    </children>

@@ -81,7 +81,8 @@ import javax.crypto.spec.SecretKeySpec;
 public class Main extends Application {
     
     public static DecimalFormat qty = new DecimalFormat("###,##0.##");
-    public static DecimalFormat rp = new DecimalFormat("###,##0;(###,##0)");
+//    public static DecimalFormat rp = new DecimalFormat("###,##0;(###,##0)");
+    public static DecimalFormat rp = new DecimalFormat("###,##0");
     public static DateFormat tglBarang = new SimpleDateFormat("yyyy-MM-dd");
     public static DateFormat tglSql = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     public static DateFormat tgl = new SimpleDateFormat("dd MMM yyyy");
@@ -502,6 +503,7 @@ public class Main extends Application {
             if(splash!=null)
                 splash.close();
             splash = new Stage();
+            splash.getIcons().add(new Image(Main.class.getResourceAsStream("Resource/icon.png"),90,90,true,true));
             splash.initModality(Modality.WINDOW_MODAL);
             splash.initOwner(MainStage);
             splash.initStyle(StageStyle.TRANSPARENT);

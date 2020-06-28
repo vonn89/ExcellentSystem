@@ -5,9 +5,12 @@
  */
 package com.excellentsystem.jagobangunpersadafx.View.Report;
 
+import com.excellentsystem.jagobangunpersadafx.Function;
 import static com.excellentsystem.jagobangunpersadafx.Function.getTreeTableCell;
 import com.excellentsystem.jagobangunpersadafx.Main;
 import static com.excellentsystem.jagobangunpersadafx.Main.rp;
+import static com.excellentsystem.jagobangunpersadafx.Main.tgl;
+import static com.excellentsystem.jagobangunpersadafx.Main.tglBarang;
 import static com.excellentsystem.jagobangunpersadafx.Main.tglLengkap;
 import static com.excellentsystem.jagobangunpersadafx.Main.tglSql;
 import com.excellentsystem.jagobangunpersadafx.Model.Keuangan;
@@ -52,6 +55,7 @@ public class DetailKeuanganController  {
     @FXML private TreeTableColumn<Keuangan, String> deskripsiColumn;
     @FXML private TreeTableColumn<Keuangan, Number> jumlahRpColumn;
     @FXML private TreeTableColumn<Keuangan, String> kodeUserColumn;
+    @FXML private TreeTableColumn<Keuangan, String> tglInputColumn;
     
     @FXML private Label totalLabel;
     
@@ -74,11 +78,22 @@ public class DetailKeuanganController  {
         kodeUserColumn.setCellValueFactory(param -> param.getValue().getValue().kodeUserProperty());
         tglKeuanganColumn.setCellValueFactory(cellData -> { 
             try {
-                return new SimpleStringProperty(tglLengkap.format(tglSql.parse(cellData.getValue().getValue().getTglKeuangan())));
+                return new SimpleStringProperty(tgl.format(tglBarang.parse(cellData.getValue().getValue().getTglKeuangan())));
             } catch (Exception ex) {
                 return null;
             }
         });
+        tglKeuanganColumn.setCellFactory(col -> Function.getWrapTreeTableCell(tglKeuanganColumn));
+        tglKeuanganColumn.setComparator(Function.sortDate(tgl));
+        tglInputColumn.setCellValueFactory(cellData -> { 
+            try {
+                return new SimpleStringProperty(tglLengkap.format(tglSql.parse(cellData.getValue().getValue().getTglInput())));
+            } catch (Exception ex) {
+                return null;
+            }
+        });
+        tglInputColumn.setCellFactory(col -> Function.getWrapTreeTableCell(tglInputColumn));
+        tglInputColumn.setComparator(Function.sortDate(tglLengkap));
         jumlahRpColumn.setCellValueFactory(param -> param.getValue().getValue().jumlahRpProperty());
         jumlahRpColumn.setCellFactory(col -> getTreeTableCell(rp));
         
@@ -198,6 +213,10 @@ public class DetailKeuanganController  {
                     kk.setKodeProperty("");
                     kk.setDeskripsi(keu.getDeskripsi());
                     kk.setKodeUser(keu.getKodeUser());
+                    kk.setTglInput(keu.getTglInput());
+                    kk.setStatus(keu.getStatus());
+                    kk.setTglBatal(keu.getTglBatal());
+                    kk.setUserBatal(keu.getUserBatal());
                     TreeItem<Keuangan> child = new TreeItem<>(kk);
                     double total = 0;
                     for(Keuangan k : allKeuangan){

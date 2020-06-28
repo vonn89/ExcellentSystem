@@ -27,7 +27,8 @@
             <TableView fx:id="modalTable" prefHeight="200.0" prefWidth="2000.0" GridPane.rowIndex="1">
                <columns>
                   <TableColumn fx:id="noPerubahanModalColumn" maxWidth="1000.0" prefWidth="75.0" text="No Modal" />
-                  <TableColumn fx:id="tglPerubahanModalColumn" maxWidth="1000.0" prefWidth="75.0" text="Tgl Modal" />
+                  <TableColumn fx:id="tglPerubahanModalColumn" maxWidth="1000.0" prefWidth="75.0" text="Tgl Transaksi" />
+                  <TableColumn fx:id="tglInputColumn" maxWidth="1000.0" prefWidth="75.0" text="Tgl Input" />
                   <TableColumn fx:id="kategoriColumn" maxWidth="2000.0" prefWidth="75.0" text="Kategori" />
                   <TableColumn fx:id="deskripsiColumn" maxWidth="2000.0" prefWidth="75.0" text="Deskripsi" />
                   <TableColumn fx:id="jumlahRpColumn" maxWidth="1000.0" prefWidth="75.0" text="Jumlah Rp" />

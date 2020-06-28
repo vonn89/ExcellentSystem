@@ -135,6 +135,23 @@ public class Function {
         };
         return date;
     }
+    public static DateCell getDateCellOnlyThisMonth(LocalDate date){
+        return new DateCell() {
+            @Override
+            public void updateItem(LocalDate item, boolean empty) {
+                super.updateItem(item, empty);
+                DayOfWeek day = DayOfWeek.from(item);
+                if (day == DayOfWeek.SUNDAY) 
+                    this.setStyle("-fx-background-color: derive(seccolor1,150%);");
+                if (item.equals(LocalDate.now())) 
+                    this.setStyle("-fx-font-weight: bold;");
+                if (item.isAfter(date)) 
+                    this.setDisable(true);
+                if (item.isBefore(date.minusMonths(1))) 
+                    this.setDisable(true);
+            }
+        };
+    }
     public static DateCell getDateCellDisableBefore(LocalDate date){
         return new DateCell() {
             @Override
@@ -321,7 +338,7 @@ public class Function {
             System.out.println("start download");
             try{
                 StorageOptions storageOptions = StorageOptions.newBuilder().
-                        setProjectId("excellentSystem").
+                        setProjectId("auristeel-280420").
                         setCredentials(GoogleCredentials.fromStream(Main.class.getResourceAsStream("Resource/credentials.json"))).build();
                 Storage storage = storageOptions.getService();
 
@@ -357,7 +374,7 @@ public class Function {
             String status = "";
             System.out.println("start upload");
             StorageOptions storageOptions = StorageOptions.newBuilder().
-                    setProjectId("excellentSystem").
+                    setProjectId("auristeel-280420").
                     setCredentials(GoogleCredentials.fromStream(Main.class.getResourceAsStream("Resource/credentials.json"))).build();
             Storage storage = storageOptions.getService();
 

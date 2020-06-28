@@ -38,7 +38,6 @@ import com.excellentsystem.jagobangunpersadafx.View.Dialog.EditController;
 import com.excellentsystem.jagobangunpersadafx.View.Dialog.MessageController;
 import com.excellentsystem.jagobangunpersadafx.View.Dialog.TransferKeuanganController;
 import java.sql.Connection;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
@@ -78,8 +77,6 @@ public class KeuanganController {
     @FXML
     private TreeTableColumn<Keuangan, String> noKeuanganColumn;
     @FXML
-    private TreeTableColumn<Keuangan, String> tglKeuanganColumn;
-    @FXML
     private TreeTableColumn<Keuangan, String> tipeKeuanganColumn;
     @FXML
     private TreeTableColumn<Keuangan, String> kodePropertyColumn;
@@ -91,6 +88,8 @@ public class KeuanganController {
     private TreeTableColumn<Keuangan, Number> jumlahRpColumn;
     @FXML
     private TreeTableColumn<Keuangan, String> kodeUserColumn;
+    @FXML
+    private TreeTableColumn<Keuangan, String> tglInputColumn;
     @FXML
     private TextField searchField;
     @FXML
@@ -133,15 +132,15 @@ public class KeuanganController {
         kodeUserColumn.setCellValueFactory(param -> param.getValue().getValue().kodeUserProperty());
         kodeUserColumn.setCellFactory(col -> Function.getWrapTreeTableCell(kodeUserColumn));
 
-        tglKeuanganColumn.setCellValueFactory(cellData -> {
+        tglInputColumn.setCellValueFactory(cellData -> {
             try {
-                return new SimpleStringProperty(new SimpleDateFormat("hh:mm").format(tglSql.parse(cellData.getValue().getValue().getTglKeuangan())));
+                return new SimpleStringProperty(tglLengkap.format(tglSql.parse(cellData.getValue().getValue().getTglInput())));
             } catch (Exception ex) {
                 return null;
             }
         });
-        tglKeuanganColumn.setCellFactory(col -> Function.getWrapTreeTableCell(tglKeuanganColumn));
-        tglKeuanganColumn.setComparator(Function.sortDate(new SimpleDateFormat("hh:mm")));
+        tglInputColumn.setCellFactory(col -> Function.getWrapTreeTableCell(tglInputColumn));
+        tglInputColumn.setComparator(Function.sortDate(tglLengkap));
 
         jumlahRpColumn.setCellValueFactory(param -> param.getValue().getValue().jumlahRpProperty());
         jumlahRpColumn.setCellFactory(col -> getTreeTableCell(rp));
@@ -188,6 +187,10 @@ public class KeuanganController {
                             MenuItem addNew = new MenuItem("Add New Keuangan");
                             addNew.setOnAction(e -> {
                                 showNewKeuangan();
+                            });
+                            MenuItem detail = new MenuItem("Detail Transaksi Keuangan");
+                            detail.setOnAction((e) -> {
+                                detailTransaksiKeuangan(item);
                             });
                             MenuItem transfer = new MenuItem("Transfer Keuangan");
                             transfer.setOnAction(e -> {
@@ -262,20 +265,17 @@ public class KeuanganController {
                                 if (o.getJenis().equals("Add New Keuangan") && o.isStatus()) {
                                     rowMenu.getItems().add(addNew);
                                 }
+                                if (o.getJenis().equals("Detail Transaksi Keuangan") && o.isStatus()) {
+                                    rowMenu.getItems().add(detail);
+                                }
                                 if (o.getJenis().equals("Transfer Keuangan") && o.isStatus()) {
                                     rowMenu.getItems().add(transfer);
                                 }
                                 if (o.getJenis().equals("Edit Keterangan") && o.isStatus() && status) {
                                     rowMenu.getItems().add(edit);
-                                } 
+                                }
                                 if (o.getJenis().equals("Batal Keuangan") && o.isStatus() && status) {
-                                    if (sistem.getUser().getLevel().equals("Manager")) {
-                                        rowMenu.getItems().add(batal);
-                                    } else {
-                                        if (item.getTglKeuangan().substring(0, 10).equals(tglBarang.format(new Date()))) {
-                                            rowMenu.getItems().add(batal);
-                                        }
-                                    }
+                                    rowMenu.getItems().add(batal);
                                 }
                             }
                             if (item.getProperty() != null) {
@@ -408,7 +408,8 @@ public class KeuanganController {
                     filterData.add(temp);
                 } else {
                     if (checkColumn(temp.getNoKeuangan())
-                            || checkColumn(tglLengkap.format(tglSql.parse(temp.getTglKeuangan())))
+                            || checkColumn(tgl.format(tglBarang.parse(temp.getTglKeuangan())))
+                            || checkColumn(tglLengkap.format(tglSql.parse(temp.getTglInput())))
                             || checkColumn(temp.getTipeKeuangan())
                             || checkColumn(temp.getKodeProperty())
                             || checkColumn(temp.getKategori())
@@ -437,8 +438,8 @@ public class KeuanganController {
         }
         List<String> tanggal = new ArrayList<>();
         for (Keuangan temp : filterData) {
-            if (!tanggal.contains(temp.getTglKeuangan().substring(0, 10))) {
-                tanggal.add(temp.getTglKeuangan().substring(0, 10));
+            if (!tanggal.contains(temp.getTglKeuangan())) {
+                tanggal.add(temp.getTglKeuangan());
             }
         }
         for (String t : tanggal) {
@@ -448,7 +449,7 @@ public class KeuanganController {
             tglKeu.setKodeProperty("");
             TreeItem<Keuangan> parent = new TreeItem<>(tglKeu);
             for (Keuangan keu : filterData) {
-                if (t.equals(keu.getTglKeuangan().substring(0, 10))) {
+                if (t.equals(keu.getTglKeuangan())) {
                     Boolean status = true;
                     for (TreeItem<Keuangan> temp : parent.getChildren()) {
                         if (temp.getValue().getNoKeuangan().equals(keu.getNoKeuangan())) {
@@ -471,6 +472,10 @@ public class KeuanganController {
                             kk.setKodeProperty("");
                             kk.setDeskripsi(keu.getDeskripsi());
                             kk.setKodeUser(keu.getKodeUser());
+                            kk.setTglInput(keu.getTglInput());
+                            kk.setStatus(keu.getStatus());
+                            kk.setTglBatal(keu.getTglBatal());
+                            kk.setUserBatal(keu.getUserBatal());
                             TreeItem<Keuangan> child = new TreeItem<>(kk);
                             double total = 0;
                             for (Keuangan k : filterData) {
@@ -515,23 +520,31 @@ public class KeuanganController {
                             try (Connection con = Koneksi.getConnection()) {
                                 Keuangan d = new Keuangan();
                                 d.setNoKeuangan(null);
-                                d.setTglKeuangan(tglSql.format(new Date()));
+                                d.setTglKeuangan(tglBarang.format(new Date()));
                                 d.setTipeKeuangan(x.dariCombo.getSelectionModel().getSelectedItem());
                                 d.setKategori("Transfer Keuangan " + x.dariCombo.getSelectionModel().getSelectedItem() + "-" + x.keCombo.getSelectionModel().getSelectedItem());
                                 d.setKodeProperty("");
                                 d.setDeskripsi(x.keteranganField.getText());
                                 d.setJumlahRp(-Double.parseDouble(x.jumlahRpField.getText().replaceAll(",", "")));
                                 d.setKodeUser(sistem.getUser().getUsername());
+                                d.setTglInput(tglSql.format(new Date()));
+                                d.setStatus("true");
+                                d.setTglBatal("2000-01-01 00:00:00");
+                                d.setUserBatal("");
 
                                 Keuangan t = new Keuangan();
                                 t.setNoKeuangan(null);
-                                t.setTglKeuangan(tglSql.format(new Date()));
+                                t.setTglKeuangan(tglBarang.format(new Date()));
                                 t.setTipeKeuangan(x.keCombo.getSelectionModel().getSelectedItem());
                                 t.setKategori("Transfer Keuangan " + x.dariCombo.getSelectionModel().getSelectedItem() + "-" + x.keCombo.getSelectionModel().getSelectedItem());
                                 t.setKodeProperty("");
                                 t.setDeskripsi(x.keteranganField.getText());
                                 t.setJumlahRp(Double.parseDouble(x.jumlahRpField.getText().replaceAll(",", "")));
                                 t.setKodeUser(sistem.getUser().getUsername());
+                                t.setTglInput(tglSql.format(new Date()));
+                                t.setStatus("true");
+                                t.setTglBatal("2000-01-01 00:00:00");
+                                t.setUserBatal("");
                                 List<Keuangan> z = new ArrayList<>();
                                 z.add(d);
                                 z.add(t);
@@ -574,6 +587,7 @@ public class KeuanganController {
         FXMLLoader loader = mainApp.showDialog(mainApp.MainStage, stage, "View/Dialog/DetailTransaksiKeuangan.fxml");
         DetailTransaksiKeuanganController x = loader.getController();
         x.setMainApp(mainApp, mainApp.MainStage, stage);
+        x.setNewKeuangan();
         x.saveButton.setOnAction((ActionEvent event) -> {
             if ("0".equals(x.jumlahRpField.getText().replaceAll(",", ""))
                     || "".equals(x.jumlahRpField.getText().replaceAll(",", ""))) {
@@ -596,7 +610,7 @@ public class KeuanganController {
                             List<Keuangan> listKeuangan = new ArrayList<>();
                             if (Double.parseDouble(x.totalPropertyField.getText()) == 0) {
                                 Keuangan k = new Keuangan();
-                                k.setTglKeuangan(tglSql.format(new Date()));
+                                k.setTglKeuangan(x.tglKeuanganPicker.getValue().toString());
                                 k.setTipeKeuangan(x.tipeKeuanganCombo.getSelectionModel().getSelectedItem());
                                 k.setKategori(x.kategoriCombo.getSelectionModel().getSelectedItem());
                                 k.setKodeProperty("");
@@ -607,9 +621,13 @@ public class KeuanganController {
                                     k.setJumlahRp(-Double.parseDouble(x.jumlahRpField.getText().replaceAll(",", "")));
                                 }
                                 k.setKodeUser(sistem.getUser().getUsername());
+                                k.setTglInput(tglSql.format(new Date()));
+                                k.setStatus("true");
+                                k.setTglBatal("2000-01-01 00:00:00");
+                                k.setUserBatal("");
 
                                 Keuangan k2 = new Keuangan();
-                                k2.setTglKeuangan(tglSql.format(new Date()));
+                                k2.setTglKeuangan(x.tglKeuanganPicker.getValue().toString());
                                 k2.setKodeProperty("");
                                 k2.setKategori(x.kategoriCombo.getSelectionModel().getSelectedItem());
                                 k2.setDeskripsi(x.keteranganField.getText());
@@ -621,6 +639,10 @@ public class KeuanganController {
                                     k2.setJumlahRp(Double.parseDouble(x.jumlahRpField.getText().replaceAll(",", "")));
                                 }
                                 k2.setKodeUser(sistem.getUser().getUsername());
+                                k2.setTglInput(tglSql.format(new Date()));
+                                k2.setStatus("true");
+                                k2.setTglBatal("2000-01-01 00:00:00");
+                                k2.setUserBatal("");
 
                                 listKeuangan.add(k);
                                 listKeuangan.add(k2);
@@ -642,7 +664,7 @@ public class KeuanganController {
                                             d.setJumlahRp(total * d.getProperty().getLuasTanah() / totalLuas);
                                         }
                                         Keuangan k = new Keuangan();
-                                        k.setTglKeuangan(tglSql.format(new Date()));
+                                        k.setTglKeuangan(x.tglKeuanganPicker.getValue().toString());
                                         k.setKodeProperty(d.getKodeProperty());
                                         k.setKategori(x.kategoriCombo.getSelectionModel().getSelectedItem());
                                         k.setDeskripsi(x.keteranganField.getText());
@@ -653,9 +675,13 @@ public class KeuanganController {
                                             k.setJumlahRp(-d.getJumlahRp());
                                         }
                                         k.setKodeUser(sistem.getUser().getUsername());
+                                        k.setTglInput(tglSql.format(new Date()));
+                                        k.setStatus("true");
+                                        k.setTglBatal("2000-01-01 00:00:00");
+                                        k.setUserBatal("");
 
                                         Keuangan k2 = new Keuangan();
-                                        k2.setTglKeuangan(tglSql.format(new Date()));
+                                        k2.setTglKeuangan(x.tglKeuanganPicker.getValue().toString());
                                         k2.setKodeProperty(d.getKodeProperty());
                                         k2.setKategori(x.kategoriCombo.getSelectionModel().getSelectedItem());
                                         k2.setDeskripsi(x.keteranganField.getText());
@@ -667,13 +693,20 @@ public class KeuanganController {
                                             k2.setJumlahRp(d.getJumlahRp());
                                         }
                                         k2.setKodeUser(sistem.getUser().getUsername());
+                                        k2.setTglInput(tglSql.format(new Date()));
+                                        k2.setStatus("true");
+                                        k2.setTglBatal("2000-01-01 00:00:00");
+                                        k2.setUserBatal("");
 
                                         listKeuangan.add(k);
                                         listKeuangan.add(k2);
                                     }
                                 }
                             }
-                            return Service.saveAllTransaksiKeuangan(con, listKeuangan);
+                            if(x.totalImageField.getText().equals("0"))
+                                return Service.saveAllTransaksiKeuangan(con, listKeuangan);
+                            else
+                                return Service.saveAllTransaksiKeuanganWithImage(con, listKeuangan, x.listImage);
                         }
                     }
                 };
@@ -702,7 +735,13 @@ public class KeuanganController {
             }
         });
     }
-
+    private void detailTransaksiKeuangan(Keuangan k) {
+        Stage stage = new Stage();
+        FXMLLoader loader = mainApp.showDialog(mainApp.MainStage, stage, "View/Dialog/DetailTransaksiKeuangan.fxml");
+        DetailTransaksiKeuanganController x = loader.getController();
+        x.setMainApp(mainApp, mainApp.MainStage, stage);
+        x.setDetailKeuangan(k);
+    }
     private void edit(Keuangan k) {
         Stage stage = new Stage();
         FXMLLoader loader = mainApp.showDialog(mainApp.MainStage, stage, "View/Dialog/Edit.fxml");
@@ -749,7 +788,7 @@ public class KeuanganController {
                 @Override
                 public String call() throws Exception {
                     try (Connection con = Koneksi.getConnection()) {
-                        return Service.batalTransaksiKeuangan(con, keu);
+                        return Service.batalTransaksiKeuangan(con, keu.getNoKeuangan());
                     }
                 }
             };
