@@ -63,8 +63,8 @@ public class KeuanganDAO {
             k.setKodeUser(rs.getString(8));
             k.setTglInput(rs.getString(9));
             k.setStatus(rs.getString(10));
-            k.setUserBatal(rs.getString(11));
-            k.setTglBatal(rs.getString(12));
+            k.setTglBatal(rs.getString(11));
+            k.setUserBatal(rs.getString(12));
         }
         return k;
     }
@@ -85,8 +85,8 @@ public class KeuanganDAO {
             k.setKodeUser(rs.getString(8));
             k.setTglInput(rs.getString(9));
             k.setStatus(rs.getString(10));
-            k.setUserBatal(rs.getString(11));
-            k.setTglBatal(rs.getString(12));
+            k.setTglBatal(rs.getString(11));
+            k.setUserBatal(rs.getString(12));
             allKeuangan.add(k);
         }
         return allKeuangan;
@@ -108,8 +108,8 @@ public class KeuanganDAO {
             k.setKodeUser(rs.getString(8));
             k.setTglInput(rs.getString(9));
             k.setStatus(rs.getString(10));
-            k.setUserBatal(rs.getString(11));
-            k.setTglBatal(rs.getString(12));
+            k.setTglBatal(rs.getString(11));
+            k.setUserBatal(rs.getString(12));
             allKeuangan.add(k);
         }
         return allKeuangan;
@@ -135,8 +135,8 @@ public class KeuanganDAO {
             k.setKodeUser(rs.getString(8));
             k.setTglInput(rs.getString(9));
             k.setStatus(rs.getString(10));
-            k.setUserBatal(rs.getString(11));
-            k.setTglBatal(rs.getString(12));
+            k.setTglBatal(rs.getString(11));
+            k.setUserBatal(rs.getString(12));
             allKeuangan.add(k);
         }
         return allKeuangan;
@@ -179,8 +179,8 @@ public class KeuanganDAO {
         ps.setString(8, k.getKodeUser());
         ps.setString(9, k.getTglInput());
         ps.setString(10, k.getStatus());
-        ps.setString(11, k.getUserBatal());
-        ps.setString(12, k.getTglBatal());
+        ps.setString(11, k.getTglBatal());
+        ps.setString(12, k.getUserBatal());
         ps.executeUpdate();
     }
 //    public static void delete(Connection con, Keuangan k)throws Exception{
