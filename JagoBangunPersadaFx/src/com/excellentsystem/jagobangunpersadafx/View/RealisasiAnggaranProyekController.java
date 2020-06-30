@@ -438,14 +438,14 @@ public class RealisasiAnggaranProyekController  {
                                     r.setTglRealisasi(tglSql.format(new Date()));
                                     r.setKeterangan(x.keteranganField.getText());
                                     r.setSatuan(x.satuanField.getText());
-                                    r.setQty(Integer.parseInt(x.qtyField.getText().replaceAll(",", "")));
+                                    r.setQty(Double.parseDouble(x.qtyField.getText().replaceAll(",", "")));
                                     r.setJumlahRp(Double.parseDouble(x.totalField.getText().replaceAll(",", "")));
                                     r.setTipeKeuangan(x.tipeKeuanganCombo.getSelectionModel().getSelectedItem());
                                     r.setKodeUser(sistem.getUser().getUsername());
                                     r.setStatus("true");
                                     r.setTglBatal("2000-01-01 00:00:00");
                                     r.setUserBatal("");
-                                    return Service.saveRealisasi(con, r);
+                                    return Service.saveRealisasi(con, r, x.listImage);
                                 }
                             }
                         };
@@ -469,9 +469,6 @@ public class RealisasiAnggaranProyekController  {
                         new Thread(task).start();
                     }
                 }
-            });
-            x.cancelButton.setOnAction((event) -> {
-                mainApp.closeDialog(mainApp.MainStage, stage);
             });
         }
     }

@@ -189,9 +189,9 @@ public class RencanaAnggaranProyekController  {
                                 rowMenu.getItems().add(addNew);
                             if(o.getJenis().equals("Detail Rencana Anggaran Proyek")&&o.isStatus())
                                 rowMenu.getItems().add(detail);
-                            if(o.getJenis().equals("Edit Rencana Anggaran Proyek")&&o.isStatus())
+                            if(o.getJenis().equals("Edit Rencana Anggaran Proyek")&&o.isStatus()&&item.getStatusApproval().equals("On Review"))
                                 rowMenu.getItems().add(edit);
-                            if(o.getJenis().equals("Hapus Rencana Anggaran Proyek")&&o.isStatus())
+                            if(o.getJenis().equals("Hapus Rencana Anggaran Proyek")&&o.isStatus()&&item.getStatusApproval().equals("On Review"))
                                 rowMenu.getItems().add(batal);
                             if(o.getJenis().equals("Print Rencana Anggaran Proyek")&&o.isStatus())
                                 rowMenu.getItems().add(print);

@@ -992,7 +992,7 @@ public class Service {
         }
     }
     
-    public static String saveRealisasi(Connection con, RAPRealisasi r){
+    public static String saveRealisasi(Connection con, RAPRealisasi r, List<ImageView> listImage){
         try{
             con.setAutoCommit(false);
             String status = "true";
@@ -1026,6 +1026,26 @@ public class Service {
                 insertKeuangan(con, noKeuangan, tglBarang.format(new Date()), r.getTipeKeuangan(), "Realisasi Proyek", d.getKodeProperty(),
                         "Realisasi Proyek - "+r.getNoRap()+" - "+r.getNoUrut(), -nilai, sistem.getUser().getUsername(), 
                                         tglSql.format(new Date()), "true", "2000-01-01 00:00:00", "");
+            }
+            
+            int noUrutImage = 1;
+            for(ImageView i : listImage){
+                File tempFile = new File(r.getNoRap()+"-"+r.getNoUrut()+" - "+noUrutImage+".png");
+                BufferedImage bImage = SwingFXUtils.fromFXImage(i.getImage(), null);
+                ImageIO.write(bImage, "png", tempFile);
+                
+                StorageOptions storageOptions = StorageOptions.newBuilder().
+                        setProjectId("auristeel-280420").
+                        setCredentials(GoogleCredentials.fromStream(Main.class.getResourceAsStream("Resource/credentials.json"))).build();
+                Storage storage = storageOptions.getService();
+                
+                BlobId blobId = BlobId.of("jagobangunpersada", tempFile.getName());
+                BlobInfo blobInfo = BlobInfo.newBuilder(blobId).build();
+                storage.create(blobInfo, Files.readAllBytes(Paths.get(tempFile.getPath())));
+                
+                Files.deleteIfExists(tempFile.toPath()); 
+                
+                noUrutImage = noUrutImage + 1;
             }
             
             if(status.equals("true"))

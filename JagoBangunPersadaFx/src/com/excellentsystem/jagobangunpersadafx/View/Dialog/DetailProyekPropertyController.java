@@ -22,7 +22,6 @@ import javafx.concurrent.Task;
 import javafx.concurrent.WorkerStateEvent;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
@@ -98,16 +97,10 @@ public class DetailProyekPropertyController  {
                         setContextMenu(rm);
                     } else{
                         final ContextMenu rm = new ContextMenu();
-                        MenuItem edit = new MenuItem("Edit Persentase");
-                        edit.setOnAction((ActionEvent e)->{
-                            editPersentase(item);
-                        });
                         MenuItem refresh = new MenuItem("Refresh");
                         refresh.setOnAction((ActionEvent e)->{
                             propertyTable.refresh();
                         });
-                        if(kategoriPropertyCombo.isVisible())
-                            rm.getItems().add(edit);
                         rm.getItems().add(refresh);
                         setContextMenu(rm);
                     }
@@ -139,7 +132,7 @@ public class DetailProyekPropertyController  {
             kategoriPropertyCombo.setItems(allKategori);
 
             allMetode.clear();
-            allMetode.addAll("Rata-rata","Luas Tanah","Manual");
+            allMetode.addAll("Rata-rata","Luas Tanah");
             metodeCombo.getSelectionModel().select("Rata-rata");
 
             allKategori.addAll(Function.getKategoriProperty());
@@ -213,20 +206,6 @@ public class DetailProyekPropertyController  {
             });
             new Thread(task).start();
         }
-    }
-    private void editPersentase(RAPDetailProperty d){
-        Stage child = new Stage();
-        FXMLLoader loader = mainApp.showDialog(stage, child, "View/Dialog/Edit.fxml");
-        EditController x = loader.getController();
-        x.textField.setText(qty.format(d.getPersentase()));
-        Function.setNumberField(x.textField);
-        x.saveButton.setOnAction((event) -> {
-            metodeCombo.getSelectionModel().select("Manual");
-            d.setStatus(true);
-            d.setPersentase(Double.parseDouble(x.textField.getText().replaceAll(",", "")));
-            hitungTotal();
-            mainApp.closeDialog(stage, child);
-        });
     }
     @FXML
     private void hitungTotal(){
