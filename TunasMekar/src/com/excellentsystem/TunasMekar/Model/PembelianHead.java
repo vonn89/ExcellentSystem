@@ -20,9 +20,9 @@ public class PembelianHead {
     private final StringProperty noPembelian = new SimpleStringProperty();
     private final StringProperty tglPembelian = new SimpleStringProperty();
     private final StringProperty supplier = new SimpleStringProperty();
+    private final StringProperty paymentTerm = new SimpleStringProperty();
+    private final StringProperty jatuhTempo = new SimpleStringProperty();
     private final DoubleProperty totalPembelian = new SimpleDoubleProperty();
-    private final DoubleProperty ppn = new SimpleDoubleProperty();
-    private final DoubleProperty grandtotal = new SimpleDoubleProperty();
     private final DoubleProperty sisaPembayaran = new SimpleDoubleProperty();
     private final DoubleProperty pembayaran = new SimpleDoubleProperty();
     private final StringProperty status = new SimpleStringProperty();
@@ -32,29 +32,30 @@ public class PembelianHead {
     private List<PembelianDetail> listPembelianDetail;
     private List<Pembayaran> listPembayaran;
 
-    public double getGrandtotal() {
-        return grandtotal.get();
+    public String getJatuhTempo() {
+        return jatuhTempo.get();
     }
 
-    public void setGrandtotal(double value) {
-        grandtotal.set(value);
+    public void setJatuhTempo(String value) {
+        jatuhTempo.set(value);
     }
 
-    public DoubleProperty grandtotalProperty() {
-        return grandtotal;
+    public StringProperty jatuhTempoProperty() {
+        return jatuhTempo;
     }
 
-    public double getPpn() {
-        return ppn.get();
+    public String getPaymentTerm() {
+        return paymentTerm.get();
     }
 
-    public void setPpn(double value) {
-        ppn.set(value);
+    public void setPaymentTerm(String value) {
+        paymentTerm.set(value);
     }
 
-    public DoubleProperty ppnProperty() {
-        return ppn;
+    public StringProperty paymentTermProperty() {
+        return paymentTerm;
     }
+
 
     public List<Pembayaran> getListPembayaran() {
         return listPembayaran;

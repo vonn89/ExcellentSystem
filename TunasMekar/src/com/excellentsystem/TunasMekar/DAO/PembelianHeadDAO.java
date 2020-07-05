@@ -37,9 +37,9 @@ public class PembelianHeadDAO {
             p.setNoPembelian(rs.getString(1));
             p.setTglPembelian(rs.getString(2));
             p.setSupplier(rs.getString(3));
-            p.setTotalPembelian(rs.getDouble(4));
-            p.setPpn(rs.getDouble(5));
-            p.setGrandtotal(rs.getDouble(6));
+            p.setPaymentTerm(rs.getString(4));
+            p.setJatuhTempo(rs.getString(5));
+            p.setTotalPembelian(rs.getDouble(6));
             p.setPembayaran(rs.getDouble(7));
             p.setSisaPembayaran(rs.getDouble(8));
             p.setKodeUser(rs.getString(9));
@@ -61,9 +61,9 @@ public class PembelianHeadDAO {
             p.setNoPembelian(rs.getString(1));
             p.setTglPembelian(rs.getString(2));
             p.setSupplier(rs.getString(3));
-            p.setTotalPembelian(rs.getDouble(4));
-            p.setPpn(rs.getDouble(5));
-            p.setGrandtotal(rs.getDouble(6));
+            p.setPaymentTerm(rs.getString(4));
+            p.setJatuhTempo(rs.getString(5));
+            p.setTotalPembelian(rs.getDouble(6));
             p.setPembayaran(rs.getDouble(7));
             p.setSisaPembayaran(rs.getDouble(8));
             p.setKodeUser(rs.getString(9));
@@ -89,9 +89,9 @@ public class PembelianHeadDAO {
         ps.setString(1, p.getNoPembelian());
         ps.setString(2, p.getTglPembelian());
         ps.setString(3, p.getSupplier());
-        ps.setDouble(4, p.getTotalPembelian());
-        ps.setDouble(5, p.getPpn());
-        ps.setDouble(6, p.getGrandtotal());
+        ps.setString(4, p.getPaymentTerm());
+        ps.setString(5, p.getJatuhTempo());
+        ps.setDouble(6, p.getTotalPembelian());
         ps.setDouble(7, p.getPembayaran());
         ps.setDouble(8, p.getSisaPembayaran());
         ps.setString(9, p.getKodeUser());
@@ -102,13 +102,13 @@ public class PembelianHeadDAO {
     }
     public static void update(Connection con, PembelianHead p)throws Exception{
         PreparedStatement ps = con.prepareStatement("update tt_pembelian_head set "
-                + " tgl_pembelian = ?, supplier = ?, total_pembelian = ?, ppn = ?, grandtotal = ?, pembayaran = ?, sisa_pembayaran = ?, "
+                + " tgl_pembelian = ?, supplier = ?, payment_term = ?, jatuh_tempo = ?, total_pembelian = ?, pembayaran = ?, sisa_pembayaran = ?, "
                 + " kode_user = ?, status = ?, tgl_batal = ?, user_batal = ? where no_pembelian = ?");
         ps.setString(1, p.getTglPembelian());
         ps.setString(2, p.getSupplier());
-        ps.setDouble(3, p.getTotalPembelian());
-        ps.setDouble(4, p.getPpn());
-        ps.setDouble(5, p.getGrandtotal());
+        ps.setString(3, p.getPaymentTerm());
+        ps.setString(4, p.getJatuhTempo());
+        ps.setDouble(5, p.getTotalPembelian());
         ps.setDouble(6, p.getPembayaran());
         ps.setDouble(7, p.getSisaPembayaran());
         ps.setString(8, p.getKodeUser());

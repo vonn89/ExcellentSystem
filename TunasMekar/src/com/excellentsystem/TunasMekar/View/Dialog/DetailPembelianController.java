@@ -16,6 +16,7 @@ import com.excellentsystem.TunasMekar.Koneksi;
 import com.excellentsystem.TunasMekar.Main;
 import static com.excellentsystem.TunasMekar.Main.qty;
 import static com.excellentsystem.TunasMekar.Main.rp;
+import static com.excellentsystem.TunasMekar.Main.sistem;
 import static com.excellentsystem.TunasMekar.Main.tglLengkap;
 import static com.excellentsystem.TunasMekar.Main.tglSql;
 import static com.excellentsystem.TunasMekar.Main.timeout;
@@ -24,6 +25,8 @@ import com.excellentsystem.TunasMekar.Model.PembelianDetail;
 import com.excellentsystem.TunasMekar.Model.PembelianHead;
 import com.excellentsystem.TunasMekar.Model.Satuan;
 import java.sql.Connection;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import javafx.application.Platform;
@@ -38,6 +41,7 @@ import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ContextMenu;
+import javafx.scene.control.DatePicker;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
@@ -78,6 +82,8 @@ public class DetailPembelianController  {
     @FXML private TextField noPembelianField;
     @FXML private TextField tglPembelianField;
     @FXML public TextField supplierField;
+    @FXML public TextField paymentTermField;
+    @FXML public DatePicker jatuhTempoPicker;
     
     @FXML private TextField searchField;
     @FXML private Button searchButton;
@@ -310,6 +316,10 @@ public class DetailPembelianController  {
             }
         });
         pembelianDetailTable.setItems(allBarang);
+        jatuhTempoPicker.setConverter(Function.getTglConverter());
+        jatuhTempoPicker.setValue(LocalDate.parse(sistem.getTglSystem()));
+        jatuhTempoPicker.setDayCellFactory((final DatePicker datePicker) -> 
+                Function.getDateCellDisableBefore(LocalDate.parse(sistem.getTglSystem())));
     }    
     public void setMainApp(Main main, Stage stage) {
         mainApp = main;
@@ -396,7 +406,9 @@ public class DetailPembelianController  {
                 noPembelianField.setText(p.getNoPembelian());
                 tglPembelianField.setText(tglLengkap.format(tglSql.parse(p.getTglPembelian())));
                 supplierField.setText(p.getSupplier());
-                totalPembelianField.setText(rp.format(p.getGrandtotal()));
+                paymentTermField.setText(p.getPaymentTerm());
+                jatuhTempoPicker.setValue(LocalDate.parse(p.getJatuhTempo(),DateTimeFormatter.ISO_DATE));
+                totalPembelianField.setText(rp.format(p.getTotalPembelian()));
                 allBarang.clear();
                 allBarang.addAll(p.getListPembelianDetail());
                 List<MenuItem> removeMenu = new ArrayList<>();
@@ -407,6 +419,8 @@ public class DetailPembelianController  {
                 pembelianDetailTable.getContextMenu().getItems().removeAll(removeMenu);
                 
                 supplierField.setDisable(true);
+                paymentTermField.setDisable(true);
+                jatuhTempoPicker.setDisable(true);
                 searchField.setVisible(false);
                 searchButton.setVisible(false);
                 saveButton.setVisible(false);
@@ -454,7 +468,9 @@ public class DetailPembelianController  {
                 noPembelianField.setText(p.getNoPembelian());
                 tglPembelianField.setText(tglLengkap.format(tglSql.parse(p.getTglPembelian())));
                 supplierField.setText(p.getSupplier());
-                totalPembelianField.setText(rp.format(p.getGrandtotal()));
+                paymentTermField.setText(p.getPaymentTerm());
+                jatuhTempoPicker.setValue(LocalDate.parse(p.getJatuhTempo(),DateTimeFormatter.ISO_DATE));
+                totalPembelianField.setText(rp.format(p.getTotalPembelian()));
                 allBarang.clear();
                 allBarang.addAll(p.getListPembelianDetail());
                 for(PembelianDetail d : p.getListPembelianDetail()){

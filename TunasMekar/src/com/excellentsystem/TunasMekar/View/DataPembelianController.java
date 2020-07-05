@@ -15,7 +15,9 @@ import com.excellentsystem.TunasMekar.Koneksi;
 import com.excellentsystem.TunasMekar.Main;
 import static com.excellentsystem.TunasMekar.Main.rp;
 import static com.excellentsystem.TunasMekar.Main.sistem;
+import static com.excellentsystem.TunasMekar.Main.tglBarang;
 import static com.excellentsystem.TunasMekar.Main.tglLengkap;
+import static com.excellentsystem.TunasMekar.Main.tglNormal;
 import static com.excellentsystem.TunasMekar.Main.tglSql;
 import static com.excellentsystem.TunasMekar.Main.user;
 import com.excellentsystem.TunasMekar.Model.Pembayaran;
@@ -67,9 +69,9 @@ public class DataPembelianController  {
     @FXML private TableColumn<PembelianHead, String> noPembelianColumn;
     @FXML private TableColumn<PembelianHead, String> tglPembelianColumn;
     @FXML private TableColumn<PembelianHead, String> supplierColumn;
+    @FXML private TableColumn<PembelianHead, String> paymentTermColumn;
+    @FXML private TableColumn<PembelianHead, String> jatuhTempoColumn;
     @FXML private TableColumn<PembelianHead, Number> totalPembelianColumn;
-    @FXML private TableColumn<PembelianHead, Number> ppnColumn;
-    @FXML private TableColumn<PembelianHead, Number> grandtotalColumn;
     @FXML private TableColumn<PembelianHead, Number> pembayaranColumn;
     @FXML private TableColumn<PembelianHead, Number> sisaPembayaranColumn;
     @FXML private TableColumn<PembelianHead, String> kodeUserColumn;
@@ -102,14 +104,14 @@ public class DataPembelianController  {
         supplierColumn.setCellValueFactory(cellData -> cellData.getValue().supplierProperty());
         supplierColumn.setCellFactory(col -> Function.getWrapTableCell(supplierColumn));
         
+        paymentTermColumn.setCellValueFactory(cellData -> cellData.getValue().paymentTermProperty());
+        paymentTermColumn.setCellFactory(col -> Function.getWrapTableCell(paymentTermColumn));
+        
+        jatuhTempoColumn.setCellValueFactory(cellData -> cellData.getValue().jatuhTempoProperty());
+        jatuhTempoColumn.setCellFactory(col -> Function.getWrapTableCell(jatuhTempoColumn));
+        
         totalPembelianColumn.setCellValueFactory(cellData -> cellData.getValue().totalPembelianProperty());
         totalPembelianColumn.setCellFactory(col -> getTableCell(rp));
-        
-        ppnColumn.setCellValueFactory(cellData -> cellData.getValue().ppnProperty());
-        ppnColumn.setCellFactory(col -> getTableCell(rp));
-        
-        grandtotalColumn.setCellValueFactory(cellData -> cellData.getValue().grandtotalProperty());
-        grandtotalColumn.setCellFactory(col -> getTableCell(rp));
         
         pembayaranColumn.setCellValueFactory(cellData -> cellData.getValue().pembayaranProperty());
         pembayaranColumn.setCellFactory(col -> getTableCell(rp));
@@ -255,9 +257,9 @@ public class DataPembelianController  {
                     if(checkColumn(temp.getNoPembelian())||
                         checkColumn(tglLengkap.format(tglSql.parse(temp.getTglPembelian())))||
                         checkColumn(temp.getSupplier())||
+                        checkColumn(temp.getPaymentTerm())||
+                        checkColumn(tglNormal.format(tglBarang.parse(temp.getJatuhTempo())))||
                         checkColumn(rp.format(temp.getTotalPembelian()))||
-                        checkColumn(rp.format(temp.getPpn()))||
-                        checkColumn(rp.format(temp.getGrandtotal()))||
                         checkColumn(rp.format(temp.getPembayaran()))||
                         checkColumn(rp.format(temp.getSisaPembayaran()))||
                         checkColumn(temp.getKodeUser()))
@@ -274,7 +276,7 @@ public class DataPembelianController  {
         double totalPembayaran = 0;
         double totalSisaPembayaran = 0;
         for(PembelianHead d : filterData){
-            totalPembelian = totalPembelian + d.getGrandtotal();
+            totalPembelian = totalPembelian + d.getTotalPembelian();
             totalPembayaran = totalPembayaran + d.getPembayaran();
             totalSisaPembayaran = totalSisaPembayaran + d.getSisaPembayaran();
         }
@@ -301,10 +303,10 @@ public class DataPembelianController  {
                             p.setNoPembelian("");
                             p.setTglPembelian(Function.getSystemDate());
                             p.setSupplier(controller.supplierField.getText());
+                            p.setPaymentTerm(controller.paymentTermField.getText());
+                            p.setJatuhTempo(controller.jatuhTempoPicker.getValue().toString());
 ;
                             p.setTotalPembelian(Double.parseDouble(controller.totalPembelianField.getText().replaceAll(",", "")));
-                            p.setPpn(0);
-                            p.setGrandtotal(Double.parseDouble(controller.totalPembelianField.getText().replaceAll(",", "")));
                             p.setPembayaran(0);
                             p.setSisaPembayaran(Double.parseDouble(controller.totalPembelianField.getText().replaceAll(",", "")));
                             p.setKodeUser(user.getKodeUser());
@@ -385,8 +387,8 @@ public class DataPembelianController  {
                             pbNew.setTglPembelian(Function.getSystemDate());
                             pbNew.setSupplier(controller.supplierField.getText());
                             pbNew.setTotalPembelian(Double.parseDouble(controller.totalPembelianField.getText().replaceAll(",", "")));
-                            pbNew.setPpn(0);
-                            pbNew.setGrandtotal(Double.parseDouble(controller.totalPembelianField.getText().replaceAll(",", "")));
+                            pbNew.setPaymentTerm(controller.paymentTermField.getText());
+                            pbNew.setJatuhTempo(controller.jatuhTempoPicker.getValue().toString());
 
                             List<Pembayaran> listPembayaran = new ArrayList<>();
                             Pembayaran pp = new Pembayaran();
@@ -463,7 +465,7 @@ public class DataPembelianController  {
             for(PembelianDetail d : p.getListPembelianDetail()){
                 status = status + " - "+rp.format(d.getQty())+" "+d.getSatuan()+"   "+d.getNamaBarang()+"  : Rp "+rp.format(d.getHargaBeli())+"\n";
             }
-            status = status + "Total Pembelian : "+rp.format(p.getGrandtotal())+"\n";
+            status = status + "Total Pembelian : "+rp.format(p.getTotalPembelian())+"\n";
             status = status + "Pembayaran : "+rp.format(p.getPembayaran())+"\n";
             status = status + "Sisa Pembayaran : "+rp.format(p.getSisaPembayaran())+"\n";
             controller.textArea.setText(status);

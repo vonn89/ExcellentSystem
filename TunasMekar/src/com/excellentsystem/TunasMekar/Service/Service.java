@@ -1476,17 +1476,14 @@ public class Service {
                 i = i + 1;
             }
             for (PembelianDetail d : group) {
-                if(p.getPpn()!=0){
-                    d.setTotal(d.getTotal()*1.1);
-                }
                 status = updateStokMasuk(con, "Pembelian", p.getNoPembelian(), d.getKodeBarang(),
                         d.getQtyMasuk(), d.getTotal(), status);
             }
             
             insertKeuangan(con, nokeuangan, "Hutang Pembelian", "Pembelian",
-                    p.getNoPembelian(), p.getGrandtotal(), p.getKodeUser());
+                    p.getNoPembelian(), p.getTotalPembelian(), p.getKodeUser());
             insertKeuangan(con, nokeuangan, "Stok Barang", "Pembelian",
-                    p.getNoPembelian(), p.getGrandtotal(), p.getKodeUser());
+                    p.getNoPembelian(), p.getTotalPembelian(), p.getKodeUser());
 
             if (status.equals("true")) {
                 con.commit();
@@ -1531,9 +1528,9 @@ public class Service {
 
             pbLama.setListPembelianDetail(PembelianDetailDAO.getAll(con, pbLama.getNoPembelian()));
             insertKeuangan(con, nokeuangan, "Hutang Pembelian", "Batal Pembelian",
-                    pbLama.getNoPembelian(), -pbLama.getGrandtotal(), pbLama.getKodeUser());
+                    pbLama.getNoPembelian(), -pbLama.getTotalPembelian(), pbLama.getKodeUser());
             insertKeuangan(con, nokeuangan, "Stok Barang", "Batal Pembelian",
-                    pbLama.getNoPembelian(), -pbLama.getGrandtotal(), pbLama.getKodeUser());
+                    pbLama.getNoPembelian(), -pbLama.getTotalPembelian(), pbLama.getKodeUser());
 
             List<PembelianDetail> groupKeluar = new ArrayList<>();
             for (PembelianDetail d : pbLama.getListPembelianDetail()) {
@@ -1635,9 +1632,9 @@ public class Service {
             }
 
             insertKeuangan(con, nokeuangan, "Hutang Pembelian", "Pembelian",
-                    pbBaru.getNoPembelian(), pbBaru.getGrandtotal(), pbBaru.getKodeUser());
+                    pbBaru.getNoPembelian(), pbBaru.getTotalPembelian(), pbBaru.getKodeUser());
             insertKeuangan(con, nokeuangan, "Stok Barang", "Pembelian",
-                    pbBaru.getNoPembelian(), pbBaru.getGrandtotal(), pbBaru.getKodeUser());
+                    pbBaru.getNoPembelian(), pbBaru.getTotalPembelian(), pbBaru.getKodeUser());
 
             List<StokBarang> listStok = new ArrayList<>();
             for (PembelianDetail d : groupKeluar) {
@@ -1733,16 +1730,13 @@ public class Service {
                 }
             }
             for (PembelianDetail d : group) {
-                if(p.getPpn()!=0){
-                    d.setTotal(d.getTotal()*1.1);
-                }
                 status = updateStokKeluar(con, "Batal Pembelian", p.getNoPembelian(), d.getKodeBarang(),
                         d.getQtyMasuk(), d.getTotal(), status);
             }
             insertKeuangan(con, nokeuangan, "Hutang Pembelian", "Batal Pembelian",
-                    p.getNoPembelian(), -p.getGrandtotal(), p.getKodeUser());
+                    p.getNoPembelian(), -p.getTotalPembelian(), p.getKodeUser());
             insertKeuangan(con, nokeuangan, "Stok Barang", "Batal Pembelian",
-                    p.getNoPembelian(), -p.getGrandtotal(), p.getKodeUser());
+                    p.getNoPembelian(), -p.getTotalPembelian(), p.getKodeUser());
             
             p.setListPembayaran(PembayaranDAO.getAllByNoTransaksiAndStatus(con, p.getNoPembelian(), "true"));
             for (Pembayaran pp : p.getListPembayaran()) {
