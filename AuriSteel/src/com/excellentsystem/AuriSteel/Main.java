@@ -132,7 +132,7 @@ public class Main extends Application {
     public static Sistem sistem;
     private double x = 0;
     private double y = 0;
-    public final String version = "2.2.2";
+    public final String version = "2.2.3";
     public static SecretKeySpec key;
     @Override
     public void start(Stage stage)  {
@@ -181,12 +181,7 @@ public class Main extends Application {
                     if(!version.equals(sistem.getVersion())){
                         updateMessage("updating software...");
                         updateProgress(50, 100);
-                        String status = Function.downloadUpdateGoogleStorage("Auri Steel.exe");
-                        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                        alert.setTitle("Information");
-                        alert.setContentText(status);
-                        alert.showAndWait();
-                        System.exit(0);
+                        return Function.downloadUpdateGoogleStorage("Auri Steel.exe");
                     }
 //                Service.createAbsensi(con, 01, 2020);
 //                System.out.println(Function.getServerDate(con).getDate());
@@ -213,9 +208,9 @@ public class Main extends Application {
             if(task.getValue().equals("true")){
                 showLoginScene();
             }else{
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("Error");
-                alert.setContentText("Application Failed - \n" +task.getValue());
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Information");
+                alert.setContentText(task.getValue());
                 alert.showAndWait();
                 System.exit(0);
             }
@@ -723,6 +718,7 @@ public class Main extends Application {
             if(splash!=null)
                 splash.close();
             splash = new Stage();
+            splash.getIcons().add(new Image(getClass().getResourceAsStream("Resource/icon.png")));
             splash.initModality(Modality.WINDOW_MODAL);
             splash.initOwner(MainStage);
             splash.initStyle(StageStyle.TRANSPARENT);
