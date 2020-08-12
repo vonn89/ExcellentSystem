@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="LaporanProyekAnggaranMaterial" language="groovy" pageWidth="275" pageHeight="802" columnWidth="275" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" isFloatColumnFooter="true" isIgnorePagination="true" uuid="d124af95-0a8e-4c31-8d2f-44b57f75025a">
+	<property name="ireport.zoom" value="2.3579476910000023"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<style name="columnHeader" mode="Opaque" forecolor="#FFFFFF" backcolor="#00457F" fontSize="9">
+		<box>
+			<topPen lineWidth="1.0" lineColor="#005B7F"/>
+			<leftPen lineWidth="1.0" lineColor="#005B7F"/>
+			<bottomPen lineWidth="1.0" lineColor="#005B7F"/>
+			<rightPen lineWidth="1.0" lineColor="#005B7F"/>
+		</box>
+		<paragraph leftIndent="5" rightIndent="5"/>
+	</style>
+	<style name="columnDetail" forecolor="#00457F" fontSize="9">
+		<box>
+			<leftPen lineWidth="1.0"/>
+			<rightPen lineWidth="1.0"/>
+		</box>
+		<paragraph leftIndent="5" rightIndent="5"/>
+	</style>
+	<queryString>
+		<![CDATA[]]>
+	</queryString>
+	<field name="hargaBeli" class="java.lang.Double">
+		<fieldDescription><![CDATA[hargaBeli]]></fieldDescription>
+	</field>
+	<field name="namaBarang" class="java.lang.String">
+		<fieldDescription><![CDATA[namaBarang]]></fieldDescription>
+	</field>
+	<field name="hargaJual" class="java.lang.Double">
+		<fieldDescription><![CDATA[hargaJual]]></fieldDescription>
+	</field>
+	<field name="qty" class="java.lang.Double">
+		<fieldDescription><![CDATA[qty]]></fieldDescription>
+	</field>
+	<field name="satuan" class="java.lang.String">
+		<fieldDescription><![CDATA[satuan]]></fieldDescription>
+	</field>
+	<variable name="totalAnggaranMaterial" class="java.lang.Double" calculation="Sum">
+		<variableExpression><![CDATA[$F{qty}*$F{hargaJual}]]></variableExpression>
+	</variable>
+	<variable name="totalPembelian" class="java.lang.Double" calculation="Sum">
+		<variableExpression><![CDATA[$F{qty}*$F{hargaBeli}]]></variableExpression>
+	</variable>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<columnHeader>
+		<band height="20" splitType="Stretch">
+			<staticText>
+				<reportElement style="columnHeader" x="0" y="0" width="89" height="20" uuid="38dccef3-ed62-46ab-895c-a18877c50a56"/>
+				<textElement verticalAlignment="Middle">
+					<paragraph leftIndent="5"/>
+				</textElement>
+				<text><![CDATA[Nama Barang]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="columnHeader" x="91" y="0" width="25" height="20" uuid="aef919d5-6d52-47d4-bea5-f84146a65d98"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[Qty]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="columnHeader" x="118" y="0" width="46" height="20" uuid="b7f7e176-7818-4135-8b63-2c4961b6091d"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Satuan]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="columnHeader" x="166" y="0" width="53" height="20" uuid="2f280f2f-b890-4588-b36f-93fc482630aa"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Harga Beli]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="columnHeader" x="221" y="0" width="54" height="20" uuid="42959abc-f57c-4402-a56c-352f17c2162d"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Harga Jual]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField>
+				<reportElement style="columnDetail" x="0" y="0" width="90" height="20" uuid="32467945-0d03-4157-950b-29b3ef3ec1cf"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{namaBarang}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0">
+				<reportElement style="columnDetail" x="90" y="0" width="27" height="20" uuid="79a84db6-db42-4b9f-9ceb-35a2ff77a5da"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{qty}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="columnDetail" x="117" y="0" width="48" height="20" uuid="d57b9cf2-f31a-45a5-bbc6-965eae1ccc35"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{satuan}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0">
+				<reportElement style="columnDetail" x="165" y="0" width="55" height="20" uuid="743c6a56-0d59-4e0d-83b3-20fa4f3112a2"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{hargaBeli}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0">
+				<reportElement style="columnDetail" x="220" y="0" width="55" height="20" uuid="c8898771-ec84-4b56-83b2-ffcc2c7e1c66"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{hargaJual}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="42">
+			<textField pattern="#,##0">
+				<reportElement style="columnHeader" x="166" y="0" width="109" height="20" uuid="57336a39-d0d1-46ed-8ac1-8261c86090ba"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<paragraph rightIndent="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{totalPembelian}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement style="columnHeader" x="0" y="0" width="164" height="20" uuid="117853c9-a92b-406c-9670-a6901509ac77"/>
+				<textElement verticalAlignment="Middle">
+					<paragraph leftIndent="5"/>
+				</textElement>
+				<text><![CDATA[Total Pembelian]]></text>
+			</staticText>
+			<textField pattern="#,##0">
+				<reportElement style="columnHeader" x="166" y="22" width="109" height="20" uuid="701831db-a5cb-4409-9a5a-fab48e7c0cad"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<paragraph rightIndent="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{totalAnggaranMaterial}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement style="columnHeader" x="0" y="22" width="164" height="20" uuid="28373dc5-c187-488e-a8ba-a7ce019881f5"/>
+				<textElement verticalAlignment="Middle">
+					<paragraph leftIndent="5"/>
+				</textElement>
+				<text><![CDATA[Total Anggaran Material]]></text>
+			</staticText>
+		</band>
+	</columnFooter>
+</jasperReport>

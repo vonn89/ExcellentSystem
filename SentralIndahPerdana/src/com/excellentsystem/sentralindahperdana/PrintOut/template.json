@@ -1,0 +1,45 @@
+{
+     "pageFormat": {
+         "characterPitch": "12",
+         "lineSpacing": "1/8",
+         "pageLength": 36,
+         "pageWidth": 95,
+         "usePageLengthFromPrinter": false
+     },
+     "template": {
+         "header": [ "                                     SURAT JALAN                                     " ,
+                     "No Surat Jalan  : ${noSuratJalan}",
+                     "Tgl Pengiriman  : ${tglPengiriman}",
+                     "Jenis Kendaraan : ${jenisKendaraan}",
+                     "No Polisi       : ${noPolisi}",
+                     "Nama Supir      : ${namaSupir}",
+                     "",
+                     "Tujuan Pengiriman :",
+                     " Nama   : ${nama}",
+                     " Alamat : ${alamat}",
+                     ""
+         ],
+         "detail": [
+             {
+                "table": "table",
+                "border": true,
+                "columns": [
+                    { "caption": "No", "source": "no::center", "width": 4},
+                    { "caption": "Nama Barang", "source": "namaBarang", "width": 30 },
+                    { "caption": "Qty", "source": "qty::center", "width": 8 },
+                    { "caption": "Satuan", "source": "satuan::center", "width": 8 },
+                    { "caption": "Keterangan", "source": "keterangan", "width": 40 }
+                ]
+             }
+         ],
+         "footer": [ "Barang sudah diterima dalam keadaan BAIK dan CUKUP oleh :",
+                     "Tgl Penerimaan : ",
+                     "",
+                     "",
+                     "",
+                     "",
+                     "",
+                     "       (Penerima)                                                 (Bag. Pengiriman)            "
+         ] 
+     }
+ }

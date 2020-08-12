@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+
+<AnchorPane id="AnchorPane" prefHeight="700.0" prefWidth="600.0" styleClass="dialog" stylesheets="@../../Resource/MyTheme.css" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.excellentsystem.sentralindahperdana.View.Dialog.AddPekerjaanController">
+   <children>
+      <GridPane fx:id="gridpane" hgap="7.0" layoutX="20.0" layoutY="59.0" prefHeight="495.0" vgap="7.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+        <columnConstraints>
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="110.0" minWidth="110.0" prefWidth="110.0" />
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+        </columnConstraints>
+        <rowConstraints>
+            <RowConstraints fillHeight="false" maxHeight="30.0" minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES" />
+          <RowConstraints fillHeight="false" maxHeight="30.0" minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES" />
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints fillHeight="false" maxHeight="5.0" minHeight="5.0" prefHeight="5.0" vgrow="SOMETIMES" />
+          <RowConstraints fillHeight="false" maxHeight="30.0" minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints fillHeight="false" maxHeight="30.0" minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints fillHeight="false" maxHeight="30.0" minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints fillHeight="false" maxHeight="30.0" minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints fillHeight="false" maxHeight="30.0" minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints fillHeight="false" maxHeight="30.0" minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints fillHeight="false" maxHeight="30.0" minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints fillHeight="false" maxHeight="30.0" minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES" />
+        </rowConstraints>
+         <children>
+            <TableView fx:id="pekerjaanTable" prefHeight="200.0" prefWidth="200.0" tableMenuButtonVisible="true" GridPane.columnSpan="2147483647" GridPane.rowIndex="2">
+              <columns>
+                <TableColumn fx:id="kodePekerjaanColumn" maxWidth="1000.0" prefWidth="75.0" text="Kode Pekerjaan" visible="false" />
+                  <TableColumn fx:id="kodeKategoriColumn" maxWidth="1000.0" prefWidth="75.0" text="Kode Kategori" />
+                <TableColumn fx:id="namaPekerjaanColumn" maxWidth="3000.0" prefWidth="75.0" text="Nama Pekerjaan" />
+                  <TableColumn fx:id="keteranganColumn" maxWidth="4000.0" prefWidth="75.0" text="Keterangan" visible="false" />
+                  <TableColumn fx:id="satuanColumn" maxWidth="1000.0" prefWidth="75.0" text="Satuan" />
+                  <TableColumn fx:id="hargaColumn" maxWidth="1000.0" prefWidth="75.0" text="Laba Persen" visible="false" />
+              </columns>
+               <columnResizePolicy>
+                  <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+               </columnResizePolicy>
+            </TableView>
+            <TextField fx:id="searchField" prefHeight="30.0" promptText="Search..." styleClass="search-field" GridPane.columnSpan="2147483647" GridPane.rowIndex="1" />
+            <Label style="-fx-font-size: 24;" text="Add Item">
+               
+            </Label>
+            <Button fx:id="addButton" defaultButton="true" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="30.0" text="Add" GridPane.columnSpan="2" GridPane.rowIndex="11" />
+            <Label text="Kode Pekerjaan" GridPane.rowIndex="4" />
+            <Label text="Nama Pekerjaan" GridPane.rowIndex="5" />
+            <Label text="Keterangan" GridPane.rowIndex="6" />
+            <Label text="Qty" GridPane.rowIndex="8" />
+            <Label text="Harga" GridPane.rowIndex="9" />
+            <Label prefHeight="30.0" text="Total " GridPane.rowIndex="10" />
+            <Button cancelButton="true" mnemonicParsing="false" onAction="#close" prefHeight="30.0" prefWidth="30.0" GridPane.columnIndex="1" GridPane.halignment="RIGHT">
+               <graphic>
+                  <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../Resource/close.png" />
+                     </image>
+                  </ImageView>
+               </graphic></Button>
+            <HBox prefHeight="100.0" prefWidth="200.0" spacing="5.0" GridPane.columnIndex="1" GridPane.rowIndex="4">
+               <children>
+                  <TextField fx:id="kodePekerjaanField" disable="true" editable="false" maxWidth="1.7976931348623157E308" prefHeight="30.0" HBox.hgrow="ALWAYS" />
+               </children>
+            </HBox>
+            <TextField fx:id="namaPekerjaanField" disable="true" editable="false" prefHeight="30.0" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+            <TextArea fx:id="keteranganField" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="6" GridPane.rowSpan="2" />
+            <HBox prefHeight="100.0" prefWidth="200.0" spacing="5.0" GridPane.columnIndex="1" GridPane.rowIndex="8">
+               <children>
+                  <TextField fx:id="qtyField" prefHeight="30.0" prefWidth="100.0" text="0" />
+                  <TextField fx:id="satuanField" disable="true" maxWidth="1.7976931348623157E308" prefHeight="30.0" HBox.hgrow="ALWAYS" />
+               </children>
+            </HBox>
+            <TextField fx:id="hargaJualField" maxWidth="1.7976931348623157E308" prefHeight="30.0" text="0" GridPane.columnIndex="1" GridPane.rowIndex="9" />
+            <TextField fx:id="totalField" disable="true" editable="false" maxWidth="1.7976931348623157E308" prefHeight="30.0" text="0" GridPane.columnIndex="1" GridPane.rowIndex="10" />
+         </children>
+         <padding>
+            <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
+         </padding>
+      </GridPane>
+   </children>
+</AnchorPane>

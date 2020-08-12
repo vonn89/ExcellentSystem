@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" pageWidth="275" pageHeight="842" columnWidth="275" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" isFloatColumnFooter="true" isIgnorePagination="true" uuid="44af4020-1730-41e1-9008-1d1a9d89be05">
+	<property name="ireport.zoom" value="2.4200000000000017"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<style name="columnHeader" mode="Opaque" forecolor="#FFFFFF" backcolor="#00457F" fontSize="9">
+		<box>
+			<topPen lineWidth="1.0" lineColor="#005B7F"/>
+			<leftPen lineWidth="1.0" lineColor="#005B7F"/>
+			<bottomPen lineWidth="1.0" lineColor="#005B7F"/>
+			<rightPen lineWidth="1.0" lineColor="#005B7F"/>
+		</box>
+		<paragraph leftIndent="5" rightIndent="5"/>
+	</style>
+	<style name="columnDetail" forecolor="#00457F" fontSize="9">
+		<box>
+			<leftPen lineWidth="1.0"/>
+			<rightPen lineWidth="1.0"/>
+		</box>
+		<paragraph leftIndent="5" rightIndent="5"/>
+	</style>
+	<queryString>
+		<![CDATA[]]>
+	</queryString>
+	<field name="namaBarang" class="java.lang.String">
+		<fieldDescription><![CDATA[namaBarang]]></fieldDescription>
+	</field>
+	<field name="nilai" class="java.lang.Double">
+		<fieldDescription><![CDATA[nilai]]></fieldDescription>
+	</field>
+	<field name="qty" class="java.lang.Double">
+		<fieldDescription><![CDATA[qty]]></fieldDescription>
+	</field>
+	<field name="satuan" class="java.lang.String">
+		<fieldDescription><![CDATA[satuan]]></fieldDescription>
+	</field>
+	<variable name="totalBebanMaterial" class="java.lang.Double" calculation="Sum">
+		<variableExpression><![CDATA[$F{nilai}]]></variableExpression>
+	</variable>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<columnHeader>
+		<band height="20" splitType="Stretch">
+			<staticText>
+				<reportElement style="columnHeader" x="0" y="0" width="89" height="20" uuid="81516542-5c27-4875-9967-9b12d87982ca"/>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[Nama Barang]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="columnHeader" x="91" y="0" width="25" height="20" uuid="0223f2ae-ec02-47ae-9854-581c92ed51bb"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Qty]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="columnHeader" x="118" y="0" width="46" height="20" uuid="67b685cb-8cd7-4b99-b64c-dd482753077e"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Satuan]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="columnHeader" x="166" y="0" width="109" height="20" uuid="736f8751-221b-4be4-86fd-f72013f85c22"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Nilai Pokok]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField>
+				<reportElement style="columnDetail" x="0" y="0" width="90" height="20" uuid="1cd4d60d-2843-4bcb-93a4-e264b8ae8e6b"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{namaBarang}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0">
+				<reportElement style="columnDetail" x="90" y="0" width="27" height="20" uuid="eb3ac2db-c4e3-4e07-95c8-932b7e6a38a8"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{qty}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="columnDetail" x="117" y="0" width="48" height="20" uuid="67d83d73-9fb8-49ca-a481-6d205a398e7e"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{satuan}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0">
+				<reportElement style="columnDetail" x="165" y="0" width="110" height="20" uuid="9a0f226d-c716-43a7-b489-6d1cd0a19d39"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{nilai}/$F{qty}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="20" splitType="Stretch">
+			<textField pattern="#,##0">
+				<reportElement style="columnHeader" x="166" y="0" width="109" height="20" uuid="3089bfa0-9cc5-4bda-9b7b-d6cdcf9ea048"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$V{totalBebanMaterial}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement style="columnHeader" x="0" y="0" width="164" height="20" uuid="2ecc4d84-a65d-4cd0-a588-8a102eca4bb5"/>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[Total Beban Material]]></text>
+			</staticText>
+		</band>
+	</columnFooter>
+</jasperReport>

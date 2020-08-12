@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+
+<AnchorPane id="AnchorPane" prefHeight="700.0" prefWidth="1024.0" style="-fx-background-radius: 5;" styleClass="stage" stylesheets="@../../Resource/MyTheme.css" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.excellentsystem.sentralindahperdana.View.Dialog.NewPenjualanController">
+   <children>
+      <GridPane hgap="5.0" layoutX="34.0" layoutY="247.0" prefHeight="453.0" prefWidth="1024.0" vgap="5.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+        <columnConstraints>
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="110.0" minWidth="110.0" prefWidth="110.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="1.7976931348623157E308" minWidth="10.0" percentWidth="20.0" prefWidth="100.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="1.7976931348623157E308" minWidth="10.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="120.0" minWidth="120.0" prefWidth="120.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="1.7976931348623157E308" minWidth="10.0" percentWidth="20.0" prefWidth="100.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="1.7976931348623157E308" minWidth="10.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="110.0" minWidth="110.0" prefWidth="110.0" />
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="1.7976931348623157E308" minWidth="10.0" percentWidth="20.0" prefWidth="100.0" />
+        </columnConstraints>
+        <rowConstraints>
+            <RowConstraints fillHeight="false" maxHeight="30.0" minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints fillHeight="false" maxHeight="5.0" minHeight="5.0" prefHeight="5.0" vgrow="SOMETIMES" />
+            <RowConstraints fillHeight="false" maxHeight="30.0" minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints fillHeight="false" maxHeight="30.0" minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints fillHeight="false" maxHeight="30.0" minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints fillHeight="false" maxHeight="30.0" minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES" />
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints fillHeight="false" maxHeight="30.0" minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints fillHeight="false" maxHeight="30.0" minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES" />
+        </rowConstraints>
+         <children>
+            <Button fx:id="addItemButton" mnemonicParsing="false" onAction="#addPekerjaan" prefHeight="30.0" prefWidth="120.0" text="Add Item" GridPane.columnIndex="7" GridPane.halignment="RIGHT" GridPane.rowIndex="5" />
+            <TableView fx:id="penjualanDetailTable" tableMenuButtonVisible="true" GridPane.columnSpan="2147483647" GridPane.rowIndex="6">
+              <columns>
+                <TableColumn fx:id="kodePekerjaanColumn" maxWidth="2000.0" prefWidth="75.0" text="Kode Pekerjaan" visible="false" />
+                <TableColumn fx:id="namaPekerjaanColumn" prefWidth="75.0" text="Nama Pekerjaan" />
+                  <TableColumn fx:id="keteranganColumn" prefWidth="75.0" text="Keterangan" />
+                  <TableColumn fx:id="satuanColumn" maxWidth="2000.0" prefWidth="75.0" text="Satuan" />
+                  <TableColumn fx:id="qtyColumn" maxWidth="2000.0" prefWidth="75.0" text="Qty" />
+                  <TableColumn fx:id="hargaColumn" maxWidth="2000.0" prefWidth="75.0" text="Harga" />
+                  <TableColumn fx:id="totalColumn" maxWidth="3000.0" prefWidth="75.0" text="Total" />
+                  <TableColumn fx:id="removeColumn" maxWidth="50.0" minWidth="50.0" prefWidth="50.0" resizable="false" />
+              </columns>
+               <columnResizePolicy>
+                  <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+               </columnResizePolicy>
+            </TableView>
+            <Label text="Catatan" GridPane.rowIndex="7">
+            </Label>
+            <Label text="Total Penjualan" GridPane.columnIndex="6" GridPane.rowIndex="7">
+            </Label>
+            <TextField fx:id="totalPenjualanField" disable="true" editable="false" prefHeight="30.0" prefWidth="1000.0" text="0" GridPane.columnIndex="7" GridPane.rowIndex="7" />
+            <TextArea fx:id="catatanField" wrapText="true" GridPane.columnIndex="1" GridPane.columnSpan="4" GridPane.rowIndex="7" GridPane.rowSpan="2" />
+            <AnchorPane prefHeight="200.0" prefWidth="1000.0" GridPane.columnIndex="6" GridPane.columnSpan="2" GridPane.rowIndex="8">
+               <children>
+                  <Button fx:id="saveButton" layoutX="69.0" layoutY="2.0" mnemonicParsing="false" onAction="#save" prefHeight="30.0" prefWidth="100.0" text="Save" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+               </children>
+            </AnchorPane>
+            <VBox alignment="CENTER" prefHeight="100.0" prefWidth="350.0" style="-fx-border-color: seccolor3; -fx-border-radius: 3;" GridPane.columnIndex="6" GridPane.columnSpan="2" GridPane.rowIndex="2" GridPane.rowSpan="3">
+               <children>
+                  <Label fx:id="noPenjualanField" style="-fx-font-size: 45;" styleClass="label-header" text="PI-1708001" />
+                  <Label fx:id="tglPenjualanField" style="-fx-font-size: 20;" styleClass="label-header" text="Senin, 27 Agustus 2017" />
+               </children>
+            </VBox>
+            <Button fx:id="cancelButton" mnemonicParsing="false" onAction="#close" prefHeight="30.0" prefWidth="30.0" GridPane.columnIndex="7" GridPane.halignment="RIGHT">
+               <graphic>
+                  <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../Resource/close.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </Button>
+            <Label style="-fx-font-size: 24;" text="Detail Penjualan" GridPane.columnSpan="2147483647" />
+            <Label text="Nama Proyek" GridPane.columnIndex="3" GridPane.rowIndex="2" />
+            <Label text="Lokasi Pengerjaan" GridPane.columnIndex="3" GridPane.rowIndex="3" />
+            <TextField fx:id="namaProyekField" prefHeight="30.0" GridPane.columnIndex="4" GridPane.rowIndex="2" />
+            <TextArea fx:id="lokasiPengerjaanField" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="4" GridPane.rowIndex="3" GridPane.rowSpan="2" />
+            <Label text="Nama Customer" GridPane.rowIndex="2" />
+            <TextField fx:id="namaField" disable="true" editable="false" prefHeight="30.0" prefWidth="1000.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+            <Button fx:id="addCustomerButton" mnemonicParsing="false" onAction="#addCustomer" prefHeight="30.0" prefWidth="30.0" text="..." GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="2" />
+            <Label text="Alamat Customer" GridPane.rowIndex="3" />
+            <TextArea fx:id="alamatField" disable="true" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="3" GridPane.rowSpan="2" />
+         </children>
+         <padding>
+            <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
+         </padding>
+      </GridPane>
+   </children> 
+</AnchorPane>

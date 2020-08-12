@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="LaporanProyekBebanPenjualan" language="groovy" pageWidth="275" pageHeight="802" columnWidth="275" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" isFloatColumnFooter="true" isIgnorePagination="true" uuid="3dbe3189-4e8d-46c4-98d1-44e3044aa365">
+	<property name="ireport.zoom" value="2.1435888100000016"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<style name="columnHeader" mode="Opaque" forecolor="#FFFFFF" backcolor="#00457F" fontSize="9">
+		<box>
+			<topPen lineWidth="1.0" lineColor="#005B7F"/>
+			<leftPen lineWidth="1.0" lineColor="#005B7F"/>
+			<bottomPen lineWidth="1.0" lineColor="#005B7F"/>
+			<rightPen lineWidth="1.0" lineColor="#005B7F"/>
+		</box>
+		<paragraph leftIndent="5" rightIndent="5"/>
+	</style>
+	<style name="columnDetail" forecolor="#00457F" fontSize="9">
+		<box>
+			<leftPen lineWidth="1.0"/>
+			<rightPen lineWidth="1.0"/>
+		</box>
+		<paragraph leftIndent="5" rightIndent="5"/>
+	</style>
+	<queryString>
+		<![CDATA[]]>
+	</queryString>
+	<field name="kategori" class="java.lang.String">
+		<fieldDescription><![CDATA[kategori]]></fieldDescription>
+	</field>
+	<field name="jumlahRp" class="java.lang.Double">
+		<fieldDescription><![CDATA[jumlahRp]]></fieldDescription>
+	</field>
+	<field name="keterangan" class="java.lang.String">
+		<fieldDescription><![CDATA[keterangan]]></fieldDescription>
+	</field>
+	<variable name="totalBebanPenjualan" class="java.lang.Double" calculation="Sum">
+		<variableExpression><![CDATA[$F{jumlahRp}]]></variableExpression>
+	</variable>
+	<variable name="totalKategori" class="java.lang.Double" resetType="Group" resetGroup="kategori" calculation="Sum">
+		<variableExpression><![CDATA[$F{jumlahRp}]]></variableExpression>
+	</variable>
+	<group name="kategori">
+		<groupExpression><![CDATA[$F{kategori}]]></groupExpression>
+		<groupFooter>
+			<band height="20">
+				<textField pattern="#,##0">
+					<reportElement style="columnDetail" x="166" y="0" width="109" height="20" uuid="bc4b71c6-d3c5-49e3-b13d-3bba8fcae807"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle"/>
+					<textFieldExpression><![CDATA[$V{totalKategori}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement style="columnDetail" x="0" y="0" width="166" height="20" uuid="3c907b95-c4b4-403e-b318-7fddc25a905c"/>
+					<textElement verticalAlignment="Middle"/>
+					<textFieldExpression><![CDATA[$F{kategori}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupFooter>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<columnHeader>
+		<band height="25" splitType="Stretch">
+			<staticText>
+				<reportElement style="columnHeader" x="0" y="5" width="165" height="20" uuid="fceb9ced-4654-4ad0-9f54-ea4f876cbf42"/>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[Kategori]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="columnHeader" x="167" y="5" width="108" height="20" uuid="c8cc96d8-bff2-4ae9-b376-43276f367d7c"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<text><![CDATA[Jumlah Rp]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<columnFooter>
+		<band height="20" splitType="Stretch">
+			<textField pattern="#,##0">
+				<reportElement style="columnHeader" x="167" y="0" width="108" height="20" uuid="33a70d17-cd33-4bb5-b11e-aace9c2675dd"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$V{totalBebanPenjualan}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement style="columnHeader" x="0" y="0" width="165" height="20" uuid="1b9c0295-bf8f-4bf0-86ce-ab6709bb5f6d"/>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[Total Beban Penjualan]]></text>
+			</staticText>
+		</band>
+	</columnFooter>
+</jasperReport>
