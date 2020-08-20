@@ -64,6 +64,7 @@
                               <TableColumn fx:id="jumlahRpColumn" prefWidth="75.0" text="Jumlah Rp" />
                               <TableColumn fx:id="tipeKeuanganColumn" prefWidth="75.0" text="Tipe Keuangan" visible="false" />
                               <TableColumn fx:id="kodeUserRealisasiColumn" prefWidth="75.0" text="Kode User" visible="false" />
+                              <TableColumn fx:id="totalImageColumn" prefWidth="75.0" text="Bukti Gambar" />
                           </columns>
                            <columnResizePolicy>
                               <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />

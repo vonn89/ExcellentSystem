@@ -26,11 +26,24 @@ public class RAPRealisasi {
     private final DoubleProperty qty = new SimpleDoubleProperty();
     private final DoubleProperty jumlahRp = new SimpleDoubleProperty();
     private final StringProperty tipeKeuangan = new SimpleStringProperty();
+    private final IntegerProperty totalImage = new SimpleIntegerProperty();
     private final StringProperty kodeUser = new SimpleStringProperty();
     private final StringProperty status = new SimpleStringProperty();
     private final StringProperty tglBatal = new SimpleStringProperty();
     private final StringProperty userBatal = new SimpleStringProperty();
     private RAPHead rapHead;
+
+    public int getTotalImage() {
+        return totalImage.get();
+    }
+
+    public void setTotalImage(int value) {
+        totalImage.set(value);
+    }
+
+    public IntegerProperty totalImageProperty() {
+        return totalImage;
+    }
 
     public RAPHead getRapHead() {
         return rapHead;

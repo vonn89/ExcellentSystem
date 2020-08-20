@@ -44,10 +44,11 @@ public class RAPRealisasiDAO {
             d.setQty(rs.getDouble(6));
             d.setJumlahRp(rs.getDouble(7));
             d.setTipeKeuangan(rs.getString(8));
-            d.setKodeUser(rs.getString(9));
-            d.setStatus(rs.getString(10));
-            d.setTglBatal(rs.getString(11));
-            d.setUserBatal(rs.getString(12));
+            d.setTotalImage(rs.getInt(9));
+            d.setKodeUser(rs.getString(10));
+            d.setStatus(rs.getString(11));
+            d.setTglBatal(rs.getString(12));
+            d.setUserBatal(rs.getString(13));
             allRAPRealisasi.add(d);
         }
         return allRAPRealisasi;
@@ -68,10 +69,11 @@ public class RAPRealisasiDAO {
             d.setQty(rs.getDouble(6));
             d.setJumlahRp(rs.getDouble(7));
             d.setTipeKeuangan(rs.getString(8));
-            d.setKodeUser(rs.getString(9));
-            d.setStatus(rs.getString(10));
-            d.setTglBatal(rs.getString(11));
-            d.setUserBatal(rs.getString(12));
+            d.setTotalImage(rs.getInt(9));
+            d.setKodeUser(rs.getString(10));
+            d.setStatus(rs.getString(11));
+            d.setTglBatal(rs.getString(12));
+            d.setUserBatal(rs.getString(13));
             allRAPRealisasi.add(d);
         }
         return allRAPRealisasi;
@@ -92,15 +94,16 @@ public class RAPRealisasiDAO {
             d.setQty(rs.getDouble(6));
             d.setJumlahRp(rs.getDouble(7));
             d.setTipeKeuangan(rs.getString(8));
-            d.setKodeUser(rs.getString(9));
-            d.setStatus(rs.getString(10));
-            d.setTglBatal(rs.getString(11));
-            d.setUserBatal(rs.getString(12));
+            d.setTotalImage(rs.getInt(9));
+            d.setKodeUser(rs.getString(10));
+            d.setStatus(rs.getString(11));
+            d.setTglBatal(rs.getString(12));
+            d.setUserBatal(rs.getString(13));
         }
         return d;
     }
     public static void insert(Connection con, RAPRealisasi d)throws Exception{
-        PreparedStatement ps = con.prepareStatement("insert into tt_rap_realisasi values(?,?,?,?,?,?,?,?,?,?,?,?)");
+        PreparedStatement ps = con.prepareStatement("insert into tt_rap_realisasi values(?,?,?,?,?,?,?,?,?,?,?,?,?)");
         ps.setString(1, d.getNoRap());
         ps.setInt(2, d.getNoUrut());
         ps.setString(3, d.getTglRealisasi());
@@ -109,16 +112,17 @@ public class RAPRealisasiDAO {
         ps.setDouble(6, d.getQty());
         ps.setDouble(7, d.getJumlahRp());
         ps.setString(8, d.getTipeKeuangan());
-        ps.setString(9, d.getKodeUser());
-        ps.setString(10, d.getStatus());
-        ps.setString(11, d.getTglBatal());
-        ps.setString(12, d.getUserBatal());
+        ps.setInt(9, d.getTotalImage());
+        ps.setString(10, d.getKodeUser());
+        ps.setString(11, d.getStatus());
+        ps.setString(12, d.getTglBatal());
+        ps.setString(13, d.getUserBatal());
         ps.executeUpdate();
     }
     public static void update(Connection con, RAPRealisasi d)throws Exception{
         PreparedStatement ps = con.prepareStatement("update tt_rap_realisasi set "
                 + " tgl_realisasi=?, keterangan=?, satuan=?, qty=?, jumlah_rp=?, "
-                + " tipe_keuangan=?, kode_user=?, status=?, tgl_batal=?, user_batal=? "
+                + " tipe_keuangan=?, total_image=?, kode_user=?, status=?, tgl_batal=?, user_batal=? "
                 + " where no_rap=? and no_urut=?");
         ps.setString(1, d.getTglRealisasi());
         ps.setString(2, d.getKeterangan());
@@ -126,12 +130,13 @@ public class RAPRealisasiDAO {
         ps.setDouble(4, d.getQty());
         ps.setDouble(5, d.getJumlahRp());
         ps.setString(6, d.getTipeKeuangan());
-        ps.setString(7, d.getKodeUser());
-        ps.setString(8, d.getStatus());
-        ps.setString(9, d.getTglBatal());
-        ps.setString(10, d.getUserBatal());
-        ps.setString(11, d.getNoRap());
-        ps.setInt(12, d.getNoUrut());
+        ps.setInt(7, d.getTotalImage());
+        ps.setString(8, d.getKodeUser());
+        ps.setString(9, d.getStatus());
+        ps.setString(10, d.getTglBatal());
+        ps.setString(11, d.getUserBatal());
+        ps.setString(12, d.getNoRap());
+        ps.setInt(13, d.getNoUrut());
         ps.executeUpdate();
     }
 }

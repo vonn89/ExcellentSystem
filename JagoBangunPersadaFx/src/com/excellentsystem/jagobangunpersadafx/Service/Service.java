@@ -45,6 +45,7 @@ import com.excellentsystem.jagobangunpersadafx.DAO.TerimaPembayaranDAO;
 import com.excellentsystem.jagobangunpersadafx.DAO.TipeKeuanganDAO;
 import com.excellentsystem.jagobangunpersadafx.DAO.TukangDAO;
 import com.excellentsystem.jagobangunpersadafx.DAO.UserDAO;
+import com.excellentsystem.jagobangunpersadafx.Function;
 import com.excellentsystem.jagobangunpersadafx.Main;
 import static com.excellentsystem.jagobangunpersadafx.Main.sistem;
 import static com.excellentsystem.jagobangunpersadafx.Main.tglBarang;
@@ -115,7 +116,7 @@ import javax.imageio.ImageIO;
 public class Service {
     
     private static void insertKeuangan(Connection con, String noKeuangan, String tanggal, String tipeKeuangan, 
-            String kategori, String kodeProperty, String deskripsi, double jumlahRp, String kodeUser, 
+            String kategori, String kodeProperty, String deskripsi, double jumlahRp, int totalImage, String kodeUser, 
             String tglInput, String status, String tglBatal, String userBatal)throws Exception{
         Keuangan k = new Keuangan();
         k.setNoKeuangan(noKeuangan);
@@ -125,6 +126,7 @@ public class Service {
         k.setKodeProperty(kodeProperty);
         k.setDeskripsi(deskripsi);
         k.setJumlahRp(jumlahRp);
+        k.setTotalImage(totalImage);
         k.setKodeUser(kodeUser);
         k.setTglInput(tglInput);
         k.setStatus(status);
@@ -153,10 +155,10 @@ public class Service {
                             if(status){
                                 String noKeuangan = KeuanganDAO.getIdByDate(con, tglBarang.parse(tglSusut.toString()));
                                 insertKeuangan(con, noKeuangan, tglSusut.toString(), "ASET TETAP", aset.getKategori(), "", 
-                                        "Penyusutan Aset Tetap Ke-"+i+" ("+aset.getNoAset()+")", -penyusutanPerbulan, "System", 
+                                        "Penyusutan Aset Tetap Ke-"+i+" ("+aset.getNoAset()+")", -penyusutanPerbulan, 0, "System", 
                                         tglSql.format(new Date()), "true", "2000-01-01 00:00:00", "");
                                 insertKeuangan(con, noKeuangan, tglSusut.toString(), "BEBAN", "Beban Penyusutan Aset Tetap", "", 
-                                        "Penyusutan Aset Tetap Ke-"+i+" ("+aset.getNoAset()+")", penyusutanPerbulan, "System", 
+                                        "Penyusutan Aset Tetap Ke-"+i+" ("+aset.getNoAset()+")", penyusutanPerbulan, 0, "System", 
                                         tglSql.format(new Date()), "true", "2000-01-01 00:00:00", "");
                             }
                             totalPenyusutan = totalPenyusutan + penyusutanPerbulan;
@@ -642,7 +644,7 @@ public class Service {
             PropertyDAO.update(con, p);
             
             insertKeuangan(con, noKeuangan, tglBarang.format(new Date()), "ASET LANCAR", "Tanah & Bangunan", p.getKodeProperty(),  
-                    "Pemecahan Property - "+head.getNoPemecahan(), -head.getNilaiProperty(), sistem.getUser().getUsername(), 
+                    "Pemecahan Property - "+head.getNoPemecahan(), -head.getNilaiProperty(), 0, sistem.getUser().getUsername(), 
                                         tglSql.format(new Date()), "true", "2000-01-01 00:00:00", "");
             
             for(PemecahanPropertyDetail detail : head.getAllDetail()){
@@ -654,7 +656,7 @@ public class Service {
                 PropertyDAO.insert(con, detail.getProperty());
                 
                 insertKeuangan(con, noKeuangan, tglBarang.format(new Date()), "ASET LANCAR", "Tanah & Bangunan", detail.getProperty().getKodeProperty(), 
-                        "Pemecahan Property - "+head.getNoPemecahan(), detail.getProperty().getNilaiProperty(), sistem.getUser().getUsername(), 
+                        "Pemecahan Property - "+head.getNoPemecahan(), detail.getProperty().getNilaiProperty(), 0, sistem.getUser().getUsername(), 
                                         tglSql.format(new Date()), "true", "2000-01-01 00:00:00", "");
             }
             if(status.equals("true"))
@@ -688,7 +690,7 @@ public class Service {
             PropertyDAO.insert(con, head.getProperty());
             
             insertKeuangan(con, noKeuangan, tglBarang.format(new Date()), "ASET LANCAR", "Tanah & Bangunan",  head.getProperty().getKodeProperty(),
-                    "Penggabungan Property - "+head.getNoPenggabungan(), head.getProperty().getNilaiProperty(), sistem.getUser().getUsername(), 
+                    "Penggabungan Property - "+head.getNoPenggabungan(), head.getProperty().getNilaiProperty(), 0, sistem.getUser().getUsername(), 
                                         tglSql.format(new Date()), "true", "2000-01-01 00:00:00", "");
                         
             for(PenggabunganPropertyDetail d : head.getAllDetail()){
@@ -698,7 +700,7 @@ public class Service {
                 PropertyDAO.update(con, d.getProperty());
                 
                 insertKeuangan(con, noKeuangan, tglBarang.format(new Date()), "ASET LANCAR", "Tanah & Bangunan",  d.getProperty().getKodeProperty(),
-                        "Penggabungan Property - "+head.getNoPenggabungan(), -d.getProperty().getNilaiProperty(), sistem.getUser().getUsername(), 
+                        "Penggabungan Property - "+head.getNoPenggabungan(), -d.getProperty().getNilaiProperty(), 0, sistem.getUser().getUsername(), 
                                         tglSql.format(new Date()), "true", "2000-01-01 00:00:00", "");
             }
             if(status.equals("true"))
@@ -728,12 +730,12 @@ public class Service {
             PropertyDAO.insert(con, pembelian.getProperty());
             
             insertKeuangan(con, noKeuangan, tglBarang.format(new Date()), "ASET LANCAR", "Tanah & Bangunan", pembelian.getProperty().getKodeProperty(),
-                    "Pembelian Tanah - "+pembelian.getNoPembelian(), pembelian.getHargaBeli(), sistem.getUser().getUsername(), 
+                    "Pembelian Tanah - "+pembelian.getNoPembelian(), pembelian.getHargaBeli(), 0, sistem.getUser().getUsername(), 
                                         tglSql.format(new Date()), "true", "2000-01-01 00:00:00", "");
             
             if(jumlahBayar!=0){
                 insertKeuangan(con, noKeuangan, tglBarang.format(new Date()), pembelian.getTipeKeuangan(), "Pembelian Tanah", pembelian.getProperty().getKodeProperty(),
-                        "Pembelian Tanah - "+pembelian.getNoPembelian(), -jumlahBayar, sistem.getUser().getUsername(), 
+                        "Pembelian Tanah - "+pembelian.getNoPembelian(), -jumlahBayar, 0, sistem.getUser().getUsername(), 
                                         tglSql.format(new Date()), "true", "2000-01-01 00:00:00", "");
             }
             
@@ -751,7 +753,7 @@ public class Service {
                 HutangDAO.insert(con, h);
                 
                 insertKeuangan(con, noKeuangan, tglBarang.format(new Date()), "HUTANG", "Hutang Pembelian Tanah", pembelian.getKodeProperty(),
-                        "Pembelian Tanah - "+pembelian.getNoPembelian(), pembelian.getHargaBeli()-jumlahBayar, sistem.getUser().getUsername(), 
+                        "Pembelian Tanah - "+pembelian.getNoPembelian(), pembelian.getHargaBeli()-jumlahBayar, 0, sistem.getUser().getUsername(), 
                                         tglSql.format(new Date()), "true", "2000-01-01 00:00:00", "");
             }
             
@@ -829,11 +831,11 @@ public class Service {
                 PropertyDAO.update(con, prop);
                 
                 insertKeuangan(con, noKeuangan, tglBarang.format(new Date()), "ASET LANCAR", "Tanah & Bangunan", d.getKodeProperty(),
-                        "Pembangunan - "+p.getNoPembangunan(), d.getBiaya(), sistem.getUser().getUsername(), 
+                        "Pembangunan - "+p.getNoPembangunan(), d.getBiaya(), 0, sistem.getUser().getUsername(), 
                                         tglSql.format(new Date()), "true", "2000-01-01 00:00:00", "");
 
                 insertKeuangan(con, noKeuangan, tglBarang.format(new Date()), p.getTipeKeuangan(), "Pembangunan", d.getKodeProperty(),
-                        "Pembangunan - "+p.getNoPembangunan(), -d.getBiaya(), sistem.getUser().getUsername(), 
+                        "Pembangunan - "+p.getNoPembangunan(), -d.getBiaya(), 0, sistem.getUser().getUsername(), 
                                         tglSql.format(new Date()), "true", "2000-01-01 00:00:00", "");
             }
             if(status.equals("true"))
@@ -1020,30 +1022,33 @@ public class Service {
                 PropertyDAO.update(con, prop);
                 
                 insertKeuangan(con, noKeuangan, tglBarang.format(new Date()), "ASET LANCAR", "Tanah & Bangunan", d.getKodeProperty(),
-                        "Realisasi Proyek - "+r.getNoRap()+" - "+r.getNoUrut(), nilai, sistem.getUser().getUsername(), 
+                        "Realisasi Proyek - "+r.getNoRap()+" - "+r.getNoUrut(), nilai, listImage.size(), sistem.getUser().getUsername(), 
                                         tglSql.format(new Date()), "true", "2000-01-01 00:00:00", "");
 
                 insertKeuangan(con, noKeuangan, tglBarang.format(new Date()), r.getTipeKeuangan(), "Realisasi Proyek", d.getKodeProperty(),
-                        "Realisasi Proyek - "+r.getNoRap()+" - "+r.getNoUrut(), -nilai, sistem.getUser().getUsername(), 
+                        "Realisasi Proyek - "+r.getNoRap()+" - "+r.getNoUrut(), -nilai, listImage.size(), sistem.getUser().getUsername(), 
                                         tglSql.format(new Date()), "true", "2000-01-01 00:00:00", "");
             }
             
             int noUrutImage = 1;
             for(ImageView i : listImage){
-                File tempFile = new File(r.getNoRap()+"-"+r.getNoUrut()+" - "+noUrutImage+".png");
+                File tempFile = new File("temp.jpg");
                 BufferedImage bImage = SwingFXUtils.fromFXImage(i.getImage(), null);
-                ImageIO.write(bImage, "png", tempFile);
+                ImageIO.write(bImage, "jpg", tempFile);
+                
+                File compressFile = Function.compress(tempFile, r.getNoRap()+"-"+r.getNoUrut()+" - "+noUrutImage+".jpg");
                 
                 StorageOptions storageOptions = StorageOptions.newBuilder().
                         setProjectId("auristeel-280420").
                         setCredentials(GoogleCredentials.fromStream(Main.class.getResourceAsStream("Resource/credentials.json"))).build();
                 Storage storage = storageOptions.getService();
                 
-                BlobId blobId = BlobId.of("jagobangunpersada", tempFile.getName());
+                BlobId blobId = BlobId.of("jagobangunpersada", compressFile.getName());
                 BlobInfo blobInfo = BlobInfo.newBuilder(blobId).build();
-                storage.create(blobInfo, Files.readAllBytes(Paths.get(tempFile.getPath())));
+                storage.create(blobInfo, Files.readAllBytes(Paths.get(compressFile.getPath())));
                 
                 Files.deleteIfExists(tempFile.toPath()); 
+                Files.deleteIfExists(compressFile.toPath()); 
                 
                 noUrutImage = noUrutImage + 1;
             }
@@ -1122,11 +1127,11 @@ public class Service {
             PropertyDAO.update(con, stj.getProperty());
             
             insertKeuangan(con, noKeuangan, tglBarang.format(new Date()), stj.getTipeKeuangan(), "Terima Tanda Jadi", stj.getKodeProperty(),
-                    "Terima Tanda Jadi - "+stj.getNoSTJ(), stj.getJumlahRp(), sistem.getUser().getUsername(), 
+                    "Terima Tanda Jadi - "+stj.getNoSTJ(), stj.getJumlahRp(), 0, sistem.getUser().getUsername(), 
                                         tglSql.format(new Date()), "true", "2000-01-01 00:00:00", "");
 
             insertKeuangan(con, noKeuangan, tglBarang.format(new Date()), "HUTANG", "Terima Tanda Jadi", stj.getKodeProperty(),
-                    "Terima Tanda Jadi - "+stj.getNoSTJ(), stj.getJumlahRp(), sistem.getUser().getUsername(), 
+                    "Terima Tanda Jadi - "+stj.getNoSTJ(), stj.getJumlahRp(), 0, sistem.getUser().getUsername(), 
                                         tglSql.format(new Date()), "true", "2000-01-01 00:00:00", "");
             
             Hutang h = new Hutang();
@@ -1206,11 +1211,11 @@ public class Service {
             SDPDAO.insert(con, sdp);
             
             insertKeuangan(con, noKeuangan, tglBarang.format(new Date()), sdp.getTipeKeuangan(), "Terima Down Payment", sdp.getKodeProperty(),
-                    "Terima Down Payment - "+sdp.getNoSDP(), sdp.getJumlahRp(), sistem.getUser().getUsername(), 
+                    "Terima Down Payment - "+sdp.getNoSDP(), sdp.getJumlahRp(), 0, sistem.getUser().getUsername(), 
                                         tglSql.format(new Date()), "true", "2000-01-01 00:00:00", "");
 
             insertKeuangan(con, noKeuangan, tglBarang.format(new Date()), "HUTANG", "Terima Down Payment", sdp.getKodeProperty(),
-                    "Terima Down Payment - "+sdp.getNoSDP(), sdp.getJumlahRp(), sistem.getUser().getUsername(), 
+                    "Terima Down Payment - "+sdp.getNoSDP(), sdp.getJumlahRp(), 0, sistem.getUser().getUsername(), 
                                         tglSql.format(new Date()), "true", "2000-01-01 00:00:00", "");
                         
             Hutang h = new Hutang();
@@ -1311,7 +1316,7 @@ public class Service {
             PembayaranDAO.insert(con, pstj);
             
             insertKeuangan(con, noKeuangan, tglBarang.format(new Date()), "HUTANG", "Terima Tanda Jadi", skl.getKodeProperty(),
-                    "Penjualan - "+skl.getNoSKL(), -hstj.getJumlahHutang(), sistem.getUser().getUsername(), 
+                    "Penjualan - "+skl.getNoSKL(), -hstj.getJumlahHutang(), 0, sistem.getUser().getUsername(), 
                                         tglSql.format(new Date()), "true", "2000-01-01 00:00:00", "");
             
             List<SDP> allSDP = SDPDAO.getAllByKodeProperty(con, skl.getKodeProperty(), "true");
@@ -1339,23 +1344,23 @@ public class Service {
                 totaldp = totaldp + h.getJumlahHutang();
             }
             insertKeuangan(con, noKeuangan, tglBarang.format(new Date()), "HUTANG", "Terima Down Payment", skl.getKodeProperty(),
-                    "Penjualan - "+skl.getNoSKL(), -totaldp, sistem.getUser().getUsername(), 
+                    "Penjualan - "+skl.getNoSKL(), -totaldp, 0, sistem.getUser().getUsername(), 
                                         tglSql.format(new Date()), "true", "2000-01-01 00:00:00", "");
             
             insertKeuangan(con, noKeuangan, tglBarang.format(new Date()), "PENJUALAN", "Penjualan", skl.getKodeProperty(),
-                    "Penjualan - "+skl.getNoSKL(), skl.getProperty().getHargaJual()-skl.getProperty().getDiskon(), sistem.getUser().getUsername(), 
+                    "Penjualan - "+skl.getNoSKL(), skl.getProperty().getHargaJual()-skl.getProperty().getDiskon(), 0, sistem.getUser().getUsername(), 
                                         tglSql.format(new Date()), "true", "2000-01-01 00:00:00", "");
 
             insertKeuangan(con, noKeuangan, tglBarang.format(new Date()), "HPP", "HPP", skl.getKodeProperty(),
-                    "Penjualan - "+skl.getNoSKL(), skl.getProperty().getNilaiProperty(), sistem.getUser().getUsername(), 
+                    "Penjualan - "+skl.getNoSKL(), skl.getProperty().getNilaiProperty(), 0, sistem.getUser().getUsername(), 
                                         tglSql.format(new Date()), "true", "2000-01-01 00:00:00", "");
 
             insertKeuangan(con, noKeuangan, tglBarang.format(new Date()), "ASET LANCAR", "Tanah & Bangunan", skl.getKodeProperty(),
-                    "Penjualan - "+skl.getNoSKL(), -skl.getProperty().getNilaiProperty(), sistem.getUser().getUsername(), 
+                    "Penjualan - "+skl.getNoSKL(), -skl.getProperty().getNilaiProperty(), 0, sistem.getUser().getUsername(), 
                                         tglSql.format(new Date()), "true", "2000-01-01 00:00:00", "");
 
             insertKeuangan(con, noKeuangan, tglBarang.format(new Date()), "PIUTANG", "Piutang Penjualan", skl.getKodeProperty(),
-                    "Penjualan - "+skl.getNoSKL(), skl.getSisaPelunasan(), sistem.getUser().getUsername(), 
+                    "Penjualan - "+skl.getNoSKL(), skl.getSisaPelunasan(), 0, sistem.getUser().getUsername(), 
                                         tglSql.format(new Date()), "true", "2000-01-01 00:00:00", "");
 
             Piutang p = new Piutang();
@@ -1499,7 +1504,7 @@ public class Service {
             PropertyDAO.update(con, kpr.getProperty());
             
             insertKeuangan(con, noKeuangan, tglBarang.format(new Date()), kpr.getTipeKeuangan(), "Pencairan KPR", kpr.getKodeProperty(),
-                    "Pencairan KPR - "+kpr.getNoKPR(), kpr.getJumlahRp(), sistem.getUser().getUsername(), 
+                    "Pencairan KPR - "+kpr.getNoKPR(), kpr.getJumlahRp(), 0, sistem.getUser().getUsername(), 
                                         tglSql.format(new Date()), "true", "2000-01-01 00:00:00", "");
                         
             Piutang p = PiutangDAO.getByKategoriAndKeteranganAndStatus(con,  "Piutang Penjualan", kpr.getNoSKL(),"open");
@@ -1522,7 +1527,7 @@ public class Service {
             TerimaPembayaranDAO.insert(con, tp);
             
             insertKeuangan(con, noKeuangan, tglBarang.format(new Date()), "PIUTANG", "Piutang Penjualan", kpr.getKodeProperty(),
-                    "Pencairan KPR - "+kpr.getNoKPR(), -kpr.getJumlahRp(), sistem.getUser().getUsername(), 
+                    "Pencairan KPR - "+kpr.getNoKPR(), -kpr.getJumlahRp(), 0, sistem.getUser().getUsername(), 
                                         tglSql.format(new Date()), "true", "2000-01-01 00:00:00", "");
                         
             if(status.equals("true"))
@@ -1599,7 +1604,7 @@ public class Service {
             SAPDAO.insert(con, sap);
             
             insertKeuangan(con, noKeuangan, tglBarang.format(new Date()), sap.getTipeKeuangan(), "Terima Pembayaran Angsuran", sap.getKodeProperty(),
-                    "Terima Pembayaran Angsuran - "+sap.getNoSAP(), sap.getJumlahRp(), sistem.getUser().getUsername(), 
+                    "Terima Pembayaran Angsuran - "+sap.getNoSAP(), sap.getJumlahRp(), 0, sistem.getUser().getUsername(), 
                                         tglSql.format(new Date()), "true", "2000-01-01 00:00:00", "");
                         
             Piutang p = PiutangDAO.getByKategoriAndKeteranganAndStatus(con,  "Piutang Penjualan", sap.getNoSKL(),"open");
@@ -1623,7 +1628,7 @@ public class Service {
             TerimaPembayaranDAO.insert(con, tp);
             
             insertKeuangan(con, noKeuangan, tglBarang.format(new Date()), "PIUTANG", "Piutang Penjualan", sap.getKodeProperty(),
-                    "Terima Pembayaran Angsuran - "+sap.getNoSAP(), -sap.getJumlahRp(), sistem.getUser().getUsername(), 
+                    "Terima Pembayaran Angsuran - "+sap.getNoSAP(), -sap.getJumlahRp(), 0, sistem.getUser().getUsername(), 
                                         tglSql.format(new Date()), "true", "2000-01-01 00:00:00", "");
             
             if(status.equals("true"))
@@ -1786,20 +1791,23 @@ public class Service {
             }
             int noUrut = 1;
             for(ImageView i : listImage){
-                File tempFile = new File(noKeuangan+" - "+noUrut+".png");
+                File tempFile = new File("temp.jpg");
                 BufferedImage bImage = SwingFXUtils.fromFXImage(i.getImage(), null);
-                ImageIO.write(bImage, "png", tempFile);
+                ImageIO.write(bImage, "jpg", tempFile);
+                
+                File compressFile = Function.compress(tempFile, noKeuangan+" - "+noUrut+".jpg");
                 
                 StorageOptions storageOptions = StorageOptions.newBuilder().
                         setProjectId("auristeel-280420").
                         setCredentials(GoogleCredentials.fromStream(Main.class.getResourceAsStream("Resource/credentials.json"))).build();
                 Storage storage = storageOptions.getService();
                 
-                BlobId blobId = BlobId.of("jagobangunpersada", tempFile.getName());
+                BlobId blobId = BlobId.of("jagobangunpersada", compressFile.getName());
                 BlobInfo blobInfo = BlobInfo.newBuilder(blobId).build();
-                storage.create(blobInfo, Files.readAllBytes(Paths.get(tempFile.getPath())));
+                storage.create(blobInfo, Files.readAllBytes(Paths.get(compressFile.getPath())));
                 
                 Files.deleteIfExists(tempFile.toPath()); 
+                Files.deleteIfExists(compressFile.toPath()); 
                 
                 noUrut = noUrut + 1;
             }
@@ -1859,11 +1867,11 @@ public class Service {
             HutangDAO.insert(con, hutang);
             
             insertKeuangan(con, noKeuangan, tglBarang.format(new Date()), "HUTANG", hutang.getKategori(), "",
-                    hutang.getNoHutang()+" - "+hutang.getKeterangan(), hutang.getJumlahHutang(), sistem.getUser().getUsername(), 
+                    hutang.getNoHutang()+" - "+hutang.getKeterangan(), hutang.getJumlahHutang(), 0, sistem.getUser().getUsername(), 
                                         tglSql.format(new Date()), "true", "2000-01-01 00:00:00", "");
             
             insertKeuangan(con, noKeuangan, tglBarang.format(new Date()), tipeKeuangan, hutang.getKategori(), "",
-                    hutang.getNoHutang()+" - "+hutang.getKeterangan(), hutang.getJumlahHutang(), sistem.getUser().getUsername(), 
+                    hutang.getNoHutang()+" - "+hutang.getKeterangan(), hutang.getJumlahHutang(), 0, sistem.getUser().getUsername(), 
                                         tglSql.format(new Date()), "true", "2000-01-01 00:00:00", "");
             
             
@@ -1905,11 +1913,11 @@ public class Service {
                 kodeProperty = PembelianTanahDAO.get(con, hutang.getKeterangan()).getKodeProperty();
             
             insertKeuangan(con, noKeuangan, tglBarang.format(new Date()), "HUTANG", hutang.getKategori(), kodeProperty,
-                    "Pembayaran - "+hutang.getNoHutang()+" - "+hutang.getKeterangan(), -pembayaran.getJumlahPembayaran(), sistem.getUser().getUsername(), 
+                    "Pembayaran - "+hutang.getNoHutang()+" - "+hutang.getKeterangan(), -pembayaran.getJumlahPembayaran(), 0, sistem.getUser().getUsername(), 
                                         tglSql.format(new Date()), "true", "2000-01-01 00:00:00", "");
             
             insertKeuangan(con, noKeuangan, tglBarang.format(new Date()), pembayaran.getTipeKeuangan(), hutang.getKategori(), kodeProperty,
-                    "Pembayaran - "+hutang.getNoHutang()+" - "+hutang.getKeterangan(), -pembayaran.getJumlahPembayaran(), sistem.getUser().getUsername(), 
+                    "Pembayaran - "+hutang.getNoHutang()+" - "+hutang.getKeterangan(), -pembayaran.getJumlahPembayaran(), 0, sistem.getUser().getUsername(), 
                                         tglSql.format(new Date()), "true", "2000-01-01 00:00:00", "");
             
 
@@ -1974,11 +1982,11 @@ public class Service {
             String noKeuangan = KeuanganDAO.getIdByDate(con, new Date());
             
             insertKeuangan(con, noKeuangan, tglBarang.format(new Date()), "PIUTANG", piutang.getKategori(), "",
-                    piutang.getNoPiutang()+" - "+piutang.getKeterangan(), piutang.getJumlahPiutang(), sistem.getUser().getUsername(), 
+                    piutang.getNoPiutang()+" - "+piutang.getKeterangan(), piutang.getJumlahPiutang(), 0, sistem.getUser().getUsername(), 
                                         tglSql.format(new Date()), "true", "2000-01-01 00:00:00", "");
             
             insertKeuangan(con, noKeuangan, tglBarang.format(new Date()), tipeKeuangan, piutang.getKategori(), "",
-                    piutang.getNoPiutang()+" - "+piutang.getKeterangan(), -piutang.getJumlahPiutang(), sistem.getUser().getUsername(), 
+                    piutang.getNoPiutang()+" - "+piutang.getKeterangan(), -piutang.getJumlahPiutang(), 0, sistem.getUser().getUsername(), 
                                         tglSql.format(new Date()), "true", "2000-01-01 00:00:00", "");
             
             PiutangDAO.insert(con, piutang);
@@ -2017,11 +2025,11 @@ public class Service {
             PiutangDAO.update(con, piutang);
             
             insertKeuangan(con, noKeuangan, tglBarang.format(new Date()), "PIUTANG", piutang.getKategori(), "",
-                    "Terima Pembayaran - "+piutang.getNoPiutang()+" - "+piutang.getKeterangan(), -terimaPembayaran.getJumlahPembayaran(), sistem.getUser().getUsername(), 
+                    "Terima Pembayaran - "+piutang.getNoPiutang()+" - "+piutang.getKeterangan(), -terimaPembayaran.getJumlahPembayaran(), 0, sistem.getUser().getUsername(), 
                                         tglSql.format(new Date()), "true", "2000-01-01 00:00:00", "");
             
             insertKeuangan(con, noKeuangan, tglBarang.format(new Date()), terimaPembayaran.getTipeKeuangan(), piutang.getKategori(), "",
-                    "Terima Pembayaran - "+piutang.getNoPiutang()+" - "+piutang.getKeterangan(), terimaPembayaran.getJumlahPembayaran(), sistem.getUser().getUsername(), 
+                    "Terima Pembayaran - "+piutang.getNoPiutang()+" - "+piutang.getKeterangan(), terimaPembayaran.getJumlahPembayaran(), 0, sistem.getUser().getUsername(), 
                                         tglSql.format(new Date()), "true", "2000-01-01 00:00:00", "");
             
             
@@ -2087,11 +2095,11 @@ public class Service {
             AsetTetapDAO.insert(con, aset);
             
             insertKeuangan(con, noKeuangan, tglBarang.format(new Date()), tipeKeuangan, "Pembelian Aset Tetap", "",
-                    "Pembelian Aset Tetap - "+aset.getNoAset(), -jumlahBayar, sistem.getUser().getUsername(), 
+                    "Pembelian Aset Tetap - "+aset.getNoAset(), -jumlahBayar, 0, sistem.getUser().getUsername(), 
                                         tglSql.format(new Date()), "true", "2000-01-01 00:00:00", "");
             
             insertKeuangan(con, noKeuangan, tglBarang.format(new Date()), "ASET TETAP", aset.getKategori(), "",
-                    "Pembelian Aset Tetap - "+aset.getNoAset(), aset.getNilaiAwal(), sistem.getUser().getUsername(), 
+                    "Pembelian Aset Tetap - "+aset.getNoAset(), aset.getNilaiAwal(), 0, sistem.getUser().getUsername(), 
                                         tglSql.format(new Date()), "true", "2000-01-01 00:00:00", "");
                         
             if(aset.getNilaiAwal()>jumlahBayar){
@@ -2108,7 +2116,7 @@ public class Service {
                 HutangDAO.insert(con, h);
 
                 insertKeuangan(con, noKeuangan, tglBarang.format(new Date()), "HUTANG", "Hutang Pembelian Aset Tetap", "",
-                        "Pembelian Aset Tetap - "+aset.getNoAset(), aset.getNilaiAwal()-jumlahBayar, sistem.getUser().getUsername(), 
+                        "Pembelian Aset Tetap - "+aset.getNoAset(), aset.getNilaiAwal()-jumlahBayar, 0, sistem.getUser().getUsername(), 
                                         tglSql.format(new Date()), "true", "2000-01-01 00:00:00", "");
             }
             
@@ -2137,20 +2145,20 @@ public class Service {
             AsetTetapDAO.update(con, aset);
                         
             insertKeuangan(con, noKeuangan, tglBarang.format(new Date()), tipeKeuangan, "Penjualan Aset Tetap", "",
-                    "Penjualan Aset Tetap - "+aset.getNoAset(), jumlahBayar, sistem.getUser().getUsername(), 
+                    "Penjualan Aset Tetap - "+aset.getNoAset(), jumlahBayar, 0, sistem.getUser().getUsername(), 
                                         tglSql.format(new Date()), "true", "2000-01-01 00:00:00", "");
                         
             insertKeuangan(con, noKeuangan, tglBarang.format(new Date()), "ASET TETAP", aset.getKategori(), "",
-                    "Penjualan Aset Tetap - "+aset.getNoAset(), -aset.getNilaiAkhir(), sistem.getUser().getUsername(), 
+                    "Penjualan Aset Tetap - "+aset.getNoAset(), -aset.getNilaiAkhir(), 0, sistem.getUser().getUsername(), 
                                         tglSql.format(new Date()), "true", "2000-01-01 00:00:00", "");
                         
             if(aset.getHargaJual() > aset.getNilaiAkhir()){
                 insertKeuangan(con, noKeuangan, tglBarang.format(new Date()), "PENDAPATAN", "Pendapatan Penjualan Aset Tetap", "",
-                        "Penjualan Aset Tetap - "+aset.getNoAset(), aset.getHargaJual()-aset.getNilaiAkhir(), sistem.getUser().getUsername(), 
+                        "Penjualan Aset Tetap - "+aset.getNoAset(), aset.getHargaJual()-aset.getNilaiAkhir(), 0, sistem.getUser().getUsername(), 
                                         tglSql.format(new Date()), "true", "2000-01-01 00:00:00", "");
             }else if(aset.getHargaJual() < aset.getNilaiAkhir()){
                 insertKeuangan(con, noKeuangan, tglBarang.format(new Date()), "BEBAN", "Beban Penjualan Aset Tetap", "",
-                        "Penjualan Aset Tetap - "+aset.getNoAset(), aset.getNilaiAkhir()-aset.getHargaJual(), sistem.getUser().getUsername(), 
+                        "Penjualan Aset Tetap - "+aset.getNoAset(), aset.getNilaiAkhir()-aset.getHargaJual(), 0, sistem.getUser().getUsername(), 
                                         tglSql.format(new Date()), "true", "2000-01-01 00:00:00", "");
             }
             
@@ -2168,7 +2176,7 @@ public class Service {
                 PiutangDAO.insert(con, p);
 
                 insertKeuangan(con, noKeuangan, tglBarang.format(new Date()), "PIUTANG", "Piutang Penjualan Aset Tetap", "",
-                        "Penjualan Aset Tetap - "+aset.getNoAset(), aset.getHargaJual()-jumlahBayar, sistem.getUser().getUsername(), 
+                        "Penjualan Aset Tetap - "+aset.getNoAset(), aset.getHargaJual()-jumlahBayar, 0, sistem.getUser().getUsername(), 
                                         tglSql.format(new Date()), "true", "2000-01-01 00:00:00", "");
             }
             if(status.equals("true"))

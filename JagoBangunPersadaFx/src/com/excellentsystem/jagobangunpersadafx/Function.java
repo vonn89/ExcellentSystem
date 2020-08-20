@@ -24,10 +24,12 @@ import com.google.cloud.storage.Blob;
 import com.google.cloud.storage.BlobId;
 import com.google.cloud.storage.Storage;
 import com.google.cloud.storage.StorageOptions;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.nio.channels.FileChannel;
 import java.nio.file.Files;
@@ -50,6 +52,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.Base64;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -71,6 +74,11 @@ import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.PBEKeySpec;
 import javax.crypto.spec.SecretKeySpec;
+import javax.imageio.IIOImage;
+import javax.imageio.ImageIO;
+import javax.imageio.ImageWriteParam;
+import javax.imageio.ImageWriter;
+import javax.imageio.stream.ImageOutputStream;
 import org.apache.poi.hssf.util.HSSFColor;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Font;
@@ -326,6 +334,29 @@ public class Function {
             else if(style.equals("Detail"))
                 sheet.getRow(r).getCell(i).setCellStyle(null);
         }
+    }
+    public static File compress(File f, String filename)throws Exception{
+      BufferedImage image = ImageIO.read(f);
+
+      File compressedImageFile = new File(filename);
+      OutputStream os = new FileOutputStream(compressedImageFile);
+
+      Iterator<ImageWriter>writers =  ImageIO.getImageWritersByFormatName("jpg");
+      ImageWriter writer = (ImageWriter) writers.next();
+
+      ImageOutputStream ios = ImageIO.createImageOutputStream(os);
+      writer.setOutput(ios);
+
+      ImageWriteParam param = writer.getDefaultWriteParam();
+      
+      param.setCompressionMode(ImageWriteParam.MODE_EXPLICIT);
+        param.setCompressionQuality(0.5f);
+      writer.write(null, new IIOImage(image, null, null), param);
+      
+      os.close();
+      ios.close();
+      writer.dispose();
+      return compressedImageFile;
     }
     public static String downloadUpdateGoogleStorage(String filename){
         try{

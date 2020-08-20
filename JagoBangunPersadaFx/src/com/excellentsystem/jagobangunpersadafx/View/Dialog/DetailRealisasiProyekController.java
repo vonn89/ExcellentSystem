@@ -19,10 +19,9 @@ import com.google.cloud.storage.Bucket;
 import com.google.cloud.storage.Storage;
 import com.google.cloud.storage.StorageOptions;
 import java.io.File;
-import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.sql.Connection;
-import java.util.Date;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
@@ -171,43 +170,26 @@ public class DetailRealisasiProyekController {
     }
 
     public void setDetailRealisasi(RAPRealisasi r) {
-        try {
-            noRAP = r.getNoRap() + "-" + r.getNoUrut();
-            keteranganField.setDisable(true);
-            satuanField.setDisable(true);
-            qtyField.setDisable(true);
-            hargaSatuanField.setDisable(true);
-            totalField.setDisable(true);
-            tipeKeuanganCombo.setDisable(true);
-            saveButton.setVisible(false);
-            cancelButton.setVisible(false);
-            gridpane.getRowConstraints().remove(9);
-            stage.setHeight(320);
-            
-            keteranganField.setText(r.getKeterangan());
-            satuanField.setText(r.getSatuan());
-            qtyField.setText(qty.format(r.getQty()));
-            hargaSatuanField.setText(rp.format(r.getJumlahRp() / r.getQty()));
-            totalField.setText(rp.format(r.getJumlahRp()));
-            tipeKeuanganCombo.getSelectionModel().select(r.getTipeKeuangan());
-            
-            System.out.println(new Date() + " start");
-            StorageOptions storageOptions = StorageOptions.newBuilder().
-                    setCredentials(GoogleCredentials.fromStream(Main.class.getResourceAsStream("Resource/credentials.json"))).build();
-            Storage storage = storageOptions.getService();
-            Bucket bucket = storage.get("jagobangunpersada");
-            Page<Blob> blobs = bucket.list();
-            double totalImage = 0;
-            for (Blob blob : blobs.iterateAll()) {
-                if (blob.getName().startsWith(noRAP)) {
-                    totalImage = totalImage + 1;
-                }
-            }
-            totalImageField.setText(rp.format(totalImage));
-            System.out.println(new Date() + " finish");
-        } catch (IOException ex) {
-            mainApp.showMessage(Modality.NONE, "Error", ex.toString());
-        }
+        noRAP = r.getNoRap() + "-" + r.getNoUrut();
+        keteranganField.setDisable(true);
+        satuanField.setDisable(true);
+        qtyField.setDisable(true);
+        hargaSatuanField.setDisable(true);
+        totalField.setDisable(true);
+        tipeKeuanganCombo.setDisable(true);
+        saveButton.setVisible(false);
+        cancelButton.setVisible(false);
+        gridpane.getRowConstraints().remove(9);
+        stage.setHeight(320);
+
+        keteranganField.setText(r.getKeterangan());
+        satuanField.setText(r.getSatuan());
+        qtyField.setText(qty.format(r.getQty()));
+        hargaSatuanField.setText(rp.format(r.getJumlahRp() / r.getQty()));
+        totalField.setText(rp.format(r.getJumlahRp()));
+        tipeKeuanganCombo.getSelectionModel().select(r.getTipeKeuangan());
+
+        totalImageField.setText(rp.format(r.getTotalImage()));
     }
 
     private void hitungTotal() {
@@ -233,7 +215,6 @@ public class DetailRealisasiProyekController {
     @FXML
     private void setImage() {
         if (!saveButton.isVisible() && !totalImageField.getText().equals("0")) {
-            System.out.println(new Date() + " start download");
             try {
                 StorageOptions storageOptions = StorageOptions.newBuilder().
                         setCredentials(GoogleCredentials.fromStream(Main.class.getResourceAsStream("Resource/credentials.json"))).build();
@@ -245,12 +226,12 @@ public class DetailRealisasiProyekController {
                         File tempFile = new File(blob.getName());
                         blob.downloadTo(Paths.get(tempFile.getPath()));
                         listImage.add(new ImageView(new Image("file:" + tempFile.getPath())));
+                        Files.deleteIfExists(tempFile.toPath()); 
                     }
                 }
             } catch (Exception e) {
                 mainApp.showMessage(Modality.NONE, "Error", e.toString());
             }
-            System.out.println(new Date() + " finish download");
         }
         Stage child = new Stage();
         FXMLLoader loader = mainApp.showDialog(stage, child, "View/Dialog/DetailTransaksiKeuanganImage.fxml");

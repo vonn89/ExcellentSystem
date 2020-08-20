@@ -23,6 +23,7 @@ import com.google.cloud.storage.Bucket;
 import com.google.cloud.storage.Storage;
 import com.google.cloud.storage.StorageOptions;
 import java.io.File;
+import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.sql.Connection;
 import java.time.LocalDate;
@@ -143,6 +144,7 @@ public class DetailTransaksiKeuanganController {
             keteranganField.setDisable(true);
             jumlahRpField.setText(rp.format(k.getJumlahRp()));
             jumlahRpField.setDisable(true);
+            totalImageField.setText(rp.format(k.getTotalImage()));
             tipeKeuanganCombo.getSelectionModel().select(k.getTipeKeuangan());
             tipeKeuanganCombo.setDisable(true);
             totalPropertyField.setText(rp.format(allDetail.size()));
@@ -150,21 +152,6 @@ public class DetailTransaksiKeuanganController {
             cancelButton.setVisible(false);
             gridpane.getRowConstraints().remove(13);
             stage.setHeight(465);
-
-            System.out.println(new Date()+ " start");
-            StorageOptions storageOptions = StorageOptions.newBuilder().
-                    setCredentials(GoogleCredentials.fromStream(Main.class.getResourceAsStream("Resource/credentials.json"))).build();
-            Storage storage = storageOptions.getService();
-            Bucket bucket = storage.get("jagobangunpersada");
-            Page<Blob> blobs = bucket.list();
-            double totalImage = 0;
-            for (Blob blob : blobs.iterateAll()) {
-                if (blob.getName().startsWith(k.getNoKeuangan())) {
-                    totalImage = totalImage + 1;
-                }
-            }
-            totalImageField.setText(rp.format(totalImage));
-            System.out.println(new Date()+ " finish");
         } catch (Exception e) {
             mainApp.showMessage(Modality.NONE, "Error", e.toString());
         }
@@ -197,7 +184,6 @@ public class DetailTransaksiKeuanganController {
     @FXML
     private void setImage() {
         if (!saveButton.isVisible() && !totalImageField.getText().equals("0")) {
-            System.out.println(new Date()+ " start download");
             try {
                 StorageOptions storageOptions = StorageOptions.newBuilder().
                         setCredentials(GoogleCredentials.fromStream(Main.class.getResourceAsStream("Resource/credentials.json"))).build();
@@ -209,12 +195,12 @@ public class DetailTransaksiKeuanganController {
                         File tempFile = new File(blob.getName());
                         blob.downloadTo(Paths.get(tempFile.getPath()));
                         listImage.add(new ImageView(new Image("file:" + tempFile.getPath())));
+                        Files.deleteIfExists(tempFile.toPath()); 
                     }
                 }
             } catch (Exception e) {
                 mainApp.showMessage(Modality.NONE, "Error", e.toString());
             }
-            System.out.println(new Date()+ " finish download");
         }
         Stage child = new Stage();
         FXMLLoader loader = mainApp.showDialog(stage, child, "View/Dialog/DetailTransaksiKeuanganImage.fxml");

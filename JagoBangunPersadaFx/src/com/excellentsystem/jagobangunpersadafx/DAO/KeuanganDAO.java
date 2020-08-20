@@ -60,11 +60,12 @@ public class KeuanganDAO {
             k.setKodeProperty(rs.getString(5));
             k.setDeskripsi(rs.getString(6));
             k.setJumlahRp(rs.getDouble(7));
-            k.setKodeUser(rs.getString(8));
-            k.setTglInput(rs.getString(9));
-            k.setStatus(rs.getString(10));
-            k.setTglBatal(rs.getString(11));
-            k.setUserBatal(rs.getString(12));
+            k.setTotalImage(rs.getInt(8));
+            k.setKodeUser(rs.getString(9));
+            k.setTglInput(rs.getString(10));
+            k.setStatus(rs.getString(11));
+            k.setTglBatal(rs.getString(12));
+            k.setUserBatal(rs.getString(13));
         }
         return k;
     }
@@ -82,11 +83,12 @@ public class KeuanganDAO {
             k.setKodeProperty(rs.getString(5));
             k.setDeskripsi(rs.getString(6));
             k.setJumlahRp(rs.getDouble(7));
-            k.setKodeUser(rs.getString(8));
-            k.setTglInput(rs.getString(9));
-            k.setStatus(rs.getString(10));
-            k.setTglBatal(rs.getString(11));
-            k.setUserBatal(rs.getString(12));
+            k.setTotalImage(rs.getInt(8));
+            k.setKodeUser(rs.getString(9));
+            k.setTglInput(rs.getString(10));
+            k.setStatus(rs.getString(11));
+            k.setTglBatal(rs.getString(12));
+            k.setUserBatal(rs.getString(13));
             allKeuangan.add(k);
         }
         return allKeuangan;
@@ -105,11 +107,12 @@ public class KeuanganDAO {
             k.setKodeProperty(rs.getString(5));
             k.setDeskripsi(rs.getString(6));
             k.setJumlahRp(rs.getDouble(7));
-            k.setKodeUser(rs.getString(8));
-            k.setTglInput(rs.getString(9));
-            k.setStatus(rs.getString(10));
-            k.setTglBatal(rs.getString(11));
-            k.setUserBatal(rs.getString(12));
+            k.setTotalImage(rs.getInt(8));
+            k.setKodeUser(rs.getString(9));
+            k.setTglInput(rs.getString(10));
+            k.setStatus(rs.getString(11));
+            k.setTglBatal(rs.getString(12));
+            k.setUserBatal(rs.getString(13));
             allKeuangan.add(k);
         }
         return allKeuangan;
@@ -132,11 +135,12 @@ public class KeuanganDAO {
             k.setKodeProperty(rs.getString(5));
             k.setDeskripsi(rs.getString(6));
             k.setJumlahRp(rs.getDouble(7));
-            k.setKodeUser(rs.getString(8));
-            k.setTglInput(rs.getString(9));
-            k.setStatus(rs.getString(10));
-            k.setTglBatal(rs.getString(11));
-            k.setUserBatal(rs.getString(12));
+            k.setTotalImage(rs.getInt(8));
+            k.setKodeUser(rs.getString(9));
+            k.setTglInput(rs.getString(10));
+            k.setStatus(rs.getString(11));
+            k.setTglBatal(rs.getString(12));
+            k.setUserBatal(rs.getString(13));
             allKeuangan.add(k);
         }
         return allKeuangan;
@@ -151,24 +155,25 @@ public class KeuanganDAO {
     }
     public static void update(Connection con, Keuangan k)throws Exception{
         PreparedStatement ps = con.prepareStatement("update tt_keuangan set "
-                + " tgl_keuangan = ?, deskripsi = ?, jumlah_rp = ?, kode_user = ?, tgl_input = ?, status = ?, user_batal = ?, tgl_batal = ? "
+                + " tgl_keuangan = ?, deskripsi = ?, jumlah_rp = ?, total_image = ?, kode_user = ?, tgl_input = ?, status = ?, user_batal = ?, tgl_batal = ? "
                 + " where no_keuangan = ? and tipe_keuangan = ? and kategori = ? and kode_property = ?");
         ps.setString(1, k.getTglKeuangan());
         ps.setString(2, k.getDeskripsi());
         ps.setDouble(3, k.getJumlahRp());
-        ps.setString(4, k.getKodeUser());
-        ps.setString(5, k.getTglInput());
-        ps.setString(6, k.getStatus());
-        ps.setString(7, k.getUserBatal());
-        ps.setString(8, k.getTglBatal());
-        ps.setString(9, k.getNoKeuangan());
-        ps.setString(10, k.getTipeKeuangan());
-        ps.setString(11, k.getKategori());
-        ps.setString(12, k.getKodeProperty());
+        ps.setInt(4, k.getTotalImage());
+        ps.setString(5, k.getKodeUser());
+        ps.setString(6, k.getTglInput());
+        ps.setString(7, k.getStatus());
+        ps.setString(8, k.getUserBatal());
+        ps.setString(9, k.getTglBatal());
+        ps.setString(10, k.getNoKeuangan());
+        ps.setString(11, k.getTipeKeuangan());
+        ps.setString(12, k.getKategori());
+        ps.setString(13, k.getKodeProperty());
         ps.executeUpdate();
     }
     public static void insert(Connection con, Keuangan k)throws Exception{
-        PreparedStatement ps = con.prepareStatement("insert into tt_keuangan values (?,?,?,?,?,?,?,?,?,?,?,?)");
+        PreparedStatement ps = con.prepareStatement("insert into tt_keuangan values (?,?,?,?,?,?,?,?,?,?,?,?,?)");
         ps.setString(1, k.getNoKeuangan());
         ps.setString(2, k.getTglKeuangan());
         ps.setString(3, k.getTipeKeuangan());
@@ -176,11 +181,12 @@ public class KeuanganDAO {
         ps.setString(5, k.getKodeProperty());
         ps.setString(6, k.getDeskripsi());
         ps.setDouble(7, k.getJumlahRp());
-        ps.setString(8, k.getKodeUser());
-        ps.setString(9, k.getTglInput());
-        ps.setString(10, k.getStatus());
-        ps.setString(11, k.getTglBatal());
-        ps.setString(12, k.getUserBatal());
+        ps.setInt(8, k.getTotalImage());
+        ps.setString(9, k.getKodeUser());
+        ps.setString(10, k.getTglInput());
+        ps.setString(11, k.getStatus());
+        ps.setString(12, k.getTglBatal());
+        ps.setString(13, k.getUserBatal());
         ps.executeUpdate();
     }
 //    public static void delete(Connection con, Keuangan k)throws Exception{

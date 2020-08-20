@@ -84,6 +84,7 @@ public class RealisasiAnggaranProyekController  {
     @FXML private TableColumn<RAPRealisasi, Number> qtyColumn;
     @FXML private TableColumn<RAPRealisasi, Number> jumlahRpColumn;
     @FXML private TableColumn<RAPRealisasi, String> tipeKeuanganColumn;
+    @FXML private TableColumn<RAPRealisasi, Number> totalImageColumn;
     @FXML private TableColumn<RAPRealisasi, String> kodeUserRealisasiColumn;
     
     @FXML private TextField searchField;
@@ -158,6 +159,9 @@ public class RealisasiAnggaranProyekController  {
         
         tipeKeuanganColumn.setCellValueFactory(cellData ->cellData.getValue().tipeKeuanganProperty());
         tipeKeuanganColumn.setCellFactory(col -> Function.getWrapTableCell(tipeKeuanganColumn));
+        
+        totalImageColumn.setCellValueFactory(cellData ->cellData.getValue().totalImageProperty());
+        totalImageColumn.setCellFactory(col -> getTableCell(rp));
         
         kodeUserRealisasiColumn.setCellValueFactory(cellData ->cellData.getValue().kodeUserProperty());
         kodeUserRealisasiColumn.setCellFactory(col -> Function.getWrapTableCell(kodeUserRealisasiColumn));
@@ -273,8 +277,12 @@ public class RealisasiAnggaranProyekController  {
                         for(Otoritas o : sistem.getUser().getOtoritas()){
                             if(o.getJenis().equals("Add New Realisasi")&&o.isStatus())
                                 rowMenu.getItems().add(addNew);
+                        }
+                        for(Otoritas o : sistem.getUser().getOtoritas()){
                             if(o.getJenis().equals("Detail Realisasi")&&o.isStatus())
                                 rowMenu.getItems().add(detail);
+                        }
+                        for(Otoritas o : sistem.getUser().getOtoritas()){
                             if(o.getJenis().equals("Batal Realisasi")&&o.isStatus())
                                 rowMenu.getItems().add(hapus);
                         }
@@ -441,6 +449,7 @@ public class RealisasiAnggaranProyekController  {
                                     r.setQty(Double.parseDouble(x.qtyField.getText().replaceAll(",", "")));
                                     r.setJumlahRp(Double.parseDouble(x.totalField.getText().replaceAll(",", "")));
                                     r.setTipeKeuangan(x.tipeKeuanganCombo.getSelectionModel().getSelectedItem());
+                                    r.setTotalImage(x.listImage.size());
                                     r.setKodeUser(sistem.getUser().getUsername());
                                     r.setStatus("true");
                                     r.setTglBatal("2000-01-01 00:00:00");

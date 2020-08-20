@@ -50,6 +50,7 @@
                   <TreeTableColumn fx:id="kodePropertyColumn" maxWidth="1000.0" prefWidth="100.0" text="Nama Property" />
                   <TreeTableColumn fx:id="deskripsiColumn" maxWidth="3000.0" prefWidth="100.0" text="Deskripsi" />
                   <TreeTableColumn fx:id="jumlahRpColumn" maxWidth="1000.0" prefWidth="100.0" text="Jumlah Rp" />
+                  <TreeTableColumn fx:id="totalImageColumn" maxWidth="500.0" prefWidth="100.0" text="Bukti Gambar" />
               </columns>
                <columnResizePolicy>
                   <TreeTableView fx:constant="CONSTRAINED_RESIZE_POLICY" />

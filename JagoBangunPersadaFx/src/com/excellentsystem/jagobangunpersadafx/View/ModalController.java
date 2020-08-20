@@ -236,6 +236,7 @@ public class ModalController  {
                             modal.setKategori("Tambah Modal");
                             modal.setDeskripsi(x.keteranganField.getText());
                             modal.setJumlahRp(Double.parseDouble(x.jumlahRpField.getText().replaceAll(",", "")));
+                            modal.setTotalImage(0);
                             modal.setKodeUser(sistem.getUser().getUsername());
                             modal.setTglInput(tglSql.format(new Date()));
                             modal.setStatus("true");
@@ -249,6 +250,7 @@ public class ModalController  {
                             keu.setKategori("Tambah Modal");
                             keu.setDeskripsi(x.keteranganField.getText());
                             keu.setJumlahRp(Double.parseDouble(x.jumlahRpField.getText().replaceAll(",", "")));
+                            keu.setTotalImage(0);
                             keu.setKodeUser(sistem.getUser().getUsername());
                             keu.setTglInput(tglSql.format(new Date()));
                             keu.setStatus("true");
@@ -312,6 +314,7 @@ public class ModalController  {
                             modal.setKategori("Ambil Modal");
                             modal.setDeskripsi(x.keteranganField.getText());
                             modal.setJumlahRp(-Double.parseDouble(x.jumlahRpField.getText().replaceAll(",", "")));
+                            modal.setTotalImage(0);
                             modal.setKodeUser(sistem.getUser().getUsername());
                             modal.setTglInput(tglSql.format(new Date()));
                             modal.setStatus("true");
@@ -325,6 +328,7 @@ public class ModalController  {
                             keu.setKategori("Ambil Modal");
                             keu.setDeskripsi(x.keteranganField.getText());
                             keu.setJumlahRp(-Double.parseDouble(x.jumlahRpField.getText().replaceAll(",", "")));
+                            keu.setTotalImage(0);
                             keu.setKodeUser(sistem.getUser().getUsername());
                             keu.setTglInput(tglSql.format(new Date()));
                             keu.setStatus("true");

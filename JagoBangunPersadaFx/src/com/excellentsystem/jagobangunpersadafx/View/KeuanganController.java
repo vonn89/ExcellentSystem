@@ -87,6 +87,8 @@ public class KeuanganController {
     @FXML
     private TreeTableColumn<Keuangan, Number> jumlahRpColumn;
     @FXML
+    private TreeTableColumn<Keuangan, Number> totalImageColumn;
+    @FXML
     private TreeTableColumn<Keuangan, String> kodeUserColumn;
     @FXML
     private TreeTableColumn<Keuangan, String> tglInputColumn;
@@ -144,6 +146,9 @@ public class KeuanganController {
 
         jumlahRpColumn.setCellValueFactory(param -> param.getValue().getValue().jumlahRpProperty());
         jumlahRpColumn.setCellFactory(col -> getTreeTableCell(rp));
+        
+        totalImageColumn.setCellValueFactory(param -> param.getValue().getValue().totalImageProperty());
+        totalImageColumn.setCellFactory(col -> getTreeTableCell(rp));
 
         tglAwalPicker.setConverter(Function.getTglConverter());
         tglAwalPicker.setValue(LocalDate.now().minusWeeks(1));
@@ -448,6 +453,7 @@ public class KeuanganController {
             tglKeu.setJumlahRp(saldoAwal);
             tglKeu.setKodeProperty("");
             TreeItem<Keuangan> parent = new TreeItem<>(tglKeu);
+            int totalImage = 0;
             for (Keuangan keu : filterData) {
                 if (t.equals(keu.getTglKeuangan())) {
                     Boolean status = true;
@@ -471,6 +477,7 @@ public class KeuanganController {
                             kk.setKategori(keu.getKategori());
                             kk.setKodeProperty("");
                             kk.setDeskripsi(keu.getDeskripsi());
+                            kk.setTotalImage(keu.getTotalImage());
                             kk.setKodeUser(keu.getKodeUser());
                             kk.setTglInput(keu.getTglInput());
                             kk.setStatus(keu.getStatus());
@@ -491,8 +498,10 @@ public class KeuanganController {
                         }
                     }
                     saldoAwal = saldoAwal + keu.getJumlahRp();
+                    totalImage = totalImage + keu.getTotalImage();
                 }
             }
+            parent.getValue().setTotalImage(totalImage);
             root.getChildren().add(parent);
         }
         keuanganTable.setRoot(root);
@@ -526,6 +535,7 @@ public class KeuanganController {
                                 d.setKodeProperty("");
                                 d.setDeskripsi(x.keteranganField.getText());
                                 d.setJumlahRp(-Double.parseDouble(x.jumlahRpField.getText().replaceAll(",", "")));
+                                d.setTotalImage(0);
                                 d.setKodeUser(sistem.getUser().getUsername());
                                 d.setTglInput(tglSql.format(new Date()));
                                 d.setStatus("true");
@@ -540,6 +550,7 @@ public class KeuanganController {
                                 t.setKodeProperty("");
                                 t.setDeskripsi(x.keteranganField.getText());
                                 t.setJumlahRp(Double.parseDouble(x.jumlahRpField.getText().replaceAll(",", "")));
+                                t.setTotalImage(0);
                                 t.setKodeUser(sistem.getUser().getUsername());
                                 t.setTglInput(tglSql.format(new Date()));
                                 t.setStatus("true");
@@ -620,6 +631,7 @@ public class KeuanganController {
                                 } else {
                                     k.setJumlahRp(-Double.parseDouble(x.jumlahRpField.getText().replaceAll(",", "")));
                                 }
+                                k.setTotalImage(0);
                                 k.setKodeUser(sistem.getUser().getUsername());
                                 k.setTglInput(tglSql.format(new Date()));
                                 k.setStatus("true");
@@ -638,6 +650,7 @@ public class KeuanganController {
                                     k2.setTipeKeuangan("BEBAN");
                                     k2.setJumlahRp(Double.parseDouble(x.jumlahRpField.getText().replaceAll(",", "")));
                                 }
+                                k2.setTotalImage(0);
                                 k2.setKodeUser(sistem.getUser().getUsername());
                                 k2.setTglInput(tglSql.format(new Date()));
                                 k2.setStatus("true");
@@ -674,6 +687,7 @@ public class KeuanganController {
                                         } else {
                                             k.setJumlahRp(-d.getJumlahRp());
                                         }
+                                        k.setTotalImage(0);
                                         k.setKodeUser(sistem.getUser().getUsername());
                                         k.setTglInput(tglSql.format(new Date()));
                                         k.setStatus("true");
@@ -692,6 +706,7 @@ public class KeuanganController {
                                             k2.setTipeKeuangan("BEBAN");
                                             k2.setJumlahRp(d.getJumlahRp());
                                         }
+                                        k2.setTotalImage(0);
                                         k2.setKodeUser(sistem.getUser().getUsername());
                                         k2.setTglInput(tglSql.format(new Date()));
                                         k2.setStatus("true");
@@ -703,10 +718,14 @@ public class KeuanganController {
                                     }
                                 }
                             }
+                            for(Keuangan k : listKeuangan){
+                                k.setTotalImage(x.listImage.size());
+                            }
                             if(x.totalImageField.getText().equals("0"))
                                 return Service.saveAllTransaksiKeuangan(con, listKeuangan);
-                            else
+                            else{
                                 return Service.saveAllTransaksiKeuanganWithImage(con, listKeuangan, x.listImage);
+                            }
                         }
                     }
                 };

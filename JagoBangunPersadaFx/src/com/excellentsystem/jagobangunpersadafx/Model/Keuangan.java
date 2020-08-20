@@ -8,8 +8,10 @@ package com.excellentsystem.jagobangunpersadafx.Model;
 
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleDoubleProperty;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
@@ -25,6 +27,7 @@ public class Keuangan {
     private final StringProperty kodeProperty = new SimpleStringProperty();
     private final StringProperty deskripsi = new SimpleStringProperty();
     private final DoubleProperty jumlahRp = new SimpleDoubleProperty();
+    private final IntegerProperty totalImage = new SimpleIntegerProperty();
     private final StringProperty kodeUser = new SimpleStringProperty();
     private final StringProperty tglInput = new SimpleStringProperty();
     private final StringProperty status = new SimpleStringProperty();
@@ -32,6 +35,18 @@ public class Keuangan {
     private final StringProperty tglBatal = new SimpleStringProperty();
     private Property property;
     private final BooleanProperty checked = new SimpleBooleanProperty();
+
+    public int getTotalImage() {
+        return totalImage.get();
+    }
+
+    public void setTotalImage(int value) {
+        totalImage.set(value);
+    }
+
+    public IntegerProperty totalImageProperty() {
+        return totalImage;
+    }
 
     public boolean isChecked() {
         return checked.get();
