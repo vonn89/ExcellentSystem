@@ -1735,8 +1735,10 @@ public class Service {
             
             for(PenjualanDetail d : stokBarang){
                 StokBarang stok = StokBarangDAO.get(con, tglBarang.format(tglSql.parse(penjualan.getTglPenjualan())), d.getKodeBarang(), penjualan.getKodeGudang());
+                System.out.println(stok.getStokKeluar());
                 stok.setStokKeluar(stok.getStokKeluar()-d.getQty());
                 stok.setStokAkhir(stok.getStokAkhir()+d.getQty());
+                System.out.println(stok.getStokKeluar());
                 StokBarangDAO.update(con, stok);
                 resetStokBarang(con, d.getKodeBarang(), penjualan.getKodeGudang(), tglBarang.format(tglSql.parse(penjualan.getTglPenjualan())));
 
@@ -1751,6 +1753,7 @@ public class Service {
             con.setAutoCommit(true);
             return status;
         }catch(Exception e){
+            e.printStackTrace();
             try{
                 con.rollback();
                 con.setAutoCommit(true);

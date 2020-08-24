@@ -384,10 +384,6 @@ public class PengirimanBarangController  {
                                 pengiriman.setPembayaran(total);
                             pengiriman.setSisaPembayaran(pengiriman.getTotalPenjualan()-pengiriman.getPembayaran());
                             pengiriman.setListPenjualanDetail(controller.allPenjualanDetail); 
-                            if(pengiriman.getPemesananHead().getCustomer().getLimitHutang()<
-                                pengiriman.getPemesananHead().getCustomer().getHutang()+pengiriman.getSisaPembayaran())
-                                return "Sisa pembayaran melebihi limit hutang customer";
-                            else
                                 return Service.newPenjualan(con, pengiriman);
                         }
                     }

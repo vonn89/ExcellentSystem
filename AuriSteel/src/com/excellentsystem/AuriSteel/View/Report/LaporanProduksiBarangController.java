@@ -210,13 +210,13 @@ public class LaporanProduksiBarangController  {
     }
     public void setMainApp(Main mainApp) {
         this.mainApp = mainApp;
-        ObservableList<String> groupBy = FXCollections.observableArrayList();
-        groupBy.clear();
-        groupBy.add("Produksi Bahan - Bahan");
-        groupBy.add("Produksi Bahan - Barang");
-        groupBy.add("Produksi Barang - Barang");
-        groupByCombo.setItems(groupBy);
-        groupByCombo.getSelectionModel().select("Produksi Bahan - Barang");
+        ObservableList<String> kategori = FXCollections.observableArrayList();
+        kategori.clear();
+        kategori.add("Bahan - Bahan");
+        kategori.add("Bahan - Barang");
+        kategori.add("Barang - Barang");
+        groupByCombo.setItems(kategori);
+        groupByCombo.getSelectionModel().select("Bahan - Barang");
         getProduksi();
         produksiHeadTable.setItems(filterData);
     } 
@@ -236,6 +236,7 @@ public class LaporanProduksiBarangController  {
                             con, tglProduksiMulaiPicker.getValue().toString(), tglProduksiAkhirPicker.getValue().toString(), 
                             groupByCombo.getSelectionModel().getSelectedItem(),"true");
                     for(ProduksiHead p : listProduksi){
+                        System.out.println(p.getKodeProduksi());
                         List<ProduksiDetailBahan> listBahan = new ArrayList<>();
                         for(ProduksiDetailBahan b : listProduksiBahan){
                             if(p.getKodeProduksi().equals(b.getKodeProduksi()))

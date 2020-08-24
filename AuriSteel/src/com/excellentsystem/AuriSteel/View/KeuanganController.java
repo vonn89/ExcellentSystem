@@ -256,21 +256,21 @@ public class KeuanganController {
                                 rm.getItems().add(addNewBebanPenjualan);
                                 rm.getItems().add(addNewBebanProduksi);
                             }
-                            if (o.getJenis().equals("Detail Transaksi") && o.isStatus() && status) {
+                            if (o.getJenis().equals("Detail Transaksi") && o.isStatus()) {
                                 if (statusBebanPenjualan) {
                                     rm.getItems().addAll(detailBebanPenjualan);
                                 }else if (statusBebanProduksi) {
                                     rm.getItems().addAll(detailBebanProduksi);
-                                }else{
+                                }else if(status){
                                     rm.getItems().add(lihatKeuangan);
                                 }
                             }
-                            if (o.getJenis().equals("Batal Transaksi") && o.isStatus() && status) {
+                            if (o.getJenis().equals("Batal Transaksi") && o.isStatus()) {
                                 if (statusBebanPenjualan) {
                                     rm.getItems().addAll(batalBebanPenjualan);
                                 }else if (statusBebanProduksi) {
                                     rm.getItems().addAll(batalBebanProduksi);
-                                }else{
+                                }else if(status){
                                     rm.getItems().add(batal);
                                 }
                             }

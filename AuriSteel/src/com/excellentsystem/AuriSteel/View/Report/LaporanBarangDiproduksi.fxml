@@ -69,6 +69,8 @@
              
             </Label>
                   <DatePicker fx:id="tglProduksiAkhirPicker" editable="false" onAction="#getProduksi" prefHeight="35.0" prefWidth="140.0" />
+                  <Label layoutX="401.0" layoutY="19.0" text="Jenis Produksi" />
+                  <ComboBox fx:id="kategoriCombo" layoutX="461.0" layoutY="10.0" onAction="#getProduksi" prefHeight="35.0" prefWidth="120.0" />
                   <Label text="Group By" />
                   <ComboBox fx:id="groupByCombo" onAction="#getProduksi" prefHeight="35.0" prefWidth="120.0" />
                </children>

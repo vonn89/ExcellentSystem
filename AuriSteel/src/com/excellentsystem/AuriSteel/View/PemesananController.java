@@ -460,7 +460,10 @@ public class PemesananController {
         controller.saveButton.setOnAction((event) -> {
             if(controller.customer==null)
                 mainApp.showMessage(Modality.NONE, "Warning", "Customer belum dipilih");
-            else if(controller.paymentTermCombo.getSelectionModel().getSelectedItem()==null)
+            else if(controller.customer.getLimitHutang()<controller.customer.getHutang()+
+                    Double.parseDouble(controller.grandtotalField.getText().replaceAll(",", ""))){
+                mainApp.showMessage(Modality.NONE, "Warning", "Pemesanan melebihi limit hutang customer");
+            }else if(controller.paymentTermCombo.getSelectionModel().getSelectedItem()==null)
                 mainApp.showMessage(Modality.NONE, "Warning", "Payment term belum dipilih");
             else if(controller.allPemesananDetail.isEmpty())
                 mainApp.showMessage(Modality.NONE, "Warning", "Barang tidak ada");

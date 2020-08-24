@@ -583,7 +583,7 @@ public class ProduksiBarangController  {
                 
                 Sheet sheet = workbook.createSheet("Data Produksi");
                 int rc = 0;
-                int c = 6;
+                int c = 10;
                 createRow(workbook, sheet, rc, c, "Bold");
                 sheet.getRow(rc).getCell(0).setCellValue("Tanggal : "+
                         tgl.format(tglBarang.parse(tglMulaiPicker.getValue().toString()))+"-"+
@@ -597,9 +597,12 @@ public class ProduksiBarangController  {
                 sheet.getRow(rc).getCell(1).setCellValue("Tgl Produksi");  
                 sheet.getRow(rc).getCell(2).setCellValue("Gudang"); 
                 sheet.getRow(rc).getCell(3).setCellValue("Bahan"); 
-                sheet.getRow(rc).getCell(4).setCellValue("Barang"); 
-                sheet.getRow(rc).getCell(5).setCellValue("Catatan"); 
-                sheet.getRow(rc).getCell(6).setCellValue("Kode User"); 
+                sheet.getRow(rc).getCell(4).setCellValue("Total Berat Bahan"); 
+                sheet.getRow(rc).getCell(5).setCellValue("Barang"); 
+                sheet.getRow(rc).getCell(6).setCellValue("Total Berat Barang"); 
+                sheet.getRow(rc).getCell(7).setCellValue("Berat Jadi"); 
+                sheet.getRow(rc).getCell(8).setCellValue("Catatan"); 
+                sheet.getRow(rc).getCell(9).setCellValue("Kode User"); 
                 rc++;
                 for (ProduksiHead p : filterData) {
                     createRow(workbook, sheet, rc, c, "Detail");
@@ -607,21 +610,51 @@ public class ProduksiBarangController  {
                     sheet.getRow(rc).getCell(1).setCellValue(tglLengkap.format(tglSql.parse(p.getTglProduksi())));
                     sheet.getRow(rc).getCell(2).setCellValue(p.getKodeGudang());
                     String listBahan = "";
+                    double totalBeratBahan = 0;
                     for(ProduksiDetailBahan d : p.getListProduksiDetailBahan()){
                         listBahan = listBahan + d.getKodeBarang();
                         if(p.getListProduksiDetailBahan().indexOf(d)<p.getListProduksiDetailBahan().size()-1)
                             listBahan = listBahan + ", ";
+                        if(d.getBarang()!=null)
+                            totalBeratBahan = totalBeratBahan + (d.getQty()*d.getBarang().getBerat());
+                        else
+                            totalBeratBahan = totalBeratBahan + d.getQty();
                     }
                     sheet.getRow(rc).getCell(3).setCellValue(listBahan);
+                    sheet.getRow(rc).getCell(4).setCellValue(totalBeratBahan);
                     String listBarang = "";
+                    double totalBeratBarang = 0;
                     for(ProduksiDetailBarang d : p.getListProduksiDetailBarang()){
                         listBarang = listBarang + d.getKodeBarang();
                         if(p.getListProduksiDetailBarang().indexOf(d)<p.getListProduksiDetailBarang().size()-1)
                             listBarang = listBarang + ", ";
+                        totalBeratBarang = totalBeratBarang + d.getQty()*d.getBarang().getBerat();
                     }
-                    sheet.getRow(rc).getCell(4).setCellValue(listBarang);
-                    sheet.getRow(rc).getCell(5).setCellValue(p.getCatatan());
-                    sheet.getRow(rc).getCell(6).setCellValue(p.getKodeUser());
+                    sheet.getRow(rc).getCell(5).setCellValue(listBarang);
+                    sheet.getRow(rc).getCell(6).setCellValue(totalBeratBarang);
+                    double beratJadi = 0;
+                    if(p.getJenisProduksi().equals("Bahan - Barang")){
+                        double qty = 0;
+                        for(ProduksiDetailBarang d : p.getListProduksiDetailBarang()){
+                            qty = qty + d.getQty();
+                        }
+                        double berat = 0;
+                        for(ProduksiDetailBahan d : p.getListProduksiDetailBahan()){
+                            berat = berat + d.getQty();
+                        }
+                        beratJadi = berat/qty;
+                    }else if(p.getJenisProduksi().equals("Barang - Barang")){
+                        double qty = 0;
+                        double berat = 0;
+                        for(ProduksiDetailBarang d : p.getListProduksiDetailBarang()){
+                            qty = qty + d.getQty();
+                            berat = berat + (d.getQty()*d.getBarang().getBerat());
+                        }
+                        beratJadi = berat/qty;
+                    }
+                    sheet.getRow(rc).getCell(7).setCellValue(beratJadi);
+                    sheet.getRow(rc).getCell(8).setCellValue(p.getCatatan());
+                    sheet.getRow(rc).getCell(9).setCellValue(p.getKodeUser());
                     rc++;
                 }
                 for(int i=0 ; i<c ; i++){ sheet.autoSizeColumn(i);}

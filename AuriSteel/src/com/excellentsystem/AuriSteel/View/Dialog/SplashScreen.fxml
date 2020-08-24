@@ -18,9 +18,9 @@
             <RowConstraints vgrow="SOMETIMES" />
          </rowConstraints>
          <children>
-            <VBox fx:id="vbox" alignment="CENTER" fillWidth="false" maxWidth="1.7976931348623157E308" spacing="20.0" style="-fx-background-color: seccolor6;" GridPane.halignment="CENTER">
+            <VBox fx:id="vbox" alignment="CENTER" fillWidth="false" maxWidth="1.7976931348623157E308" spacing="20.0" style="-fx-background-color: seccolor2;" GridPane.halignment="CENTER">
                <children>
-                  <ImageView fitHeight="200.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fitHeight="150.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@../../Resource/auri-steel-big.jpg" />
                      </image>

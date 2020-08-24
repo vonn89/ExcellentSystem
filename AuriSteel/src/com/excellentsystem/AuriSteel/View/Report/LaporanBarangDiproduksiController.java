@@ -6,6 +6,11 @@
 
 package com.excellentsystem.AuriSteel.View.Report;
 
+import com.excellentsystem.AuriSteel.DAO.BarangDAO;
+import com.excellentsystem.AuriSteel.DAO.ProduksiDetailBahanDAO;
+import com.excellentsystem.AuriSteel.DAO.ProduksiDetailBarangDAO;
+import com.excellentsystem.AuriSteel.DAO.ProduksiHeadDAO;
+import com.excellentsystem.AuriSteel.DAO.ProduksiOperatorDAO;
 import com.excellentsystem.AuriSteel.Function;
 import static com.excellentsystem.AuriSteel.Function.createRow;
 import com.excellentsystem.AuriSteel.Koneksi;
@@ -21,6 +26,7 @@ import com.excellentsystem.AuriSteel.Model.Otoritas;
 import com.excellentsystem.AuriSteel.Model.ProduksiDetailBahan;
 import com.excellentsystem.AuriSteel.Model.ProduksiDetailBarang;
 import com.excellentsystem.AuriSteel.Model.ProduksiHead;
+import com.excellentsystem.AuriSteel.Model.ProduksiOperator;
 import com.excellentsystem.AuriSteel.PrintOut.Report;
 import com.excellentsystem.AuriSteel.View.Dialog.NewProduksiBarangController;
 import java.io.File;
@@ -82,6 +88,7 @@ public class LaporanBarangDiproduksiController  {
     @FXML private TreeTableColumn<ProduksiDetailBarang, Number> nilaiSatuanBarangColumn;
     
     @FXML private ComboBox<String> groupByCombo;
+    @FXML private ComboBox<String> kategoriCombo;
     @FXML private TextField searchField;
     @FXML private Label totalQtyField;
     @FXML private Label totalNilaiField;
@@ -230,6 +237,13 @@ public class LaporanBarangDiproduksiController  {
         groupBy.add("Tahun");
         groupByCombo.setItems(groupBy);
         groupByCombo.getSelectionModel().select("No Produksi");
+        ObservableList<String> kategori = FXCollections.observableArrayList();
+        kategori.clear();
+        kategori.add("Bahan - Bahan");
+        kategori.add("Bahan - Barang");
+        kategori.add("Barang - Barang");
+        kategoriCombo.setItems(kategori);
+        kategoriCombo.getSelectionModel().select("Bahan - Barang");
         getProduksi();
     } 
     @FXML
@@ -238,30 +252,36 @@ public class LaporanBarangDiproduksiController  {
             @Override 
             public List<ProduksiDetailBarang> call() throws Exception{
                 try(Connection con = Koneksi.getConnection()){
-//                    List<ProduksiHead> produksiHead = ProduksiHeadDAO.getAllByDateAndJenisProduksiAndStatus(con, 
-//                            tglProduksiMulaiPicker.getValue().toString(), tglProduksiAkhirPicker.getValue().toString(),"true");
-//                    List<ProduksiDetailBarang> allProduksi = ProduksiDetailBarangDAO.getAllByDateAndStatus(con, 
-//                            tglProduksiMulaiPicker.getValue().toString(), tglProduksiAkhirPicker.getValue().toString(),"true");
-//                    List<ProduksiDetailBahan> allProduksiBahan = ProduksiDetailBahanDAO.getAllByDateAndStatus(con, 
-//                            tglProduksiMulaiPicker.getValue().toString(), tglProduksiAkhirPicker.getValue().toString(),"true");
-//                    List<Barang> allbarang = BarangDAO.getAllByStatus(con, "%");
-//                    for(ProduksiDetailBarang d : allProduksi){
-//                        for(Barang b : allbarang){
-//                            if(d.getKodeBarang().equals(b.getKodeBarang()))
-//                                d.setBarang(b);
-//                        }
-//                        for(ProduksiHead p : produksiHead){
-//                            if(d.getKodeProduksi().equals(p.getKodeProduksi()))
-//                                d.setProduksiHead(p);
-//                        }
-//                        List<ProduksiDetailBahan> listBahan = new ArrayList<>();
-//                        for(ProduksiDetailBahan b : allProduksiBahan){
-//                            if(b.getKodeProduksi().equals(d.getKodeProduksi()))
-//                                listBahan.add(b);
-//                        }
-//                        d.getProduksiHead().setListProduksiDetailBahan(listBahan);
-//                    }
-                    return allProduksi;
+                    List<ProduksiHead> listProduksi = ProduksiHeadDAO.getAllByDateAndJenisProduksiAndStatus(
+                            con, tglProduksiMulaiPicker.getValue().toString(), tglProduksiAkhirPicker.getValue().toString(), 
+                            kategoriCombo.getSelectionModel().getSelectedItem(), "true");
+                    List<ProduksiDetailBahan> listProduksiBahan = ProduksiDetailBahanDAO.getAllByDateAndJenisProduksiAndStatus(
+                            con, tglProduksiMulaiPicker.getValue().toString(), tglProduksiAkhirPicker.getValue().toString(),  
+                            kategoriCombo.getSelectionModel().getSelectedItem(),"true");
+                    List<ProduksiDetailBarang> listProduksiBarang = ProduksiDetailBarangDAO.getAllByDateAndJenisProduksiAndStatus(
+                            con, tglProduksiMulaiPicker.getValue().toString(), tglProduksiAkhirPicker.getValue().toString(), 
+                            kategoriCombo.getSelectionModel().getSelectedItem(),"true");
+                    List<ProduksiOperator> listProduksiOperator = ProduksiOperatorDAO.getAllByDateAndJenisProduksiAndStatus(
+                            con, tglProduksiMulaiPicker.getValue().toString(), tglProduksiAkhirPicker.getValue().toString(), 
+                            kategoriCombo.getSelectionModel().getSelectedItem(),"true");
+                    List<Barang> allbarang = BarangDAO.getAllByStatus(con, "%");
+                    for(ProduksiDetailBarang d : listProduksiBarang){
+                        for(Barang b : allbarang){
+                            if(d.getKodeBarang().equals(b.getKodeBarang()))
+                                d.setBarang(b);
+                        }
+                        for(ProduksiHead p : listProduksi){
+                            if(d.getKodeProduksi().equals(p.getKodeProduksi()))
+                                d.setProduksiHead(p);
+                        }
+                        List<ProduksiDetailBahan> listBahan = new ArrayList<>();
+                        for(ProduksiDetailBahan b : listProduksiBahan){
+                            if(b.getKodeProduksi().equals(d.getKodeProduksi()))
+                                listBahan.add(b);
+                        }
+                        d.getProduksiHead().setListProduksiDetailBahan(listBahan);
+                    }
+                    return listProduksiBarang;
                 }
             }
         };
@@ -506,21 +526,21 @@ public class LaporanBarangDiproduksiController  {
                             createRow(workbook, sheet, rc, c, "Detail");
                             sheet.getRow(rc).getCell(0).setCellValue(detail.getKodeProduksi());
                             sheet.getRow(rc).getCell(1).setCellValue(tglLengkap.format(tglSql.parse(detail.getProduksiHead().getTglProduksi())));
-                            sheet.getRow(rc).getCell(1).setCellValue(detail.getProduksiHead().getKodeGudang());
+                            sheet.getRow(rc).getCell(2).setCellValue(detail.getProduksiHead().getKodeGudang());
                             String listBahan = "";
                             for(ProduksiDetailBahan d : detail.getProduksiHead().getListProduksiDetailBahan()){
                                 listBahan = listBahan + d.getKodeBarang();
                                 if(detail.getProduksiHead().getListProduksiDetailBahan().indexOf(d) < detail.getProduksiHead().getListProduksiDetailBahan().size()-1)
                                     listBahan = listBahan + ", ";
                             }
-                            sheet.getRow(rc).getCell(2).setCellValue(listBahan);
-                            sheet.getRow(rc).getCell(3).setCellValue(detail.getProduksiHead().getCatatan());
-                            sheet.getRow(rc).getCell(4).setCellValue(detail.getKodeBarang());
-                            sheet.getRow(rc).getCell(5).setCellValue(detail.getBarang().getNamaBarang());
-                            sheet.getRow(rc).getCell(6).setCellValue(detail.getBarang().getSatuan());
-                            sheet.getRow(rc).getCell(7).setCellValue(detail.getQty());
-                            sheet.getRow(rc).getCell(8).setCellValue(detail.getNilai());
-                            sheet.getRow(rc).getCell(9).setCellValue(detail.getNilai()/detail.getQty());
+                            sheet.getRow(rc).getCell(3).setCellValue(listBahan);
+                            sheet.getRow(rc).getCell(4).setCellValue(detail.getProduksiHead().getCatatan());
+                            sheet.getRow(rc).getCell(5).setCellValue(detail.getKodeBarang());
+                            sheet.getRow(rc).getCell(6).setCellValue(detail.getBarang().getNamaBarang());
+                            sheet.getRow(rc).getCell(7).setCellValue(detail.getBarang().getSatuan());
+                            sheet.getRow(rc).getCell(8).setCellValue(detail.getQty());
+                            sheet.getRow(rc).getCell(9).setCellValue(detail.getNilai());
+                            sheet.getRow(rc).getCell(10).setCellValue(detail.getNilai()/detail.getQty());
                             rc++;
                             totalQty = totalQty + detail.getQty();
                             totalNilai = totalNilai + detail.getNilai();
@@ -528,16 +548,16 @@ public class LaporanBarangDiproduksiController  {
                     }
                     createRow(workbook, sheet, rc, c, "SubHeader");
                     sheet.getRow(rc).getCell(0).setCellValue("Total "+temp);
-                    sheet.getRow(rc).getCell(7).setCellValue(totalQty);
-                    sheet.getRow(rc).getCell(8).setCellValue(totalNilai);
+                    sheet.getRow(rc).getCell(8).setCellValue(totalQty);
+                    sheet.getRow(rc).getCell(9).setCellValue(totalNilai);
                     rc++;
                     grandtotalQty = grandtotalQty + totalQty;
                     grandtotalNilai = grandtotalNilai + totalNilai;
                 }
                 createRow(workbook, sheet, rc, c, "Header");
                 sheet.getRow(rc).getCell(0).setCellValue("Total");
-                sheet.getRow(rc).getCell(7).setCellValue(grandtotalQty);
-                sheet.getRow(rc).getCell(8).setCellValue(grandtotalNilai);
+                sheet.getRow(rc).getCell(8).setCellValue(grandtotalQty);
+                sheet.getRow(rc).getCell(9).setCellValue(grandtotalNilai);
                 rc++;
                 for(int i=0 ; i<c ; i++){ sheet.autoSizeColumn(i);}
                 try (FileOutputStream outputStream = new FileOutputStream(file)) {

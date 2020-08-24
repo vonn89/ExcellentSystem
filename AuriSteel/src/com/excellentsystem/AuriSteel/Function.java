@@ -6,7 +6,6 @@
 package com.excellentsystem.AuriSteel;
 
 import static com.excellentsystem.AuriSteel.Main.df;
-import static com.excellentsystem.AuriSteel.Main.sistem;
 import static com.excellentsystem.AuriSteel.Main.tglSql;
 import com.google.auth.oauth2.GoogleCredentials;
 import com.google.cloud.storage.Blob;
@@ -38,8 +37,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.Base64;
 import java.util.Comparator;
 import java.util.Date;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.scene.control.Control;
 import javafx.scene.control.DateCell;
 import javafx.scene.control.DatePicker;
@@ -362,11 +359,11 @@ public class Function {
                     setCredentials(GoogleCredentials.fromStream(Main.class.getResourceAsStream("Resource/credentials.json"))).build();
             Storage storage = storageOptions.getService();
             
-            
             Blob blob = storage.get(BlobId.of("auristeel", filename));
             blob.downloadTo(Paths.get(filename));
             status = "Update Success - please restart application";
-        }catch(Exception e){
+        }catch(Exception e){e.printStackTrace();
+            System.out.println(e);
             System.out.println("rollback file");
             File fileasli = new File(filename);
             File filebackup = new File(filename+" backup");
@@ -386,6 +383,7 @@ public class Function {
         System.out.println("delete backup");
         Files.deleteIfExists(Paths.get(filename+" backup")); 
 //            
+        System.out.println("finish");
         return status;
     }
     public static void shutdown() throws RuntimeException, IOException {
