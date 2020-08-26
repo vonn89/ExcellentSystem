@@ -15,9 +15,7 @@ import com.excellentsystem.TokoEmasJagoPusat.Main;
 import static com.excellentsystem.TokoEmasJagoPusat.Main.gr;
 import static com.excellentsystem.TokoEmasJagoPusat.Main.rp;
 import static com.excellentsystem.TokoEmasJagoPusat.Main.sistem;
-import static com.excellentsystem.TokoEmasJagoPusat.Main.user;
 import com.excellentsystem.TokoEmasJagoPusat.Model.Kategori;
-import com.excellentsystem.TokoEmasJagoPusat.Model.Otoritas;
 import com.excellentsystem.TokoEmasJagoPusat.Model.StokBarang;
 import com.excellentsystem.TokoEmasJagoPusat.Model.SubKategori;
 import com.excellentsystem.TokoEmasJagoPusat.Service.Service;
@@ -25,6 +23,7 @@ import com.excellentsystem.TokoEmasJagoPusat.View.Dialog.KartuStokBarangPusatCon
 import com.excellentsystem.TokoEmasJagoPusat.View.Dialog.TambahBarangPusatController;
 import java.sql.Connection;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import javafx.beans.value.ObservableValue;
@@ -35,6 +34,7 @@ import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
@@ -71,11 +71,13 @@ public class StokBarangPusatController  {
     @FXML private TableColumn<StokBarang, Number> nilaiAkhirColumn;
     
     @FXML private TextField searchField;
+    @FXML private ComboBox<String> kategoriCombo;
     @FXML private Label totalBeratLabel;
     @FXML private Label totalBeratPersenLabel;
     @FXML private Label totalNilaiLabel;
     @FXML private DatePicker tglPicker;
     private Main mainApp;   
+    private final ObservableList<String> allKategori = FXCollections.observableArrayList();
     private final ObservableList<StokBarang> allBarang = FXCollections.observableArrayList();
     private final ObservableList<StokBarang> filterData = FXCollections.observableArrayList();
     public void initialize() {
@@ -184,7 +186,37 @@ public class StokBarangPusatController  {
     }    
     public void setMainApp(Main mainApp){
         this.mainApp = mainApp;
-        getBarang();
+        Task<List<String>> task = new Task<List<String>>() {
+            @Override 
+            public List<String> call() throws Exception{
+                try(Connection conPusat = KoneksiPusat.getConnection()){
+                    List<Kategori> listKategori = KategoriDAO.getAll(conPusat);
+                    List<String> allKategori = new ArrayList<>();
+                    allKategori.add("Semua");
+                    for(Kategori k : listKategori){
+                        allKategori.add(k.getKodeKategori());
+                    }
+                    return allKategori;
+                }
+            }
+        };
+        task.setOnRunning((e) -> {
+            mainApp.showLoadingScreen();
+        });
+        task.setOnSucceeded((e) -> {
+            mainApp.closeLoading();
+            allKategori.clear();
+            allKategori.addAll(task.getValue());
+            kategoriCombo.setItems(allKategori);
+            kategoriCombo.getSelectionModel().selectFirst();
+            getBarang();
+        });
+        task.setOnFailed((e) -> {
+            task.getException().printStackTrace();
+            mainApp.closeLoading();
+            mainApp.showMessage(Modality.NONE, "Error", task.getException().toString());
+        });
+        new Thread(task).start();
     } 
     @FXML
     private void getBarang(){
@@ -192,7 +224,11 @@ public class StokBarangPusatController  {
             @Override 
             public List<StokBarang> call() throws Exception{
                 try(Connection conPusat = KoneksiPusat.getConnection()){
-                    List<StokBarang> listBarang = StokBarangDAO.getAllByTanggal(conPusat, tglPicker.getValue().toString());
+                    String kategori = "%";
+                    if(!kategoriCombo.getSelectionModel().getSelectedItem().equals("Semua"))
+                        kategori = kategoriCombo.getSelectionModel().getSelectedItem();
+                    System.out.println(kategori);
+                    List<StokBarang> listBarang = StokBarangDAO.getAllByTanggalAndKategori(conPusat, tglPicker.getValue().toString(), kategori);
                     listBarang.sort(Comparator.comparing(StokBarang::getKodeSubKategori));
                     return listBarang;
                 }

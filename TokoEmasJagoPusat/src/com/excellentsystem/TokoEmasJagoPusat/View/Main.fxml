@@ -378,6 +378,7 @@
                                              <items>
                                                 <MenuItem mnemonicParsing="false" onAction="#showLaporanPerformaBarcode" text="Laporan Performa Barcode" />
                                                 <MenuItem mnemonicParsing="false" onAction="#showLaporanOmzet" text="Laporan Omzet Cabang" />
+                                                <MenuItem mnemonicParsing="false" onAction="#showLaporanTransaksiCabang" text="Laporan Transaksi Cabang" />
                                                 <MenuItem mnemonicParsing="false" onAction="#showLaporanNeracaCabang" text="Laporan Neraca Cabang" />
                                                 <MenuItem mnemonicParsing="false" onAction="#showLaporanUntungRugiCabang" text="Laporan Untung Rugi Cabang" />
                                              </items>

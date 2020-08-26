@@ -793,6 +793,10 @@ public class MainController  {
     private void showLaporanUntungRugiCabang2(){
         mainApp.showLaporanUntungRugiCabang2();
     }
+    @FXML
+    private void showLaporanTransaksiCabang(){
+        mainApp.showLaporanTransaksiCabang();
+    }
     
     @FXML
     private void showPenjualanFiktifCabang(){

@@ -12,12 +12,12 @@ import static com.excellentsystem.TokoEmasJagoPusat.Function.createSecretKey;
 import com.excellentsystem.TokoEmasJagoPusat.Model.Otoritas;
 import com.excellentsystem.TokoEmasJagoPusat.Model.Sistem;
 import com.excellentsystem.TokoEmasJagoPusat.Model.User;
-import static com.excellentsystem.TokoEmasJagoPusat.Patch.patchResetStokBarang;
 import com.excellentsystem.TokoEmasJagoPusat.Report.LaporanBatalBarcodeController;
 import com.excellentsystem.TokoEmasJagoPusat.Report.LaporanNeracaCabangController;
 import com.excellentsystem.TokoEmasJagoPusat.Report.LaporanOmzetController;
 import com.excellentsystem.TokoEmasJagoPusat.Report.LaporanPembelianController;
 import com.excellentsystem.TokoEmasJagoPusat.Report.LaporanPerformaBarcodeController;
+import com.excellentsystem.TokoEmasJagoPusat.Report.LaporanTransaksiCabangController;
 import com.excellentsystem.TokoEmasJagoPusat.Report.LaporanUntungRugiCabangController;
 import com.excellentsystem.TokoEmasJagoPusat.Report.LaporanUntungRugiController;
 import com.excellentsystem.TokoEmasJagoPusat.View.BarcodeBarangController;
@@ -466,6 +466,17 @@ public class Main extends Application{
 //            if (event.getCode() == KeyCode.RIGHT) 
 //                controller.nextPage();
 //        });
+    }
+    public void showLaporanTransaksiCabang(){
+        Stage stage = new Stage();
+        FXMLLoader loader = showLaporan(stage, "Report/LaporanTransaksiCabang.fxml", "Laporan Transaksi Cabang");
+        LaporanTransaksiCabangController controller = loader.getController();
+        stage.addEventFilter(KeyEvent.KEY_RELEASED, event->{
+            if (event.getCode() == KeyCode.LEFT) 
+                controller.prevPage();
+            if (event.getCode() == KeyCode.RIGHT) 
+                controller.nextPage();
+        });
     }
     public DataCabangController showDataCabang(){
         Stage stage = new Stage();

@@ -55,8 +55,10 @@ public class StokBarangDAO {
         }
         return listStokBarang;
     }
-    public static List<StokBarang> getAllByTanggal(Connection con, String tanggal)throws Exception{
-        String sql = "select * from tt_stok_barang where tanggal = ?  ";
+    public static List<StokBarang> getAllByTanggalAndKategori(Connection con, String tanggal, String kategori)throws Exception{
+        String sql = "select * from tt_stok_barang where tanggal = ? ";
+        if(!kategori.equals("%"))
+            sql = sql + " and kode_kategori = '"+kategori+"' ";
         PreparedStatement ps = con.prepareStatement(sql);
         ps.setString(1, tanggal);
         List<StokBarang> listStokBarang = new ArrayList<>();
