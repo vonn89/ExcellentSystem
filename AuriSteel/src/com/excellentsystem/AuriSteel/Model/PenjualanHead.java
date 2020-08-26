@@ -24,7 +24,6 @@ public class PenjualanHead {
     private final StringProperty kodeCustomerInvoice = new SimpleStringProperty();
     private final StringProperty kodeGudang = new SimpleStringProperty();
     private final StringProperty tujuanKirim = new SimpleStringProperty();
-    private final StringProperty jenisPengiriman = new SimpleStringProperty();
     private final StringProperty supir = new SimpleStringProperty();
     private final StringProperty paymentTerm = new SimpleStringProperty();
     private final DoubleProperty totalPenjualan = new SimpleDoubleProperty();
@@ -36,12 +35,38 @@ public class PenjualanHead {
     private final StringProperty kodeUser = new SimpleStringProperty();
     private final StringProperty tglBatal = new SimpleStringProperty();
     private final StringProperty userBatal = new SimpleStringProperty();
+    private final StringProperty tglVerifikasi = new SimpleStringProperty();
+    private final StringProperty userVerifikasi = new SimpleStringProperty();
     private final StringProperty status = new SimpleStringProperty();
     private Customer customer;
     private Pegawai sales;
     private List<PenjualanDetail> listPenjualanDetail;
     private PemesananHead pemesananHead;
     private Customer customerInvoice;
+
+    public String getUserVerifikasi() {
+        return userVerifikasi.get();
+    }
+
+    public void setUserVerifikasi(String value) {
+        userVerifikasi.set(value);
+    }
+
+    public StringProperty userVerifikasiProperty() {
+        return userVerifikasi;
+    }
+
+    public String getTglVerifikasi() {
+        return tglVerifikasi.get();
+    }
+
+    public void setTglVerifikasi(String value) {
+        tglVerifikasi.set(value);
+    }
+
+    public StringProperty tglVerifikasiProperty() {
+        return tglVerifikasi;
+    }
 
     public double getTotalBebanPenjualan() {
         return totalBebanPenjualan.get();
@@ -111,19 +136,6 @@ public class PenjualanHead {
     public StringProperty supirProperty() {
         return supir;
     }
-
-    public String getJenisPengiriman() {
-        return jenisPengiriman.get();
-    }
-
-    public void setJenisPengiriman(String value) {
-        jenisPengiriman.set(value);
-    }
-
-    public StringProperty jenisPengirimanProperty() {
-        return jenisPengiriman;
-    }
-
 
     public PemesananHead getPemesananHead() {
         return pemesananHead;

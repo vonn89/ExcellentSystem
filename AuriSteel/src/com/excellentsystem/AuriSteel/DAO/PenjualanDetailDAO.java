@@ -88,4 +88,23 @@ public class PenjualanDetailDAO {
         ps.setDouble(12, d.getTotal());
         ps.executeUpdate();
     }
+    public static void update(Connection con, PenjualanDetail d)throws Exception{
+        PreparedStatement ps = con.prepareStatement("update tt_penjualan_detail set "
+                + " kode_barang = ?, nama_barang = ?, keterangan = ?, catatan_intern = ?, "
+                + " satuan = ?, qty = ?, nilai = ?, harga_jual = ?, total = ? "
+                + " where no_penjualan = ? and no_pemesanan = ? and no_urut = ? ");
+        ps.setString(1, d.getKodeBarang());
+        ps.setString(2, d.getNamaBarang());
+        ps.setString(3, d.getKeterangan());
+        ps.setString(4, d.getCatatanIntern());
+        ps.setString(5, d.getSatuan());
+        ps.setDouble(6, d.getQty());
+        ps.setDouble(7, d.getNilai());
+        ps.setDouble(8, d.getHargaJual());
+        ps.setDouble(9, d.getTotal());
+        ps.setString(10, d.getNoPenjualan());
+        ps.setString(11, d.getNoPemesanan());
+        ps.setInt(12, d.getNoUrut());
+        ps.executeUpdate();
+    }
 }

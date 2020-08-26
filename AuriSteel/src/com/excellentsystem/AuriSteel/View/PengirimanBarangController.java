@@ -46,6 +46,7 @@ import javafx.concurrent.WorkerStateEvent;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.MenuItem;
@@ -85,6 +86,7 @@ public class PengirimanBarangController  {
     @FXML private TextField searchField;
     @FXML private DatePicker tglMulaiPicker;
     @FXML private DatePicker tglAkhirPicker;
+    @FXML private ComboBox<String> groupByCombo;
     
     private ObservableList<PenjualanHead> allPengiriman = FXCollections.observableArrayList();
     private ObservableList<PenjualanHead> filterData = FXCollections.observableArrayList();
@@ -177,6 +179,10 @@ public class PengirimanBarangController  {
                         detail.setOnAction((ActionEvent e)->{
                             lihatDetailPengiriman(item);
                         });
+                        MenuItem verifikasi = new MenuItem("Verifikasi Pengiriman");
+                        verifikasi.setOnAction((ActionEvent e)->{
+                            verifikasiPengiriman(item);
+                        });
                         MenuItem batal = new MenuItem("Batal Pengiriman");
                         batal.setOnAction((ActionEvent e)->{
                             batalPengiriman(item);
@@ -202,11 +208,13 @@ public class PengirimanBarangController  {
                                 rm.getItems().add(addNew);
                             if(o.getJenis().equals("Detail Pengiriman")&&o.isStatus())
                                 rm.getItems().add(detail);
-                            if(o.getJenis().equals("Batal Pengiriman")&&o.isStatus())
+                            if(o.getJenis().equals("Verifikasi Pengiriman")&&o.isStatus()&&item.getStatus().equals("open"))
+                                rm.getItems().add(verifikasi);
+                            if(o.getJenis().equals("Batal Pengiriman")&&o.isStatus()&&!item.getStatus().equals("false"))
                                 rm.getItems().add(batal);
-                            if(o.getJenis().equals("Print Surat Jalan")&&o.isStatus())
+                            if(o.getJenis().equals("Print Surat Jalan")&&o.isStatus()&&!item.getStatus().equals("false"))
                                 rm.getItems().add(suratJalan);
-                            if(o.getJenis().equals("Print Invoice")&&o.isStatus())
+                            if(o.getJenis().equals("Print Invoice")&&o.isStatus()&&!item.getStatus().equals("false"))
                                 rm.getItems().add(invoice);
                             if(o.getJenis().equals("Export Excel")&&o.isStatus())
                                 rm.getItems().add(export);
@@ -240,6 +248,14 @@ public class PengirimanBarangController  {
     }    
     public void setMainApp(Main mainApp) {
         this.mainApp = mainApp;
+        ObservableList<String> groupBy = FXCollections.observableArrayList();
+        groupBy.clear();
+        groupBy.add("Wait");
+        groupBy.add("Done");
+        groupBy.add("Cancel");
+        groupBy.add("Semua");
+        groupByCombo.setItems(groupBy);
+        groupByCombo.getSelectionModel().select("Wait");
         getPengiriman();
     }
     @FXML
@@ -248,13 +264,21 @@ public class PengirimanBarangController  {
             @Override 
             public List<PenjualanHead> call() throws Exception {
                 try (Connection con = Koneksi.getConnection()) {
+                    String status = "%";
+                    if(groupByCombo.getSelectionModel().getSelectedItem().equals("Done")){
+                        status = "true";
+                    }else if(groupByCombo.getSelectionModel().getSelectedItem().equals("Wait")){
+                        status = "open";
+                    }else if(groupByCombo.getSelectionModel().getSelectedItem().equals("Cancel")){
+                        status = "false";
+                    }
                     List<Customer> allCustomer = CustomerDAO.getAllByStatus(con, "%");
                     List<Pegawai> allSales = PegawaiDAO.getAllByStatus(con, "%");
                     List<Barang> allBarang = BarangDAO.getAllByStatus(con, "%");
                     List<PenjualanDetail> allPengirimanDetail = PenjualanDetailDAO.getAllByDateAndStatus(con, 
-                            tglMulaiPicker.getValue().toString(), tglAkhirPicker.getValue().toString(),"true");
+                            tglMulaiPicker.getValue().toString(), tglAkhirPicker.getValue().toString(), status);
                     List<PenjualanHead> allPengiriman = PenjualanHeadDAO.getAllByDateAndStatus(con, 
-                            tglMulaiPicker.getValue().toString(), tglAkhirPicker.getValue().toString(),"true");
+                            tglMulaiPicker.getValue().toString(), tglAkhirPicker.getValue().toString(), status);
                     for(PenjualanHead h : allPengiriman){
                         for(Customer c : allCustomer){
                             if(h.getKodeCustomer().equals(c.getKodeCustomer()))
@@ -322,7 +346,6 @@ public class PengirimanBarangController  {
                         checkColumn(temp.getCustomer().getKota())||
                         checkColumn(temp.getKodeGudang())||
                         checkColumn(temp.getTujuanKirim())||
-                        checkColumn(temp.getJenisPengiriman())||
                         checkColumn(temp.getSupir())||
                         checkColumn(temp.getCatatan()))
                         filterData.add(temp);
@@ -361,7 +384,6 @@ public class PengirimanBarangController  {
                             pengiriman.setKodeCustomerInvoice(controller.pemesanan.getKodeCustomerInvoice());
                             pengiriman.setKodeGudang(controller.gudangCombo.getSelectionModel().getSelectedItem());
                             pengiriman.setTujuanKirim(controller.alamatKirimField.getText());
-                            pengiriman.setJenisPengiriman("");
                             pengiriman.setSupir(controller.namaSupirField.getText());
                             pengiriman.setPaymentTerm(controller.pemesanan.getPaymentTerm());
                             pengiriman.setCatatan(controller.pemesanan.getCatatan());
@@ -369,7 +391,9 @@ public class PengirimanBarangController  {
                             pengiriman.setKodeUser(sistem.getUser().getKodeUser());
                             pengiriman.setTglBatal("2000-01-01 00:00:00");
                             pengiriman.setUserBatal("");
-                            pengiriman.setStatus("true");
+                            pengiriman.setTglVerifikasi("2000-01-01 00:00:00");
+                            pengiriman.setUserVerifikasi("");
+                            pengiriman.setStatus("open");
                             pengiriman.setTotalBebanPenjualan(0);
                             double total = 0;
                             for(PenjualanDetail temp : controller.allPenjualanDetail){
@@ -377,14 +401,18 @@ public class PengirimanBarangController  {
                                 total = total + temp.getTotal();
                             }
                             pengiriman.setTotalPenjualan(total);
-                            double dp = pengiriman.getPemesananHead().getSisaDownPayment();
-                            if(total>=dp)
-                                pengiriman.setPembayaran(dp);
-                            else if(total<dp)
-                                pengiriman.setPembayaran(total);
-                            pengiriman.setSisaPembayaran(pengiriman.getTotalPenjualan()-pengiriman.getPembayaran());
+                            pengiriman.setPembayaran(0);
+                            pengiriman.setSisaPembayaran(total);
+//                            
+//                            double dp = pengiriman.getPemesananHead().getSisaDownPayment();
+//                            if(total>=dp)
+//                                pengiriman.setPembayaran(dp);
+//                            else if(total<dp)
+//                                pengiriman.setPembayaran(total);
+//                            pengiriman.setSisaPembayaran(pengiriman.getTotalPenjualan()-pengiriman.getPembayaran());
+                            
                             pengiriman.setListPenjualanDetail(controller.allPenjualanDetail); 
-                                return Service.newPenjualan(con, pengiriman);
+                            return Service.newPengiriman(con, pengiriman);
                         }
                     }
                 };
@@ -409,6 +437,41 @@ public class PengirimanBarangController  {
             }
         });
     }
+    private void verifikasiPengiriman(PenjualanHead pengiriman){
+        MessageController controller = mainApp.showMessage(Modality.WINDOW_MODAL, "Confirmation",
+            "Verifikasi pengiriman barang "+pengiriman.getNoPenjualan()+" ?");
+        controller.OK.setOnAction((ActionEvent e) -> {
+            mainApp.closeMessage();
+            Task<String> task = new Task<String>() {
+                @Override 
+                public String call()throws Exception {
+                    try (Connection con = Koneksi.getConnection()) {
+                        pengiriman.setTglVerifikasi(tglSql.format(Function.getServerDate(con)));
+                        pengiriman.setUserVerifikasi(sistem.getUser().getKodeUser());
+                        pengiriman.setStatus("true");
+                        return Service.verifikasiPengiriman(con, pengiriman);
+                    }
+                }
+            };
+            task.setOnRunning((ex) -> {
+                mainApp.showLoadingScreen();
+            });
+            task.setOnSucceeded((WorkerStateEvent ex) -> {
+                mainApp.closeLoading();
+                getPengiriman();
+                if(task.getValue().equals("true")){
+                    mainApp.showMessage(Modality.NONE, "Success", "Data pengiriman barang berhasil disetujui");
+                }else{
+                    mainApp.showMessage(Modality.NONE, "Error", task.getValue());
+                }
+            });
+            task.setOnFailed((ex) -> {
+                mainApp.showMessage(Modality.NONE, "Error", task.getException().toString());
+                mainApp.closeLoading();
+            });
+            new Thread(task).start();
+        });
+    }
     private void batalPengiriman(PenjualanHead pengiriman){
         MessageController controller = mainApp.showMessage(Modality.WINDOW_MODAL, "Confirmation",
             "Batal pengiriman barang "+pengiriman.getNoPenjualan()+" ?");
@@ -421,7 +484,12 @@ public class PengirimanBarangController  {
                         pengiriman.setTglBatal(tglSql.format(Function.getServerDate(con)));
                         pengiriman.setUserBatal(sistem.getUser().getKodeUser());
                         pengiriman.setStatus("false");
-                        return Service.batalPenjualan(con, pengiriman);
+                        if(pengiriman.getStatus().equals("open"))
+                            return Service.batalPengiriman(con, pengiriman);
+                        else if(pengiriman.getStatus().equals("true"))
+                            return Service.batalPenjualan(con, pengiriman);
+                        else
+                            return "Status pengiriman salah";
                     }
                 }
             };

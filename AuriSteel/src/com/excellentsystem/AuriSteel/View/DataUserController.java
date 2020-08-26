@@ -369,6 +369,7 @@ public class DataUserController  {
                 Arrays.asList(                    
                     "Add New Pengiriman",
                     "Detail Pengiriman",
+                    "Verifikasi Pengiriman",
                     "Batal Pengiriman",
                     "Print Surat Jalan"
                 )
