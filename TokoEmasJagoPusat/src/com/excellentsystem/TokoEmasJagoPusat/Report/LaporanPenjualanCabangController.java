@@ -5,19 +5,17 @@
  */
 package com.excellentsystem.TokoEmasJagoPusat.Report;
 
-import com.excellentsystem.TokoEmasJagoPusat.DAO.AmbilBarangDetailDAO;
 import com.excellentsystem.TokoEmasJagoPusat.DAO.CabangDAO;
+import com.excellentsystem.TokoEmasJagoPusat.DAO.PenjualanCabangDetailDAO;
 import com.excellentsystem.TokoEmasJagoPusat.Function;
 import com.excellentsystem.TokoEmasJagoPusat.KoneksiPusat;
 import static com.excellentsystem.TokoEmasJagoPusat.Main.gr;
 import static com.excellentsystem.TokoEmasJagoPusat.Main.rp;
 import static com.excellentsystem.TokoEmasJagoPusat.Main.sistem;
 import static com.excellentsystem.TokoEmasJagoPusat.Main.tglBarang;
-import static com.excellentsystem.TokoEmasJagoPusat.Main.tglLengkap;
 import static com.excellentsystem.TokoEmasJagoPusat.Main.tglNormal;
-import static com.excellentsystem.TokoEmasJagoPusat.Main.tglSql;
-import com.excellentsystem.TokoEmasJagoPusat.Model.AmbilBarangDetail;
 import com.excellentsystem.TokoEmasJagoPusat.Model.Cabang;
+import com.excellentsystem.TokoEmasJagoPusat.Model.PenjualanCabangDetail;
 import java.awt.image.BufferedImage;
 import java.sql.Connection;
 import java.time.LocalDate;
@@ -49,7 +47,7 @@ import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.xml.JRXmlLoader;
 
-public class LaporanPembelianController {
+public class LaporanPenjualanCabangController {
 
     @SuppressWarnings("rawtypes")
     private JasperPrint jasperPrint;
@@ -66,7 +64,6 @@ public class LaporanPembelianController {
     @FXML private ComboBox<String> cabangCombo;
     @FXML private ComboBox<String> groupByCombo;
     @FXML private TextField searchField;
-    private ObservableList<String> group = FXCollections.observableArrayList();
     public void initialize(){
         Function.setNumberField(pageField, rp);
         tglAwalPicker.setConverter(Function.getTglConverter());
@@ -77,10 +74,11 @@ public class LaporanPembelianController {
         tglAkhirPicker.setValue(LocalDate.parse(sistem.getTglSystem()));
         tglAkhirPicker.setDayCellFactory((final DatePicker datePicker) -> 
                 Function.getDateCellAkhir(tglAwalPicker, LocalDate.parse(sistem.getTglSystem())));
-        groupByCombo.setItems(group);
-        group.add("No Pembelian");
+        ObservableList<String> group = FXCollections.observableArrayList();
+        group.add("No Penjualan");
         group.add("Kategori");
-        group.add("Barang");
+        group.add("Jenis");
+        groupByCombo.setItems(group);
         groupByCombo.getSelectionModel().selectFirst();
         getCabang();
         getBarang();
@@ -88,6 +86,7 @@ public class LaporanPembelianController {
     private void getCabang(){
         try(Connection conPusat = KoneksiPusat.getConnection()){
             ObservableList<String> cabang = FXCollections.observableArrayList();
+            cabang.add("Semua");
             List<Cabang> listCabang = CabangDAO.getAll(conPusat);
             for(Cabang c: listCabang){
                 cabang.add(c.getKodeCabang());
@@ -105,18 +104,18 @@ public class LaporanPembelianController {
     private void getBarang(){
         if(cabangCombo.getSelectionModel().getSelectedItem()!=null){
             try(Connection conPusat = KoneksiPusat.getConnection()){
-                if(groupByCombo.getSelectionModel().getSelectedItem().equals("No Pembelian")){
-                    List<AmbilBarangDetail> listPembelianDetail = AmbilBarangDetailDAO.getAllByTglPembelianAndCabang(
-                        conPusat, tglAwalPicker.getValue().toString(), tglAkhirPicker.getValue().toString(), cabangCombo.getSelectionModel().getSelectedItem());
-                    List<AmbilBarangDetail> filterData = filterData(listPembelianDetail);
+                if(groupByCombo.getSelectionModel().getSelectedItem().equals("No Penjualan")){
+                    List<PenjualanCabangDetail> listPenjualanCabangDetail = PenjualanCabangDetailDAO.getAllByDateAndCabangAndStatus(
+                        conPusat, tglAwalPicker.getValue().toString(), tglAkhirPicker.getValue().toString(), cabangCombo.getSelectionModel().getSelectedItem(), "true");
+                    List<PenjualanCabangDetail> filterData = filterData(listPenjualanCabangDetail);
         //            listBarang.sort(Comparator.comparing(Barang::getKodeKategori));
                     Collections.sort(filterData, (o1, o2) -> {
-                        int sComp = ((AmbilBarangDetail) o1).getNoPembelian().compareTo(((AmbilBarangDetail) o2).getNoPembelian());
+                        int sComp = ((PenjualanCabangDetail) o1).getNoPenjualanCabang().compareTo(((PenjualanCabangDetail) o2).getNoPenjualanCabang());
                         if (sComp != 0) 
                             return sComp;
-                        return ((AmbilBarangDetail) o1).getKodeJenis().compareTo(((AmbilBarangDetail) o2).getKodeJenis());
+                        return ((PenjualanCabangDetail) o1).getKodeJenis().compareTo(((PenjualanCabangDetail) o2).getKodeJenis());
                     });
-                    JasperDesign jasperDesign = JRXmlLoader.load(getClass().getResourceAsStream("LaporanPembelianNoPembelian.jrxml"));
+                    JasperDesign jasperDesign = JRXmlLoader.load(getClass().getResourceAsStream("LaporanPenjualanCabangNoPenjualan.jrxml"));
                     JRBeanCollectionDataSource beanColDataSource = new JRBeanCollectionDataSource(filterData);
                     Map hash = new HashMap();
                     hash.put("kodeCabang", cabangCombo.getSelectionModel().getSelectedItem());
@@ -125,17 +124,17 @@ public class LaporanPembelianController {
                     JasperReport jasperReport = JasperCompileManager.compileReport(jasperDesign);
                     jasperPrint = JasperFillManager.fillReport(jasperReport,hash, beanColDataSource);
                 }else if(groupByCombo.getSelectionModel().getSelectedItem().equals("Kategori")){
-                    List<AmbilBarangDetail> listPembelianDetail = AmbilBarangDetailDAO.getAllByTglPembelianAndCabang(
-                        conPusat, tglAwalPicker.getValue().toString(), tglAkhirPicker.getValue().toString(), cabangCombo.getSelectionModel().getSelectedItem());
-                    List<AmbilBarangDetail> filterData = filterData(listPembelianDetail);
+                    List<PenjualanCabangDetail> listPembelianDetail = PenjualanCabangDetailDAO.getAllByDateAndCabangAndStatus(
+                        conPusat, tglAwalPicker.getValue().toString(), tglAkhirPicker.getValue().toString(), cabangCombo.getSelectionModel().getSelectedItem(), "true");
+                    List<PenjualanCabangDetail> filterData = filterData(listPembelianDetail);
         //            listBarang.sort(Comparator.comparing(Barang::getKodeKategori));
                     Collections.sort(filterData, (o1, o2) -> {
-                        int sComp = ((AmbilBarangDetail) o1).getKodeKategori().compareTo(((AmbilBarangDetail) o2).getKodeKategori());
+                        int sComp = ((PenjualanCabangDetail) o1).getKodeKategori().compareTo(((PenjualanCabangDetail) o2).getKodeKategori());
                         if (sComp != 0) 
                             return sComp;
-                        return ((AmbilBarangDetail) o1).getKodeJenis().compareTo(((AmbilBarangDetail) o2).getKodeJenis());
+                        return ((PenjualanCabangDetail) o1).getKodeJenis().compareTo(((PenjualanCabangDetail) o2).getKodeJenis());
                     });
-                    JasperDesign jasperDesign = JRXmlLoader.load(getClass().getResourceAsStream("LaporanPembelianKategori.jrxml"));
+                    JasperDesign jasperDesign = JRXmlLoader.load(getClass().getResourceAsStream("LaporanPenjualanCabangKategori.jrxml"));
                     JRBeanCollectionDataSource beanColDataSource = new JRBeanCollectionDataSource(filterData);
                     Map hash = new HashMap();
                     hash.put("kodeCabang", cabangCombo.getSelectionModel().getSelectedItem());
@@ -143,18 +142,18 @@ public class LaporanPembelianController {
                             tglNormal.format(tglBarang.parse(tglAkhirPicker.getValue().toString())));
                     JasperReport jasperReport = JasperCompileManager.compileReport(jasperDesign);
                     jasperPrint = JasperFillManager.fillReport(jasperReport, hash, beanColDataSource);
-                }else if(groupByCombo.getSelectionModel().getSelectedItem().equals("Barang")){
-                    List<AmbilBarangDetail> listPembelianDetail = AmbilBarangDetailDAO.getAllByTglPembelianAndCabang(
-                        conPusat, tglAwalPicker.getValue().toString(), tglAkhirPicker.getValue().toString(), cabangCombo.getSelectionModel().getSelectedItem());
-                    List<AmbilBarangDetail> filterData = filterData(listPembelianDetail);
+                }else if(groupByCombo.getSelectionModel().getSelectedItem().equals("Jenis")){
+                    List<PenjualanCabangDetail> listPembelianDetail = PenjualanCabangDetailDAO.getAllByDateAndCabangAndStatus(
+                        conPusat, tglAwalPicker.getValue().toString(), tglAkhirPicker.getValue().toString(), cabangCombo.getSelectionModel().getSelectedItem(), "true");
+                    List<PenjualanCabangDetail> filterData = filterData(listPembelianDetail);
         //            listBarang.sort(Comparator.comparing(Barang::getKodeKategori));
                     Collections.sort(filterData, (o1, o2) -> {
-                        int sComp = ((AmbilBarangDetail) o1).getKodeKategori().compareTo(((AmbilBarangDetail) o2).getKodeKategori());
+                        int sComp = ((PenjualanCabangDetail) o1).getKodeKategori().compareTo(((PenjualanCabangDetail) o2).getKodeKategori());
                         if (sComp != 0) 
                             return sComp;
-                        return ((AmbilBarangDetail) o1).getKodeJenis().compareTo(((AmbilBarangDetail) o2).getKodeJenis());
+                        return ((PenjualanCabangDetail) o1).getKodeJenis().compareTo(((PenjualanCabangDetail) o2).getKodeJenis());
                     });
-                    JasperDesign jasperDesign = JRXmlLoader.load(getClass().getResourceAsStream("LaporanPembelianBarang.jrxml"));
+                    JasperDesign jasperDesign = JRXmlLoader.load(getClass().getResourceAsStream("LaporanPenjualanCabangJenis.jrxml"));
                     JRBeanCollectionDataSource beanColDataSource = new JRBeanCollectionDataSource(filterData);
                     Map hash = new HashMap();
                     hash.put("kodeCabang", cabangCombo.getSelectionModel().getSelectedItem());
@@ -198,25 +197,24 @@ public class LaporanPembelianController {
         }
         return false;
     }
-    private List<AmbilBarangDetail> filterData(List<AmbilBarangDetail> listData) throws Exception{
-        List<AmbilBarangDetail> filterData = new ArrayList<>();
-        for (AmbilBarangDetail p : listData) {
+    private List<PenjualanCabangDetail> filterData(List<PenjualanCabangDetail> listData) throws Exception{
+        List<PenjualanCabangDetail> filterData = new ArrayList<>();
+        for (PenjualanCabangDetail p : listData) {
             if (searchField.getText() == null || searchField.getText().equals(""))
                 filterData.add(p);
             else{
-                if(checkColumn(p.getNoPembelian())||
-                    checkColumn(tglLengkap.format(tglSql.parse(p.getTglPembelian())))||
-                    checkColumn(p.getKodeSales())||
-                    checkColumn(p.getNamaBarang())||
+                if(checkColumn(p.getNoPenjualanCabang())||
+//                    checkColumn(tglLengkap.format(tglSql.parse(p.gettg())))||
                     checkColumn(p.getKodeJenis())||
                     checkColumn(p.getKodeKategori())||
-                    checkColumn(gr.format(p.getBeratKotor()))||
-                    checkColumn(gr.format(p.getBeratBersih()))||
+                    checkColumn(gr.format(p.getBerat()))||
                     checkColumn(gr.format(p.getBeratPersen()))||
+                    checkColumn(gr.format(p.getHargaPersen()))||
                     checkColumn(gr.format(p.getPersentaseEmas()))||
-                    checkColumn(rp.format(p.getHargaBeli()))||
-                    checkColumn(rp.format(p.getHargaKomp()))||
-                    checkColumn(rp.format(p.getQty())))
+                    checkColumn(rp.format(p.getQty()))||
+                    checkColumn(rp.format(p.getTotalHargaPersen()))||
+                    checkColumn(rp.format(p.getTotalNilai()))||
+                    checkColumn(rp.format(p.getTotalHargaRp())))
                     filterData.add(p);
             }
         }
