@@ -950,7 +950,7 @@ public class Service {
 
             p.setNoPenjualan(PenjualanHeadDAO.getId(con));
             PenjualanHeadDAO.insert(con, p);
-
+            System.out.println(new Date()+" insert penjualan");
             if(p.getPelanggan()!=null && !p.getPelanggan().equals("")){
                 Pelanggan plg = PelangganDAO.get(con, p.getPelanggan());
                 if(plg!=null){
@@ -958,6 +958,7 @@ public class Service {
                     PelangganDAO.update(con, plg);
                 }
             }
+            System.out.println(new Date()+" update pelanggan");
             
             int i = 1;
             List<PenjualanDetail> group = new ArrayList<>();
@@ -982,6 +983,7 @@ public class Service {
                     }
 
                     i = i + 1;
+                System.out.println(new Date()+" group-ing barang");
 //                }
             }
             double totalNilai = 0;
@@ -989,12 +991,15 @@ public class Service {
                 status = updateStokKeluar(con, "Penjualan " + p.getKategoriPenjualan(), p.getNoPenjualan(), d.getKodeBarang(),
                         d.getQtyKeluar(), d.getTotalNilai(), status);
                 totalNilai = pembulatan(totalNilai + d.getTotalNilai());
+                System.out.println(new Date()+" update log & stok barang");
             }
             for (PenjualanDiskon pd : p.getListPenjualanDiskon()) {
                 pd.setNoPenjualan(p.getNoPenjualan());
 
                 PenjualanDiskonDAO.insert(con, pd);
             }
+            System.out.println(new Date()+" insert penjualan diskon");
+            
             for (Pembayaran pp : p.getListPembayaran()) {
                 pp.setNoPembayaran(PembayaranDAO.getId(con));
                 pp.setTglPembayaran(p.getTglPenjualan());
@@ -1008,6 +1013,7 @@ public class Service {
                 
                 insertKeuangan(con, nokeuangan, "Kas", "Penjualan " + p.getKategoriPenjualan(),
                         p.getNoPenjualan(), p.getPembayaran(), p.getKodeUser());
+                System.out.println(new Date()+" insert pembayaran");
             }
 
             insertKeuangan(con, nokeuangan, "Piutang Penjualan", "Penjualan " + p.getKategoriPenjualan(),
@@ -1019,6 +1025,8 @@ public class Service {
             insertKeuangan(con, nokeuangan, "Stok Barang", "Penjualan " + p.getKategoriPenjualan(),
                     p.getNoPenjualan(), -totalNilai, p.getKodeUser());
 
+            System.out.println(new Date()+" insert keuangan");
+            
             if (c != null) {
                 CartHeadDAO.delete(con, c);
                 CartDetailDAO.deleteAll(con, c.getNoCart());
@@ -1478,6 +1486,9 @@ public class Service {
             for (PembelianDetail d : group) {
                 status = updateStokMasuk(con, "Pembelian", p.getNoPembelian(), d.getKodeBarang(),
                         d.getQtyMasuk(), d.getTotal(), status);
+                Barang b = BarangDAO.get(con, d.getKodeBarang());
+                b.setHargaBeli(d.getTotal()/d.getQtyMasuk());
+                BarangDAO.update(con, b);
             }
             
             insertKeuangan(con, nokeuangan, "Hutang Pembelian", "Pembelian",
@@ -1568,6 +1579,14 @@ public class Service {
                 l.setStokAkhir(pembulatan(stokAwal - d.getQtyMasuk()));
                 l.setNilaiAkhir(pembulatan(nilaiAwal - d.getTotal()));
                 LogBarangDAO.insert(con, l);
+                
+                PembelianDetail detailLama = PembelianDetailDAO.getLastPembelianByBarang(con, d.getKodeBarang());
+                double hargaLama = 0;
+                if(detailLama!=null)
+                    hargaLama = detailLama.getTotal()/detailLama.getQtyMasuk();
+                Barang b = BarangDAO.get(con, d.getKodeBarang());
+                b.setHargaBeli(hargaLama);
+                BarangDAO.update(con, b);
             }
 
             pbBaru.setNoPembelian(PembelianHeadDAO.getId(con));
@@ -1613,6 +1632,10 @@ public class Service {
                 l.setStokAkhir(pembulatan(stokAwal + d.getQtyMasuk()));
                 l.setNilaiAkhir(pembulatan(nilaiAwal + d.getTotal()));
                 LogBarangDAO.insert(con, l);
+                
+                Barang b = BarangDAO.get(con, d.getKodeBarang());
+                b.setHargaBeli(d.getTotal()/d.getQtyMasuk());
+                BarangDAO.update(con, b);
             }
             for (Pembayaran pp : pbBaru.getListPembayaran()) {
                 pp.setNoPembayaran(PembayaranDAO.getId(con));
@@ -1668,6 +1691,7 @@ public class Service {
                     s.setStokKeluar(0);
                     listStok.add(s);
                 }
+                
             }
             for (StokBarang d : listStok) {
                 StokBarang s = StokBarangDAO.get(con, sistem.getTglSystem(), d.getKodeBarang());
@@ -1732,6 +1756,14 @@ public class Service {
             for (PembelianDetail d : group) {
                 status = updateStokKeluar(con, "Batal Pembelian", p.getNoPembelian(), d.getKodeBarang(),
                         d.getQtyMasuk(), d.getTotal(), status);
+                
+                PembelianDetail detailLama = PembelianDetailDAO.getLastPembelianByBarang(con, d.getKodeBarang());
+                double hargaLama = 0;
+                if(detailLama!=null)
+                    hargaLama = detailLama.getTotal()/detailLama.getQtyMasuk();
+                Barang b = BarangDAO.get(con, d.getKodeBarang());
+                b.setHargaBeli(hargaLama);
+                BarangDAO.update(con, b);
             }
             insertKeuangan(con, nokeuangan, "Hutang Pembelian", "Batal Pembelian",
                     p.getNoPembelian(), -p.getTotalPembelian(), p.getKodeUser());

@@ -6,7 +6,9 @@
 package com.excellentsystem.TunasMekar.Model;
 
 import java.util.List;
+import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
@@ -22,10 +24,23 @@ public class Barang {
     private final StringProperty namaBarang = new SimpleStringProperty();
     private final StringProperty supplier = new SimpleStringProperty();
     private final IntegerProperty stokMinimal = new SimpleIntegerProperty();
+    private final DoubleProperty hargaBeli = new SimpleDoubleProperty();
     private final StringProperty status = new SimpleStringProperty();
     private List<Satuan> allSatuan;
     private Satuan satuan;
     private StokBarang stokAkhir;
+
+    public double getHargaBeli() {
+        return hargaBeli.get();
+    }
+
+    public void setHargaBeli(double value) {
+        hargaBeli.set(value);
+    }
+
+    public DoubleProperty hargaBeliProperty() {
+        return hargaBeli;
+    }
 
     public StokBarang getStokAkhir() {
         return stokAkhir;
