@@ -19,6 +19,7 @@ import static com.excellentsystem.AuriSteel.Function.createSecretKey;
 import com.excellentsystem.AuriSteel.Model.Otoritas;
 import com.excellentsystem.AuriSteel.Model.Sistem;
 import com.excellentsystem.AuriSteel.Model.User;
+import com.excellentsystem.AuriSteel.Services.Service;
 import com.excellentsystem.AuriSteel.View.AsetTetapController;
 import com.excellentsystem.AuriSteel.View.DashboardController;
 import com.excellentsystem.AuriSteel.View.DataAbsensiController;
@@ -82,6 +83,7 @@ import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import javafx.animation.Animation;
 import javafx.animation.Transition;
@@ -132,7 +134,7 @@ public class Main extends Application {
     public static Sistem sistem;
     private double x = 0;
     private double y = 0;
-    public final String version = "2.2.3";
+    public final String version = "2.2.4";
     public static SecretKeySpec key;
     @Override
     public void start(Stage stage)  {
@@ -184,11 +186,11 @@ public class Main extends Application {
                         return Function.downloadUpdateGoogleStorage("Auri Steel.exe");
                     }
 //                Service.createAbsensi(con, 01, 2020);
-//                System.out.println(Function.getServerDate(con).getDate());
+                System.out.println(Function.getServerDate(con).getDate());
 ////                if(Function.getServerDate(con).getDate()==1){
-//                    Service.setPenyusutanAset(con);
+                    Service.setPenyusutanAset(con);
 ////                }
-//                System.out.println(new Date()+" penyusutan aset");
+                System.out.println(new Date()+" penyusutan aset");
                     updateProgress(70, 100);
                     Thread.sleep(500);
                     updateProgress(80, 100);
@@ -279,6 +281,8 @@ public class Main extends Application {
                 mainAppController.setMainApp(this);
                 if(sistem.getUser().getLevel().equals("Gudang"))
                     showPermintaanBarang();
+                if(sistem.getUser().getLevel().equals("Produksi"))
+                    showPengirimanBarang();
                 if(sistem.getUser().getLevel().equals("Penjualan"))
                     showPenjualan();
                 if(sistem.getUser().getLevel().equals("Pembelian"))
