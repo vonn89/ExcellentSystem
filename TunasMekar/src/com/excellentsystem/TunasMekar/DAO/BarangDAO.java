@@ -30,7 +30,8 @@ public class BarangDAO {
             b.setNamaBarang(rs.getString(3));
             b.setSupplier(rs.getString(4));
             b.setStokMinimal(rs.getInt(5));
-            b.setStatus(rs.getString(6));
+            b.setHargaBeli(rs.getDouble(6));
+            b.setStatus(rs.getString(7));
         }
         return b;
     }
@@ -50,7 +51,8 @@ public class BarangDAO {
             b.setNamaBarang(rs.getString(3));
             b.setSupplier(rs.getString(4));
             b.setStokMinimal(rs.getInt(5));
-            b.setStatus(rs.getString(6));
+            b.setHargaBeli(rs.getDouble(6));
+            b.setStatus(rs.getString(7));
             allBarang.add(b);
         }
         return allBarang;
@@ -65,23 +67,27 @@ public class BarangDAO {
             return "B-"+df.format(1);
     }
     public static void insert(Connection con, Barang b)throws Exception{
-        PreparedStatement ps = con.prepareStatement("insert into tm_barang values(?,?,?,?,?,?)");
+        PreparedStatement ps = con.prepareStatement("insert into tm_barang values(?,?,?,?,?,?,?)");
         ps.setString(1, b.getKodeBarang());
         ps.setString(2, b.getKodeKategori());
         ps.setString(3, b.getNamaBarang());
         ps.setString(4, b.getSupplier());
         ps.setInt(5, b.getStokMinimal());
-        ps.setString(6, b.getStatus());
+        ps.setDouble(6, b.getHargaBeli());
+        ps.setString(7, b.getStatus());
         ps.executeUpdate();
     }
     public static void update(Connection con, Barang b)throws Exception{
-        PreparedStatement ps = con.prepareStatement("update tm_barang set kode_kategori=?, nama_barang=?, supplier=?, stok_minimal=?, status=? where kode_barang=?");
+        PreparedStatement ps = con.prepareStatement("update tm_barang set "
+                + " kode_kategori=?, nama_barang=?, supplier=?, stok_minimal=?, harga_beli=?, status=? "
+                + " where kode_barang=?");
         ps.setString(1, b.getKodeKategori());
         ps.setString(2, b.getNamaBarang());
         ps.setString(3, b.getSupplier());
         ps.setInt(4, b.getStokMinimal());
-        ps.setString(5, b.getStatus());
-        ps.setString(6, b.getKodeBarang());
+        ps.setDouble(5, b.getHargaBeli());
+        ps.setString(6, b.getStatus());
+        ps.setString(7, b.getKodeBarang());
         ps.executeUpdate();
     }
     public static void deleteAll(Connection con)throws Exception{

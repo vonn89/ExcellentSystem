@@ -25,6 +25,7 @@ import com.excellentsystem.TunasMekar.View.Dialog.UbahHargaController;
 import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.List;
+import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -67,9 +68,11 @@ public class DataBarangController  {
     @FXML private TableColumn<Barang, String> supplierColumn;
     @FXML private TableColumn<Barang, Number> stokMinimalColumn;
     @FXML private TableColumn<Barang, Number> qtyColumn;
+    @FXML private TableColumn<Barang, Number> hargaBeliColumn;
     @FXML private TableColumn<Barang, Number> hargaRetailColumn;
     @FXML private TableColumn<Barang, Number> hargaGrosirColumn;
     @FXML private TableColumn<Barang, Number> hargaGrosirBesarColumn;
+    @FXML private TableColumn<Barang, Number> labaGrosirColumn;
     
     @FXML private Label totalQtyLabel;
     @FXML private ComboBox<String> kategoriCombo;
@@ -98,12 +101,23 @@ public class DataBarangController  {
         stokMinimalColumn.setCellFactory((c) -> getTableCell(qty));
         qtyColumn.setCellValueFactory(cellData -> cellData.getValue().getSatuan().qtyProperty());
         qtyColumn.setCellFactory((c) -> getTableCell(qty));
+        hargaBeliColumn.setCellValueFactory(cellData -> {
+            double hargaBeli = cellData.getValue().getHargaBeli()*cellData.getValue().getSatuan().getQty();
+            return new SimpleDoubleProperty(hargaBeli);
+        });
+        hargaBeliColumn.setCellFactory((c) -> getTableCell(rp));
         hargaRetailColumn.setCellValueFactory(cellData -> cellData.getValue().getSatuan().hargaRetailProperty());
         hargaRetailColumn.setCellFactory((c) -> getTableCell(rp));
         hargaGrosirColumn.setCellValueFactory(cellData -> cellData.getValue().getSatuan().hargaGrosirProperty());
         hargaGrosirColumn.setCellFactory((c) -> getTableCell(rp));
         hargaGrosirBesarColumn.setCellValueFactory(cellData -> cellData.getValue().getSatuan().hargaGrosirBesarProperty());
         hargaGrosirBesarColumn.setCellFactory((c) -> getTableCell(rp));
+        labaGrosirColumn.setCellValueFactory(cellData -> {
+            double hargaBeli = cellData.getValue().getHargaBeli()*cellData.getValue().getSatuan().getQty();
+            double hargaGrosir = cellData.getValue().getSatuan().getHargaGrosir();
+            return new SimpleDoubleProperty(hargaGrosir-hargaBeli);
+        });
+        labaGrosirColumn.setCellFactory((c) -> getTableCell(rp));
         
         allBarang.addListener((ListChangeListener.Change<? extends Barang> change) -> {
             searchBarang();
@@ -241,6 +255,7 @@ public class DataBarangController  {
                             barang.setNamaBarang(b.getNamaBarang());
                             barang.setSupplier(b.getSupplier());
                             barang.setStokMinimal(b.getStokMinimal());
+                            barang.setHargaBeli(b.getHargaBeli());
                             barang.setStatus(b.getStatus());
                             barang.setSatuan(s);
                             barang.setAllSatuan(b.getAllSatuan());

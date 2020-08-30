@@ -33,9 +33,11 @@
                   <TableColumn fx:id="supplierColumn" maxWidth="3000.0" prefWidth="75.0" text="Supplier" visible="false" />
                   <TableColumn fx:id="kodeSatuanColumn" maxWidth="2000.0" prefWidth="75.0" text="Satuan" />
                   <TableColumn fx:id="qtyColumn" maxWidth="2000.0" prefWidth="75.0" text="Qty" />
+                  <TableColumn fx:id="hargaBeliColumn" maxWidth="2000.0" prefWidth="75.0" text="Harga Beli" />
                   <TableColumn fx:id="hargaGrosirBesarColumn" maxWidth="2000.0" prefWidth="75.0" text="Harga Grosir Besar" />
                   <TableColumn fx:id="hargaGrosirColumn" maxWidth="2000.0" prefWidth="75.0" text="Harga Grosir" />
                   <TableColumn fx:id="hargaRetailColumn" maxWidth="2000.0" prefWidth="75.0" text="Harga Retail" />
+                  <TableColumn fx:id="labaGrosirColumn" maxWidth="2000.0" prefWidth="75.0" text="Laba Grosir" />
                   <TableColumn fx:id="stokMinimalColumn" maxWidth="2000.0" prefWidth="75.0" text="Stok Minimal" visible="false" />
               </columns>
                <columnResizePolicy>

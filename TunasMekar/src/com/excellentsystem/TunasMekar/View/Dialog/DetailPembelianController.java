@@ -189,6 +189,7 @@ public class DetailPembelianController  {
                             }
                             hitungTotal();
                         }catch(NumberFormatException e){
+                            e.printStackTrace();
                             textField.undo();
                         }
                     });
@@ -426,12 +427,12 @@ public class DetailPembelianController  {
                 saveButton.setVisible(false);
                 cariButton.setVisible(false);
                 checkPPNColumn.setVisible(false);
-                gridPane.getRowConstraints().get(5).setMinHeight(0);
-                gridPane.getRowConstraints().get(5).setPrefHeight(0);
-                gridPane.getRowConstraints().get(5).setMaxHeight(0);
-                gridPane.getRowConstraints().get(8).setMinHeight(0);
-                gridPane.getRowConstraints().get(8).setPrefHeight(0);
-                gridPane.getRowConstraints().get(8).setMaxHeight(0);
+                gridPane.getRowConstraints().get(7).setMinHeight(0);
+                gridPane.getRowConstraints().get(7).setPrefHeight(0);
+                gridPane.getRowConstraints().get(7).setMaxHeight(0);
+                gridPane.getRowConstraints().get(10).setMinHeight(0);
+                gridPane.getRowConstraints().get(10).setPrefHeight(0);
+                gridPane.getRowConstraints().get(10).setMaxHeight(0);
             }catch(Exception e){
                 mainApp.showMessage(Modality.NONE, "Error", e.toString());
             }
@@ -714,7 +715,7 @@ public class DetailPembelianController  {
             }else{
                 d.setHargaPpn(d.getHargaBeli());
             }
-            d.setTotal(d.getQty()*d.getHargaPpn());
+//            d.setTotal(d.getQty()*d.getHargaPpn());
             total = total + d.getTotal();
         }
         totalPembelianField.setText(rp.format(total));
