@@ -164,6 +164,7 @@ public class DataUserController  {
         allLevel.add("Penjualan");
         allLevel.add("Keuangan");
         allLevel.add("Gudang");
+        allLevel.add("Produksi");
         allLevel.add("Manager");
         levelCombo.setItems(allLevel);
         getUser();

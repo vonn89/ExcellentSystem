@@ -132,7 +132,7 @@ public class Main extends Application {
     public static Sistem sistem;
     private double x = 0;
     private double y = 0;
-    public final String version = "2.2.3";
+    public final String version = "2.2.4";
     public static SecretKeySpec key;
     @Override
     public void start(Stage stage)  {
@@ -278,6 +278,8 @@ public class Main extends Application {
                 
                 mainAppController.setMainApp(this);
                 if(sistem.getUser().getLevel().equals("Gudang"))
+                    showPengirimanBarang();
+                if(sistem.getUser().getLevel().equals("Produksi"))
                     showPermintaanBarang();
                 if(sistem.getUser().getLevel().equals("Penjualan"))
                     showPenjualan();
