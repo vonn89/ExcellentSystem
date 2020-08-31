@@ -298,7 +298,7 @@ public class DetailPembelianController  {
                 if(mouseEvent.getButton().equals(MouseButton.PRIMARY)&&mouseEvent.getClickCount() == 2){
                     if(checkPPNColumn.isVisible()){
                         row.getItem().setPpn(!row.getItem().isPpn());
-                        hitungTotal();
+                        hitungTotalPPN();
                     }
                 }
             });
@@ -704,7 +704,21 @@ public class DetailPembelianController  {
         for(PembelianDetail d: allBarang){
             d.setPpn(checkAll.isSelected());
         }
-        hitungTotal();
+        hitungTotalPPN();
+    }
+    @FXML
+    private void hitungTotalPPN(){
+        double total = 0;
+        for(PembelianDetail d : allBarang){
+            if(d.isPpn()){
+                d.setHargaPpn(d.getHargaBeli()*1.1);
+            }else{
+                d.setHargaPpn(d.getHargaBeli());
+            }
+            d.setTotal(d.getQty()*d.getHargaPpn());
+            total = total + d.getTotal();
+        }
+        totalPembelianField.setText(rp.format(total));
     }
     @FXML
     private void hitungTotal(){
