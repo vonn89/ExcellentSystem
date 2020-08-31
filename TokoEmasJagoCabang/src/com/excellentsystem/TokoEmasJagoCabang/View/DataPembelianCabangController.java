@@ -311,7 +311,7 @@ public class DataPembelianCabangController  {
         try{
             if(!p.getNoPenjualan().substring(7,13).equals(tglSystem.format(tglBarang.parse(sistem.getTglSystem())))){
                 mainApp.showMessage(Modality.NONE, "Warning", "Pembelian tidak dapat dibatal, karena sudah berbeda tanggal");
-            }else if(p.getStatusTerima().equals("true")){
+            }else if(p.getStatusBatal().equals("true")){
                 mainApp.showMessage(Modality.NONE, "Warning", "Pembelian tidak dapat dibatal, karena sudah dibatalkan");
             }else{
                 MessageController x = mainApp.showMessage(Modality.APPLICATION_MODAL, "Confirmation",
