@@ -6,7 +6,6 @@
 
 package com.excellentsystem.AuriSteel.DAO;
 
-import com.excellentsystem.AuriSteel.Function;
 import static com.excellentsystem.AuriSteel.Main.yymmdd;
 import com.excellentsystem.AuriSteel.Model.Keuangan;
 import java.sql.Connection;
@@ -113,27 +112,15 @@ public class KeuanganDAO {
             saldoAwal = rs.getDouble(1);
         return saldoAwal;
     }
-    public static String getId(Connection con)throws Exception{
-        Date serverDate = Function.getServerDate(con);
+    public static String getId(Connection con, Date date)throws Exception{
         PreparedStatement ps = con.prepareStatement("select max(right(no_keuangan,4)) "
                 + " from tt_keuangan where mid(no_keuangan,4,6)=? ");
-        ps.setString(1, yymmdd.format(serverDate));
+        ps.setString(1, yymmdd.format(date));
         ResultSet rs = ps.executeQuery();
         if (rs.next())
-            return "KK-"+yymmdd.format(serverDate)+"-" +new DecimalFormat("0000").format(rs.getInt(1)+1);
+            return "KK-"+yymmdd.format(date)+"-" +new DecimalFormat("0000").format(rs.getInt(1)+1);
         else 
-            return "KK-"+yymmdd.format(serverDate)+"-"+new DecimalFormat("0000").format(1);
-    }
-    public static String getIdByDate(Connection con,Date date)throws Exception{
-        Date serverDate = Function.getServerDate(con);
-        PreparedStatement ps = con.prepareStatement("select max(right(no_keuangan,4)) "
-                + " from tt_keuangan where mid(no_keuangan,4,6)=? ");
-        ps.setString(1, yymmdd.format(serverDate));
-        ResultSet rs = ps.executeQuery();
-        if (rs.next()) 
-            return "KK-"+yymmdd.format(serverDate)+"-" +new DecimalFormat("0000").format(rs.getInt(1)+1);
-        else 
-            return "KK-"+yymmdd.format(serverDate)+"-"+new DecimalFormat("0000").format(1);
+            return "KK-"+yymmdd.format(date)+"-"+new DecimalFormat("0000").format(1);
     }
     public static void insert(Connection con, Keuangan k)throws Exception{
         PreparedStatement ps = con.prepareStatement("insert into tt_keuangan values (?,?,?,?,?,?,?)");
@@ -165,6 +152,12 @@ public class KeuanganDAO {
         ps.setString(1, tipeKeuangan);
         ps.setString(2, kategori);
         ps.setString(3, keterangan);
+        ps.executeUpdate();
+    }
+    public static void deleteByNoKeuangan(Connection con, String noKeuangan)throws Exception{
+        PreparedStatement ps = con.prepareStatement("delete from tt_keuangan "
+                + " where no_keuangan=?");
+        ps.setString(1, noKeuangan);
         ps.executeUpdate();
     }
 }

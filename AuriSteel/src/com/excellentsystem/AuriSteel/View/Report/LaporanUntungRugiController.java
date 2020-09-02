@@ -258,7 +258,6 @@ public class LaporanUntungRugiController  {
     private void addHyperLinkPenjualanText(String text, int column, int row){
         Hyperlink hyperlink = new Hyperlink(text);
         hyperlink.setStyle("-fx-font-size:12;"
-                + "-fx-text-fill:seccolor3;"
                 + "-fx-border-color:transparent;");
         hyperlink.setOnAction((e) -> {
             Stage stage = new Stage();
@@ -272,7 +271,6 @@ public class LaporanUntungRugiController  {
     private void addHyperLinkHPPPenjualanText(String text, int column, int row){
         Hyperlink hyperlink = new Hyperlink(text);
         hyperlink.setStyle("-fx-font-size:12;"
-                + "-fx-text-fill:seccolor3;"
                 + "-fx-border-color:transparent;");
         hyperlink.setOnAction((e) -> {
             Stage stage = new Stage();
@@ -286,7 +284,6 @@ public class LaporanUntungRugiController  {
     private void addHyperLinkPenjualanCoilText(String text, int column, int row){
         Hyperlink hyperlink = new Hyperlink(text);
         hyperlink.setStyle("-fx-font-size:12;"
-                + "-fx-text-fill:seccolor3;"
                 + "-fx-border-color:transparent;");
         hyperlink.setOnAction((e) -> {
             Stage stage = new Stage();
@@ -300,7 +297,6 @@ public class LaporanUntungRugiController  {
     private void addHyperLinkHPPPenjualanCoilText(String text, int column, int row){
         Hyperlink hyperlink = new Hyperlink(text);
         hyperlink.setStyle("-fx-font-size:12;"
-                + "-fx-text-fill:seccolor3;"
                 + "-fx-border-color:transparent;");
         hyperlink.setOnAction((e) -> {
             Stage stage = new Stage();
@@ -314,7 +310,6 @@ public class LaporanUntungRugiController  {
     private void addHyperLinkPendapatanBebanText(String text, int column, int row, List<Keuangan> keuangan){
         Hyperlink hyperlink = new Hyperlink(text);
         hyperlink.setStyle("-fx-font-size:12;"
-                + "-fx-text-fill:seccolor3;"
                 + "-fx-border-color:transparent;");
         hyperlink.setOnAction((e) -> {
             Stage stage = new Stage();

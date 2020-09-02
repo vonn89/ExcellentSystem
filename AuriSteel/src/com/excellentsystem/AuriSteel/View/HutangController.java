@@ -37,6 +37,7 @@ import com.excellentsystem.AuriSteel.View.Dialog.NewPemesananController;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.sql.Connection;
+import java.util.Date;
 import java.util.List;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
@@ -446,11 +447,6 @@ public class HutangController  {
                 @Override 
                 public String call()throws Exception {
                     try (Connection con = Koneksi.getConnection()) {
-                        Hutang hutang = HutangDAO.get(con, pembayaran.getNoHutang());
-                        pembayaran.setTglBatal(tglSql.format(Function.getServerDate(con)));
-                        pembayaran.setUserBatal(sistem.getUser().getKodeUser());
-                        pembayaran.setStatus("false");
-                        pembayaran.setHutang(hutang);
                         return Service.batalPembayaranHutang(con, pembayaran);
                     }
                 }
@@ -553,9 +549,10 @@ public class HutangController  {
                     @Override 
                     public String call() throws Exception{
                         try (Connection con = Koneksi.getConnection()) {
+                            Date date = Function.getServerDate(con);
                             Pembayaran pembayaran = new Pembayaran();
-                            pembayaran.setNoPembayaran(PembayaranDAO.getId(con));
-                            pembayaran.setTglPembayaran(tglSql.format(Function.getServerDate(con)));
+                            pembayaran.setNoPembayaran(PembayaranDAO.getId(con, date));
+                            pembayaran.setTglPembayaran(tglSql.format(date));
                             pembayaran.setNoHutang(h.getNoHutang());
                             pembayaran.setJumlahPembayaran(Double.parseDouble(controller.jumlahPembayaranField.getText().replaceAll(",", "")));
                             pembayaran.setTipeKeuangan(controller.tipeKeuanganCombo.getSelectionModel().getSelectedItem());

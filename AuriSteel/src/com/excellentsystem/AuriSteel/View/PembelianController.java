@@ -7,7 +7,6 @@
 package com.excellentsystem.AuriSteel.View;
 
 import com.excellentsystem.AuriSteel.DAO.HutangDAO;
-import com.excellentsystem.AuriSteel.DAO.PembayaranDAO;
 import com.excellentsystem.AuriSteel.DAO.PembelianHeadDAO;
 import com.excellentsystem.AuriSteel.DAO.SupplierDAO;
 import com.excellentsystem.AuriSteel.Function;
@@ -552,8 +551,6 @@ public class PembelianController  {
                                     con, "Hutang Pembelian", p.getNoPembelian(), "open");
                             h.setPembelianCoilHead(p);
                             Pembayaran pembayaran = new Pembayaran();
-                            pembayaran.setNoPembayaran(PembayaranDAO.getId(con));
-                            pembayaran.setTglPembayaran(tglSql.format(Function.getServerDate(con)));
                             pembayaran.setNoHutang(h.getNoHutang());
                             pembayaran.setJumlahPembayaran(Double.parseDouble(controller.jumlahPembayaranField.getText().replaceAll(",", "")));
                             pembayaran.setTipeKeuangan(controller.tipeKeuanganCombo.getSelectionModel().getSelectedItem());

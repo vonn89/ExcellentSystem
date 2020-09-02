@@ -396,7 +396,6 @@ public class LaporanNeracaController  {
         Hyperlink hyperlink = new Hyperlink(text);
         hyperlink.setStyle("-fx-font-size:12;"
                 + "-fx-font-weight:bold;"
-                + "-fx-text-fill:seccolor3;"
                 + "-fx-border-color:transparent;"
         );
         hyperlink.setOnAction((e) -> {
@@ -411,7 +410,6 @@ public class LaporanNeracaController  {
     private void addHyperLinkText(String text, int column, int row, List<Keuangan> keuangan){
         Hyperlink hyperlink = new Hyperlink(text);
         hyperlink.setStyle("-fx-font-size:12;"
-                + "-fx-text-fill:seccolor3;"
                 + "-fx-border-color:transparent;");
         hyperlink.setOnAction((e) -> {
             Stage stage = new Stage();
@@ -425,7 +423,6 @@ public class LaporanNeracaController  {
     private void addHyperLinkPiutangText(String text, int column, int row){
         Hyperlink hyperlink = new Hyperlink(text);
         hyperlink.setStyle("-fx-font-size:12;"
-                + "-fx-text-fill:seccolor3;"
                 + "-fx-border-color:transparent;");
         hyperlink.setOnAction((e) -> {
             Stage stage = new Stage();
@@ -439,7 +436,6 @@ public class LaporanNeracaController  {
     private void addHyperLinkHutangText(String text, int column, int row){
         Hyperlink hyperlink = new Hyperlink(text);
         hyperlink.setStyle("-fx-font-size:12;"
-                + "-fx-text-fill:seccolor3;"
                 + "-fx-border-color:transparent;");
         hyperlink.setOnAction((e) -> {
             Stage stage = new Stage();
@@ -453,7 +449,6 @@ public class LaporanNeracaController  {
     private void addHyperLinkAsetTetapText(String text, int column, int row, List<Keuangan> keuangan){
         Hyperlink hyperlink = new Hyperlink(text);
         hyperlink.setStyle("-fx-font-size:12;"
-                + "-fx-text-fill:seccolor3;"
                 + "-fx-border-color:transparent;");
         hyperlink.setOnAction((e) -> {
             Stage stage = new Stage();
@@ -467,7 +462,6 @@ public class LaporanNeracaController  {
     private void addHyperLinkStokBahanText(String text, String gudang, int column, int row){
         Hyperlink hyperlink = new Hyperlink(text);
         hyperlink.setStyle("-fx-font-size:12;"
-                + "-fx-text-fill:seccolor3;"
                 + "-fx-border-color:transparent;");
         hyperlink.setOnAction((e) -> {
             Stage stage = new Stage();
@@ -481,7 +475,6 @@ public class LaporanNeracaController  {
     private void addHyperLinkStokBarangText(String text, String gudang, int column, int row){
         Hyperlink hyperlink = new Hyperlink(text);
         hyperlink.setStyle("-fx-font-size:12;"
-                + "-fx-text-fill:seccolor3;"
                 + "-fx-border-color:transparent;");
         hyperlink.setOnAction((e) -> {
             Stage stage = new Stage();
@@ -496,7 +489,6 @@ public class LaporanNeracaController  {
         Hyperlink hyperlink = new Hyperlink(text);
         hyperlink.setStyle("-fx-font-size:12;"
                 + "-fx-font-weight:bold;"
-                + "-fx-text-fill:seccolor3;"
                 + "-fx-border-color:transparent;"
         );
         hyperlink.setOnAction((e) -> {

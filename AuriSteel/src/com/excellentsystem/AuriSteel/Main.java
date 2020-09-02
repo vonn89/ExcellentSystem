@@ -280,6 +280,8 @@ public class Main extends Application {
                 
                 mainAppController.setMainApp(this);
                 if(sistem.getUser().getLevel().equals("Gudang"))
+                    showPengirimanBarang();
+                if(sistem.getUser().getLevel().equals("Produksi"))
                     showPermintaanBarang();
                 if(sistem.getUser().getLevel().equals("Produksi"))
                     showPengirimanBarang();
