@@ -5,7 +5,6 @@
  */
 package com.excellentsystem.AuriSteel.DAO;
 
-import com.excellentsystem.AuriSteel.Function;
 import static com.excellentsystem.AuriSteel.Main.yymm;
 import com.excellentsystem.AuriSteel.Model.PemesananCoilHead;
 import java.sql.Connection;
@@ -13,6 +12,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -75,15 +75,15 @@ public class PemesananCoilHeadDAO {
         }
         return p;
     }
-    public static String getId(Connection con)throws Exception{
+    public static String getId(Connection con, Date date)throws Exception{
         PreparedStatement ps = con.prepareStatement("select max(right(no_pemesanan,3)) "
                 + " from tt_pemesanan_coil_head where mid(no_pemesanan,4,4) = ?");
-        ps.setString(1, yymm.format(Function.getServerDate(con)));
+        ps.setString(1, yymm.format(date));
         ResultSet rs = ps.executeQuery();
         if(rs.next())
-            return "PC-"+yymm.format(Function.getServerDate(con))+new DecimalFormat("000").format(rs.getInt(1)+1);
+            return "PC-"+yymm.format(date)+new DecimalFormat("000").format(rs.getInt(1)+1);
         else
-            return "PC-"+yymm.format(Function.getServerDate(con))+new DecimalFormat("000").format(1);
+            return "PC-"+yymm.format(date)+new DecimalFormat("000").format(1);
     }
     public static void insert(Connection con, PemesananCoilHead p)throws Exception{
         PreparedStatement ps = con.prepareStatement("insert into tt_pemesanan_coil_head "

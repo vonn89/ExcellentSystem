@@ -374,11 +374,8 @@ public class PengirimanBarangController  {
                     @Override 
                     public String call()throws Exception {
                         try (Connection con = Koneksi.getConnection()) {
-                            String noPengiriman = PenjualanHeadDAO.getId(con);
                             PenjualanHead pengiriman = new PenjualanHead();
                             pengiriman.setPemesananHead(controller.pemesanan);
-                            pengiriman.setNoPenjualan(noPengiriman);
-                            pengiriman.setTglPenjualan(tglSql.format(Function.getServerDate(con)));
                             pengiriman.setNoPemesanan(controller.noPemesananField.getText());
                             pengiriman.setKodeCustomer(controller.pemesanan.getKodeCustomer());
                             pengiriman.setKodeCustomerInvoice(controller.pemesanan.getKodeCustomerInvoice());
@@ -397,7 +394,6 @@ public class PengirimanBarangController  {
                             pengiriman.setTotalBebanPenjualan(0);
                             double total = 0;
                             for(PenjualanDetail temp : controller.allPenjualanDetail){
-                                temp.setNoPenjualan(noPengiriman);
                                 total = total + temp.getTotal();
                             }
                             pengiriman.setTotalPenjualan(total);
@@ -446,9 +442,6 @@ public class PengirimanBarangController  {
                 @Override 
                 public String call()throws Exception {
                     try (Connection con = Koneksi.getConnection()) {
-                        pengiriman.setTglVerifikasi(tglSql.format(Function.getServerDate(con)));
-                        pengiriman.setUserVerifikasi(sistem.getUser().getKodeUser());
-                        pengiriman.setStatus("true");
                         return Service.verifikasiPengiriman(con, pengiriman);
                     }
                 }
@@ -481,14 +474,11 @@ public class PengirimanBarangController  {
                 @Override 
                 public String call()throws Exception {
                     try (Connection con = Koneksi.getConnection()) {
-                        pengiriman.setTglBatal(tglSql.format(Function.getServerDate(con)));
-                        pengiriman.setUserBatal(sistem.getUser().getKodeUser());
-                        pengiriman.setStatus("false");
-                        if(pengiriman.getStatus().equals("open"))
+                        if(pengiriman.getStatus().equals("open")){
                             return Service.batalPengiriman(con, pengiriman);
-                        else if(pengiriman.getStatus().equals("true"))
+                        }else if(pengiriman.getStatus().equals("true")){
                             return Service.batalPenjualan(con, pengiriman);
-                        else
+                        }else
                             return "Status pengiriman salah";
                     }
                 }

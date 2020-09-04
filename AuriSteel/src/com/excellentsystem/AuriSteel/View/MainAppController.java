@@ -17,6 +17,7 @@ import com.excellentsystem.AuriSteel.Model.Hutang;
 import com.excellentsystem.AuriSteel.Model.Otoritas;
 import com.excellentsystem.AuriSteel.Model.Piutang;
 import java.sql.Connection;
+import java.util.Date;
 import java.util.List;
 import javafx.animation.Animation;
 import javafx.animation.Transition;
@@ -343,10 +344,11 @@ public class MainAppController {
     public void getAllNotif()throws Exception{
         allNotif.clear();
         try (Connection con = Koneksi.getConnection()) {
+            Date date = Function.getServerDate(con);
             List<Piutang> allPiutang = PiutangDAO.getAllByStatus(con, "open");
             for(Piutang p : allPiutang){
                 if(!p.getJatuhTempo().equals("2000-01-01")){
-                    if(tglBarang.parse(p.getJatuhTempo()).before(Function.getServerDate(con))||tglBarang.parse(p.getJatuhTempo()).equals(Function.getServerDate(con))){
+                    if(tglBarang.parse(p.getJatuhTempo()).before(date)||tglBarang.parse(p.getJatuhTempo()).equals(date)){
                         Notification notif = new Notification();
                         notif.setNama(p.getKeterangan());
                         notif.setJenisTransaksi(p.getKategori());
@@ -359,7 +361,7 @@ public class MainAppController {
             List<Hutang> allHutang = HutangDAO.getAllByStatus(con, "open");
             for(Hutang h : allHutang){
                 if(!h.getJatuhTempo().equals("2000-01-01")){
-                    if(tglBarang.parse(h.getJatuhTempo()).before(Function.getServerDate(con))||tglBarang.parse(h.getJatuhTempo()).equals(Function.getServerDate(con))){
+                    if(tglBarang.parse(h.getJatuhTempo()).before(date)||tglBarang.parse(h.getJatuhTempo()).equals(date)){
                         Notification notif = new Notification();
                         notif.setNama(h.getKeterangan());
                         notif.setJenisTransaksi(h.getKategori());

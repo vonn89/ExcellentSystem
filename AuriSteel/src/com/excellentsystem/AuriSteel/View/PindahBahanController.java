@@ -287,10 +287,7 @@ public class PindahBahanController {
                     @Override 
                     public String call()throws Exception {
                         try (Connection con = Koneksi.getConnection()) {
-                            String noPengiriman = PindahBahanHeadDAO.getId(con);
                             PindahBahanHead p = new PindahBahanHead();
-                            p.setNoPindah(noPengiriman);
-                            p.setTglPindah(tglSql.format(Function.getServerDate(con)));
                             p.setGudangAsal(controller.gudangAsalCombo.getSelectionModel().getSelectedItem());
                             p.setGudangTujuan(controller.gudangTujuanCombo.getSelectionModel().getSelectedItem());
                             p.setSupir(controller.namaSupirField.getText());
@@ -299,12 +296,6 @@ public class PindahBahanController {
                             p.setTglBatal("2000-01-01 00:00:00");
                             p.setUserBatal("");
                             p.setStatus("true");
-                            int i = 1;
-                            for(PindahBahanDetail temp : controller.allPindahBahanDetail){
-                                temp.setNoPindah(noPengiriman);
-                                temp.setNoUrut(i);
-                                i++;
-                            }
                             p.setListPindahBahanDetail(controller.allPindahBahanDetail); 
                             return Service.newPindahBahan(con, p);
                         }
@@ -340,11 +331,6 @@ public class PindahBahanController {
                 @Override 
                 public String call()throws Exception {
                     try (Connection con = Koneksi.getConnection()) {
-                        List<PindahBahanDetail> listPindah = PindahBahanDetailDAO.getAllPindahBahanDetail(con, p.getNoPindah());
-                        p.setListPindahBahanDetail(listPindah);
-                        p.setTglBatal(tglSql.format(Function.getServerDate(con)));
-                        p.setUserBatal(sistem.getUser().getKodeUser());
-                        p.setStatus("false");
                         return Service.batalPindahBahan(con, p);
                     }
                 }

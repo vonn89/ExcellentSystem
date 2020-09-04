@@ -6,7 +6,6 @@
 
 package com.excellentsystem.AuriSteel.DAO;
 
-import com.excellentsystem.AuriSteel.Function;
 import static com.excellentsystem.AuriSteel.Main.yymm;
 import com.excellentsystem.AuriSteel.Model.AsetTetap;
 import java.sql.Connection;
@@ -14,6 +13,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -48,15 +48,15 @@ public class AsetTetapDAO {
         }
         return allAsetTetap;
     }
-    public static String getId(Connection con)throws Exception{
+    public static String getId(Connection con, Date date)throws Exception{
         PreparedStatement ps = con.prepareStatement("select max(right(no_aset_tetap,3)) from tm_aset_tetap "
                 + "where mid(no_aset_tetap,4,4) = ?");
-        ps.setString(1, yymm.format(Function.getServerDate(con)));
+        ps.setString(1, yymm.format(date));
         ResultSet rs = ps.executeQuery();
         if(rs.next())
-            return "AT-"+yymm.format(Function.getServerDate(con))+new DecimalFormat("000").format(rs.getInt(1)+1);
+            return "AT-"+yymm.format(date)+new DecimalFormat("000").format(rs.getInt(1)+1);
         else
-            return "AT-"+yymm.format(Function.getServerDate(con))+new DecimalFormat("000").format(1);
+            return "AT-"+yymm.format(date)+new DecimalFormat("000").format(1);
     }
     public static void insert(Connection con, AsetTetap a)throws Exception{
         PreparedStatement ps = con.prepareStatement("insert into tm_aset_tetap values(?,?,?,?,?,?,?,?,?,?,?,?,?,?)");

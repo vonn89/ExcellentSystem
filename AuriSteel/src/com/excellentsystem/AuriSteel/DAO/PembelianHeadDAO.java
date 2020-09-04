@@ -6,7 +6,6 @@
 
 package com.excellentsystem.AuriSteel.DAO;
 
-import com.excellentsystem.AuriSteel.Function;
 import static com.excellentsystem.AuriSteel.Main.yymm;
 import com.excellentsystem.AuriSteel.Model.PembelianHead;
 import java.sql.Connection;
@@ -78,16 +77,15 @@ public class PembelianHeadDAO {
         }
         return p;
     }
-    public static String getId(Connection con)throws Exception{
-        Date serverDate = Function.getServerDate(con);
+    public static String getId(Connection con, Date date)throws Exception{
         PreparedStatement ps = con.prepareStatement("select max(right(no_pembelian,3)) from tt_pembelian_head "
                 + " where mid(no_pembelian,4,4) = ?");
-        ps.setString(1, yymm.format(serverDate));
+        ps.setString(1, yymm.format(date));
         ResultSet rs = ps.executeQuery();
         if(rs.next())
-            return "PO-"+yymm.format(serverDate)+new DecimalFormat("000").format(rs.getInt(1)+1);
+            return "PO-"+yymm.format(date)+new DecimalFormat("000").format(rs.getInt(1)+1);
         else
-            return "PO-"+yymm.format(serverDate)+new DecimalFormat("000").format(1);
+            return "PO-"+yymm.format(date)+new DecimalFormat("000").format(1);
     }
     public static void insert(Connection con, PembelianHead p)throws Exception{
         PreparedStatement ps = con.prepareStatement("insert into tt_pembelian_head values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");

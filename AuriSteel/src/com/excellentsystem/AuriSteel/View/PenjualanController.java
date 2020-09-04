@@ -10,7 +10,6 @@ import com.excellentsystem.AuriSteel.DAO.PegawaiDAO;
 import com.excellentsystem.AuriSteel.DAO.PenjualanDetailDAO;
 import com.excellentsystem.AuriSteel.DAO.PenjualanHeadDAO;
 import com.excellentsystem.AuriSteel.DAO.PiutangDAO;
-import com.excellentsystem.AuriSteel.DAO.TerimaPembayaranDAO;
 import com.excellentsystem.AuriSteel.Function;
 import static com.excellentsystem.AuriSteel.Function.createRow;
 import com.excellentsystem.AuriSteel.Koneksi;
@@ -447,8 +446,6 @@ public class PenjualanController {
                                     con, "Piutang Penjualan", p.getNoPenjualan(), "%");
                             pt.setPenjualanHead(p);
                             TerimaPembayaran t = new TerimaPembayaran();
-                            t.setNoTerimaPembayaran(TerimaPembayaranDAO.getId(con));
-                            t.setTglTerima(tglSql.format(Function.getServerDate(con)));
                             t.setNoPiutang(pt.getNoPiutang());
                             t.setJumlahPembayaran(Double.parseDouble(controller.jumlahPembayaranField.getText().replaceAll(",", "")));
                             t.setTipeKeuangan(controller.tipeKeuanganCombo.getSelectionModel().getSelectedItem());
@@ -588,11 +585,6 @@ public class PenjualanController {
                 @Override
                 public String call() throws Exception {
                     try (Connection con = Koneksi.getConnection()) {
-                        Piutang piutang = PiutangDAO.get(con, pembayaran.getNoPiutang());
-                        pembayaran.setTglBatal(tglSql.format(Function.getServerDate(con)));
-                        pembayaran.setUserBatal(sistem.getUser().getKodeUser());
-                        pembayaran.setStatus("false");
-                        pembayaran.setPiutang(piutang);
                         return Service.batalTerimaPembayaranPiutang(con, pembayaran);
                     }
                 }

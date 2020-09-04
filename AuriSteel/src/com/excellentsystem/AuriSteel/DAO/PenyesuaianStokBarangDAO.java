@@ -5,7 +5,6 @@
  */
 package com.excellentsystem.AuriSteel.DAO;
 
-import com.excellentsystem.AuriSteel.Function;
 import static com.excellentsystem.AuriSteel.Main.yymmdd;
 import com.excellentsystem.AuriSteel.Model.PenyesuaianStokBarang;
 import java.sql.Connection;
@@ -81,15 +80,14 @@ public class PenyesuaianStokBarangDAO {
         ps.setString(9, p.getStatus());
         ps.executeUpdate();
     }
-    public static String getId(Connection con)throws Exception{
-        Date serverDate = Function.getServerDate(con);
+    public static String getId(Connection con, Date date)throws Exception{
         PreparedStatement ps = con.prepareStatement("select max(right(no_penyesuaian,3)) from tt_penyesuaian_stok_barang "
                 + " where mid(no_penyesuaian,4,6) = ?");
-        ps.setString(1, yymmdd.format(serverDate));
+        ps.setString(1, yymmdd.format(date));
         ResultSet rs = ps.executeQuery();
         if(rs.next())
-            return "SR-"+yymmdd.format(serverDate)+new DecimalFormat("000").format(rs.getInt(1)+1);
+            return "SR-"+yymmdd.format(date)+new DecimalFormat("000").format(rs.getInt(1)+1);
         else
-            return "SR-"+yymmdd.format(serverDate)+new DecimalFormat("000").format(1);
+            return "SR-"+yymmdd.format(date)+new DecimalFormat("000").format(1);
     }
 }

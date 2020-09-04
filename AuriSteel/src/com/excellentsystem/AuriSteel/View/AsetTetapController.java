@@ -347,7 +347,6 @@ public class AsetTetapController  {
                             asetTetap.setStatus("open");
                             asetTetap.setTglJual("2000-01-01 00:00:00");
                             asetTetap.setUserJual("");
-                            asetTetap.setTglBeli(tglSql.format(Function.getServerDate(con)));
                             asetTetap.setUserBeli(sistem.getUser().getKodeUser());
                             return Service.pembelianAsetTetap(con, asetTetap, 
                                     controller.tipeKeuanganCombo.getSelectionModel().getSelectedItem());
@@ -397,7 +396,6 @@ public class AsetTetapController  {
                         try (Connection con = Koneksi.getConnection()) {
                             aset.setHargaJual(Double.parseDouble(controller.hargaField.getText().replaceAll(",", "")));
                             aset.setStatus("close");
-                            aset.setTglJual(tglSql.format(Function.getServerDate(con)));
                             aset.setUserJual(sistem.getUser().getKodeUser());
                             return Service.penjualanAsetTetap(con, aset, 
                                     controller.tipeKeuanganCombo.getSelectionModel().getSelectedItem());

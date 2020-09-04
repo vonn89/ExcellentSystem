@@ -6,7 +6,6 @@
 
 package com.excellentsystem.AuriSteel.DAO;
 
-import com.excellentsystem.AuriSteel.Function;
 import static com.excellentsystem.AuriSteel.Main.yymm;
 import com.excellentsystem.AuriSteel.Model.TerimaPembayaran;
 import java.sql.Connection;
@@ -67,21 +66,18 @@ public class TerimaPembayaranDAO {
             t.setUserBatal(rs.getString(9));
             t.setStatus(rs.getString(10));
             allPembayaran.add(t);
-            System.out.println(t.getNoTerimaPembayaran());
         }
-            System.out.println(noPiutang);
         return allPembayaran;
     }
-    public static String getId(Connection con)throws Exception{
-        Date serverDate = Function.getServerDate(con);
+    public static String getId(Connection con, Date date)throws Exception{
         PreparedStatement ps = con.prepareStatement("select max(right(no_terima_pembayaran,3)) "
                 + " from tt_terima_pembayaran where mid(no_terima_pembayaran,4,4) = ?");
-        ps.setString(1, yymm.format(serverDate));
+        ps.setString(1, yymm.format(date));
         ResultSet rs = ps.executeQuery();
         if(rs.next())
-            return "TB-"+yymm.format(serverDate)+new DecimalFormat("000").format(rs.getInt(1)+1);
+            return "TB-"+yymm.format(date)+new DecimalFormat("000").format(rs.getInt(1)+1);
         else
-            return "TB-"+yymm.format(serverDate)+new DecimalFormat("000").format(1);
+            return "TB-"+yymm.format(date)+new DecimalFormat("000").format(1);
     }
     public static void insert(Connection con, TerimaPembayaran t)throws Exception{
         PreparedStatement ps = con.prepareStatement("insert into tt_terima_pembayaran values(?,?,?,?,?,?,?,?,?,?)");

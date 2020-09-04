@@ -6,7 +6,6 @@
 
 package com.excellentsystem.AuriSteel.DAO;
 
-import com.excellentsystem.AuriSteel.Function;
 import static com.excellentsystem.AuriSteel.Main.yymm;
 import com.excellentsystem.AuriSteel.Model.Hutang;
 import java.sql.Connection;
@@ -161,16 +160,15 @@ public class HutangDAO {
         }
         return h;
     }
-    public static String getId(Connection con)throws Exception{
+    public static String getId(Connection con, Date date)throws Exception{
         PreparedStatement ps = con.prepareStatement("select max(right(no_hutang,3)) "
                 + " from tm_hutang where mid(no_hutang,4,4) = ?");
-        Date serverDate = Function.getServerDate(con);
-        ps.setString(1, yymm.format(serverDate));
+        ps.setString(1, yymm.format(date));
         ResultSet rs = ps.executeQuery();
         if(rs.next())
-            return "HT-"+yymm.format(serverDate)+new DecimalFormat("000").format(rs.getInt(1)+1);
+            return "HT-"+yymm.format(date)+new DecimalFormat("000").format(rs.getInt(1)+1);
         else
-            return "HT-"+yymm.format(serverDate)+new DecimalFormat("000").format(1);
+            return "HT-"+yymm.format(date)+new DecimalFormat("000").format(1);
     }
     public static void insert(Connection con, Hutang h)throws Exception{
         PreparedStatement ps = con.prepareStatement("insert into tm_hutang values(?,?,?,?,?,?,?,?,?,?,?)");

@@ -423,10 +423,7 @@ public class PemesananCoilController {
                     @Override 
                     public String call() throws Exception{
                         try (Connection con = Koneksi.getConnection()) {
-                            String noPemesanan = PemesananCoilHeadDAO.getId(con);
                             PemesananCoilHead pemesanan = new PemesananCoilHead();
-                            pemesanan.setNoPemesanan(noPemesanan);
-                            pemesanan.setTglPemesanan(tglSql.format(Function.getServerDate(con)));
                             pemesanan.setKodeCustomer(controller.customer.getKodeCustomer());
                             pemesanan.setPaymentTerm(controller.paymentTermField.getText());
                             pemesanan.setKurs(Double.parseDouble(controller.kursField.getText().replaceAll(",", "")));
@@ -439,9 +436,6 @@ public class PemesananCoilController {
                             pemesanan.setTglBatal("2000-01-01 00:00:00");
                             pemesanan.setUserBatal("");
                             pemesanan.setStatus("open");
-                            for(PemesananCoilDetail temp : controller.allPemesananCoilDetail){
-                                temp.setNoPemesanan(noPemesanan);
-                            }
                             pemesanan.setListPemesananCoilDetail(controller.allPemesananCoilDetail);
                             return Service.newPemesananCoil(con, pemesanan);
                         }
@@ -484,10 +478,7 @@ public class PemesananCoilController {
                     @Override 
                     public String call() throws Exception{
                         try (Connection con = Koneksi.getConnection()) {
-                            String noPemesanan = PemesananCoilHeadDAO.getId(con);
                             PemesananCoilHead pemesanan = new PemesananCoilHead();
-                            pemesanan.setNoPemesanan(noPemesanan);
-                            pemesanan.setTglPemesanan(tglSql.format(Function.getServerDate(con)));
                             pemesanan.setKodeCustomer(controller.customer.getKodeCustomer());
                             pemesanan.setPaymentTerm(controller.paymentTermField.getText());
                             pemesanan.setKurs(1);
@@ -500,9 +491,6 @@ public class PemesananCoilController {
                             pemesanan.setTglBatal("2000-01-01 00:00:00");
                             pemesanan.setUserBatal("");
                             pemesanan.setStatus("open");
-                            for(PemesananCoilDetail temp : controller.allPemesananCoilDetail){
-                                temp.setNoPemesanan(noPemesanan);
-                            }
                             pemesanan.setListPemesananCoilDetail(controller.allPemesananCoilDetail);
                             return Service.newPemesananCoil(con, pemesanan);
                         }
@@ -552,9 +540,6 @@ public class PemesananCoilController {
                 @Override 
                 public String call() throws Exception{
                     try (Connection con = Koneksi.getConnection()) {
-                        p.setTglBatal(tglSql.format(Function.getServerDate(con)));
-                        p.setUserBatal(sistem.getUser().getKodeUser());
-                        p.setStatus("false");
                         return Service.batalPemesananCoil(con, p);
                     }
                 }

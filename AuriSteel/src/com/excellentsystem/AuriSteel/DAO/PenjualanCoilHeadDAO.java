@@ -6,7 +6,6 @@
 
 package com.excellentsystem.AuriSteel.DAO;
 
-import com.excellentsystem.AuriSteel.Function;
 import static com.excellentsystem.AuriSteel.Main.yymm;
 import com.excellentsystem.AuriSteel.Model.PenjualanCoilHead;
 import java.sql.Connection;
@@ -123,16 +122,15 @@ public class PenjualanCoilHeadDAO {
         }
         return p;
     }
-    public static String getId(Connection con)throws Exception{
-        Date serverDate = Function.getServerDate(con);
+    public static String getId(Connection con, Date date)throws Exception{
         PreparedStatement ps = con.prepareStatement("select max(right(no_penjualan,3)) "
                 + " from tt_penjualan_coil_head where mid(no_penjualan,4,4) = ?");
-        ps.setString(1, yymm.format(serverDate));
+        ps.setString(1, yymm.format(date));
         ResultSet rs = ps.executeQuery();
         if(rs.next())
-            return "PE-"+yymm.format(serverDate)+new DecimalFormat("000").format(rs.getInt(1)+1);
+            return "PE-"+yymm.format(date)+new DecimalFormat("000").format(rs.getInt(1)+1);
         else
-            return "PE-"+yymm.format(serverDate)+new DecimalFormat("000").format(1);
+            return "PE-"+yymm.format(date)+new DecimalFormat("000").format(1);
     }
     public static void insert(Connection con, PenjualanCoilHead p)throws Exception{
         PreparedStatement ps = con.prepareStatement("insert into tt_penjualan_coil_head values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");

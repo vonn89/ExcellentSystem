@@ -83,7 +83,6 @@ import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import javafx.animation.Animation;
 import javafx.animation.Transition;
@@ -186,11 +185,9 @@ public class Main extends Application {
                         return Function.downloadUpdateGoogleStorage("Auri Steel.exe");
                     }
 //                Service.createAbsensi(con, 01, 2020);
-                System.out.println(Function.getServerDate(con).getDate());
 ////                if(Function.getServerDate(con).getDate()==1){
                     Service.setPenyusutanAset(con);
 ////                }
-                System.out.println(new Date()+" penyusutan aset");
                     updateProgress(70, 100);
                     Thread.sleep(500);
                     updateProgress(80, 100);

@@ -457,10 +457,7 @@ public class ProduksiBarangController  {
                     @Override 
                     public String call() throws Exception{
                         try (Connection con = Koneksi.getConnection()) {
-                            String noProduksi = ProduksiHeadDAO.getId(con);
                             ProduksiHead produksi = new ProduksiHead();
-                            produksi.setKodeProduksi(noProduksi);
-                            produksi.setTglProduksi(tglSql.format(Function.getServerDate(con)));
                             produksi.setKodeGudang(controller.gudangCombo.getSelectionModel().getSelectedItem());
                             produksi.setJenisProduksi(controller.jenisCombo.getSelectionModel().getSelectedItem());
                             produksi.setBiayaProduksi(0);
@@ -469,21 +466,12 @@ public class ProduksiBarangController  {
                             produksi.setTglBatal("2000-01-01 00:00:00");
                             produksi.setUserBatal("");
                             produksi.setStatus("true");
-
-                            for(ProduksiDetailBahan d : controller.listBahanDiproduksi){
-                                d.setKodeProduksi(noProduksi);
-                            }
                             produksi.setListProduksiDetailBahan(controller.listBahanDiproduksi);
-
-                            for(ProduksiDetailBarang d : controller.listBarangProduksi){
-                                d.setKodeProduksi(noProduksi);
-                            }
                             produksi.setListProduksiDetailBarang(controller.listBarangProduksi);
 
                             List<ProduksiOperator> listProduksiOperator = new ArrayList<>();
                             for(Pegawai p : controller.listOperator){
                                 ProduksiOperator op = new ProduksiOperator();
-                                op.setKodeProduksi(noProduksi);
                                 op.setKodePegawai(p.getKodePegawai());
                                 listProduksiOperator.add(op);
                             }
@@ -528,9 +516,6 @@ public class ProduksiBarangController  {
                 @Override 
                 public String call() throws Exception{
                     try (Connection con = Koneksi.getConnection()) {
-                        produksi.setTglBatal(tglSql.format(Function.getServerDate(con)));
-                        produksi.setUserBatal(sistem.getUser().getKodeUser());
-                        produksi.setStatus("false");
                         return Service.batalProduksiBarang(con, produksi);
                     }
                 }

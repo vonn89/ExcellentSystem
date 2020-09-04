@@ -5,7 +5,6 @@
  */
 package com.excellentsystem.AuriSteel.DAO;
 
-import com.excellentsystem.AuriSteel.Function;
 import static com.excellentsystem.AuriSteel.Main.yymm;
 import com.excellentsystem.AuriSteel.Model.PemesananHead;
 import java.sql.Connection;
@@ -75,16 +74,15 @@ public class PemesananHeadDAO {
         }
         return p;
     }
-    public static String getId(Connection con)throws Exception{
-        Date serverDate = Function.getServerDate(con);
+    public static String getId(Connection con, Date date)throws Exception{
         PreparedStatement ps = con.prepareStatement("select max(right(no_pemesanan,3)) from tt_pemesanan_head "
                 + " where mid(no_pemesanan,4,4) = ?");
-        ps.setString(1, yymm.format(serverDate));
+        ps.setString(1, yymm.format(date));
         ResultSet rs = ps.executeQuery();
         if(rs.next())
-            return "PI-"+yymm.format(serverDate)+new DecimalFormat("000").format(rs.getInt(1)+1);
+            return "PI-"+yymm.format(date)+new DecimalFormat("000").format(rs.getInt(1)+1);
         else
-            return "PI-"+yymm.format(serverDate)+new DecimalFormat("000").format(1);
+            return "PI-"+yymm.format(date)+new DecimalFormat("000").format(1);
     }
     public static void insert(Connection con, PemesananHead p)throws Exception{
         PreparedStatement ps = con.prepareStatement("insert into tt_pemesanan_head values(?,?,?,?,?,?,?,?,?,?,?,?,?,?)");

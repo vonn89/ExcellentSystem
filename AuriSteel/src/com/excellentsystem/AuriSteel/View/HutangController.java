@@ -7,7 +7,6 @@
 package com.excellentsystem.AuriSteel.View;
 
 import com.excellentsystem.AuriSteel.DAO.HutangDAO;
-import com.excellentsystem.AuriSteel.DAO.PembayaranDAO;
 import com.excellentsystem.AuriSteel.DAO.PemesananCoilHeadDAO;
 import com.excellentsystem.AuriSteel.Function;
 import static com.excellentsystem.AuriSteel.Function.createRow;
@@ -37,7 +36,6 @@ import com.excellentsystem.AuriSteel.View.Dialog.NewPemesananController;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.sql.Connection;
-import java.util.Date;
 import java.util.List;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
@@ -492,8 +490,6 @@ public class HutangController  {
                             if(x.jatuhTempoField.getValue()!=null)
                                 jatuhTempo= x.jatuhTempoField.getValue().toString();
                             Hutang h = new Hutang();
-                            h.setNoHutang(HutangDAO.getId(con));
-                            h.setTglHutang(tglSql.format(Function.getServerDate(con)));
                             h.setKategori(x.kategoriCombo.getSelectionModel().getSelectedItem());
                             h.setKeterangan(x.keteranganField.getText());
                             h.setTipeKeuangan(x.tipeKeuanganCombo.getSelectionModel().getSelectedItem());
@@ -549,10 +545,7 @@ public class HutangController  {
                     @Override 
                     public String call() throws Exception{
                         try (Connection con = Koneksi.getConnection()) {
-                            Date date = Function.getServerDate(con);
                             Pembayaran pembayaran = new Pembayaran();
-                            pembayaran.setNoPembayaran(PembayaranDAO.getId(con, date));
-                            pembayaran.setTglPembayaran(tglSql.format(date));
                             pembayaran.setNoHutang(h.getNoHutang());
                             pembayaran.setJumlahPembayaran(Double.parseDouble(controller.jumlahPembayaranField.getText().replaceAll(",", "")));
                             pembayaran.setTipeKeuangan(controller.tipeKeuanganCombo.getSelectionModel().getSelectedItem());

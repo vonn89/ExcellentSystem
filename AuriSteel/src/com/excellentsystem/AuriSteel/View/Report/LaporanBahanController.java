@@ -7,7 +7,6 @@
 package com.excellentsystem.AuriSteel.View.Report;
 
 import com.excellentsystem.AuriSteel.DAO.BahanDAO;
-import com.excellentsystem.AuriSteel.DAO.PenyesuaianStokBahanDAO;
 import com.excellentsystem.AuriSteel.DAO.StokBahanDAO;
 import com.excellentsystem.AuriSteel.Function;
 import static com.excellentsystem.AuriSteel.Function.createRow;
@@ -17,7 +16,6 @@ import static com.excellentsystem.AuriSteel.Main.df;
 import static com.excellentsystem.AuriSteel.Main.sistem;
 import static com.excellentsystem.AuriSteel.Main.tgl;
 import static com.excellentsystem.AuriSteel.Main.tglBarang;
-import static com.excellentsystem.AuriSteel.Main.tglSql;
 import com.excellentsystem.AuriSteel.Model.Bahan;
 import com.excellentsystem.AuriSteel.Model.Gudang;
 import com.excellentsystem.AuriSteel.Model.Otoritas;
@@ -399,8 +397,6 @@ public class LaporanBahanController  {
                             if(x.statusCombo.getSelectionModel().getSelectedItem().equals("Penambahan Stok"))
                                 qty = Double.parseDouble(x.qtyField.getText().replaceAll(",", ""));
                             PenyesuaianStokBahan p = new PenyesuaianStokBahan();
-                            p.setNoPenyesuaian(PenyesuaianStokBahanDAO.getId(con));
-                            p.setTglPenyesuaian(tglSql.format(Function.getServerDate(con)));
                             p.setKodeBahan(s.getKodeBahan());
                             p.setKodeGudang(s.getKodeGudang());
                             p.setQty(qty);

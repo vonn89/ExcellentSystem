@@ -8,7 +8,6 @@ package com.excellentsystem.AuriSteel.View;
 
 import com.excellentsystem.AuriSteel.DAO.PenjualanCoilHeadDAO;
 import com.excellentsystem.AuriSteel.DAO.PiutangDAO;
-import com.excellentsystem.AuriSteel.DAO.TerimaPembayaranDAO;
 import com.excellentsystem.AuriSteel.Function;
 import static com.excellentsystem.AuriSteel.Function.createRow;
 import com.excellentsystem.AuriSteel.Koneksi;
@@ -395,11 +394,6 @@ public class PiutangController  {
                 @Override 
                 public String call()throws Exception {
                     try (Connection con = Koneksi.getConnection()) {
-                        Piutang piutang = PiutangDAO.get(con, pembayaran.getNoPiutang());
-                        pembayaran.setTglBatal(tglSql.format(Function.getServerDate(con)));
-                        pembayaran.setUserBatal(sistem.getUser().getKodeUser());
-                        pembayaran.setStatus("false");
-                        pembayaran.setPiutang(piutang);
                         return Service.batalTerimaPembayaranPiutang(con, pembayaran);
                     }
                 }
@@ -445,8 +439,6 @@ public class PiutangController  {
                             if(x.jatuhTempoField.getValue()!=null)
                                 jatuhTempo= x.jatuhTempoField.getValue().toString();
                             Piutang h = new Piutang();
-                            h.setNoPiutang(PiutangDAO.getId(con));
-                            h.setTglPiutang(tglSql.format(Function.getServerDate(con)));
                             h.setKategori(x.kategoriCombo.getSelectionModel().getSelectedItem());
                             h.setKeterangan(x.keteranganField.getText());
                             h.setTipeKeuangan(x.tipeKeuanganCombo.getSelectionModel().getSelectedItem());
@@ -505,8 +497,6 @@ public class PiutangController  {
                     public String call() throws Exception{
                         try (Connection con = Koneksi.getConnection()) {
                             TerimaPembayaran t = new TerimaPembayaran();
-                            t.setNoTerimaPembayaran(TerimaPembayaranDAO.getId(con));
-                            t.setTglTerima(tglSql.format(Function.getServerDate(con)));
                             t.setNoPiutang(p.getNoPiutang());
                             t.setJumlahPembayaran(Double.parseDouble(controller.jumlahPembayaranField.getText().replaceAll(",", "")));
                             t.setTipeKeuangan(controller.tipeKeuanganCombo.getSelectionModel().getSelectedItem());

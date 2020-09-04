@@ -69,7 +69,7 @@ import org.apache.poi.ss.usermodel.Workbook;
  * @author yunaz
  */
 public class Function {
-    public static Date getServerDate(Connection con)throws Exception{
+    public static Date getServerDate1(Connection con)throws Exception{
         Date date = null;
         ResultSet rs = con.prepareStatement("SELECT SYSDATE() + INTERVAL 7 HOUR").executeQuery();
 //        ResultSet rs = con.prepareStatement("SELECT SYSDATE()").executeQuery();

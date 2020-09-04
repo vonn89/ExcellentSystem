@@ -472,10 +472,7 @@ public class PemesananController {
                     @Override 
                     public String call() throws Exception{
                         try (Connection con = Koneksi.getConnection()) {
-                            String noPemesanan = PemesananHeadDAO.getId(con);
                             PemesananHead pemesanan = new PemesananHead();
-                            pemesanan.setNoPemesanan(noPemesanan);
-                            pemesanan.setTglPemesanan(tglSql.format(Function.getServerDate(con)));
                             pemesanan.setKodeCustomer(controller.customer.getKodeCustomer());
                             pemesanan.setKodeCustomerInvoice(controller.customerInvoice.getKodeCustomer());
                             pemesanan.setPaymentTerm(controller.paymentTermCombo.getSelectionModel().getSelectedItem());
@@ -488,12 +485,6 @@ public class PemesananController {
                             pemesanan.setTglBatal("2000-01-01 00:00:00");
                             pemesanan.setUserBatal("");
                             pemesanan.setStatus("open");
-                            int noUrut = 1;
-                            for(PemesananDetail temp : controller.allPemesananDetail){
-                                temp.setNoPemesanan(noPemesanan);
-                                temp.setNoUrut(noUrut);
-                                noUrut = noUrut + 1;
-                            }
                             pemesanan.setListPemesananDetail(controller.allPemesananDetail);
                             return Service.newPemesanan(con, pemesanan);
                         }
@@ -605,9 +596,6 @@ public class PemesananController {
                     @Override 
                     public String call() throws Exception{
                         try (Connection con = Koneksi.getConnection()) {
-                            p.setTglBatal(tglSql.format(Function.getServerDate(con)));
-                            p.setUserBatal(sistem.getUser().getKodeUser());
-                            p.setStatus("false");
                             return Service.batalPemesanan(con, p);
                         }
                     }

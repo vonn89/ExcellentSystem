@@ -39,6 +39,7 @@ and open the template in the editor.
 .hyperlink{
     -fx-border-color:transparent;
     -fx-underline: false;
+    -fx-text-fill: blackcolor;
 }
 .stage{
     -fx-background-color: #f0f0f0;

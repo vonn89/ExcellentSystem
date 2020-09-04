@@ -7,9 +7,7 @@
 package com.excellentsystem.AuriSteel.View.Report;
 
 import com.excellentsystem.AuriSteel.DAO.BarangDAO;
-import com.excellentsystem.AuriSteel.DAO.GudangDAO;
 import com.excellentsystem.AuriSteel.DAO.LogBarangDAO;
-import com.excellentsystem.AuriSteel.DAO.PenyesuaianStokBarangDAO;
 import com.excellentsystem.AuriSteel.DAO.StokBarangDAO;
 import com.excellentsystem.AuriSteel.Function;
 import static com.excellentsystem.AuriSteel.Function.createRow;
@@ -19,7 +17,6 @@ import static com.excellentsystem.AuriSteel.Main.df;
 import static com.excellentsystem.AuriSteel.Main.sistem;
 import static com.excellentsystem.AuriSteel.Main.tgl;
 import static com.excellentsystem.AuriSteel.Main.tglBarang;
-import static com.excellentsystem.AuriSteel.Main.tglSql;
 import com.excellentsystem.AuriSteel.Model.Barang;
 import com.excellentsystem.AuriSteel.Model.Gudang;
 import com.excellentsystem.AuriSteel.Model.LogBarang;
@@ -34,7 +31,6 @@ import java.io.FileOutputStream;
 import java.sql.Connection;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.value.ObservableValue;
@@ -344,8 +340,6 @@ public class LaporanBarangController {
                             if(x.statusCombo.getSelectionModel().getSelectedItem().equals("Penambahan Stok"))
                                 qty = Double.parseDouble(x.qtyField.getText().replaceAll(",", ""));
                             PenyesuaianStokBarang p = new PenyesuaianStokBarang();
-                            p.setNoPenyesuaian(PenyesuaianStokBarangDAO.getId(con));
-                            p.setTglPenyesuaian(tglSql.format(Function.getServerDate(con)));
                             p.setKodeBarang(s.getKodeBarang());
                             p.setKodeGudang(s.getKodeGudang());
                             p.setQty(qty);

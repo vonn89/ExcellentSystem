@@ -5,7 +5,6 @@
  */
 package com.excellentsystem.AuriSteel.DAO;
 
-import com.excellentsystem.AuriSteel.Function;
 import static com.excellentsystem.AuriSteel.Main.yymm;
 import com.excellentsystem.AuriSteel.Model.PindahBarangHead;
 import java.sql.Connection;
@@ -68,16 +67,15 @@ public class PindahBarangHeadDAO {
         }
         return p;
     }
-    public static String getId(Connection con)throws Exception{
-        Date serverDate = Function.getServerDate(con);
+    public static String getId(Connection con, Date date)throws Exception{
         PreparedStatement ps = con.prepareStatement("select max(right(no_pindah,3)) from tt_pindah_barang_head "
                 + " where mid(no_pindah,4,4) = ?");
-        ps.setString(1, yymm.format(serverDate));
+        ps.setString(1, yymm.format(date));
         ResultSet rs = ps.executeQuery();
         if(rs.next())
-            return "PG-"+yymm.format(serverDate)+new DecimalFormat("000").format(rs.getInt(1)+1);
+            return "PG-"+yymm.format(date)+new DecimalFormat("000").format(rs.getInt(1)+1);
         else
-            return "PG-"+yymm.format(serverDate)+new DecimalFormat("000").format(1);
+            return "PG-"+yymm.format(date)+new DecimalFormat("000").format(1);
     }
     public static void insert(Connection con, PindahBarangHead p)throws Exception{
         PreparedStatement ps = con.prepareStatement("insert into tt_pindah_barang_head values(?,?,?,?,?,?,?,?,?,?)");

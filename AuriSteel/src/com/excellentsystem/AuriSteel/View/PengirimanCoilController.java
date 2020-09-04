@@ -21,7 +21,6 @@ import com.excellentsystem.AuriSteel.Model.Customer;
 import com.excellentsystem.AuriSteel.Model.Otoritas;
 import com.excellentsystem.AuriSteel.Model.PenjualanCoilDetail;
 import com.excellentsystem.AuriSteel.Model.PenjualanCoilHead;
-import com.excellentsystem.AuriSteel.Model.PenjualanHead;
 import com.excellentsystem.AuriSteel.PrintOut.Report;
 import com.excellentsystem.AuriSteel.Services.Service;
 import com.excellentsystem.AuriSteel.View.Dialog.MessageController;
@@ -307,11 +306,8 @@ public class PengirimanCoilController  {
                     @Override 
                     public String call()throws Exception {
                         try (Connection con = Koneksi.getConnection()) {
-                            String noPengiriman = PenjualanCoilHeadDAO.getId(con);
                             PenjualanCoilHead pengiriman = new PenjualanCoilHead();
                             pengiriman.setPemesananCoilHead(controller.pemesanan);
-                            pengiriman.setNoPenjualan(noPengiriman);
-                            pengiriman.setTglPenjualan(tglSql.format(Function.getServerDate(con)));
                             pengiriman.setNoPemesanan(controller.noPemesananField.getText());
                             pengiriman.setKodeGudang(controller.gudangCombo.getSelectionModel().getSelectedItem());
                             pengiriman.setKodeCustomer(controller.pemesanan.getKodeCustomer());
@@ -328,7 +324,6 @@ public class PengirimanCoilController  {
                             pengiriman.setStatus("true");
                             double total = 0;
                             for(PenjualanCoilDetail temp : controller.allPenjualanCoilDetail){
-                                temp.setNoPenjualan(noPengiriman);
                                 total = total + temp.getTotal();
                             }
                             total = total * Double.parseDouble(controller.kursField.getText().replaceAll(",", "")); 
@@ -386,9 +381,6 @@ public class PengirimanCoilController  {
                 @Override 
                 public String call()throws Exception {
                     try (Connection con = Koneksi.getConnection()) {
-                        p.setTglBatal(tglSql.format(Function.getServerDate(con)));
-                        p.setUserBatal(sistem.getUser().getKodeUser());
-                        p.setStatus("false");
                         return Service.batalPenjualanCoil(con, p);
                     }
                 }

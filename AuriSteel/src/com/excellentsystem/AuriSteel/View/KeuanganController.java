@@ -430,7 +430,6 @@ public class KeuanganController {
                                 }
                             }
                             Keuangan k = new Keuangan();
-                            k.setTglKeuangan(tglSql.format(Function.getServerDate(con)));
                             k.setTipeKeuangan(x.tipeKeuanganCombo.getSelectionModel().getSelectedItem());
                             k.setKategori(x.kategoriCombo.getSelectionModel().getSelectedItem());
                             k.setDeskripsi(x.keteranganField.getText());
@@ -483,8 +482,6 @@ public class KeuanganController {
                     public String call() throws Exception {
                         try (Connection con = Koneksi.getConnection()) {
                             BebanPenjualanHead b = new BebanPenjualanHead();
-                            b.setNoBebanPenjualan(BebanPenjualanHeadDAO.getId(con));
-                            b.setTglBebanPenjualan(tglSql.format(Function.getServerDate(con)));
                             b.setKeterangan(x.keteranganField.getText());
                             b.setTotalBebanPenjualan(Double.parseDouble(x.jumlahRpField.getText().replaceAll(",", "")));
                             b.setTipeKeuangan(x.tipeKeuanganCombo.getSelectionModel().getSelectedItem());
@@ -584,8 +581,6 @@ public class KeuanganController {
                     public String call() throws Exception {
                         try (Connection con = Koneksi.getConnection()) {
                             BebanProduksiHead b = new BebanProduksiHead();
-                            b.setNoBebanProduksi(BebanProduksiHeadDAO.getId(con));
-                            b.setTglBebanProduksi(tglSql.format(Function.getServerDate(con)));
                             b.setKeterangan(x.keteranganField.getText());
                             b.setTotalBebanProduksi(Double.parseDouble(x.jumlahRpField.getText().replaceAll(",", "")));
                             b.setTipeKeuangan(x.tipeKeuanganCombo.getSelectionModel().getSelectedItem());

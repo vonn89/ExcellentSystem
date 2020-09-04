@@ -93,7 +93,6 @@ public class LaporanUntungRugiPeriodeController  {
     public void setMainApp(Main mainApp) {
         this.mainApp = mainApp;
         ObservableList<String> periode = FXCollections.observableArrayList();
-        periode.add("Last 4 Week");
         periode.add("This Year");
         periode.add("Last Year");
         periode.add("All");

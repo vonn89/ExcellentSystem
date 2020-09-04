@@ -283,10 +283,7 @@ public class PindahBarangController {
                     @Override 
                     public String call()throws Exception {
                         try (Connection con = Koneksi.getConnection()) {
-                            String noPengiriman = PindahBarangHeadDAO.getId(con);
                             PindahBarangHead p = new PindahBarangHead();
-                            p.setNoPindah(noPengiriman);
-                            p.setTglPindah(tglSql.format(Function.getServerDate(con)));
                             p.setGudangAsal(controller.gudangAsalCombo.getSelectionModel().getSelectedItem());
                             p.setGudangTujuan(controller.gudangTujuanCombo.getSelectionModel().getSelectedItem());
                             p.setSupir(controller.namaSupirField.getText());
@@ -295,12 +292,6 @@ public class PindahBarangController {
                             p.setTglBatal("2000-01-01 00:00:00");
                             p.setUserBatal("");
                             p.setStatus("true");
-                            int i = 1;
-                            for(PindahBarangDetail temp : controller.allPindahBarangDetail){
-                                temp.setNoPindah(noPengiriman);
-                                temp.setNoUrut(i);
-                                i++;
-                            }
                             p.setListPindahBarangDetail(controller.allPindahBarangDetail); 
                             return Service.newPindahBarang(con, p);
                         }
@@ -336,11 +327,6 @@ public class PindahBarangController {
                 @Override 
                 public String call()throws Exception {
                     try (Connection con = Koneksi.getConnection()) {
-                        List<PindahBarangDetail> listPindah = PindahBarangDetailDAO.getAllPindahBarangDetail(con, p.getNoPindah());
-                        p.setListPindahBarangDetail(listPindah);
-                        p.setTglBatal(tglSql.format(Function.getServerDate(con)));
-                        p.setUserBatal(sistem.getUser().getKodeUser());
-                        p.setStatus("false");
                         return Service.batalPindahBarang(con, p);
                     }
                 }

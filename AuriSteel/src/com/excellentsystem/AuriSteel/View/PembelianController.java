@@ -19,11 +19,9 @@ import static com.excellentsystem.AuriSteel.Main.tgl;
 import static com.excellentsystem.AuriSteel.Main.tglBarang;
 import static com.excellentsystem.AuriSteel.Main.tglLengkap;
 import static com.excellentsystem.AuriSteel.Main.tglSql;
-import com.excellentsystem.AuriSteel.Model.BebanPembelian;
 import com.excellentsystem.AuriSteel.Model.Hutang;
 import com.excellentsystem.AuriSteel.Model.Otoritas;
 import com.excellentsystem.AuriSteel.Model.Pembayaran;
-import com.excellentsystem.AuriSteel.Model.PembelianDetail;
 import com.excellentsystem.AuriSteel.Model.PembelianHead;
 import com.excellentsystem.AuriSteel.Model.Supplier;
 import com.excellentsystem.AuriSteel.Services.Service;
@@ -370,10 +368,7 @@ public class PembelianController  {
                     @Override 
                     public String call() throws Exception{
                         try (Connection con = Koneksi.getConnection()) {
-                            String noPembelian = PembelianHeadDAO.getId(con);
                             PembelianHead p = new PembelianHead();
-                            p.setNoPembelian(noPembelian);
-                            p.setTglPembelian(tglSql.format(Function.getServerDate(con)));
                             p.setKodeSupplier(controller.supplier.getKodeSupplier());
                             p.setKodeGudang(controller.gudangCombo.getSelectionModel().getSelectedItem());
                             p.setPaymentTerm("");
@@ -387,12 +382,6 @@ public class PembelianController  {
                             p.setTglBatal("2000-01-01 00:00:00");
                             p.setUserBatal("");
                             p.setStatus("true");
-                            for(PembelianDetail temp : controller.allPembelianDetail){
-                                temp.setNoPembelian(noPembelian);
-                            }
-                            for(BebanPembelian temp : controller.allBebanPembelian){
-                                temp.setNoPembelian(noPembelian);
-                            }
                             p.setListPembelianCoilDetail(controller.allPembelianDetail);
                             p.setListBebanPembelianCoil(controller.allBebanPembelian);
                             return Service.newPembelian(con, p);
@@ -429,9 +418,6 @@ public class PembelianController  {
                 @Override 
                 public String call() throws Exception{
                     try (Connection con = Koneksi.getConnection()) {
-                        p.setTglBatal(tglSql.format(Function.getServerDate(con)));
-                        p.setUserBatal(sistem.getUser().getKodeUser());
-                        p.setStatus("false");
                         return Service.batalPembelian(con, p);
                     }
                 }
@@ -501,11 +487,6 @@ public class PembelianController  {
                 @Override 
                 public String call()throws Exception {
                     try (Connection con = Koneksi.getConnection()) {
-                        Hutang hutang = HutangDAO.get(con, pembayaran.getNoHutang());
-                        pembayaran.setTglBatal(tglSql.format(Function.getServerDate(con)));
-                        pembayaran.setUserBatal(sistem.getUser().getKodeUser());
-                        pembayaran.setStatus("false");
-                        pembayaran.setHutang(hutang);
                         return Service.batalPembayaranHutang(con, pembayaran);
                     }
                 }
