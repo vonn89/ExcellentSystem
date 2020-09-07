@@ -131,4 +131,9 @@ public class HutangDAO {
         ps.setString(9, hutang.getNoHutang());
         ps.executeUpdate();
     }
+    public static void delete(Connection con,Hutang hutang)throws Exception{
+        PreparedStatement ps = con.prepareStatement("delete from tt_hutang where no_hutang=?");
+        ps.setString(1, hutang.getNoHutang());
+        ps.executeUpdate();
+    }
 }

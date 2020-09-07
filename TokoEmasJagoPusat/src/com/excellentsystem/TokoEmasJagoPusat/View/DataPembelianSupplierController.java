@@ -5,8 +5,7 @@
  */
 package com.excellentsystem.TokoEmasJagoPusat.View;
 
-import com.excellentsystem.TokoEmasJagoPusat.DAO.CabangDAO;
-import com.excellentsystem.TokoEmasJagoPusat.DAO.PenjualanCabangHeadDAO;
+import com.excellentsystem.TokoEmasJagoPusat.DAO.PembelianHeadDAO;
 import com.excellentsystem.TokoEmasJagoPusat.Function;
 import static com.excellentsystem.TokoEmasJagoPusat.Function.getTableCell;
 import com.excellentsystem.TokoEmasJagoPusat.KoneksiPusat;
@@ -17,13 +16,11 @@ import static com.excellentsystem.TokoEmasJagoPusat.Main.sistem;
 import static com.excellentsystem.TokoEmasJagoPusat.Main.tglLengkap;
 import static com.excellentsystem.TokoEmasJagoPusat.Main.tglSql;
 import static com.excellentsystem.TokoEmasJagoPusat.Main.user;
-import com.excellentsystem.TokoEmasJagoPusat.Model.Cabang;
-import com.excellentsystem.TokoEmasJagoPusat.Model.PenjualanCabangDetail;
-import com.excellentsystem.TokoEmasJagoPusat.Model.PenjualanCabangHead;
+import com.excellentsystem.TokoEmasJagoPusat.Model.PembelianDetail;
+import com.excellentsystem.TokoEmasJagoPusat.Model.PembelianHead;
 import com.excellentsystem.TokoEmasJagoPusat.Service.Service;
-import com.excellentsystem.TokoEmasJagoPusat.View.Dialog.DetailPenjualanCabangController;
+import com.excellentsystem.TokoEmasJagoPusat.View.Dialog.DetailPembelianSupplierController;
 import com.excellentsystem.TokoEmasJagoPusat.View.Dialog.MessageController;
-import com.excellentsystem.TokoEmasJagoPusat.View.Dialog.PenjualanCabangController;
 import java.sql.Connection;
 import java.text.ParseException;
 import java.time.LocalDate;
@@ -37,7 +34,6 @@ import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.control.ComboBox;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
@@ -56,52 +52,47 @@ import javafx.stage.Stage;
  *
  * @author Excellent
  */
-public class DataPenjualanCabangController  {
+public class DataPembelianSupplierController  {
 
-    @FXML private TableView<PenjualanCabangHead> penjualanCabangHeadTable;
-    @FXML private TableColumn<PenjualanCabangHead, String> noPenjualanCabangColumn;
-    @FXML private TableColumn<PenjualanCabangHead, String> tglPenjualanColumn;
-    @FXML private TableColumn<PenjualanCabangHead, String> kodeCabangColumn;
-    @FXML private TableColumn<PenjualanCabangHead, Number> totalQtyColumn;
-    @FXML private TableColumn<PenjualanCabangHead, Number> totalBeratColumn;
-    @FXML private TableColumn<PenjualanCabangHead, Number> totalHargaPersenColumn;
-    @FXML private TableColumn<PenjualanCabangHead, Number> hargaEmasColumn;
-    @FXML private TableColumn<PenjualanCabangHead, Number> totalPenjualanColumn;
-    @FXML private TableColumn<PenjualanCabangHead, String> kodeUserColumn;
+    @FXML private TableView<PembelianHead> pembelianHeadTable;
+    @FXML private TableColumn<PembelianHead, String> noPembelianColumn;
+    @FXML private TableColumn<PembelianHead, String> tglPembelianColumn;
+    @FXML private TableColumn<PembelianHead, String> supplierColumn;
+    @FXML private TableColumn<PembelianHead, Number> totalBeratColumn;
+    @FXML private TableColumn<PembelianHead, Number> totalHargaPersenColumn;
+    @FXML private TableColumn<PembelianHead, Number> hargaEmasColumn;
+    @FXML private TableColumn<PembelianHead, Number> totalPembelianColumn;
+    @FXML private TableColumn<PembelianHead, String> kodeUserColumn;
     
     @FXML private TextField searchField;
     @FXML private DatePicker tglAwalPicker;
     @FXML private DatePicker tglAkhirPicker;
-    @FXML private ComboBox<String> kodeCabangCombo;
     
-    @FXML private Label totalQtyLabel;
     @FXML private Label totalBeratLabel;
     @FXML private Label totalHargaPersenLabel;
-    @FXML private Label totalPenjualanLabel;
+    @FXML private Label totalPembelianLabel;
     private Main mainApp;   
-    private ObservableList<PenjualanCabangHead> allPenjualan = FXCollections.observableArrayList();
-    private ObservableList<PenjualanCabangHead> filterData = FXCollections.observableArrayList();
+    private ObservableList<PembelianHead> allPembelian = FXCollections.observableArrayList();
+    private ObservableList<PembelianHead> filterData = FXCollections.observableArrayList();
     public void initialize() {
-        noPenjualanCabangColumn.setCellValueFactory(cellData -> cellData.getValue().noPenjualanCabangProperty());
-        tglPenjualanColumn.setCellValueFactory(cellData -> { 
+        noPembelianColumn.setCellValueFactory(cellData -> cellData.getValue().noPembelianProperty());
+        tglPembelianColumn.setCellValueFactory(cellData -> { 
             try {
-                return new SimpleStringProperty(tglLengkap.format(tglSql.parse(cellData.getValue().getTglPenjualan())));
+                return new SimpleStringProperty(tglLengkap.format(tglSql.parse(cellData.getValue().getTglPembelian())));
             } catch (ParseException ex) {
                 return null;
             }
         });
-        tglPenjualanColumn.setComparator(Function.sortDate(tglLengkap));
-        kodeCabangColumn.setCellValueFactory(cellData -> cellData.getValue().kodeCabangProperty());
-        totalQtyColumn.setCellValueFactory(cellData -> cellData.getValue().totalQtyProperty());
-        totalQtyColumn.setCellFactory(col -> getTableCell(rp));
+        tglPembelianColumn.setComparator(Function.sortDate(tglLengkap));
+        supplierColumn.setCellValueFactory(cellData -> cellData.getValue().supplierProperty());
         totalBeratColumn.setCellValueFactory(cellData -> cellData.getValue().totalBeratProperty());
         totalBeratColumn.setCellFactory(col -> getTableCell(gr));
         totalHargaPersenColumn.setCellValueFactory(cellData -> cellData.getValue().totalHargaPersenProperty());
         totalHargaPersenColumn.setCellFactory(col -> getTableCell(gr));
         hargaEmasColumn.setCellValueFactory(cellData -> cellData.getValue().hargaEmasProperty());
         hargaEmasColumn.setCellFactory(col -> getTableCell(rp));
-        totalPenjualanColumn.setCellValueFactory(cellData -> cellData.getValue().totalPenjualanProperty());
-        totalPenjualanColumn.setCellFactory(col -> getTableCell(rp));
+        totalPembelianColumn.setCellValueFactory(cellData -> cellData.getValue().totalPembelianProperty());
+        totalPembelianColumn.setCellFactory(col -> getTableCell(rp));
         kodeUserColumn.setCellValueFactory(cellData -> cellData.getValue().kodeUserProperty());
         
         tglAwalPicker.setConverter(Function.getTglConverter());
@@ -114,40 +105,40 @@ public class DataPenjualanCabangController  {
                 Function.getDateCellAkhir(tglAwalPicker, LocalDate.parse(sistem.getTglSystem())));
         
         final ContextMenu rowMenu = new ContextMenu();
-        MenuItem addNew = new MenuItem("New Penjualan Cabang");
+        MenuItem addNew = new MenuItem("New Pembelian Supplier");
         addNew.setOnAction((ActionEvent e) -> {
-            newPenjualan();
+            newPembelian();
         });
         MenuItem refresh = new MenuItem("Refresh");
         refresh.setOnAction((ActionEvent event) -> {
-            getPenjualan();
+            getPembelian();
         });
         rowMenu.getItems().addAll(addNew, refresh);
-        penjualanCabangHeadTable.setContextMenu(rowMenu);
-        penjualanCabangHeadTable.setRowFactory(table -> {
-            TableRow<PenjualanCabangHead> row = new TableRow<PenjualanCabangHead>() {
+        pembelianHeadTable.setContextMenu(rowMenu);
+        pembelianHeadTable.setRowFactory(table -> {
+            TableRow<PembelianHead> row = new TableRow<PembelianHead>() {
                 @Override
-                public void updateItem(PenjualanCabangHead item, boolean empty) {
+                public void updateItem(PembelianHead item, boolean empty) {
                     super.updateItem(item, empty);
                     if (empty) {
                         setContextMenu(rowMenu);
                     }else{
                         final ContextMenu rowMenu = new ContextMenu();
-                        MenuItem addNew = new MenuItem("New Penjualan Cabang");
+                        MenuItem addNew = new MenuItem("New Pembelian Supplier");
                         addNew.setOnAction((ActionEvent e) -> {
-                            newPenjualan();
+                            newPembelian();
                         });
-                        MenuItem detail = new MenuItem("Detail Penjualan Cabang");
+                        MenuItem detail = new MenuItem("Detail Pembelian Supplier");
                         detail.setOnAction((ActionEvent e) -> {
-                            detailPenjualanCabang(item);
+                            detailPembelianPusat(item);
                         });
-                        MenuItem batal = new MenuItem("Batal Penjualan Cabang");
+                        MenuItem batal = new MenuItem("Batal Pembelian Supplier");
                         batal.setOnAction((ActionEvent e) -> {
-                            batalPenjualan(item);
+                            batalPembelian(item);
                         });
                         MenuItem refresh = new MenuItem("Refresh");
                         refresh.setOnAction((ActionEvent e) -> {
-                            getPenjualan();
+                            getPembelian();
                         });
                         rowMenu.getItems().add(addNew);
                         rowMenu.getItems().add(detail);
@@ -160,69 +151,51 @@ public class DataPenjualanCabangController  {
             row.setOnMouseClicked((MouseEvent mouseEvent) -> {
                 if(mouseEvent.getButton().equals(MouseButton.PRIMARY)&&mouseEvent.getClickCount() == 2){
                     if(row.getItem()!=null)
-                        detailPenjualanCabang(row.getItem());
+                        detailPembelianPusat(row.getItem());
                 }
             });
             return row;
         });
-        allPenjualan.addListener((ListChangeListener.Change<? extends PenjualanCabangHead> change) -> {
-            searchPenjualan();
+        allPembelian.addListener((ListChangeListener.Change<? extends PembelianHead> change) -> {
+            searchPembelian();
         });
         searchField.textProperty().addListener(
             (ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
-            searchPenjualan();
+            searchPembelian();
         });
-        filterData.addAll(allPenjualan);
-        penjualanCabangHeadTable.setItems(filterData);
+        filterData.addAll(allPembelian);
+        pembelianHeadTable.setItems(filterData);
     }    
     public void setMainApp(Main mainApp){
-        try(Connection conPusat = KoneksiPusat.getConnection()){
-            this.mainApp = mainApp;
-            ObservableList<String> allCabang = FXCollections.observableArrayList();
-            allCabang.clear();
-            allCabang.add("Semua");
-            List<Cabang> listCabang = CabangDAO.getAll(conPusat);
-            for(Cabang c : listCabang){
-                allCabang.addAll(c.getKodeCabang());
-            }
-            kodeCabangCombo.setItems(allCabang);
-            kodeCabangCombo.getSelectionModel().select("Semua");
-            getPenjualan();
-        }catch(Exception e){
-            mainApp.showMessage(Modality.NONE, "Error", e.toString());
-        }
+        this.mainApp = mainApp;
+        getPembelian();
     } 
     @FXML
-    private void getPenjualan(){
-        if(kodeCabangCombo.getSelectionModel().getSelectedItem()!=null){
-            Task<List<PenjualanCabangHead>> task = new Task<List<PenjualanCabangHead>>() {
-                @Override 
-                public List<PenjualanCabangHead> call() throws Exception{
-                    try(Connection conPusat = KoneksiPusat.getConnection()){
-                        String kodeCabang = "%";
-                        if(!kodeCabangCombo.getSelectionModel().getSelectedItem().equals("Semua"))
-                            kodeCabang = kodeCabangCombo.getSelectionModel().getSelectedItem();
-                        return PenjualanCabangHeadDAO.getAllByDateAndCabangAndStatus(
-                            conPusat, tglAwalPicker.getValue().toString(), tglAkhirPicker.getValue().toString(), kodeCabang, "true");
-                    }
+    private void getPembelian(){
+        Task<List<PembelianHead>> task = new Task<List<PembelianHead>>() {
+            @Override 
+            public List<PembelianHead> call() throws Exception{
+                try(Connection conPusat = KoneksiPusat.getConnection()){
+                    return PembelianHeadDAO.getAllByDateAndSupplierAndStatus(
+                        conPusat, tglAwalPicker.getValue().toString(), tglAkhirPicker.getValue().toString(), "%", "true");
                 }
-            };
-            task.setOnRunning((e) -> {
-                mainApp.showLoadingScreen();
-            });
-            task.setOnSucceeded((e) -> {
-                mainApp.closeLoading();
-                allPenjualan.clear();
-                allPenjualan.addAll(task.getValue());
-                penjualanCabangHeadTable.refresh();
-            });
-            task.setOnFailed((e) -> {
-                task.getException().printStackTrace();
-                mainApp.closeLoading();
-                mainApp.showMessage(Modality.NONE, "Error", task.getException().toString());
-            });
-            new Thread(task).start();
-        }
+            }
+        };
+        task.setOnRunning((e) -> {
+            mainApp.showLoadingScreen();
+        });
+        task.setOnSucceeded((e) -> {
+            mainApp.closeLoading();
+            allPembelian.clear();
+            allPembelian.addAll(task.getValue());
+            pembelianHeadTable.refresh();
+        });
+        task.setOnFailed((e) -> {
+            task.getException().printStackTrace();
+            mainApp.closeLoading();
+            mainApp.showMessage(Modality.NONE, "Error", task.getException().toString());
+        });
+        new Thread(task).start();
     }
     private Boolean checkColumn(String column){
         if(column!=null){
@@ -231,23 +204,22 @@ public class DataPenjualanCabangController  {
         }
         return false;
     }
-    private void searchPenjualan() {
+    private void searchPembelian() {
         try{
             filterData.clear();
-            for (PenjualanCabangHead a : allPenjualan) {
+            for (PembelianHead a : allPembelian) {
                 if (searchField.getText() == null || searchField.getText().equals(""))
                     filterData.add(a);
                 else{
     
-                    if(checkColumn(a.getNoPenjualanCabang())||
-                        checkColumn(tglLengkap.format(tglSql.parse(a.getTglPenjualan())))||
-                        checkColumn(a.getKodeCabang())||
+                    if(checkColumn(a.getNoPembelian())||
+                        checkColumn(tglLengkap.format(tglSql.parse(a.getTglPembelian())))||
+                        checkColumn(a.getSupplier())||
                         checkColumn(a.getKodeUser())||
-                        checkColumn(rp.format(a.getTotalQty()))||
                         checkColumn(rp.format(a.getTotalBerat()))||
                         checkColumn(rp.format(a.getTotalHargaPersen()))||
                         checkColumn(rp.format(a.getHargaEmas()))||
-                        checkColumn(rp.format(a.getTotalPenjualan())))
+                        checkColumn(rp.format(a.getTotalPembelian())))
                         filterData.add(a);
                 }
             }
@@ -257,64 +229,58 @@ public class DataPenjualanCabangController  {
         }
     }
     private void hitungTotal(){
-        double totalQty = 0;
         double totalBerat = 0;
         double totalHargaPersen = 0;
-        double totalPenjualan = 0;
-        for(PenjualanCabangHead p : filterData){
-            totalQty = totalQty + p.getTotalQty();
+        double totalPembelian = 0;
+        for(PembelianHead p : filterData){
             totalBerat = totalBerat + p.getTotalBerat();
             totalHargaPersen = totalHargaPersen + p.getTotalHargaPersen();
-            totalPenjualan = totalPenjualan + p.getTotalPenjualan();
+            totalPembelian = totalPembelian + p.getTotalPembelian();
         }
-        totalQtyLabel.setText(gr.format(totalQty));
         totalBeratLabel.setText(gr.format(totalBerat));
         totalHargaPersenLabel.setText(gr.format(totalHargaPersen));
-        totalPenjualanLabel.setText(rp.format(totalPenjualan));
+        totalPembelianLabel.setText(rp.format(totalPembelian));
     }
-    private void newPenjualan(){
+    private void newPembelian(){
         Stage stage = new Stage();
-        FXMLLoader loader = mainApp.showDialog(mainApp.MainStage, stage, "View/Dialog/PenjualanCabang.fxml");
-        PenjualanCabangController controller = loader.getController();
+        FXMLLoader loader = mainApp.showDialog(mainApp.MainStage, stage, "View/Dialog/PembelianSupplier.fxml");
+        PembelianSupplierController controller = loader.getController();
         controller.setMainApp(mainApp, mainApp.MainStage, stage);
         controller.saveButton.setOnAction((event) -> {
-            if(controller.cabangCombo.getSelectionModel().getSelectedItem()==null)
-                mainApp.showMessage(Modality.NONE, "Warning", "Kode cabang belum dipilih");
-            else if(controller.listPenjualanDetail.isEmpty())
+            if(controller.supplierCombo.getSelectionModel().getSelectedItem()==null)
+                mainApp.showMessage(Modality.NONE, "Warning", "Supplier belum dipilih");
+            else if(controller.listPembelianDetail.isEmpty())
                 mainApp.showMessage(Modality.NONE, "Warning", "Barang masih kosong");
             else{
                 Task<String> task = new Task<String>(){
                     @Override 
                     public String call() throws Exception{
                         try(Connection conPusat = KoneksiPusat.getConnection()){
-                            PenjualanCabangHead p = new PenjualanCabangHead();
-                            p.setNoPenjualanCabang(PenjualanCabangHeadDAO.getId(conPusat));
-                            p.setTglPenjualan(Function.getSystemDate());
-                            p.setKodeCabang(controller.cabangCombo.getSelectionModel().getSelectedItem());
+                            PembelianHead p = new PembelianHead();
+                            p.setNoPembelian(PembelianHeadDAO.getId(conPusat));
+                            p.setTglPembelian(Function.getSystemDate());
+                            p.setSupplier(controller.supplierCombo.getSelectionModel().getSelectedItem());
                             int i =1;
-                            int totalQty = 0;
                             double totalBerat = 0;
                             double totalHargaPersen = 0;
-                            for(PenjualanCabangDetail d : controller.listPenjualanDetail){
-                                d.setNoPenjualanCabang(p.getNoPenjualanCabang());
+                            for(PembelianDetail d : controller.listPembelianDetail){
+                                d.setNoPembelian(p.getNoPembelian());
                                 d.setNoUrut(i);
                                 
-                                totalQty = totalQty + d.getQty();
                                 totalBerat = totalBerat + d.getBerat();
-                                totalHargaPersen = totalHargaPersen + d.getTotalHargaPersen();
+                                totalHargaPersen = totalHargaPersen + d.getTotalHarga();
                                 i++;
                             }
-                            p.setListDetail(controller.listPenjualanDetail);
-                            p.setTotalQty(totalQty);
+                            p.setListPembelianDetail(controller.listPembelianDetail);
                             p.setTotalBerat(totalBerat);
                             p.setTotalHargaPersen(totalHargaPersen);
                             p.setHargaEmas(sistem.getHargaEmas());
-                            p.setTotalPenjualan(Function.pembulatan(totalHargaPersen*sistem.getHargaEmas()));
+                            p.setTotalPembelian(Function.pembulatan(totalHargaPersen*sistem.getHargaEmas()));
                             p.setKodeUser(user.getKodeUser());
                             p.setStatus("true");
                             p.setTglBatal("2000-01-01 00:00:00");
                             p.setUserBatal("");
-                            return Service.savePenjualanCabang(conPusat, p);
+                            return Service.savePembelianSupplier(conPusat, p);
                         }
                     }
                 };
@@ -323,11 +289,11 @@ public class DataPenjualanCabangController  {
                 });
                 task.setOnSucceeded((e) -> {
                     mainApp.closeLoading();
-                    getPenjualan();
+                    getPembelian();
                     String status = task.getValue();
                     if(status.equals("true")){
                         mainApp.closeDialog(mainApp.MainStage, stage);
-                        mainApp.showMessage(Modality.NONE, "Success", "Penjualan cabang berhasil disimpan");
+                        mainApp.showMessage(Modality.NONE, "Success", "Pembelian supplier berhasil disimpan");
                     }else
                         mainApp.showMessage(Modality.NONE, "Failed", status);
                 });
@@ -339,19 +305,19 @@ public class DataPenjualanCabangController  {
             }
         });
     }
-    private void detailPenjualanCabang(PenjualanCabangHead p){
+    private void detailPembelianPusat(PembelianHead p){
         Stage stage = new Stage();
-        FXMLLoader loader = mainApp.showDialog(mainApp.MainStage ,stage, "View/Dialog/DetailPenjualanCabang.fxml");
-        DetailPenjualanCabangController controller = loader.getController();
+        FXMLLoader loader = mainApp.showDialog(mainApp.MainStage ,stage, "View/Dialog/DetailPembelianSupplier.fxml");
+        DetailPembelianSupplierController controller = loader.getController();
         controller.setMainApp(mainApp, mainApp.MainStage, stage);
-        controller.setPenjualanCabang(p);
+        controller.setPembelian(p);
     }
-    private void batalPenjualan(PenjualanCabangHead p){
+    private void batalPembelian(PembelianHead p){
         if(p.getStatus().equals("false")){
-            mainApp.showMessage(Modality.NONE, "Warning", "Penjualan cabang tidak dapat dibatal, karena sudah pernah dibatal");
+            mainApp.showMessage(Modality.NONE, "Warning", "Pembelian supplier tidak dapat dibatal, karena sudah pernah dibatal");
         }else{
             MessageController x = mainApp.showMessage(Modality.APPLICATION_MODAL, "Confirmation",
-                    "Batal penjualan cabang "+p.getNoPenjualanCabang()+" ?");
+                    "Batal pembelian supplier "+p.getNoPembelian()+" ?");
             x.OK.setOnAction((ActionEvent ex) -> {
                 mainApp.closeMessage();
                 
@@ -362,7 +328,7 @@ public class DataPenjualanCabangController  {
                             p.setStatus("false");
                             p.setTglBatal(Function.getSystemDate());
                             p.setUserBatal(user.getKodeUser());
-                            return Service.saveBatalPenjualanCabang(conPusat, p);
+                            return Service.saveBatalPembelianSupplier(conPusat, p);
                         }
                     }
                 };
@@ -371,10 +337,10 @@ public class DataPenjualanCabangController  {
                 });
                 task.setOnSucceeded((e) -> {
                     mainApp.closeLoading();
-                    getPenjualan();
+                    getPembelian();
                     String status = task.getValue();
                     if(status.equals("true")){
-                        mainApp.showMessage(Modality.NONE, "Success", "Penjualan cabang berhasil dibatal");
+                        mainApp.showMessage(Modality.NONE, "Success", "Pembelian supplier berhasil dibatal");
                     }else
                         mainApp.showMessage(Modality.NONE, "Failed", status);
                 });

@@ -21,13 +21,39 @@ public class PembelianHead {
     private final StringProperty noPembelian = new SimpleStringProperty();
     private final StringProperty tglPembelian = new SimpleStringProperty();
     private final StringProperty supplier = new SimpleStringProperty();
-    private final DoubleProperty totalPembelian = new SimpleDoubleProperty();
+    private final DoubleProperty totalBerat = new SimpleDoubleProperty();
+    private final DoubleProperty totalHargaPersen = new SimpleDoubleProperty();
     private final DoubleProperty hargaEmas = new SimpleDoubleProperty();
+    private final DoubleProperty totalPembelian = new SimpleDoubleProperty();
     private final StringProperty kodeUser = new SimpleStringProperty();
     private final StringProperty status = new SimpleStringProperty();
     private final StringProperty tglBatal = new SimpleStringProperty();
     private final StringProperty userBatal = new SimpleStringProperty();
     private List<PembelianDetail> listPembelianDetail;
+
+    public double getTotalHargaPersen() {
+        return totalHargaPersen.get();
+    }
+
+    public void setTotalHargaPersen(double value) {
+        totalHargaPersen.set(value);
+    }
+
+    public DoubleProperty totalHargaPersenProperty() {
+        return totalHargaPersen;
+    }
+
+    public double getTotalBerat() {
+        return totalBerat.get();
+    }
+
+    public void setTotalBerat(double value) {
+        totalBerat.set(value);
+    }
+
+    public DoubleProperty totalBeratProperty() {
+        return totalBerat;
+    }
 
     public List<PembelianDetail> getListPembelianDetail() {
         return listPembelianDetail;

@@ -167,16 +167,37 @@ public class DashboardController {
                 try(Connection conPusat = KoneksiPusat.getConnection()){
                     String status = "";
                     allKeuanganCabang.clear();
+                    allOmzetCabang.clear();
                     allCabang.clear();
                     allCabang.addAll(CabangDAO.getAll(conPusat));
                     for(Cabang c : allCabang){
+                        OmzetCabang o = new OmzetCabang();
+                        o.setKodeCabang(c.getKodeCabang());
                         try(Connection conCabang = KoneksiCabang.getQuickConnection(c)){
-                            allKeuanganCabang.addAll(KeuanganDAO.getAllByDateAndKasirAndTipeKeuanganAndKategoriAndSales(
-                                    conCabang, tglAwal, tglAkhir, "%", "Kas", "%", "%"));
+                            List<Keuangan> listKeuanganCabang = KeuanganDAO.getAllByDateAndKasirAndTipeKeuanganAndKategoriAndSales(
+                                    conCabang, tglAwal, tglAkhir, "%", "Kas", "%", "%");
+                            allKeuanganCabang.addAll(listKeuanganCabang);
+                            
+                            for(Keuangan k : listKeuanganCabang){
+                                if(k.getKategori().equals("Penjualan Umum"))
+                                    o.setPenjualan(o.getPenjualan()+k.getJumlahRp());
+                                if(k.getKategori().equals("Pembelian Umum"))
+                                    o.setPembelian(o.getPembelian()+k.getJumlahRp()*-1);
+                                if(k.getKategori().equals("Terima Hutang"))
+                                    o.setTerimaHutang(o.getTerimaHutang()+k.getJumlahRp()*-1);
+                                if(k.getKategori().equals("Hutang Lunas"))
+                                    o.setHutangLunas(o.getHutangLunas()+k.getJumlahRp());
+                                if(k.getKategori().equals("Hutang Bunga"))
+                                    o.setHutangBunga(o.getHutangBunga()+k.getJumlahRp());
+                            }
+                            o.setSaldoAkhirKasPenjualan(KeuanganDAO.getSaldoBefore(conPusat, "Kasir", "Kas", tglAkhir));
+                            o.setSaldoAkhirKasRR(KeuanganDAO.getSaldoBefore(conPusat, "RR", "Kas", tglAkhir));
+                            
                             status = status + c.getKodeCabang()+" = online\n";
                         }catch(Exception e){
                             status = status + c.getKodeCabang()+" = offline\n";
                         }
+                        allOmzetCabang.add(o);
                         System.out.println(c.getKodeCabang()+new Date());
                     }
                     return status;
@@ -335,31 +356,12 @@ public class DashboardController {
         gridPane.add(label, column, row);
     }
     private void setStorePerformanceTable(){
-        allOmzetCabang.clear();
-        for(Cabang c : allCabang){
-            OmzetCabang o = new OmzetCabang();
-            o.setKodeCabang(c.getKodeCabang());
-            for(Keuangan k : allKeuanganCabang){
-                if(k.getNoKeuangan().startsWith(c.getKodeCabang())){
-                    if(k.getKategori().equals("Penjualan Umum"))
-                        o.setPenjualan(o.getPenjualan()+k.getJumlahRp());
-                    if(k.getKategori().equals("Pembelian Umum"))
-                        o.setPembelian(o.getPembelian()+k.getJumlahRp()*-1);
-                    if(k.getKategori().equals("Terima Hutang"))
-                        o.setTerimaHutang(o.getTerimaHutang()+k.getJumlahRp()*-1);
-                    if(k.getKategori().equals("Hutang Lunas"))
-                        o.setHutangLunas(o.getHutangLunas()+k.getJumlahRp());
-                    if(k.getKategori().equals("Hutang Bunga"))
-                        o.setHutangBunga(o.getHutangBunga()+k.getJumlahRp());
-                }
-            }
-            allOmzetCabang.add(o);
-        }
-        
         pane.getChildren().clear();
         gridPane = new GridPane();
 
         gridPane.getColumnConstraints().add(new ColumnConstraints(10, 100, 100, Priority.ALWAYS, HPos.CENTER, true));
+        gridPane.getColumnConstraints().add(new ColumnConstraints(10, 100, Double.MAX_VALUE, Priority.ALWAYS, HPos.CENTER, true));
+        gridPane.getColumnConstraints().add(new ColumnConstraints(10, 100, Double.MAX_VALUE, Priority.ALWAYS, HPos.CENTER, true));
         gridPane.getColumnConstraints().add(new ColumnConstraints(10, 100, Double.MAX_VALUE, Priority.ALWAYS, HPos.CENTER, true));
         gridPane.getColumnConstraints().add(new ColumnConstraints(10, 100, Double.MAX_VALUE, Priority.ALWAYS, HPos.CENTER, true));
         gridPane.getColumnConstraints().add(new ColumnConstraints(10, 100, Double.MAX_VALUE, Priority.ALWAYS, HPos.CENTER, true));
@@ -385,6 +387,8 @@ public class DashboardController {
         addHeaderText("Terima Hutang", 3, 0);
         addHeaderText("Hutang Lunas", 4, 0);
         addHeaderText("Hutang Bunga", 5, 0);
+        addHeaderText("Saldo Akhir Penjualan", 6, 0);
+        addHeaderText("Saldo Akhir RR", 7, 0);
         int row = 1;
         for(OmzetCabang o : allOmzetCabang){
             addHeaderText(o.getKodeCabang(), 0, row);
@@ -393,6 +397,8 @@ public class DashboardController {
             addNormalText(rp.format(o.getTerimaHutang()), 3, row);
             addNormalText(rp.format(o.getHutangLunas()), 4, row);
             addNormalText(rp.format(o.getHutangBunga()), 5, row);
+            addNormalText(rp.format(o.getSaldoAkhirKasPenjualan()), 6, row);
+            addNormalText(rp.format(o.getSaldoAkhirKasRR()), 7, row);
             row++;
         }
         gridPane.setPadding(new Insets(10));

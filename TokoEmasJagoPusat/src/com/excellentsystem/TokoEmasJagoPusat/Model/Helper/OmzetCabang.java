@@ -22,6 +22,33 @@ public class OmzetCabang {
     private final DoubleProperty terimaHutang = new SimpleDoubleProperty();
     private final DoubleProperty hutangLunas = new SimpleDoubleProperty();
     private final DoubleProperty hutangBunga = new SimpleDoubleProperty();
+    private final DoubleProperty saldoAkhirKasPenjualan = new SimpleDoubleProperty();
+    private final DoubleProperty saldoAkhirKasRR = new SimpleDoubleProperty();
+
+    public double getSaldoAkhirKasRR() {
+        return saldoAkhirKasRR.get();
+    }
+
+    public void setSaldoAkhirKasRR(double value) {
+        saldoAkhirKasRR.set(value);
+    }
+
+    public DoubleProperty saldoAkhirKasRRProperty() {
+        return saldoAkhirKasRR;
+    }
+
+    public double getSaldoAkhirKasPenjualan() {
+        return saldoAkhirKasPenjualan.get();
+    }
+
+    public void setSaldoAkhirKasPenjualan(double value) {
+        saldoAkhirKasPenjualan.set(value);
+    }
+
+    public DoubleProperty saldoAkhirKasPenjualanProperty() {
+        return saldoAkhirKasPenjualan;
+    }
+
 
     public double getHutangBunga() {
         return hutangBunga.get();
