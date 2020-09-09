@@ -39,12 +39,14 @@ public class PembelianHeadDAO {
             head.setNoPembelian(rs.getString(1));
             head.setTglPembelian(rs.getString(2));
             head.setSupplier(rs.getString(3));
-            head.setTotalPembelian(rs.getDouble(4));
-            head.setHargaEmas(rs.getDouble(5));
-            head.setKodeUser(rs.getString(6));
-            head.setStatus(rs.getString(7));
-            head.setTglBatal(rs.getString(8));
-            head.setUserBatal(rs.getString(9));
+            head.setTotalBerat(rs.getDouble(4));
+            head.setTotalHargaPersen(rs.getDouble(5));
+            head.setHargaEmas(rs.getDouble(6));
+            head.setTotalPembelian(rs.getDouble(7));
+            head.setKodeUser(rs.getString(8));
+            head.setStatus(rs.getString(9));
+            head.setTglBatal(rs.getString(10));
+            head.setUserBatal(rs.getString(11));
             allPembelianHead.add(head);
         }
         return allPembelianHead;
@@ -59,12 +61,14 @@ public class PembelianHeadDAO {
             head.setNoPembelian(rs.getString(1));
             head.setTglPembelian(rs.getString(2));
             head.setSupplier(rs.getString(3));
-            head.setTotalPembelian(rs.getDouble(4));
-            head.setHargaEmas(rs.getDouble(5));
-            head.setKodeUser(rs.getString(6));
-            head.setStatus(rs.getString(7));
-            head.setTglBatal(rs.getString(8));
-            head.setUserBatal(rs.getString(9));
+            head.setTotalBerat(rs.getDouble(4));
+            head.setTotalHargaPersen(rs.getDouble(5));
+            head.setHargaEmas(rs.getDouble(6));
+            head.setTotalPembelian(rs.getDouble(7));
+            head.setKodeUser(rs.getString(8));
+            head.setStatus(rs.getString(9));
+            head.setTglBatal(rs.getString(10));
+            head.setUserBatal(rs.getString(11));
         }
         return head;
     }
@@ -82,32 +86,36 @@ public class PembelianHeadDAO {
         return noHancur;
     }
     public static void insert(Connection con , PembelianHead head)throws Exception{
-        PreparedStatement ps = con.prepareStatement("insert into tt_pembelian_head values(?,?,?,?,?,?,?,?,?)");
+        PreparedStatement ps = con.prepareStatement("insert into tt_pembelian_head values(?,?,?,?,?,?,?,?,?,?,?)");
         ps.setString(1, head.getNoPembelian());
         ps.setString(2, head.getTglPembelian());
         ps.setString(3, head.getSupplier());
-        ps.setDouble(4, head.getTotalPembelian());
-        ps.setDouble(5, head.getHargaEmas());
-        ps.setString(6, head.getKodeUser());
-        ps.setString(7, head.getStatus());
-        ps.setString(8, head.getTglBatal());
-        ps.setString(9, head.getUserBatal());
+        ps.setDouble(4, head.getTotalBerat());
+        ps.setDouble(5, head.getTotalHargaPersen());
+        ps.setDouble(6, head.getHargaEmas());
+        ps.setDouble(7, head.getTotalPembelian());
+        ps.setString(8, head.getKodeUser());
+        ps.setString(9, head.getStatus());
+        ps.setString(10, head.getTglBatal());
+        ps.setString(11, head.getUserBatal());
         ps.executeUpdate();
     }
     public static void update(Connection con, PembelianHead head)throws Exception{
         PreparedStatement ps = con.prepareStatement("update tt_pembelian_head set "
-                + " tgl_pembelian=?, supplier=?, total_pembelian=?, harga_emas=?, "
+                + " tgl_pembelian=?, supplier=?, total_berat=?, total_harga_persen=?, harga_emas=?, total_pembelian=?, "
                 + " kode_user=?, status=?, tgl_batal=?, user_batal=?  "
                 + " where no_pembelian=?");
         ps.setString(1, head.getTglPembelian());
         ps.setString(2, head.getSupplier());
-        ps.setDouble(3, head.getTotalPembelian());
-        ps.setDouble(4, head.getHargaEmas());
-        ps.setString(5, head.getKodeUser());
-        ps.setString(6, head.getStatus());
-        ps.setString(7, head.getTglBatal());
-        ps.setString(8, head.getUserBatal());
-        ps.setString(9, head.getNoPembelian());
+        ps.setDouble(3, head.getTotalBerat());
+        ps.setDouble(4, head.getTotalHargaPersen());
+        ps.setDouble(5, head.getHargaEmas());
+        ps.setDouble(6, head.getTotalPembelian());
+        ps.setString(7, head.getKodeUser());
+        ps.setString(8, head.getStatus());
+        ps.setString(9, head.getTglBatal());
+        ps.setString(10, head.getUserBatal());
+        ps.setString(11, head.getNoPembelian());
         ps.executeUpdate();
     }
 }

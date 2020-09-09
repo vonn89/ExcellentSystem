@@ -2594,10 +2594,13 @@ public class Service {
                         p.getNoPiutang(), -hutang, user.getKodeUser());
                 insertKeuanganPusat(conPusat, noKeuanganPusat, "Piutang Modal", "Piutang Modal "+t.getKodeCabang()+"-"+t.getTipeKasir(), 
                         p.getNoPiutang(), hutang, user.getKodeUser());
-            }
-            if(pembulatan(hutang-t.getJumlahRp())!=0){
+                if(hutang<t.getJumlahRp()){
+                    insertKeuanganCabang(conPusat, noKeuangan, t.getKodeCabang(), t.getTipeKasir(), "Bank", 
+                            "Tambah Uang Cabang", t.getNoTambahUang(), pembulatan(hutang-t.getJumlahRp()), t.getKodeUser());
+                }
+            }else if(hutang<=0){
                 insertKeuanganCabang(conPusat, noKeuangan, t.getKodeCabang(), t.getTipeKasir(), "Bank", 
-                        "Tambah Uang Cabang", t.getNoTambahUang(), pembulatan(hutang-t.getJumlahRp()), t.getKodeUser());
+                        "Tambah Uang Cabang", t.getNoTambahUang(), -t.getJumlahRp(), t.getKodeUser());
             }
             insertKeuanganCabang(conPusat, noKeuangan, t.getKodeCabang(), t.getTipeKasir(), "Bank-"+t.getKodeCabang(), 
                     "Tambah Uang Cabang", t.getNoTambahUang(), t.getJumlahRp(), t.getKodeUser());
@@ -2722,21 +2725,25 @@ public class Service {
                 
                 insertKeuanganCabang(conPusat, noKeuangan, p.getKodeCabang(), "Kasir", "Hutang Pembelian", 
                         "Pembelian Pusat", p.getNoPenjualanCabang(), hutang, user.getKodeUser());
+                insertKeuanganPusat(conPusat, noKeuanganPusat, "Piutang Penjualan", "Penjualan "+p.getKodeCabang(), 
+                        p.getNoPenjualanCabang(), hutang, user.getKodeUser());
                 
-                insertKeuanganPusat(conPusat, noKeuanganPusat, "Piutang Penjualan", "Piutang Penjualan "+p.getKodeCabang(), 
-                        pt.getNoPiutang(), hutang, user.getKodeUser());
-                insertKeuanganPusat(conPusat, noKeuanganPusat, "Bank", "Piutang Penjualan "+p.getKodeCabang(), 
-                        pt.getNoPiutang(), -hutang, user.getKodeUser());
+                if(hutang<p.getTotalPenjualan()){
+                    insertKeuanganCabang(conPusat, noKeuangan, p.getKodeCabang(), "Kasir", "Bank", "Pembelian Pusat", 
+                            p.getNoPenjualanCabang(), pembulatan(hutang-p.getTotalPenjualan()), user.getKodeUser());
+                    insertKeuanganPusat(conPusat, noKeuanganPusat, "Bank", "Penjualan "+p.getKodeCabang(), 
+                            p.getNoPenjualanCabang(), -pembulatan(hutang-p.getTotalPenjualan()), user.getKodeUser());
+                }
+            }else if(hutang<=0){
+                insertKeuanganCabang(conPusat, noKeuangan, p.getKodeCabang(), "Kasir", "Bank", "Pembelian Pusat", 
+                        p.getNoPenjualanCabang(), -p.getTotalPenjualan(), user.getKodeUser());
+                insertKeuanganPusat(conPusat, noKeuanganPusat, "Bank", "Penjualan "+p.getKodeCabang(), p.getNoPenjualanCabang(), 
+                        p.getTotalPenjualan(), user.getKodeUser());
             }
             insertKeuanganPusat(conPusat, noKeuanganPusat, "Penjualan", "Penjualan "+p.getKodeCabang(), p.getNoPenjualanCabang(), p.getTotalPenjualan(), user.getKodeUser());
-            insertKeuanganPusat(conPusat, noKeuanganPusat, "Bank", "Penjualan "+p.getKodeCabang(), p.getNoPenjualanCabang(), p.getTotalPenjualan(), user.getKodeUser());
             insertKeuanganPusat(conPusat, noKeuanganPusat, "Stok Barang", "Penjualan "+p.getKodeCabang(), p.getNoPenjualanCabang(), -totalNilai, user.getKodeUser());
             insertKeuanganPusat(conPusat, noKeuanganPusat, "HPP", "Penjualan "+p.getKodeCabang(), p.getNoPenjualanCabang(), -totalNilai, user.getKodeUser());
             
-            if(pembulatan(hutang-p.getTotalPenjualan())!=0){
-                insertKeuanganCabang(conPusat, noKeuangan, p.getKodeCabang(), "Kasir", "Bank", "Pembelian Pusat", 
-                        p.getNoPenjualanCabang(), pembulatan(hutang-p.getTotalPenjualan()), user.getKodeUser());
-            }
             insertKeuanganCabang(conPusat, noKeuangan, p.getKodeCabang(), "Kasir", p.getKodeCabang()+"-New", "Pembelian Pusat", 
                     p.getNoPenjualanCabang(), p.getTotalPenjualan(), user.getKodeUser());
             
@@ -2851,25 +2858,27 @@ public class Service {
                         insertKeuanganCabang(conPusat, noKeuangan, p.getKodeCabang(), "Kasir", "Hutang Pembelian", 
                                 "Batal Pembelian Pusat", p.getNoPenjualanCabang(), -hutang, user.getKodeUser());
 
-                        insertKeuanganPusat(conPusat, noKeuanganPusat, "Piutang Penjualan", "Batal Piutang Penjualan "+p.getKodeCabang(), 
+                        insertKeuanganPusat(conPusat, noKeuanganPusat, "Piutang Penjualan", "Batal Penjualan "+p.getKodeCabang(), 
                                 pt.getNoPiutang(), -hutang, user.getKodeUser());
-                        insertKeuanganPusat(conPusat, noKeuanganPusat, "Bank", "Batal Piutang Penjualan "+p.getKodeCabang(),  
-                                pt.getNoPiutang(), hutang, user.getKodeUser());
 
+                        if(hutang<p.getTotalPenjualan()){
+                            insertKeuanganPusat(conPusat, noKeuanganPusat, "Bank", "Batal Penjualan "+p.getKodeCabang(),  
+                                    pt.getNoPiutang(), pembulatan(hutang-p.getTotalPenjualan()), user.getKodeUser());
+                            insertKeuanganCabang(conPusat, noKeuangan, p.getKodeCabang(), "Kasir", "Bank", "Batal Pembelian Pusat", 
+                                    p.getNoPenjualanCabang(), -pembulatan(hutang-p.getTotalPenjualan()), user.getKodeUser());
+                        }
                         PiutangDAO.delete(conPusat, pt);
                     }
                 }else{
-                    status = "Tidak dapat dibatal, karena piutang penjualan tidak ditemukan atau sudah dibatal";
+                    insertKeuanganCabang(conPusat, noKeuangan, p.getKodeCabang(), "Kasir", "Bank", "Batal Pembelian Pusat", 
+                            p.getNoPenjualanCabang(), p.getTotalPenjualan(), user.getKodeUser());
+                    insertKeuanganPusat(conPusat, noKeuanganPusat, "Bank", "Penjualan "+p.getKodeCabang(), p.getNoPenjualanCabang(), 
+                            -p.getTotalPenjualan(), user.getKodeUser());
                 } 
                 insertKeuanganPusat(conPusat, noKeuanganPusat, "Penjualan", "Batal Penjualan "+p.getKodeCabang(), p.getNoPenjualanCabang(), -p.getTotalPenjualan(), user.getKodeUser());
-                insertKeuanganPusat(conPusat, noKeuanganPusat, "Bank", "Batal Penjualan "+p.getKodeCabang(), p.getNoPenjualanCabang(), -p.getTotalPenjualan(), user.getKodeUser());
                 insertKeuanganPusat(conPusat, noKeuanganPusat, "Stok Barang", "Batal Penjualan "+p.getKodeCabang(), p.getNoPenjualanCabang(), totalNilai, user.getKodeUser());
                 insertKeuanganPusat(conPusat, noKeuanganPusat, "HPP", "Batal Penjualan "+p.getKodeCabang(), p.getNoPenjualanCabang(), totalNilai, user.getKodeUser());
 
-                if(pembulatan(p.getTotalPenjualan()-hutang)!=0){
-                    insertKeuanganCabang(conPusat, noKeuangan, p.getKodeCabang(), "Kasir", "Bank", "Batal Pembelian Pusat", 
-                            p.getNoPenjualanCabang(), pembulatan(p.getTotalPenjualan()-hutang), user.getKodeUser());
-                }
                 insertKeuanganCabang(conPusat, noKeuangan, p.getKodeCabang(), "Kasir", p.getKodeCabang()+"-New", "Batal Pembelian Pusat", 
                         p.getNoPenjualanCabang(), -p.getTotalPenjualan(), user.getKodeUser());
             }
@@ -2939,10 +2948,14 @@ public class Service {
                 
                 insertKeuanganPusat(conPusat, noKeuanganPusat, "Hutang Pembelian", 
                         "Pembelian Supplier", p.getNoPembelian(), hutang, user.getKodeUser());
-            }
-            if(pembulatan(hutang-p.getTotalPembelian())!=0){
+                
+                if(hutang<p.getTotalPembelian()){
+                    insertKeuanganPusat(conPusat, noKeuanganPusat, "Bank", "Pembelian Supplier", 
+                            p.getNoPembelian(), pembulatan(hutang-p.getTotalPembelian()), user.getKodeUser());
+                }
+            }else if(hutang<=0){
                 insertKeuanganPusat(conPusat, noKeuanganPusat, "Bank", "Pembelian Supplier", 
-                        p.getNoPembelian(), pembulatan(hutang-p.getTotalPembelian()), user.getKodeUser());
+                        p.getNoPembelian(), -p.getTotalPembelian(), user.getKodeUser());
             }
             insertKeuanganPusat(conPusat, noKeuanganPusat, "Stok Barang", "Pembelian Supplier", 
                     p.getNoPembelian(), p.getTotalPembelian(), user.getKodeUser());
@@ -3037,15 +3050,16 @@ public class Service {
                         insertKeuanganPusat(conPusat, noKeuanganPusat, "Hutang Pembelian", 
                                 "Batal Pembelian Supplier", p.getNoPembelian(), -hutang, user.getKodeUser());
 
+                        if(hutang<p.getTotalPembelian()){
+                            insertKeuanganPusat(conPusat, noKeuanganPusat, "Bank", "Batal Pembelian Supplier", 
+                                    p.getNoPembelian(), -pembulatan(hutang-p.getTotalPembelian()), user.getKodeUser());
+                        }
                         HutangDAO.delete(conPusat, ht);
                     }
                 }else{
-                    status = "Tidak dapat dibatal, karena hutang pembelian tidak ditemukan atau sudah dibatal";
-                } 
-                if(pembulatan(p.getTotalPembelian()-hutang)!=0){
                     insertKeuanganPusat(conPusat, noKeuanganPusat,  "Bank", "Batal Pembelian Supplier", 
-                            p.getNoPembelian(), pembulatan(p.getTotalPembelian()-hutang), user.getKodeUser());
-                }
+                            p.getNoPembelian(), p.getTotalPembelian(), user.getKodeUser());
+                } 
                 insertKeuanganPusat(conPusat, noKeuanganPusat,  "Stok Barang", "Batal Pembelian Supplier", 
                         p.getNoPembelian(), -p.getTotalPembelian(), user.getKodeUser());
             }

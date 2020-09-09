@@ -102,6 +102,7 @@ public class MainController  {
     
     @FXML private Label pusatLabel;
     @FXML private TitledPane penjualanCabangPane;
+    @FXML private TitledPane pembelianSupplierPane;
     @FXML private TitledPane stokBarangPane;
     
     @FXML private Accordion accordion1;
@@ -262,6 +263,7 @@ public class MainController  {
     public void setUser() {
         dashboardPane.setVisible(false);
         penjualanCabangPane.setVisible(false);
+        pembelianSupplierPane.setVisible(false);
         stokBarangPane.setVisible(false);
         
         menuDataBarangBarcode.setVisible(false);
@@ -310,6 +312,8 @@ public class MainController  {
                     dashboardPane.setVisible(o.isStatus());
                 }else if(o.getJenis().equals("Penjualan Cabang")){
                     penjualanCabangPane.setVisible(o.isStatus());
+                }else if(o.getJenis().equals("Pembelian Supplier")){
+                    pembelianSupplierPane.setVisible(o.isStatus());
                 }else if(o.getJenis().equals("Stok Barang Pusat")){
                     stokBarangPane.setVisible(o.isStatus());
                     
@@ -382,7 +386,8 @@ public class MainController  {
                 }
             }
             if(penjualanCabangPane.isVisible()==false &&
-                    barangCabangPane.isVisible()==false ){
+                    barangCabangPane.isVisible()==false &&
+                    pembelianSupplierPane.isVisible()==false ){
                 pusatLabel.setVisible(false);
             }
             
@@ -691,6 +696,10 @@ public class MainController  {
     @FXML
     private void showDataPenjualanCabang(){
         mainApp.showDataPenjualanCabang();
+    }
+    @FXML
+    private void showDataPembelianSupplier(){
+        mainApp.showDataPembelianSupplier();
     }
     //Barang
     @FXML

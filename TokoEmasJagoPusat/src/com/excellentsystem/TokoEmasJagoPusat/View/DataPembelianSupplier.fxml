@@ -30,9 +30,9 @@
             <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="10.0">
                <children>
                   <Label text="Tanggal" />
-                  <DatePicker fx:id="tglAwalPicker" onAction="#getPenjualan" prefHeight="30.0" prefWidth="140.0" />
+                  <DatePicker fx:id="tglAwalPicker" onAction="#getPembelian" prefHeight="30.0" prefWidth="140.0" />
                   <Label text="-" />
-                  <DatePicker fx:id="tglAkhirPicker" onAction="#getPenjualan" prefHeight="30.0" prefWidth="140.0" />
+                  <DatePicker fx:id="tglAkhirPicker" onAction="#getPembelian" prefHeight="30.0" prefWidth="140.0" />
                   <HBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="300.0" HBox.hgrow="ALWAYS">
                      <children>
                         <TextField fx:id="searchField" prefHeight="30.0" prefWidth="300.0" promptText="Search..." styleClass="search-field" />

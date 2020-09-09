@@ -18,7 +18,6 @@ import com.excellentsystem.TokoEmasJagoPusat.Service.Service;
 import com.excellentsystem.TokoEmasJagoPusat.View.Dialog.MessageController;
 import java.sql.Connection;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.value.ObservableValue;
@@ -40,12 +39,9 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeTableColumn;
 import javafx.scene.control.TreeTableView;
-import javafx.scene.control.cell.CheckBoxTableCell;
 import javafx.scene.control.cell.CheckBoxTreeTableCell;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.input.MouseButton;
-import javafx.scene.input.MouseEvent;
 import javafx.stage.Modality;
 
 /**
@@ -221,6 +217,9 @@ public class DataUserController  {
             ));
             
             root.getChildren().add(createTreeItem("Penjualan Cabang",
+                new ArrayList<>()
+            ));
+            root.getChildren().add(createTreeItem("Pembelian Supplier",
                 new ArrayList<>()
             ));
             root.getChildren().add(createTreeItem("Stok Barang Pusat",
