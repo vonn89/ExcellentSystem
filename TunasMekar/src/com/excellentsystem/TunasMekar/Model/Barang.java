@@ -27,7 +27,7 @@ public class Barang {
     private final DoubleProperty hargaBeli = new SimpleDoubleProperty();
     private final StringProperty status = new SimpleStringProperty();
     private List<Satuan> allSatuan;
-//    private Satuan satuan;
+    private Satuan satuan;
     private StokBarang stokAkhir;
 
     public double getHargaBeli() {
@@ -73,14 +73,14 @@ public class Barang {
     public StringProperty supplierProperty() {
         return supplier;
     }
-//    
-//    public Satuan getSatuan() {
-//        return satuan;
-//    }
-//
-//    public void setSatuan(Satuan satuan) {
-//        this.satuan = satuan;
-//    }
+    
+    public Satuan getSatuan() {
+        return satuan;
+    }
+
+    public void setSatuan(Satuan satuan) {
+        this.satuan = satuan;
+    }
     
 
 

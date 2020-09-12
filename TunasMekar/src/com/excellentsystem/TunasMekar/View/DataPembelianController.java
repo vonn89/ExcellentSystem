@@ -378,6 +378,7 @@ public class DataPembelianController  {
                     @Override 
                     public String call() throws Exception{
                         try(Connection con = Koneksi.getConnection()){
+                            String status = "true";
                             p.setStatus("false");
                             p.setTglBatal(Function.getSystemDate());
                             p.setUserBatal(user.getKodeUser());
@@ -408,23 +409,32 @@ public class DataPembelianController  {
                             List<PembelianDetail> allDetail = new ArrayList<>();
                             int i = 1;
                             for(PembelianDetail d : controller.allBarang){
-                                PembelianDetail detail = new PembelianDetail();
-                                detail.setBarang(d.getBarang());
-                                detail.setNoPembelian("");
-                                detail.setNoUrut(i);
-                                detail.setKodeBarang(d.getKodeBarang());
-                                detail.setNamaBarang(d.getNamaBarang());
-                                detail.setSatuan(d.getSatuan());
-                                detail.setQty(d.getQty());
-                                detail.setQtyMasuk(pembulatan(d.getQty()*d.getBarang().getSatuan().getQty()));
-                                detail.setHargaBeli(d.getHargaBeli());
-                                detail.setHargaPpn(d.getHargaPpn());
-                                detail.setTotal(detail.getHargaPpn()*detail.getQty());
-                                i++;
-                                allDetail.add(detail);
+                                if(d.getBarang()==null){
+                                    status = d.getKodeBarang()+"-"+d.getNamaBarang()+" tidak ditemukan";
+                                }else if(d.getBarang().getSatuan()==null){
+                                    status = d.getKodeBarang()+"-"+d.getNamaBarang()+" satuan "+d.getSatuan()+" tidak ditemukan";
+                                }else{
+                                    PembelianDetail detail = new PembelianDetail();
+                                    detail.setBarang(d.getBarang());
+                                    detail.setNoPembelian("");
+                                    detail.setNoUrut(i);
+                                    detail.setKodeBarang(d.getKodeBarang());
+                                    detail.setNamaBarang(d.getNamaBarang());
+                                    detail.setSatuan(d.getSatuan());
+                                    detail.setQty(d.getQty());
+                                    detail.setQtyMasuk(pembulatan(d.getQty()*d.getBarang().getSatuan().getQty()));
+                                    detail.setHargaBeli(d.getHargaBeli());
+                                    detail.setHargaPpn(d.getHargaPpn());
+                                    detail.setTotal(detail.getHargaPpn()*detail.getQty());
+                                    i++;
+                                    allDetail.add(detail);
+                                }
                             }
                             pbNew.setListPembelianDetail(allDetail);
-                            return Service.saveEditPembelian(con, p, pbNew);
+                            if(status.equals("true"))
+                                return Service.saveEditPembelian(con, p, pbNew);
+                            else 
+                                return status;
                         }
                     }
                 };
