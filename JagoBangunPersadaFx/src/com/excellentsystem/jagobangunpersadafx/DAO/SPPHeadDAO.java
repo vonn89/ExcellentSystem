@@ -115,7 +115,7 @@ public class SPPHeadDAO {
     }
     public static void update(Connection con,SPPHead spp)throws Exception{
         PreparedStatement ps = con.prepareStatement("update tt_spp_head set "
-                + " tgl_spp=?, no_skl=?, kode_property=?, kode_custoemr=?, total_dp=?, total_angsuran=?, "
+                + " tgl_spp=?, no_skl=?, kode_property=?, kode_customer=?, total_dp=?, total_angsuran=?, "
                 + " kode_user=?, status=?, tgl_batal=?, user_batal=? "
                 + " where no_spp=?");
         ps.setString(1, spp.getTglSPP());
