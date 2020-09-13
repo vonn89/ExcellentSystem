@@ -21,12 +21,14 @@ import com.excellentsystem.TokoEmasJagoPusat.DAO.LeburRosokCabangDAO;
 import com.excellentsystem.TokoEmasJagoPusat.DAO.LogHargaEmasDAO;
 import com.excellentsystem.TokoEmasJagoPusat.DAO.OtoritasDAO;
 import com.excellentsystem.TokoEmasJagoPusat.DAO.PegawaiDAO;
+import com.excellentsystem.TokoEmasJagoPusat.DAO.PembayaranHutangDAO;
 import com.excellentsystem.TokoEmasJagoPusat.DAO.PembayaranPiutangDAO;
 import com.excellentsystem.TokoEmasJagoPusat.DAO.PembelianDetailDAO;
 import com.excellentsystem.TokoEmasJagoPusat.DAO.PembelianHeadDAO;
 import com.excellentsystem.TokoEmasJagoPusat.DAO.PenjualanCabangDetailDAO;
 import com.excellentsystem.TokoEmasJagoPusat.DAO.PenjualanCabangHeadDAO;
 import com.excellentsystem.TokoEmasJagoPusat.DAO.PenjualanCiokCabangDAO;
+import com.excellentsystem.TokoEmasJagoPusat.DAO.PenyesuaianStokBarangPusatDAO;
 import com.excellentsystem.TokoEmasJagoPusat.DAO.PindahDetailDAO;
 import com.excellentsystem.TokoEmasJagoPusat.DAO.PindahHeadDAO;
 import com.excellentsystem.TokoEmasJagoPusat.DAO.PiutangDAO;
@@ -69,12 +71,14 @@ import com.excellentsystem.TokoEmasJagoPusat.Model.LeburRosokCabang;
 import com.excellentsystem.TokoEmasJagoPusat.Model.LogHargaEmas;
 import com.excellentsystem.TokoEmasJagoPusat.Model.Otoritas;
 import com.excellentsystem.TokoEmasJagoPusat.Model.Pegawai;
+import com.excellentsystem.TokoEmasJagoPusat.Model.PembayaranHutang;
 import com.excellentsystem.TokoEmasJagoPusat.Model.PembayaranPiutang;
 import com.excellentsystem.TokoEmasJagoPusat.Model.PembelianDetail;
 import com.excellentsystem.TokoEmasJagoPusat.Model.PembelianHead;
 import com.excellentsystem.TokoEmasJagoPusat.Model.PenjualanCabangDetail;
 import com.excellentsystem.TokoEmasJagoPusat.Model.PenjualanCabangHead;
 import com.excellentsystem.TokoEmasJagoPusat.Model.PenjualanCiokCabang;
+import com.excellentsystem.TokoEmasJagoPusat.Model.PenyesuaianStokBarangPusat;
 import com.excellentsystem.TokoEmasJagoPusat.Model.PindahDetail;
 import com.excellentsystem.TokoEmasJagoPusat.Model.PindahHead;
 import com.excellentsystem.TokoEmasJagoPusat.Model.Piutang;
@@ -2931,32 +2935,21 @@ public class Service {
                 status = updateStokPusatMasuk(conPusat, kategori, jenis, berat, beratPersen, pembulatan(harga), status);
             }
             String noKeuanganPusat = KeuanganPusatDAO.getId(conPusat);
-            double saldoAkhir = KeuanganPusatDAO.getSaldoAfter(conPusat, sistem.getTglSystem(), "Bank");
-            double hutang = pembulatan(p.getTotalPembelian() - saldoAkhir);
-            if(hutang>0){
-                Hutang ht = new Hutang();
-                ht.setNoHutang(HutangDAO.getId(conPusat));
-                ht.setTglHutang(Function.getSystemDate());
-                ht.setSupplier(p.getSupplier());
-                ht.setNoPembelian(p.getNoPembelian());
-                ht.setKurs(p.getHargaEmas());
-                ht.setJumlahHutang(hutang);
-                ht.setTerbayar(0);
-                ht.setSisaHutang(hutang);
-                ht.setStatus("true");
-                HutangDAO.insert(conPusat, ht);
-                
-                insertKeuanganPusat(conPusat, noKeuanganPusat, "Hutang Pembelian", 
-                        "Pembelian Supplier", p.getNoPembelian(), hutang, user.getKodeUser());
-                
-                if(hutang<p.getTotalPembelian()){
-                    insertKeuanganPusat(conPusat, noKeuanganPusat, "Bank", "Pembelian Supplier", 
-                            p.getNoPembelian(), pembulatan(hutang-p.getTotalPembelian()), user.getKodeUser());
-                }
-            }else if(hutang<=0){
-                insertKeuanganPusat(conPusat, noKeuanganPusat, "Bank", "Pembelian Supplier", 
-                        p.getNoPembelian(), -p.getTotalPembelian(), user.getKodeUser());
-            }
+            Hutang ht = new Hutang();
+            ht.setNoHutang(HutangDAO.getId(conPusat));
+            ht.setTglHutang(Function.getSystemDate());
+            ht.setSupplier(p.getSupplier());
+            ht.setNoPembelian(p.getNoPembelian());
+            ht.setKurs(p.getHargaEmas());
+            ht.setJumlahHutang(p.getTotalPembelian());
+            ht.setTerbayar(0);
+            ht.setSisaHutang(p.getTotalPembelian());
+            ht.setStatus("true");
+            HutangDAO.insert(conPusat, ht);
+
+            insertKeuanganPusat(conPusat, noKeuanganPusat, "Hutang Pembelian", 
+                    "Pembelian Supplier", p.getNoPembelian(), p.getTotalPembelian(), user.getKodeUser());
+
             insertKeuanganPusat(conPusat, noKeuanganPusat, "Stok Barang", "Pembelian Supplier", 
                     p.getNoPembelian(), p.getTotalPembelian(), user.getKodeUser());
             
@@ -3041,28 +3034,97 @@ public class Service {
                 
                 String noKeuanganPusat = KeuanganPusatDAO.getId(conPusat);
                 Hutang ht = HutangDAO.getByNoPembelian(conPusat, p.getNoPembelian());
-                double hutang = 0;
                 if(ht!=null){
                     if(ht.getTerbayar()>1 || ht.getStatus().equals("false")){
                         status = "Tidak dapat dibatal, karena hutang pembelian sudah ada pembayaran";
                     }else{
-                        hutang = ht.getJumlahHutang();
                         insertKeuanganPusat(conPusat, noKeuanganPusat, "Hutang Pembelian", 
-                                "Batal Pembelian Supplier", p.getNoPembelian(), -hutang, user.getKodeUser());
+                                "Batal Pembelian Supplier", p.getNoPembelian(), -ht.getJumlahHutang(), user.getKodeUser());
 
-                        if(hutang<p.getTotalPembelian()){
-                            insertKeuanganPusat(conPusat, noKeuanganPusat, "Bank", "Batal Pembelian Supplier", 
-                                    p.getNoPembelian(), -pembulatan(hutang-p.getTotalPembelian()), user.getKodeUser());
-                        }
                         HutangDAO.delete(conPusat, ht);
                     }
                 }else{
-                    insertKeuanganPusat(conPusat, noKeuanganPusat,  "Bank", "Batal Pembelian Supplier", 
-                            p.getNoPembelian(), p.getTotalPembelian(), user.getKodeUser());
+                    status = "Tidak dapat dibatal, karena hutang pembelian tidak ditemukan atau sudah dibatal";
                 } 
                 insertKeuanganPusat(conPusat, noKeuanganPusat,  "Stok Barang", "Batal Pembelian Supplier", 
                         p.getNoPembelian(), -p.getTotalPembelian(), user.getKodeUser());
             }
+            
+            if(status.equals("true")){
+                conPusat.commit();
+            }else{
+                conPusat.rollback();
+            }
+            conPusat.setAutoCommit(true);
+            return status;
+        }catch(Exception e){
+            try{
+                conPusat.rollback();
+                conPusat.setAutoCommit(true);
+                return e.toString();
+            }catch(SQLException ex){
+                return ex.toString();
+            }
+        }
+    }
+    
+    public static String savePembayaranPembelian(Connection conPusat, PembayaranHutang p)throws Exception{
+        try{
+            String status = "true";
+            conPusat.setAutoCommit(false);
+            
+            PembayaranHutangDAO.insert(conPusat, p);
+            
+            String noKeuanganPusat = KeuanganPusatDAO.getId(conPusat);
+            Hutang ht = HutangDAO.get(conPusat, p.getNoHutang());
+            ht.setTerbayar(ht.getTerbayar()+p.getTerbayar());
+            ht.setSisaHutang(ht.getSisaHutang()-p.getTerbayar());
+            if(ht.getSisaHutang()<=0)
+                ht.setStatus("false");
+            HutangDAO.update(conPusat, ht);
+
+            insertKeuanganPusat(conPusat, noKeuanganPusat, "Hutang Pembelian", 
+                    "Pembayaran Hutang Pembelian", p.getNoPembayaran(), -p.getTerbayar(), user.getKodeUser());
+
+            insertKeuanganPusat(conPusat, noKeuanganPusat, "Bank", 
+                    "Pembayaran Hutang Pembelian", p.getNoPembayaran(), -p.getJumlahBayar(), user.getKodeUser());
+            
+            insertKeuanganPusat(conPusat, noKeuanganPusat, "Pendapatan/Beban Kurs Emas", "Pembayaran Hutang Pembelian", 
+                    p.getNoPembayaran(), p.getTerbayar()-p.getJumlahBayar(), user.getKodeUser());
+            
+            if(status.equals("true")){
+                conPusat.commit();
+            }else{
+                conPusat.rollback();
+            }
+            conPusat.setAutoCommit(true);
+            return status;
+        }catch(Exception e){
+            e.printStackTrace();
+            try{
+                conPusat.rollback();
+                conPusat.setAutoCommit(true);
+                return e.toString();
+            }catch(SQLException ex){
+                return ex.toString();
+            }
+        }
+    }
+    public static String saveBatalPembayaranPembelian(Connection conPusat, PembayaranHutang p)throws Exception{
+        try{
+            String status = "true";
+            conPusat.setAutoCommit(false);
+            
+            PembayaranHutangDAO.update(conPusat, p);
+            
+            Hutang ht = HutangDAO.get(conPusat, p.getNoHutang());
+            ht.setTerbayar(ht.getTerbayar()-p.getTerbayar());
+            ht.setSisaHutang(ht.getSisaHutang()+p.getTerbayar());
+            ht.setStatus("true");
+            HutangDAO.update(conPusat, ht);
+
+            KeuanganPusat kp = KeuanganPusatDAO.get(conPusat, "Hutang Pembelian", "Pembayaran Hutang Pembelian", p.getNoPembayaran());
+            KeuanganPusatDAO.deleteAll(conPusat, kp.getNoKeuangan());
             
             if(status.equals("true")){
                 conPusat.commit();
@@ -3087,11 +3149,26 @@ public class Service {
             String status = "true";
             conPusat.setAutoCommit(false);
             
+            PenyesuaianStokBarangPusat p = new PenyesuaianStokBarangPusat();
+            p.setNoPenyesuaian(PenyesuaianStokBarangPusatDAO.getId(conPusat));
+            p.setTglPenyesuaian(Function.getSystemDate());
+            p.setKategori(kategori);
+            p.setJenis(jenis);
+            p.setBerat(berat);
+            p.setHargaPersen(beratPersen);
+            p.setHargaEmas(sistem.getHargaEmas());
+            p.setNilaiPokok(nilai);
+            p.setKodeUser(user.getKodeUser());
+            p.setStatus("true");
+            p.setTglBatal("2000-01-01 00:00:00");
+            p.setUserBatal("");
+            PenyesuaianStokBarangPusatDAO.insert(conPusat, p);
+            
             status = updateStokPusatMasuk(conPusat, kategori, jenis, berat, beratPersen, nilai, status);
             
             String noKeuanganPusat = KeuanganPusatDAO.getId(conPusat);
-//            insertKeuanganPusat(conPusat, noKeuanganPusat, "Modal", "Tambah Barang", noTambahBarang, nilai, user.getKodeUser());
-//            insertKeuanganPusat(conPusat, noKeuanganPusat, "Stok Barang", "Tambah Barang", noTambahBarang, nilai, user.getKodeUser());
+            insertKeuanganPusat(conPusat, noKeuanganPusat, "Modal", "Penyesuaian Stok Barang", p.getNoPenyesuaian(), nilai, user.getKodeUser());
+            insertKeuanganPusat(conPusat, noKeuanganPusat, "Stok Barang", "Penyesuaian Stok Barang", p.getNoPenyesuaian(), nilai, user.getKodeUser());
             
             if(status.equals("true")){
                 conPusat.commit();
@@ -3116,11 +3193,26 @@ public class Service {
             String status = "true";
             conPusat.setAutoCommit(false);
             
+            PenyesuaianStokBarangPusat p = new PenyesuaianStokBarangPusat();
+            p.setNoPenyesuaian(PenyesuaianStokBarangPusatDAO.getId(conPusat));
+            p.setTglPenyesuaian(Function.getSystemDate());
+            p.setKategori(kategori);
+            p.setJenis(jenis);
+            p.setBerat(-berat);
+            p.setHargaPersen(-beratPersen);
+            p.setHargaEmas(sistem.getHargaEmas());
+            p.setNilaiPokok(-nilai);
+            p.setKodeUser(user.getKodeUser());
+            p.setStatus("true");
+            p.setTglBatal("2000-01-01 00:00:00");
+            p.setUserBatal("");
+            PenyesuaianStokBarangPusatDAO.insert(conPusat, p);
+            
             status = updateStokPusatKeluar(conPusat, jenis, berat, beratPersen, nilai, status);
             
             String noKeuanganPusat = KeuanganPusatDAO.getId(conPusat);
-//            insertKeuanganPusat(conPusat, noKeuanganPusat, "Modal", "Ambil Barang", noAmbilBarang, -nilai, user.getKodeUser());
-//            insertKeuanganPusat(conPusat, noKeuanganPusat, "Stok Barang", "Ambil Barang", noAmbilBarang, -nilai, user.getKodeUser());
+            insertKeuanganPusat(conPusat, noKeuanganPusat, "Modal", "Penyesuaian Stok Barang", p.getNoPenyesuaian(), -nilai, user.getKodeUser());
+            insertKeuanganPusat(conPusat, noKeuanganPusat, "Stok Barang", "Penyesuaian Stok Barang", p.getNoPenyesuaian(), -nilai, user.getKodeUser());
             
             if(status.equals("true")){
                 conPusat.commit();

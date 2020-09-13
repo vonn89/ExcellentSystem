@@ -55,7 +55,6 @@ public class DetailPembelianSupplierController {
     
     @FXML private Label totalBeratLabel;
     @FXML private Label totalHargaPersenLabel;
-    @FXML private Label totalPembelianLabel;
     
     private ObservableList<PembelianDetail> listPembelianDetail = FXCollections.observableArrayList();
     private Main mainApp;
@@ -156,7 +155,6 @@ public class DetailPembelianSupplierController {
         }
         totalBeratLabel.setText(gr.format(totalBerat));
         totalHargaPersenLabel.setText(gr.format(totalHargaPersen));
-        totalPembelianLabel.setText(rp.format(totalHargaPersen*Double.parseDouble(hargaEmasField.getText().replaceAll(",", ""))));
     }
     @FXML
     private void close(){

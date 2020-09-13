@@ -44,10 +44,12 @@
                <children>
                   <Label layoutX="10.0" layoutY="10.0" text="Total Berat" />
                   <Label fx:id="totalBeratLabel" layoutX="43.0" layoutY="10.0" style="-fx-font-weight: bold;" text="0" />
-                  <Label layoutX="76.0" layoutY="10.0" text="Total Harga Persen" />
+                  <Label layoutX="76.0" layoutY="10.0" text="Total Pembelian" />
                   <Label fx:id="totalHargaPersenLabel" layoutX="109.0" layoutY="10.0" style="-fx-font-weight: bold;" text="0" />
-                  <Label layoutX="142.0" layoutY="10.0" text="Total Pembelian" />
-                  <Label fx:id="totalPembelianLabel" layoutX="175.0" layoutY="10.0" style="-fx-font-weight: bold;" text="0" />
+                  <Label layoutX="750.0" layoutY="15.0" text="Pembayaran" />
+                  <Label fx:id="pembayaranGrLabel" layoutX="837.0" layoutY="15.0" style="-fx-font-weight: bold;" text="0" />
+                  <Label layoutX="856.0" layoutY="15.0" text="Sisa Pembayaran" />
+                  <Label fx:id="sisaPembayaranGrLabel" layoutX="971.0" layoutY="15.0" style="-fx-font-weight: bold;" text="0" />
                </children>
             </HBox>
             <TableView fx:id="pembelianHeadTable" prefHeight="200.0" prefWidth="200.0" tableMenuButtonVisible="true" GridPane.rowIndex="1">
@@ -55,10 +57,11 @@
                 <TableColumn fx:id="noPembelianColumn" prefWidth="75.0" text="No Pembelian" />
                 <TableColumn fx:id="tglPembelianColumn" prefWidth="75.0" text="Tgl Pembelian" />
                   <TableColumn fx:id="supplierColumn" prefWidth="75.0" text="Supplier" />
-                  <TableColumn fx:id="totalBeratColumn" prefWidth="75.0" text="Total Berat" />
-                  <TableColumn fx:id="totalHargaPersenColumn" prefWidth="75.0" text="Total Harga Persen" />
                   <TableColumn fx:id="hargaEmasColumn" prefWidth="75.0" text="Harga Emas" />
-                  <TableColumn fx:id="totalPembelianColumn" prefWidth="75.0" text="Total Pembelian" />
+                  <TableColumn fx:id="totalBeratColumn" prefWidth="75.0" text="Total Berat" />
+                  <TableColumn fx:id="totalHargaPersenColumn" prefWidth="75.0" text="Total Pembelian" />
+                  <TableColumn fx:id="pembayaranCiokColumn" prefWidth="75.0" text="Pembayaran" />
+                  <TableColumn fx:id="sisaPembayaranCiokColumn" prefWidth="75.0" text="Sisa Pembayaran" />
                   <TableColumn fx:id="kodeUserColumn" prefWidth="75.0" text="Kode User" visible="false" />
               </columns>
                <columnResizePolicy>

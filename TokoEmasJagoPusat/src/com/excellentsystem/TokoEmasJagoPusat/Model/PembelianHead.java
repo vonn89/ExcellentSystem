@@ -30,7 +30,16 @@ public class PembelianHead {
     private final StringProperty tglBatal = new SimpleStringProperty();
     private final StringProperty userBatal = new SimpleStringProperty();
     private List<PembelianDetail> listPembelianDetail;
+    private Hutang hutang;
 
+    public Hutang getHutang() {
+        return hutang;
+    }
+
+    public void setHutang(Hutang hutang) {
+        this.hutang = hutang;
+    }
+    
     public double getTotalHargaPersen() {
         return totalHargaPersen.get();
     }

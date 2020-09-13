@@ -116,7 +116,7 @@ public class HutangDAO {
     }
     public static void update(Connection con,Hutang hutang)throws Exception{
         PreparedStatement ps = con.prepareStatement("update tt_hutang set "
-                + " tgl_hutang=?, supplier=?, no_pembelian=? "
+                + " tgl_hutang=?, supplier=?, no_pembelian=?, "
                 + " kurs=?, jumlah_hutang=?, terbayar=?,"
                 + " sisa_hutang=?, status=? "
                 + " where no_hutang=?");
