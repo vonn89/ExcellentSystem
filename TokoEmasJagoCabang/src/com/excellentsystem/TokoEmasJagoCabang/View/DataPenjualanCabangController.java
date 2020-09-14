@@ -20,6 +20,8 @@ import static com.excellentsystem.TokoEmasJagoCabang.Main.tglBarang;
 import static com.excellentsystem.TokoEmasJagoCabang.Main.tglLengkap;
 import static com.excellentsystem.TokoEmasJagoCabang.Main.tglSql;
 import static com.excellentsystem.TokoEmasJagoCabang.Main.tglSystem;
+import static com.excellentsystem.TokoEmasJagoCabang.Main.user;
+import com.excellentsystem.TokoEmasJagoCabang.Model.Otoritas;
 import com.excellentsystem.TokoEmasJagoCabang.Model.Pusat.PenjualanAntarCabangDetail;
 import com.excellentsystem.TokoEmasJagoCabang.Model.Pusat.PenjualanAntarCabangHead;
 import com.excellentsystem.TokoEmasJagoCabang.PrintOut.PrintOut;
@@ -181,6 +183,12 @@ public class DataPenjualanCabangController  {
     public void setMainApp(Main mainApp){
         this.mainApp = mainApp;
         getPenjualan();
+        for(Otoritas o : user.getOtoritas()){
+            if(o.getJenis().equals("Ganti Tanggal")){
+                tglAwalPicker.setDisable(!o.isStatus());
+                tglAkhirPicker.setDisable(!o.isStatus());
+            }
+        }
     } 
     @FXML
     private void getPenjualan(){

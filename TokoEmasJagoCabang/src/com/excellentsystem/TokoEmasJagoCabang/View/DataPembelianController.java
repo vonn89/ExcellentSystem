@@ -19,6 +19,8 @@ import static com.excellentsystem.TokoEmasJagoCabang.Main.tglBarang;
 import static com.excellentsystem.TokoEmasJagoCabang.Main.tglLengkap;
 import static com.excellentsystem.TokoEmasJagoCabang.Main.tglSql;
 import static com.excellentsystem.TokoEmasJagoCabang.Main.tglSystem;
+import static com.excellentsystem.TokoEmasJagoCabang.Main.user;
+import com.excellentsystem.TokoEmasJagoCabang.Model.Otoritas;
 import com.excellentsystem.TokoEmasJagoCabang.Model.PembelianDetail;
 import com.excellentsystem.TokoEmasJagoCabang.Model.PembelianHead;
 import com.excellentsystem.TokoEmasJagoCabang.PrintOut.PrintOut;
@@ -188,6 +190,12 @@ public class DataPembelianController {
     public void setMainApp(Main mainApp){
         this.mainApp = mainApp;
         getPembelian();
+        for(Otoritas o : user.getOtoritas()){
+            if(o.getJenis().equals("Ganti Tanggal")){
+                tglAwalPicker.setDisable(!o.isStatus());
+                tglAkhirPicker.setDisable(!o.isStatus());
+            }
+        }
     } 
     @FXML
     private void getPembelian(){

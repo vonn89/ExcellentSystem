@@ -17,8 +17,10 @@ import static com.excellentsystem.TokoEmasJagoCabang.Main.rp;
 import static com.excellentsystem.TokoEmasJagoCabang.Main.sistem;
 import static com.excellentsystem.TokoEmasJagoCabang.Main.tglLengkap;
 import static com.excellentsystem.TokoEmasJagoCabang.Main.tglSql;
+import static com.excellentsystem.TokoEmasJagoCabang.Main.user;
 import com.excellentsystem.TokoEmasJagoCabang.Model.HutangDetail;
 import com.excellentsystem.TokoEmasJagoCabang.Model.HutangHead;
+import com.excellentsystem.TokoEmasJagoCabang.Model.Otoritas;
 import com.excellentsystem.TokoEmasJagoCabang.PrintOut.PrintOut;
 import com.excellentsystem.TokoEmasJagoCabang.Service.Service;
 import com.excellentsystem.TokoEmasJagoCabang.View.Dialog.CariHutangController;
@@ -206,6 +208,12 @@ public class DataPelunasanHutangController  {
     public void setMainApp(Main mainApp){
         this.mainApp = mainApp;
         getHutang();
+        for(Otoritas o : user.getOtoritas()){
+            if(o.getJenis().equals("Ganti Tanggal")){
+                tglAwalPicker.setDisable(!o.isStatus());
+                tglAkhirPicker.setDisable(!o.isStatus());
+            }
+        }
     } 
     @FXML
     private void getHutang(){

@@ -421,7 +421,7 @@ public class MainController  {
     }
     @FXML
     private void showDashboard(){
-        DashboardController controller = mainApp.showDashboard();
+        mainApp.showDashboard();
     }
     @FXML
     private void showDataMember(){

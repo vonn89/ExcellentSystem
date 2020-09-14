@@ -17,6 +17,8 @@ import static com.excellentsystem.TokoEmasJagoCabang.Main.rp;
 import static com.excellentsystem.TokoEmasJagoCabang.Main.sistem;
 import static com.excellentsystem.TokoEmasJagoCabang.Main.tglLengkap;
 import static com.excellentsystem.TokoEmasJagoCabang.Main.tglSql;
+import static com.excellentsystem.TokoEmasJagoCabang.Main.user;
+import com.excellentsystem.TokoEmasJagoCabang.Model.Otoritas;
 import com.excellentsystem.TokoEmasJagoCabang.Model.Servis;
 import com.excellentsystem.TokoEmasJagoCabang.PrintOut.PrintOut;
 import com.excellentsystem.TokoEmasJagoCabang.Service.Service;
@@ -208,6 +210,12 @@ public class DataServisController  {
         statusCombo.setItems(allStatus);
         statusCombo.getSelectionModel().select("Belum Diambil");
         getServis();
+        for(Otoritas o : user.getOtoritas()){
+            if(o.getJenis().equals("Ganti Tanggal")){
+                tglAwalPicker.setDisable(!o.isStatus());
+                tglAkhirPicker.setDisable(!o.isStatus());
+            }
+        }
     } 
     @FXML
     private void getServis(){

@@ -21,6 +21,8 @@ import static com.excellentsystem.TokoEmasJagoCabang.Main.tglBarang;
 import static com.excellentsystem.TokoEmasJagoCabang.Main.tglLengkap;
 import static com.excellentsystem.TokoEmasJagoCabang.Main.tglSql;
 import static com.excellentsystem.TokoEmasJagoCabang.Main.tglSystem;
+import static com.excellentsystem.TokoEmasJagoCabang.Main.user;
+import com.excellentsystem.TokoEmasJagoCabang.Model.Otoritas;
 import com.excellentsystem.TokoEmasJagoCabang.Model.PembayaranPenjualan;
 import com.excellentsystem.TokoEmasJagoCabang.Model.PemesananDetail;
 import com.excellentsystem.TokoEmasJagoCabang.Model.PemesananHead;
@@ -216,6 +218,12 @@ public class DataPemesananController  {
         statusCombo.setItems(allStatus);
         statusCombo.getSelectionModel().select("Belum Diambil");
         getPemesanan();
+        for(Otoritas o : user.getOtoritas()){
+            if(o.getJenis().equals("Ganti Tanggal")){
+                tglAwalPicker.setDisable(!o.isStatus());
+                tglAkhirPicker.setDisable(!o.isStatus());
+            }
+        }
     } 
     @FXML
     private void getPemesanan(){
