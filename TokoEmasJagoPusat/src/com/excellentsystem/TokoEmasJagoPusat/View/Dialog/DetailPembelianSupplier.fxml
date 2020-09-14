@@ -62,10 +62,8 @@
                <children>
                   <Label text="Total Berat" />
                   <Label fx:id="totalBeratLabel" style="-fx-font-weight: bold;" text="0" />
-                  <Label layoutX="810.0" layoutY="15.0" text="Total Harga %" />
-                  <Label fx:id="totalHargaPersenLabel" layoutX="878.0" layoutY="15.0" style="-fx-font-weight: bold;" text="0" />
                   <Label layoutX="810.0" layoutY="15.0" text="Total Pembelian" />
-                  <Label fx:id="totalPembelianLabel" layoutX="878.0" layoutY="15.0" style="-fx-font-weight: bold;" text="0" />
+                  <Label fx:id="totalHargaPersenLabel" layoutX="878.0" layoutY="15.0" style="-fx-font-weight: bold;" text="0" />
                </children>
             </HBox>
             <Label text="No Pembelian" GridPane.rowIndex="2" />

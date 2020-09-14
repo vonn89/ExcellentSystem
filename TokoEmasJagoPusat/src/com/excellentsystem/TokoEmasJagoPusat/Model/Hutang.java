@@ -6,6 +6,7 @@
 
 package com.excellentsystem.TokoEmasJagoPusat.Model;
 
+import java.util.List;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -26,7 +27,16 @@ public class Hutang {
     private final DoubleProperty terbayar = new SimpleDoubleProperty();
     private final DoubleProperty sisaHutang = new SimpleDoubleProperty();
     private final StringProperty status = new SimpleStringProperty();
+    private List<PembayaranHutang> listPembayaranHutang;
 
+    public List<PembayaranHutang> getListPembayaranHutang() {
+        return listPembayaranHutang;
+    }
+
+    public void setListPembayaranHutang(List<PembayaranHutang> listPembayaranHutang) {
+        this.listPembayaranHutang = listPembayaranHutang;
+    }
+    
     public double getKurs() {
         return kurs.get();
     }

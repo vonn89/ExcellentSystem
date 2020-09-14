@@ -27,7 +27,7 @@ public class PembayaranHutang {
     private final StringProperty status = new SimpleStringProperty();
     private final StringProperty tglBatal = new SimpleStringProperty();
     private final StringProperty userBatal = new SimpleStringProperty();
-
+    
     public double getTerbayar() {
         return terbayar.get();
     }

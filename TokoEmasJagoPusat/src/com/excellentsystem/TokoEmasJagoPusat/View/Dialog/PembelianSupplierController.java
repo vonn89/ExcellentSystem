@@ -66,7 +66,6 @@ public class PembelianSupplierController {
     @FXML private Label hargaEmasLabel;
     @FXML private Label totalBeratLabel;
     @FXML private Label totalHargaPersenLabel;
-    @FXML private Label totalPembelianLabel;
     
     private List<SubKategori> allSubKategori;
     private ObservableList<String> listKodeSubKategori = FXCollections.observableArrayList();
@@ -310,7 +309,6 @@ public class PembelianSupplierController {
         hargaEmasLabel.setText(rp.format(sistem.getHargaEmas()));
         totalBeratLabel.setText(gr.format(totalBerat));
         totalHargaPersenLabel.setText(gr.format(totalHargaPersen));
-        totalPembelianLabel.setText(rp.format(totalHargaPersen*sistem.getHargaEmas()));
     }
     private void hitungTotalHargaPersen(){
         double berat = Double.parseDouble(beratField.getText().replaceAll(",", ""));
