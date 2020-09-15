@@ -222,6 +222,9 @@ public class DataUserController  {
             root.getChildren().add(createTreeItem("Pembelian Supplier",
                 new ArrayList<>()
             ));
+            root.getChildren().add(createTreeItem("Retur Pembelian Supplier",
+                new ArrayList<>()
+            ));
             root.getChildren().add(createTreeItem("Stok Barang Pusat",
                 new ArrayList<>()
             ));

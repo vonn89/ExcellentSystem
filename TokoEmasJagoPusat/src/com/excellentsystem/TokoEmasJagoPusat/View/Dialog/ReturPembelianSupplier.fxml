@@ -17,7 +17,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane id="AnchorPane" prefHeight="600.0" prefWidth="1000.0" styleClass="dialog" stylesheets="@../../Resource/MyTheme.css" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.excellentsystem.TokoEmasJagoPusat.View.Dialog.PembelianSupplierController">
+<AnchorPane id="AnchorPane" prefHeight="600.0" prefWidth="1000.0" styleClass="dialog" stylesheets="@../../Resource/MyTheme.css" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.excellentsystem.TokoEmasJagoPusat.View.Dialog.ReturPembelianSupplierController">
    <children>
       <GridPane hgap="5.0" layoutX="100.0" layoutY="87.0" vgap="5.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <columnConstraints>
@@ -38,7 +38,7 @@
             <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
          </padding>
          <children>
-            <Label fx:id="title" styleClass="label-header" text="Pembelian Supplier" GridPane.columnSpan="2147483647" />
+            <Label fx:id="title" styleClass="label-header" text="Retur Pembelian Supplier" GridPane.columnSpan="2147483647" />
             <Button mnemonicParsing="false" onAction="#close" GridPane.columnSpan="2147483647" GridPane.halignment="RIGHT">
                <graphic>
                   <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
@@ -80,7 +80,7 @@
                   </HBox>
                </children>
             </VBox>
-            <TableView fx:id="pembelianDetailTable" prefHeight="200.0" prefWidth="200.0" tableMenuButtonVisible="true" GridPane.columnSpan="2147483647" GridPane.rowIndex="5">
+            <TableView fx:id="returPembelianDetailTable" prefHeight="200.0" prefWidth="200.0" tableMenuButtonVisible="true" GridPane.columnSpan="2147483647" GridPane.rowIndex="5">
               <columns>
                   <TableColumn fx:id="kodeKategoriColumn" prefWidth="75.0" text="Kategori" />
                 <TableColumn fx:id="kodeJenisColumn" prefWidth="75.0" text="Sub Kategori" />
@@ -100,7 +100,7 @@
                      <children>
                         <Label text="Total Berat" />
                         <Label fx:id="totalBeratLabel" style="-fx-font-weight: bold;" text="0" />
-                        <Label layoutX="810.0" layoutY="15.0" text="Total Pembelian" />
+                        <Label layoutX="810.0" layoutY="15.0" text="Total Retur" />
                         <Label fx:id="totalHargaPersenLabel" layoutX="878.0" layoutY="15.0" style="-fx-font-weight: bold;" text="0" />
                      </children>
                   </HBox>

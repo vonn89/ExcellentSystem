@@ -3,8 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+
 package com.excellentsystem.TokoEmasJagoPusat.Model;
 
+import java.util.List;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -12,19 +14,78 @@ import javafx.beans.property.StringProperty;
 
 /**
  *
- * @author excellent
+ * @author Xtreme
  */
 public class ReturPembelianHead {
-
+    //tt_retur_pembelian_head
     private final StringProperty noRetur = new SimpleStringProperty();
     private final StringProperty tglRetur = new SimpleStringProperty();
     private final StringProperty supplier = new SimpleStringProperty();
-    private final DoubleProperty totalRetur = new SimpleDoubleProperty();
+    private final DoubleProperty totalBerat = new SimpleDoubleProperty();
+    private final DoubleProperty totalHargaPersen = new SimpleDoubleProperty();
     private final DoubleProperty hargaEmas = new SimpleDoubleProperty();
+    private final DoubleProperty totalRetur = new SimpleDoubleProperty();
     private final StringProperty kodeUser = new SimpleStringProperty();
     private final StringProperty status = new SimpleStringProperty();
     private final StringProperty tglBatal = new SimpleStringProperty();
     private final StringProperty userBatal = new SimpleStringProperty();
+    private List<ReturPembelianDetail> listReturPembelianDetail;
+    
+    public double getTotalHargaPersen() {
+        return totalHargaPersen.get();
+    }
+
+    public void setTotalHargaPersen(double value) {
+        totalHargaPersen.set(value);
+    }
+
+    public DoubleProperty totalHargaPersenProperty() {
+        return totalHargaPersen;
+    }
+
+    public double getTotalBerat() {
+        return totalBerat.get();
+    }
+
+    public void setTotalBerat(double value) {
+        totalBerat.set(value);
+    }
+
+    public DoubleProperty totalBeratProperty() {
+        return totalBerat;
+    }
+
+    public List<ReturPembelianDetail> getListReturPembelianDetail() {
+        return listReturPembelianDetail;
+    }
+
+    public void setListReturPembelianDetail(List<ReturPembelianDetail> listReturPembelianDetail) {
+        this.listReturPembelianDetail = listReturPembelianDetail;
+    }
+    
+    public double getTotalRetur() {
+        return totalRetur.get();
+    }
+
+    public void setTotalRetur(double value) {
+        totalRetur.set(value);
+    }
+
+    public DoubleProperty totalReturProperty() {
+        return totalRetur;
+    }
+
+    public String getKodeUser() {
+        return kodeUser.get();
+    }
+
+    public void setKodeUser(String value) {
+        kodeUser.set(value);
+    }
+
+    public StringProperty kodeUserProperty() {
+        return kodeUser;
+    }
 
     public String getUserBatal() {
         return userBatal.get();
@@ -62,18 +123,6 @@ public class ReturPembelianHead {
         return status;
     }
 
-    public String getKodeUser() {
-        return kodeUser.get();
-    }
-
-    public void setKodeUser(String value) {
-        kodeUser.set(value);
-    }
-
-    public StringProperty kodeUserProperty() {
-        return kodeUser;
-    }
-
     public double getHargaEmas() {
         return hargaEmas.get();
     }
@@ -86,17 +135,6 @@ public class ReturPembelianHead {
         return hargaEmas;
     }
 
-    public double getTotalRetur() {
-        return totalRetur.get();
-    }
-
-    public void setTotalRetur(double value) {
-        totalRetur.set(value);
-    }
-
-    public DoubleProperty totalReturProperty() {
-        return totalRetur;
-    }
 
     public String getSupplier() {
         return supplier.get();
@@ -133,5 +171,4 @@ public class ReturPembelianHead {
     public StringProperty noReturProperty() {
         return noRetur;
     }
-    
 }

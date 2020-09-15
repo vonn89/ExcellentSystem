@@ -31,6 +31,7 @@ import com.excellentsystem.TokoEmasJagoPusat.View.DataPembelianSupplierControlle
 import com.excellentsystem.TokoEmasJagoPusat.View.DataPenjualanCabangController;
 import com.excellentsystem.TokoEmasJagoPusat.View.DataPenjualanCiokCabangController;
 import com.excellentsystem.TokoEmasJagoPusat.View.DataPindahBarangController;
+import com.excellentsystem.TokoEmasJagoPusat.View.DataReturPembelianSupplierController;
 import com.excellentsystem.TokoEmasJagoPusat.View.DataRevisiBarangCabangController;
 import com.excellentsystem.TokoEmasJagoPusat.View.DataRosokCabangController;
 import com.excellentsystem.TokoEmasJagoPusat.View.DataSPBarangCabangController;
@@ -389,6 +390,13 @@ public class Main extends Application{
         DataPembelianSupplierController controller = loader.getController();
         controller.setMainApp(this);
         setTitle("Data Pembelian Supplier");
+        return controller;
+    }
+    public DataReturPembelianSupplierController showDataReturPembelianSupplier(){
+        FXMLLoader loader = changeStage("View/DataReturPembelianSupplier.fxml");
+        DataReturPembelianSupplierController controller = loader.getController();
+        controller.setMainApp(this);
+        setTitle("Data Retur Pembelian Supplier");
         return controller;
     }
     public StokBarangPusatController showStokBarangPusat(){

@@ -41,9 +41,11 @@ public class ReturPembelianDetailDAO {
             d.setNoUrut(rs.getInt(2));
             d.setKodeKategori(rs.getString(3));
             d.setKodeJenis(rs.getString(4));
-            d.setHargaPersen(rs.getDouble(5));
-            d.setBerat(rs.getDouble(6));
+            d.setBerat(rs.getDouble(5));
+            d.setPersentaseEmas(rs.getDouble(6));
             d.setBeratPersen(rs.getDouble(7));
+            d.setHargaPersen(rs.getDouble(8));
+            d.setTotalHarga(rs.getDouble(9));
             listReturPembelianDetail.add(d);
         }
         return listReturPembelianDetail;
@@ -59,22 +61,26 @@ public class ReturPembelianDetailDAO {
             d.setNoUrut(rs.getInt(2));
             d.setKodeKategori(rs.getString(3));
             d.setKodeJenis(rs.getString(4));
-            d.setHargaPersen(rs.getDouble(5));
-            d.setBerat(rs.getDouble(6));
+            d.setBerat(rs.getDouble(5));
+            d.setPersentaseEmas(rs.getDouble(6));
             d.setBeratPersen(rs.getDouble(7));
+            d.setHargaPersen(rs.getDouble(8));
+            d.setTotalHarga(rs.getDouble(9));
             listReturPembelianDetail.add(d);
         }
         return listReturPembelianDetail;
     }
-    public static void insert(Connection con,ReturPembelianDetail retur)throws Exception{
-        PreparedStatement ps = con.prepareStatement("insert into tt_retur_pembelian_detail values(?,?,?,?,?,?,?)");
-        ps.setString(1, retur.getNoRetur());
-        ps.setInt(2, retur.getNoUrut());
-        ps.setString(3, retur.getKodeKategori());
-        ps.setString(4, retur.getKodeJenis());
-        ps.setDouble(5, retur.getHargaPersen());
-        ps.setDouble(6, retur.getBerat());
-        ps.setDouble(7, retur.getBeratPersen());
-        ps.executeUpdate();        
+    public static void insert(Connection con, ReturPembelianDetail detail)throws Exception{
+        PreparedStatement ps = con.prepareStatement("insert into tt_retur_pembelian_detail values(?,?,?,?,?,?,?,?,?)");
+        ps.setString(1, detail.getNoRetur());
+        ps.setInt(2, detail.getNoUrut());
+        ps.setString(3, detail.getKodeKategori());
+        ps.setString(4, detail.getKodeJenis());
+        ps.setDouble(5, detail.getBerat());
+        ps.setDouble(6, detail.getPersentaseEmas());
+        ps.setDouble(7, detail.getBeratPersen());
+        ps.setDouble(8, detail.getHargaPersen());
+        ps.setDouble(9, detail.getTotalHarga());
+        ps.executeUpdate();
     }
 }

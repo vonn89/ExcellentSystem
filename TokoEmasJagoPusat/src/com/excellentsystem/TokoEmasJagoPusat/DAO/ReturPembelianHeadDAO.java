@@ -3,6 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+
 package com.excellentsystem.TokoEmasJagoPusat.DAO;
 
 import static com.excellentsystem.TokoEmasJagoPusat.Main.sistem;
@@ -18,11 +19,11 @@ import java.util.List;
 
 /**
  *
- * @author excellent
+ * @author Xtreme
  */
 public class ReturPembelianHeadDAO {
     public static List<ReturPembelianHead> getAllByDateAndSupplierAndStatus(
-            Connection con, String tglMulai, String tglAkhir, String supplier, String status)throws Exception{
+            Connection con, String tglMulai,String tglAkhir,String supplier,String status)throws Exception{
         String sql = "select * from tt_retur_pembelian_head where mid(no_retur,4,6) between ? and ? ";
         if(!supplier.equals("%"))
             sql = sql + " and supplier = '"+supplier+"' ";
@@ -31,41 +32,45 @@ public class ReturPembelianHeadDAO {
         PreparedStatement ps = con.prepareStatement(sql);
         ps.setString(1, tglSystem.format(tglBarang.parse(tglMulai)));
         ps.setString(2, tglSystem.format(tglBarang.parse(tglAkhir)));
+        List<ReturPembelianHead> allReturPembelianHead = new ArrayList<>();
         ResultSet rs = ps.executeQuery();
-        List<ReturPembelianHead> listReturPembelian = new ArrayList<>();
         while(rs.next()){
-            ReturPembelianHead r = new ReturPembelianHead();
-            r.setNoRetur(rs.getString(1));
-            r.setTglRetur(rs.getString(2));
-            r.setSupplier(rs.getString(3));
-            r.setTotalRetur(rs.getDouble(4));
-            r.setHargaEmas(rs.getDouble(5));
-            r.setKodeUser(rs.getString(6));
-            r.setStatus(rs.getString(7));
-            r.setTglBatal(rs.getString(8));
-            r.setUserBatal(rs.getString(9));
-            listReturPembelian.add(r);
+            ReturPembelianHead head = new ReturPembelianHead();
+            head.setNoRetur(rs.getString(1));
+            head.setTglRetur(rs.getString(2));
+            head.setSupplier(rs.getString(3));
+            head.setTotalBerat(rs.getDouble(4));
+            head.setTotalHargaPersen(rs.getDouble(5));
+            head.setHargaEmas(rs.getDouble(6));
+            head.setTotalRetur(rs.getDouble(7));
+            head.setKodeUser(rs.getString(8));
+            head.setStatus(rs.getString(9));
+            head.setTglBatal(rs.getString(10));
+            head.setUserBatal(rs.getString(11));
+            allReturPembelianHead.add(head);
         }
-        return listReturPembelian;
+        return allReturPembelianHead;
     }
-    public static ReturPembelianHead get(Connection con, String noRetur)throws Exception{
+    public static ReturPembelianHead get(Connection con, String noPembelian)throws Exception{
         PreparedStatement ps = con.prepareStatement("select * from tt_retur_pembelian_head where no_retur = ? ");
-        ps.setString(1, noRetur);
+        ps.setString(1, noPembelian);
         ResultSet rs = ps.executeQuery();
-        ReturPembelianHead r = null;
+        ReturPembelianHead head = null;
         while(rs.next()){
-            r = new ReturPembelianHead();
-            r.setNoRetur(rs.getString(1));
-            r.setTglRetur(rs.getString(2));
-            r.setSupplier(rs.getString(3));
-            r.setTotalRetur(rs.getDouble(4));
-            r.setHargaEmas(rs.getDouble(5));
-            r.setKodeUser(rs.getString(6));
-            r.setStatus(rs.getString(7));
-            r.setTglBatal(rs.getString(8));
-            r.setUserBatal(rs.getString(9));
+            head = new ReturPembelianHead();
+            head.setNoRetur(rs.getString(1));
+            head.setTglRetur(rs.getString(2));
+            head.setSupplier(rs.getString(3));
+            head.setTotalBerat(rs.getDouble(4));
+            head.setTotalHargaPersen(rs.getDouble(5));
+            head.setHargaEmas(rs.getDouble(6));
+            head.setTotalRetur(rs.getDouble(7));
+            head.setKodeUser(rs.getString(8));
+            head.setStatus(rs.getString(9));
+            head.setTglBatal(rs.getString(10));
+            head.setUserBatal(rs.getString(11));
         }
-        return r;
+        return head;
     }
     public static String getId(Connection con)throws Exception{
         PreparedStatement ps = con.prepareStatement("select max(right(no_retur,4)) from tt_retur_pembelian_head "
@@ -80,33 +85,37 @@ public class ReturPembelianHeadDAO {
             noHancur = "RB-"+tglSystem.format(tglBarang.parse(sistem.getTglSystem()))+"-"+df.format(1);
         return noHancur;
     }
-    public static void insert(Connection con, ReturPembelianHead r)throws Exception{
-        PreparedStatement ps = con.prepareStatement("insert into tt_retur_pembelian_head "
-                + "values(?,?,?,?,?,?,?,?,?)");
-        ps.setString(1, r.getNoRetur());
-        ps.setString(2, r.getTglRetur());
-        ps.setString(3, r.getSupplier());
-        ps.setDouble(4, r.getTotalRetur());
-        ps.setDouble(5, r.getHargaEmas());
-        ps.setString(6, r.getKodeUser());
-        ps.setString(7, r.getStatus());
-        ps.setString(8, r.getTglBatal());
-        ps.setString(9, r.getUserBatal());
+    public static void insert(Connection con , ReturPembelianHead head)throws Exception{
+        PreparedStatement ps = con.prepareStatement("insert into tt_retur_pembelian_head values(?,?,?,?,?,?,?,?,?,?,?)");
+        ps.setString(1, head.getNoRetur());
+        ps.setString(2, head.getTglRetur());
+        ps.setString(3, head.getSupplier());
+        ps.setDouble(4, head.getTotalBerat());
+        ps.setDouble(5, head.getTotalHargaPersen());
+        ps.setDouble(6, head.getHargaEmas());
+        ps.setDouble(7, head.getTotalRetur());
+        ps.setString(8, head.getKodeUser());
+        ps.setString(9, head.getStatus());
+        ps.setString(10, head.getTglBatal());
+        ps.setString(11, head.getUserBatal());
         ps.executeUpdate();
     }
-    public static void update(Connection con, ReturPembelianHead r)throws Exception{
+    public static void update(Connection con, ReturPembelianHead head)throws Exception{
         PreparedStatement ps = con.prepareStatement("update tt_retur_pembelian_head set "
-                + " tgl_retur=?, supplier=?, total_retur=?, harga_emas=?, "
-                + " kode_user=?, status=?, tgl_batal=?, user_batal=? where no_retur=?");
-        ps.setString(1, r.getTglRetur());
-        ps.setString(2, r.getSupplier());
-        ps.setDouble(3, r.getTotalRetur());
-        ps.setDouble(4, r.getHargaEmas());
-        ps.setString(5, r.getKodeUser());
-        ps.setString(6, r.getStatus());
-        ps.setString(7, r.getTglBatal());
-        ps.setString(8, r.getUserBatal());
-        ps.setString(9, r.getNoRetur());
+                + " tgl_retur=?, supplier=?, total_berat=?, total_harga_persen=?, harga_emas=?, total_retur=?, "
+                + " kode_user=?, status=?, tgl_batal=?, user_batal=?  "
+                + " where no_retur=?");
+        ps.setString(1, head.getTglRetur());
+        ps.setString(2, head.getSupplier());
+        ps.setDouble(3, head.getTotalBerat());
+        ps.setDouble(4, head.getTotalHargaPersen());
+        ps.setDouble(5, head.getHargaEmas());
+        ps.setDouble(6, head.getTotalRetur());
+        ps.setString(7, head.getKodeUser());
+        ps.setString(8, head.getStatus());
+        ps.setString(9, head.getTglBatal());
+        ps.setString(10, head.getUserBatal());
+        ps.setString(11, head.getNoRetur());
         ps.executeUpdate();
     }
 }

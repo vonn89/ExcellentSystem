@@ -32,6 +32,8 @@ import com.excellentsystem.TokoEmasJagoPusat.DAO.PenyesuaianStokBarangPusatDAO;
 import com.excellentsystem.TokoEmasJagoPusat.DAO.PindahDetailDAO;
 import com.excellentsystem.TokoEmasJagoPusat.DAO.PindahHeadDAO;
 import com.excellentsystem.TokoEmasJagoPusat.DAO.PiutangDAO;
+import com.excellentsystem.TokoEmasJagoPusat.DAO.ReturPembelianDetailDAO;
+import com.excellentsystem.TokoEmasJagoPusat.DAO.ReturPembelianHeadDAO;
 import com.excellentsystem.TokoEmasJagoPusat.DAO.RevisiBarangCabangDAO;
 import com.excellentsystem.TokoEmasJagoPusat.DAO.RosokCabangDAO;
 import com.excellentsystem.TokoEmasJagoPusat.DAO.SPDetailDAO;
@@ -82,6 +84,8 @@ import com.excellentsystem.TokoEmasJagoPusat.Model.PenyesuaianStokBarangPusat;
 import com.excellentsystem.TokoEmasJagoPusat.Model.PindahDetail;
 import com.excellentsystem.TokoEmasJagoPusat.Model.PindahHead;
 import com.excellentsystem.TokoEmasJagoPusat.Model.Piutang;
+import com.excellentsystem.TokoEmasJagoPusat.Model.ReturPembelianDetail;
+import com.excellentsystem.TokoEmasJagoPusat.Model.ReturPembelianHead;
 import com.excellentsystem.TokoEmasJagoPusat.Model.RevisiBarangCabang;
 import com.excellentsystem.TokoEmasJagoPusat.Model.RosokCabang;
 import com.excellentsystem.TokoEmasJagoPusat.Model.SPDetail;
@@ -3125,6 +3129,136 @@ public class Service {
 
             KeuanganPusat kp = KeuanganPusatDAO.get(conPusat, "Hutang Pembelian", "Pembayaran Hutang Pembelian", p.getNoPembayaran());
             KeuanganPusatDAO.deleteAll(conPusat, kp.getNoKeuangan());
+            
+            if(status.equals("true")){
+                conPusat.commit();
+            }else{
+                conPusat.rollback();
+            }
+            conPusat.setAutoCommit(true);
+            return status;
+        }catch(Exception e){
+            try{
+                conPusat.rollback();
+                conPusat.setAutoCommit(true);
+                return e.toString();
+            }catch(SQLException ex){
+                return ex.toString();
+            }
+        }
+    }
+    
+    public static String saveReturPembelianSupplier(Connection conPusat, ReturPembelianHead p)throws Exception{
+        try{
+            String status = "true";
+            conPusat.setAutoCommit(false);
+            
+            ReturPembelianHeadDAO.insert(conPusat, p);
+            List<String> kodeJenis = new ArrayList<>();
+            for(ReturPembelianDetail d : p.getListReturPembelianDetail()){
+                ReturPembelianDetailDAO.insert(conPusat, d);
+                
+                if(!kodeJenis.contains(d.getKodeJenis()))
+                    kodeJenis.add(d.getKodeJenis());
+            }
+            for(String jenis : kodeJenis){
+                double berat = 0;
+                double beratPersen = 0;
+                double harga = 0;
+                for(ReturPembelianDetail d : p.getListReturPembelianDetail()){
+                    if(d.getKodeJenis().equals(jenis)){
+                        berat = berat + d.getBerat();
+                        beratPersen = beratPersen + d.getBeratPersen();
+                        harga = harga + d.getHargaPersen()*p.getHargaEmas();
+                    }
+                }
+                
+                status = updateStokPusatKeluar(conPusat, jenis, berat, beratPersen, pembulatan(harga), status);
+            }
+            String noKeuanganPusat = KeuanganPusatDAO.getId(conPusat);
+
+            insertKeuanganPusat(conPusat, noKeuanganPusat, "Bank", 
+                    "Retur Pembelian Supplier", p.getNoRetur(), p.getTotalRetur(), user.getKodeUser());
+
+            insertKeuanganPusat(conPusat, noKeuanganPusat, "Stok Barang", "Retur Pembelian Supplier", 
+                    p.getNoRetur(), -p.getTotalRetur(), user.getKodeUser());
+            
+            if(status.equals("true")){
+                conPusat.commit();
+            }else{
+                conPusat.rollback();
+            }
+            conPusat.setAutoCommit(true);
+            return status;
+        }catch(Exception e){
+            e.printStackTrace();
+            try{
+                conPusat.rollback();
+                conPusat.setAutoCommit(true);
+                return e.toString();
+            }catch(SQLException ex){
+                return ex.toString();
+            }
+        }
+    }
+    public static String saveBatalReturPembelianSupplier(Connection conPusat, ReturPembelianHead p)throws Exception{
+        try{
+            String status = "true";
+            conPusat.setAutoCommit(false);
+            
+            ReturPembelianHeadDAO.update(conPusat, p);
+            if(p.getTglRetur().substring(0,10).equals(sistem.getTglSystem())){
+                List<String> kodeJenis = new ArrayList<>();
+                p.setListReturPembelianDetail(ReturPembelianDetailDAO.getAllByNoRetur(conPusat, p.getNoRetur()));
+                for(ReturPembelianDetail d : p.getListReturPembelianDetail()){
+                    if(!kodeJenis.contains(d.getKodeJenis()))
+                        kodeJenis.add(d.getKodeJenis());
+                }
+                for(String jenis : kodeJenis){
+                    double berat = 0;
+                    double beratPersen = 0;
+                    double harga = 0;
+                    for(ReturPembelianDetail d : p.getListReturPembelianDetail()){
+                        if(d.getKodeJenis().equals(jenis)){
+                            berat = berat + d.getBerat();
+                            beratPersen = beratPersen + d.getBeratPersen();
+                            harga = harga + (d.getTotalHarga()*p.getHargaEmas());
+                        }
+                    }
+                    status = updateStokPusatBatalKeluar(conPusat, jenis, berat, beratPersen, pembulatan(harga), status);
+                }
+                KeuanganPusat kp = KeuanganPusatDAO.get(conPusat, "Stok Barang", "Retur Pembelian Supplier", p.getNoRetur());
+                KeuanganPusatDAO.deleteAll(conPusat, kp.getNoKeuangan());
+            }else{
+                List<String> kodeJenis = new ArrayList<>();
+                p.setListReturPembelianDetail(ReturPembelianDetailDAO.getAllByNoRetur(conPusat, p.getNoRetur()));
+                for(ReturPembelianDetail d : p.getListReturPembelianDetail()){
+                    if(!kodeJenis.contains(d.getKodeJenis()))
+                        kodeJenis.add(d.getKodeJenis());
+                }
+                for(String jenis : kodeJenis){
+                    String kategori = "";
+                    double berat = 0;
+                    double beratPersen = 0;
+                    double harga = 0;
+                    for(ReturPembelianDetail d : p.getListReturPembelianDetail()){
+                        if(d.getKodeJenis().equals(jenis)){
+                            kategori = d.getKodeKategori();
+                            berat = berat + d.getBerat();
+                            beratPersen = beratPersen + d.getBeratPersen();
+                            harga = harga + d.getTotalHarga()*p.getHargaEmas();
+                        }
+                    }
+
+                    status = updateStokPusatMasuk(conPusat, kategori, jenis, berat, beratPersen, pembulatan(harga), status);
+                }
+                
+                String noKeuanganPusat = KeuanganPusatDAO.getId(conPusat);
+                insertKeuanganPusat(conPusat, noKeuanganPusat, "Bank", 
+                        "Batal Retur Pembelian Supplier", p.getNoRetur(), -p.getTotalRetur(), user.getKodeUser());
+                insertKeuanganPusat(conPusat, noKeuanganPusat,  "Stok Barang", "Batal Retur Pembelian Supplier", 
+                        p.getNoRetur(), p.getTotalRetur(), user.getKodeUser());
+            }
             
             if(status.equals("true")){
                 conPusat.commit();

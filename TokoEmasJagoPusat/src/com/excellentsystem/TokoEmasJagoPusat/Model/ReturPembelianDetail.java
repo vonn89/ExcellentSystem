@@ -23,44 +23,22 @@ public class ReturPembelianDetail {
     private final IntegerProperty noUrut = new SimpleIntegerProperty();
     private final StringProperty kodeKategori = new SimpleStringProperty();
     private final StringProperty kodeJenis = new SimpleStringProperty();
-    private final DoubleProperty hargaPersen = new SimpleDoubleProperty();
     private final DoubleProperty berat = new SimpleDoubleProperty();
+    private final DoubleProperty persentaseEmas = new SimpleDoubleProperty();
     private final DoubleProperty beratPersen = new SimpleDoubleProperty();
+    private final DoubleProperty hargaPersen = new SimpleDoubleProperty();
+    private final DoubleProperty totalHarga = new SimpleDoubleProperty();   
 
-    public int getNoUrut() {
-        return noUrut.get();
+    public double getTotalHarga() {
+        return totalHarga.get();
     }
 
-    public void setNoUrut(int value) {
-        noUrut.set(value);
+    public void setTotalHarga(double value) {
+        totalHarga.set(value);
     }
 
-    public IntegerProperty noUrutProperty() {
-        return noUrut;
-    }
-
-    public String getNoRetur() {
-        return noRetur.get();
-    }
-
-    public void setNoRetur(String value) {
-        noRetur.set(value);
-    }
-
-    public StringProperty noReturProperty() {
-        return noRetur;
-    }
-
-    public double getBeratPersen() {
-        return beratPersen.get();
-    }
-
-    public void setBeratPersen(double value) {
-        beratPersen.set(value);
-    }
-
-    public DoubleProperty beratPersenProperty() {
-        return beratPersen;
+    public DoubleProperty totalHargaProperty() {
+        return totalHarga;
     }
 
     public double getHargaPersen() {
@@ -75,6 +53,42 @@ public class ReturPembelianDetail {
         return hargaPersen;
     }
 
+    public double getPersentaseEmas() {
+        return persentaseEmas.get();
+    }
+
+    public void setPersentaseEmas(double value) {
+        persentaseEmas.set(value);
+    }
+
+    public DoubleProperty persentaseEmasProperty() {
+        return persentaseEmas;
+    }
+
+    public int getNoUrut() {
+        return noUrut.get();
+    }
+
+    public void setNoUrut(int value) {
+        noUrut.set(value);
+    }
+
+    public IntegerProperty noUrutProperty() {
+        return noUrut;
+    }
+
+    public double getBeratPersen() {
+        return beratPersen.get();
+    }
+
+    public void setBeratPersen(double value) {
+        beratPersen.set(value);
+    }
+
+    public DoubleProperty beratPersenProperty() {
+        return beratPersen;
+    }
+
 
     public double getBerat() {
         return berat.get();
@@ -87,7 +101,6 @@ public class ReturPembelianDetail {
     public DoubleProperty beratProperty() {
         return berat;
     }
-
 
     public String getKodeKategori() {
         return kodeKategori.get();
@@ -113,7 +126,16 @@ public class ReturPembelianDetail {
         return kodeJenis;
     }
 
-    
-    
+    public String getNoRetur() {
+        return noRetur.get();
+    }
+
+    public void setNoRetur(String value) {
+        noRetur.set(value);
+    }
+
+    public StringProperty noReturProperty() {
+        return noRetur;
+    }
     
 }

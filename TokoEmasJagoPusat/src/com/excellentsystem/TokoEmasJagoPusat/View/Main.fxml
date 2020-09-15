@@ -191,6 +191,18 @@
                               <Insets left="15.0" />
                            </VBox.margin>
                         </TitledPane>
+                        <TitledPane fx:id="returPembelianSupplierPane" animated="false" collapsible="false" expanded="false" graphicTextGap="5.0" layoutX="25.0" layoutY="120.0" onMouseClicked="#showDataReturPembelianSupplier" text="Retur Pembelian Supplier" textFill="WHITE">
+                           <graphic>
+                              <ImageView fitHeight="17.0" fitWidth="17.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../Resource/refresh.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                           <VBox.margin>
+                              <Insets left="18.0" />
+                           </VBox.margin>
+                        </TitledPane>
                         <TitledPane fx:id="stokBarangPane" animated="false" collapsible="false" expanded="false" graphicTextGap="5.0" layoutX="10.0" layoutY="89.0" onMouseClicked="#showStokBarangPusat" text="Stok Barang" textFill="WHITE">
                            <graphic>
                               <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
