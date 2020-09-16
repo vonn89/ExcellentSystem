@@ -190,8 +190,8 @@ public class DashboardController {
                                 if(k.getKategori().equals("Hutang Bunga"))
                                     o.setHutangBunga(o.getHutangBunga()+k.getJumlahRp());
                             }
-                            o.setSaldoAkhirKasPenjualan(KeuanganDAO.getSaldoBefore(conPusat, "Kasir", "Kas", tglAkhir));
-                            o.setSaldoAkhirKasRR(KeuanganDAO.getSaldoBefore(conPusat, "RR", "Kas", tglAkhir));
+                            o.setSaldoAkhirKasPenjualan(KeuanganDAO.getSaldoBefore(conCabang, "Kasir", "Kas", tglAkhir));
+                            o.setSaldoAkhirKasRR(KeuanganDAO.getSaldoBefore(conCabang, "RR", "Kas", tglAkhir));
                             
                             status = status + c.getKodeCabang()+" = online\n";
                         }catch(Exception e){
