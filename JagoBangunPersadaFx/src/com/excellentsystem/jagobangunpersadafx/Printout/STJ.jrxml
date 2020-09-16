@@ -444,14 +444,6 @@
 				</textElement>
 				<textFieldExpression><![CDATA[$F{luasBangunan}]]></textFieldExpression>
 			</textField>
-			<textField>
-				<reportElement x="250" y="520" width="233" height="20" uuid="e9669841-43bb-4e64-9dc2-a53e35a7593f"/>
-				<textElement textAlignment="Justified" verticalAlignment="Top">
-					<font fontName="Times New Roman" size="12"/>
-					<paragraph lineSpacing="1_1_2"/>
-				</textElement>
-				<textFieldExpression><![CDATA["( Harga sudah termasuk:  AJB & Pajak )"]]></textFieldExpression>
-			</textField>
 			<textField isBlankWhenNull="true">
 				<reportElement x="160" y="227" width="323" height="20" uuid="afa4c05f-c231-4d21-8dbf-5f561e5a7c5b"/>
 				<textElement verticalAlignment="Top">

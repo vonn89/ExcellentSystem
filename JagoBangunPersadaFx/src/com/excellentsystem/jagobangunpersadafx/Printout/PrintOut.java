@@ -52,6 +52,7 @@ public class PrintOut {
         Map parameters = new HashMap<>();
         DateFormat tgl = new SimpleDateFormat("dd MMMMM yyyy");
         parameters.put("tglSTJ",tgl.format(tglSql.parse(stj.getTglSTJ())));
+        parameters.put("tahunPBB",new SimpleDateFormat("yyyy").format(tglSql.parse(stj.getTglSTJ())));
         parameters.put("header", ImageIO.read(getClass().getResource("JBP Kop Surat.jpg")));
         parameters.put("watermark", ImageIO.read(getClass().getResource("JBP watermark.jpg")));
         JasperDesign subreport = JRXmlLoader.load(getClass().getResourceAsStream("STJDetail.jrxml"));
