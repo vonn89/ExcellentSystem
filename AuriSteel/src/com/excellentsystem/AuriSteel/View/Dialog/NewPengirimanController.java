@@ -209,7 +209,7 @@ public class NewPengirimanController  {
                 
                 PenjualanHead pengiriman = task.getValue();
                 noPengirimanField.setText(pengiriman.getNoPenjualan());
-                tglPengirimanField.setText(tglLengkap.format(tglSql.parse(pengiriman.getTglPenjualan())));
+                tglPengirimanField.setText(tglLengkap.format(tglSql.parse(pengiriman.getTglPengiriman())));
                 noPemesananField.setText(pengiriman.getNoPemesanan());
                 if(pengiriman.getPemesananHead()!=null)
                     tglPemesananField.setText(tglLengkap.format(tglSql.parse(pengiriman.getPemesananHead().getTglPemesanan())));

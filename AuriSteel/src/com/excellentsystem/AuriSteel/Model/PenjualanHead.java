@@ -35,8 +35,8 @@ public class PenjualanHead {
     private final StringProperty kodeUser = new SimpleStringProperty();
     private final StringProperty tglBatal = new SimpleStringProperty();
     private final StringProperty userBatal = new SimpleStringProperty();
-    private final StringProperty tglVerifikasi = new SimpleStringProperty();
-    private final StringProperty userVerifikasi = new SimpleStringProperty();
+    private final StringProperty tglPengiriman = new SimpleStringProperty();
+    private final StringProperty userPengiriman = new SimpleStringProperty();
     private final StringProperty status = new SimpleStringProperty();
     private Customer customer;
     private Pegawai sales;
@@ -44,28 +44,28 @@ public class PenjualanHead {
     private PemesananHead pemesananHead;
     private Customer customerInvoice;
 
-    public String getUserVerifikasi() {
-        return userVerifikasi.get();
+    public String getUserPengiriman() {
+        return userPengiriman.get();
     }
 
-    public void setUserVerifikasi(String value) {
-        userVerifikasi.set(value);
+    public void setUserPengiriman(String value) {
+        userPengiriman.set(value);
     }
 
-    public StringProperty userVerifikasiProperty() {
-        return userVerifikasi;
+    public StringProperty userPengirimanProperty() {
+        return userPengiriman;
     }
 
-    public String getTglVerifikasi() {
-        return tglVerifikasi.get();
+    public String getTglPengiriman() {
+        return tglPengiriman.get();
     }
 
-    public void setTglVerifikasi(String value) {
-        tglVerifikasi.set(value);
+    public void setTglPengiriman(String value) {
+        tglPengiriman.set(value);
     }
 
-    public StringProperty tglVerifikasiProperty() {
-        return tglVerifikasi;
+    public StringProperty tglPengirimanProperty() {
+        return tglPengiriman;
     }
 
     public double getTotalBebanPenjualan() {

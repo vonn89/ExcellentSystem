@@ -1411,7 +1411,7 @@ public class Service {
             
             String noPenjualan = PenjualanHeadDAO.getId(con, date);
             p.setNoPenjualan(noPenjualan);
-            p.setTglPenjualan(tglSql.format(date));
+            p.setTglPengiriman(tglSql.format(date));
             PenjualanHeadDAO.insert(con, p);
             for (PenjualanDetail d : p.getListPenjualanDetail()) {
                 d.setNoPenjualan(noPenjualan);
@@ -1443,8 +1443,10 @@ public class Service {
             con.setAutoCommit(false);
             String status = "true";
 
-            penjualan.setTglVerifikasi(tglSql.format(Function.getServerDate(con)));
-            penjualan.setUserVerifikasi(sistem.getUser().getKodeUser());
+            Date date = Function.getServerDate(con);
+            
+            penjualan.setTglPenjualan(tglSql.format(date));
+            penjualan.setKodeUser(sistem.getUser().getKodeUser());
             penjualan.setStatus("true");
             
             PemesananHead pemesanan = PemesananHeadDAO.get(con, penjualan.getNoPemesanan());
@@ -1456,7 +1458,6 @@ public class Service {
             }
             penjualan.setSisaPembayaran(penjualan.getTotalPenjualan() - penjualan.getPembayaran());
 
-            Date date = tglSql.parse(penjualan.getTglPenjualan());
             String noKeuangan = KeuanganDAO.getId(con, date);
 
             PenjualanHeadDAO.update(con, penjualan);
@@ -1678,9 +1679,9 @@ public class Service {
 
             Date date = Function.getServerDate(con);
             
-            penjualan.setTglVerifikasi("2000-01-01 00:00:00");
-            penjualan.setUserVerifikasi("");
-            penjualan.setStatus("open");
+            penjualan.setTglBatal(tglSql.format(date));
+            penjualan.setUserBatal(sistem.getUser().getKodeUser());
+            penjualan.setStatus("false");
             PenjualanHeadDAO.update(con, penjualan);
 
             KeuanganDAO.delete(con, "Penjualan", "Penjualan", "Penjualan - " + penjualan.getNoPenjualan());
@@ -4038,9 +4039,9 @@ public class Service {
             if (stokBarang == null) {
                 status = "Stok barang " + kodeBarang + " tidak ditemukan";
             } 
-//            else if (stokBarang.getStokAkhir() < qtyOut) {
-//                status = "Stok barang " + kodeBarang + " tidak mencukupi";
-//            } 
+            else if (stokBarang.getStokAkhir() < qtyOut) {
+                status = "Stok barang " + kodeBarang + " tidak mencukupi";
+            } 
             else {
                 if (stokBarang.getTanggal().equals(tglBarang.format(date))) {
                     stokBarang.setStokMasuk(stokBarang.getStokMasuk() + qtyIn);

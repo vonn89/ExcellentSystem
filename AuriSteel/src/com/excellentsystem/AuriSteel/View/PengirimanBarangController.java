@@ -97,7 +97,7 @@ public class PengirimanBarangController  {
         
         tglPengirimanColumn.setCellValueFactory(cellData -> { 
             try {
-                return  new SimpleStringProperty(tglLengkap.format(tglSql.parse(cellData.getValue().getTglPenjualan())));
+                return  new SimpleStringProperty(tglLengkap.format(tglSql.parse(cellData.getValue().getTglPengiriman())));
             } catch (Exception ex) {
                 return null;
             }
@@ -275,9 +275,9 @@ public class PengirimanBarangController  {
                     List<Customer> allCustomer = CustomerDAO.getAllByStatus(con, "%");
                     List<Pegawai> allSales = PegawaiDAO.getAllByStatus(con, "%");
                     List<Barang> allBarang = BarangDAO.getAllByStatus(con, "%");
-                    List<PenjualanDetail> allPengirimanDetail = PenjualanDetailDAO.getAllByDateAndStatus(con, 
+                    List<PenjualanDetail> allPengirimanDetail = PenjualanDetailDAO.getAllByTglKirimAndStatus(con, 
                             tglMulaiPicker.getValue().toString(), tglAkhirPicker.getValue().toString(), status);
-                    List<PenjualanHead> allPengiriman = PenjualanHeadDAO.getAllByDateAndStatus(con, 
+                    List<PenjualanHead> allPengiriman = PenjualanHeadDAO.getAllByTglKirimAndStatus(con, 
                             tglMulaiPicker.getValue().toString(), tglAkhirPicker.getValue().toString(), status);
                     for(PenjualanHead h : allPengiriman){
                         for(Customer c : allCustomer){
@@ -338,7 +338,7 @@ public class PengirimanBarangController  {
                     filterData.add(temp);
                 else{
                     if(checkColumn(temp.getNoPenjualan())||
-                        checkColumn(tglLengkap.format(tglSql.parse(temp.getTglPenjualan())))||
+                        checkColumn(tglLengkap.format(tglSql.parse(temp.getTglPengiriman())))||
                         checkColumn(temp.getNoPemesanan())||
                         checkColumn(temp.getSales().getNama())||
                         checkColumn(temp.getCustomer().getNama())||
@@ -376,6 +376,7 @@ public class PengirimanBarangController  {
                         try (Connection con = Koneksi.getConnection()) {
                             PenjualanHead pengiriman = new PenjualanHead();
                             pengiriman.setPemesananHead(controller.pemesanan);
+                            pengiriman.setTglPenjualan("2000-01-01 00:00:00");
                             pengiriman.setNoPemesanan(controller.noPemesananField.getText());
                             pengiriman.setKodeCustomer(controller.pemesanan.getKodeCustomer());
                             pengiriman.setKodeCustomerInvoice(controller.pemesanan.getKodeCustomerInvoice());
@@ -385,11 +386,11 @@ public class PengirimanBarangController  {
                             pengiriman.setPaymentTerm(controller.pemesanan.getPaymentTerm());
                             pengiriman.setCatatan(controller.pemesanan.getCatatan());
                             pengiriman.setKodeSales(controller.pemesanan.getKodeSales());
-                            pengiriman.setKodeUser(sistem.getUser().getKodeUser());
+                            pengiriman.setKodeUser("");
                             pengiriman.setTglBatal("2000-01-01 00:00:00");
                             pengiriman.setUserBatal("");
-                            pengiriman.setTglVerifikasi("2000-01-01 00:00:00");
-                            pengiriman.setUserVerifikasi("");
+                            pengiriman.setTglPengiriman("2000-01-01 00:00:00");
+                            pengiriman.setUserPengiriman(sistem.getUser().getKodeUser());
                             pengiriman.setStatus("open");
                             pengiriman.setTotalBebanPenjualan(0);
                             double total = 0;
@@ -578,7 +579,7 @@ public class PengirimanBarangController  {
                 for (PenjualanHead b : filterData) {
                     createRow(workbook, sheet, rc, c, "Detail");
                     sheet.getRow(rc).getCell(0).setCellValue(b.getNoPenjualan());
-                    sheet.getRow(rc).getCell(1).setCellValue(tglLengkap.format(tglSql.parse(b.getTglPenjualan())));
+                    sheet.getRow(rc).getCell(1).setCellValue(tglLengkap.format(tglSql.parse(b.getTglPengiriman())));
                     sheet.getRow(rc).getCell(2).setCellValue(b.getNoPemesanan());
                     sheet.getRow(rc).getCell(3).setCellValue(b.getKodeGudang());
                     sheet.getRow(rc).getCell(4).setCellValue(b.getCustomer().getNama());

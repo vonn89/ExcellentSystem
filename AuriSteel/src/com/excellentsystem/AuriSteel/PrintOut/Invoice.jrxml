@@ -83,6 +83,12 @@
 	<field name="nama" class="java.lang.String">
 		<fieldDescription><![CDATA[penjualanHead.customerInvoice.nama]]></fieldDescription>
 	</field>
+	<field name="tglPengiriman" class="java.lang.String">
+		<fieldDescription><![CDATA[penjualanHead.tglPengiriman]]></fieldDescription>
+	</field>
+	<field name="status" class="java.lang.String">
+		<fieldDescription><![CDATA[penjualanHead.status]]></fieldDescription>
+	</field>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
@@ -111,7 +117,9 @@
 				<textElement verticalAlignment="Middle">
 					<font fontName="Times New Roman" size="10" pdfFontName="Times-Roman" isPdfEmbedded="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA[new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").parse($F{tglPenjualan})]]></textFieldExpression>
+				<textFieldExpression><![CDATA[( $F{status}=="true" ? 
+new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").parse($F{tglPenjualan}) : 
+new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").parse($F{tglPengiriman}) )]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement style="detail_1" x="429" y="41" width="125" height="19" uuid="5347bf9d-4d6c-4591-a95e-51c2753a880a"/>
