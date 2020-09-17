@@ -335,7 +335,6 @@ public class AsetTetapController  {
                         try (Connection con = Koneksi.getConnection()) {
                             int masaPakai = (Integer.parseInt(controller.tahunField.getText())*12)+Integer.parseInt(controller.bulanField.getText());
                             AsetTetap asetTetap = new AsetTetap();
-                            asetTetap.setNoAset(AsetTetapDAO.getId(con));
                             asetTetap.setNama(controller.namaField.getText());
                             asetTetap.setKategori(controller.kategoriCombo.getSelectionModel().getSelectedItem());
                             asetTetap.setKeterangan(controller.keteranganField.getText());

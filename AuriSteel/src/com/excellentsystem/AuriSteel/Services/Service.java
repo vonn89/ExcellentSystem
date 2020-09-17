@@ -1004,7 +1004,7 @@ public class Service {
             String status = "true";
 
             Date date = Function.getServerDate(con);
-            String noPemesanan = PemesananHeadDAO.getId(con);
+            String noPemesanan = PemesananHeadDAO.getId(con, date);
             pemesanan.setNoPemesanan(noPemesanan);
             pemesanan.setTglPemesanan(tglSql.format(date));
             PemesananHeadDAO.insert(con, pemesanan);
@@ -1127,7 +1127,7 @@ public class Service {
             String status = "true";
 
             Date date = Function.getServerDate(con);
-            String noPemesanan = PemesananCoilHeadDAO.getId(con);
+            String noPemesanan = PemesananCoilHeadDAO.getId(con, date);
             pemesanan.setNoPemesanan(noPemesanan);
             pemesanan.setTglPemesanan(tglSql.format(date));
             PemesananCoilHeadDAO.insert(con, pemesanan);
@@ -1233,7 +1233,7 @@ public class Service {
             CustomerDAO.update(con, customer);
 
             Hutang h = new Hutang();
-            h.setNoHutang(HutangDAO.getId(con));
+            h.setNoHutang(HutangDAO.getId(con, date));
             h.setTglHutang(tglSql.format(date));
             h.setKategori("Terima Pembayaran Down Payment");
             h.setKeterangan(pemesanan.getNoPemesanan());
@@ -1325,7 +1325,7 @@ public class Service {
             CustomerDAO.update(con, customer);
 
             Hutang h = new Hutang();
-            h.setNoHutang(HutangDAO.getId(con));
+            h.setNoHutang(HutangDAO.getId(con, date));
             h.setTglHutang(tglSql.format(date));
             h.setKategori("Terima Pembayaran Down Payment");
             h.setKeterangan(pemesanan.getNoPemesanan());
@@ -1409,7 +1409,7 @@ public class Service {
 
             Date date = Function.getServerDate(con);
             
-            String noPenjualan = PenjualanHeadDAO.getId(con);
+            String noPenjualan = PenjualanHeadDAO.getId(con, date);
             p.setNoPenjualan(noPenjualan);
             p.setTglPenjualan(tglSql.format(date));
             PenjualanHeadDAO.insert(con, p);
@@ -1467,7 +1467,7 @@ public class Service {
                     "Penjualan - " + penjualan.getNoPenjualan(), penjualan.getSisaPembayaran(), sistem.getUser().getKodeUser());
 
             Piutang piutang = new Piutang();
-            piutang.setNoPiutang(PiutangDAO.getId(con));
+            piutang.setNoPiutang(PiutangDAO.getId(con, date));
             piutang.setTglPiutang(penjualan.getTglPenjualan());
             piutang.setKategori("Piutang Penjualan");
             piutang.setKeterangan(penjualan.getNoPenjualan());
@@ -1495,7 +1495,7 @@ public class Service {
                 pemesanan.setSisaDownPayment(pemesanan.getSisaDownPayment() - penjualan.getPembayaran());
 
                 TerimaPembayaran tp = new TerimaPembayaran();
-                tp.setNoTerimaPembayaran(TerimaPembayaranDAO.getId(con));
+                tp.setNoTerimaPembayaran(TerimaPembayaranDAO.getId(con, date));
                 tp.setTglTerima(penjualan.getTglPenjualan());
                 tp.setNoPiutang(piutang.getNoPiutang());
                 tp.setJumlahPembayaran(penjualan.getPembayaran());
@@ -1677,6 +1677,10 @@ public class Service {
             String status = "true";
 
             Date date = Function.getServerDate(con);
+            
+            penjualan.setTglVerifikasi("2000-01-01 00:00:00");
+            penjualan.setUserVerifikasi("");
+            penjualan.setStatus("open");
             PenjualanHeadDAO.update(con, penjualan);
 
             KeuanganDAO.delete(con, "Penjualan", "Penjualan", "Penjualan - " + penjualan.getNoPenjualan());
@@ -1816,7 +1820,7 @@ public class Service {
             Date date = Function.getServerDate(con);
             String noKeuangan = KeuanganDAO.getId(con, date);
 
-            String noPengiriman = PenjualanCoilHeadDAO.getId(con);
+            String noPengiriman = PenjualanCoilHeadDAO.getId(con, date);
             penjualan.setNoPenjualan(noPengiriman);
             penjualan.setTglPenjualan(tglSql.format(date));
             PenjualanCoilHeadDAO.insert(con, penjualan);
@@ -1827,7 +1831,7 @@ public class Service {
                     "Penjualan Coil - " + penjualan.getNoPenjualan(), penjualan.getSisaPembayaran(), sistem.getUser().getKodeUser());
 
             Piutang piutang = new Piutang();
-            piutang.setNoPiutang(PiutangDAO.getId(con));
+            piutang.setNoPiutang(PiutangDAO.getId(con, date));
             piutang.setTglPiutang(tglSql.format(date));
             piutang.setKategori("Piutang Penjualan");
             piutang.setKeterangan(penjualan.getNoPenjualan());
@@ -1856,7 +1860,7 @@ public class Service {
                 pemesanan.setSisaDownPayment(pemesanan.getSisaDownPayment() - penjualan.getPembayaran());
 
                 TerimaPembayaran tp = new TerimaPembayaran();
-                tp.setNoTerimaPembayaran(TerimaPembayaranDAO.getId(con));
+                tp.setNoTerimaPembayaran(TerimaPembayaranDAO.getId(con, date));
                 tp.setTglTerima(tglSql.format(date));
                 tp.setNoPiutang(piutang.getNoPiutang());
                 tp.setJumlahPembayaran(penjualan.getPembayaran());
@@ -2105,7 +2109,7 @@ public class Service {
 
             Date date = Function.getServerDate(con);
             String noKeuangan = KeuanganDAO.getId(con, date);
-            String noPembelian = PembelianHeadDAO.getId(con);
+            String noPembelian = PembelianHeadDAO.getId(con, date);
             
             p.setNoPembelian(noPembelian);
             p.setTglPembelian(tglSql.format(date));
@@ -2115,7 +2119,7 @@ public class Service {
                 BebanPembelianDAO.insert(con, beban);
             }
             Hutang hutang = new Hutang();
-            hutang.setNoHutang(HutangDAO.getId(con));
+            hutang.setNoHutang(HutangDAO.getId(con, date));
             hutang.setTglHutang(tglSql.format(date));
             hutang.setKategori("Hutang Pembelian");
             hutang.setKeterangan(p.getNoPembelian());
@@ -2274,7 +2278,7 @@ public class Service {
             Date date = Function.getServerDate(con);
             String noKeuangan = KeuanganDAO.getId(con, date);
 
-            String noPembelian = PembelianBarangHeadDAO.getId(con);
+            String noPembelian = PembelianBarangHeadDAO.getId(con, date);
             p.setNoPembelian(noPembelian);
             p.setTglPembelian(tglSql.format(date));
             PembelianBarangHeadDAO.insert(con, p);
@@ -2285,7 +2289,7 @@ public class Service {
             }
             
             Hutang hutang = new Hutang();
-            hutang.setNoHutang(HutangDAO.getId(con));
+            hutang.setNoHutang(HutangDAO.getId(con, date));
             hutang.setTglHutang(tglSql.format(date));
             hutang.setKategori("Hutang Pembelian");
             hutang.setKeterangan(p.getNoPembelian());
@@ -2445,7 +2449,7 @@ public class Service {
             Date date = Function.getServerDate(con);
             String noKeuangan = KeuanganDAO.getId(con, date);
 
-            String noPindah = PindahBahanHeadDAO.getId(con);
+            String noPindah = PindahBahanHeadDAO.getId(con, date);
             p.setNoPindah(noPindah);
             p.setTglPindah(tglSql.format(date));
             PindahBahanHeadDAO.insert(con, p);
@@ -2559,7 +2563,7 @@ public class Service {
             Date date = Function.getServerDate(con);
             String noKeuangan = KeuanganDAO.getId(con, date);
 
-            String noPengiriman = PindahBarangHeadDAO.getId(con);
+            String noPengiriman = PindahBarangHeadDAO.getId(con, date);
             p.setNoPindah(noPengiriman);
             p.setTglPindah(tglSql.format(date));
             PindahBarangHeadDAO.insert(con, p);
@@ -2609,9 +2613,9 @@ public class Service {
 
             for (PindahBarangDetail d : stokBarang) {
                 status = insertStokAndLogBarang(con, date, d.getKodeBarang(), p.getGudangAsal(), "Pindah Barang", p.getNoPindah(), 
-                        0, 0, d.getQty(), d.getNilai(), status);
+                        0, 0, d.getQty(), d.getNilai()*d.getQty(), status);
                 status = insertStokAndLogBarang(con, date, d.getKodeBarang(), p.getGudangTujuan(), "Pindah Barang", p.getNoPindah(), 
-                        d.getQty(), d.getNilai(), 0, 0, status);
+                        d.getQty(), d.getNilai()*d.getQty(), 0, 0, status);
             }
 
             if (status.equals("true")) {
@@ -2723,7 +2727,7 @@ public class Service {
             Date date = Function.getServerDate(con);
             String noKeuangan = KeuanganDAO.getId(con, date);
 
-            String noProduksi = ProduksiHeadDAO.getId(con);
+            String noProduksi = ProduksiHeadDAO.getId(con, date);
             produksi.setKodeProduksi(noProduksi);
             produksi.setTglProduksi(tglSql.format(date));
             
@@ -2908,7 +2912,7 @@ public class Service {
             Date date = Function.getServerDate(con);
             String noKeuangan = KeuanganDAO.getId(con, date);
 
-            b.setNoBebanPenjualan(BebanPenjualanHeadDAO.getId(con));
+            b.setNoBebanPenjualan(BebanPenjualanHeadDAO.getId(con, date));
             b.setTglBebanPenjualan(tglSql.format(date));
             BebanPenjualanHeadDAO.insert(con, b);
             
@@ -2993,7 +2997,7 @@ public class Service {
             Date date = Function.getServerDate(con);
             String noKeuangan = KeuanganDAO.getId(con, date);
 
-            b.setNoBebanProduksi(BebanProduksiHeadDAO.getId(con));
+            b.setNoBebanProduksi(BebanProduksiHeadDAO.getId(con, date));
             b.setTglBebanProduksi(tglSql.format(date));
             BebanProduksiHeadDAO.insert(con, b);
             
@@ -3177,7 +3181,7 @@ public class Service {
             Date date = Function.getServerDate(con);
             String noKeuangan = KeuanganDAO.getId(con, date);
 
-            hutang.setNoHutang(HutangDAO.getId(con));
+            hutang.setNoHutang(HutangDAO.getId(con, date));
             hutang.setTglHutang(tglSql.format(date));
             HutangDAO.insert(con, hutang);
 
@@ -3386,7 +3390,7 @@ public class Service {
             Date date = Function.getServerDate(con);
             String noKeuangan = KeuanganDAO.getId(con, date);
 
-            piutang.setNoPiutang(PiutangDAO.getId(con));
+            piutang.setNoPiutang(PiutangDAO.getId(con, date));
             piutang.setTglPiutang(tglSql.format(date));
             PiutangDAO.insert(con, piutang);
             
@@ -3438,7 +3442,7 @@ public class Service {
             Date date = Function.getServerDate(con);
             String noKeuangan = KeuanganDAO.getId(con, date);
 
-            terimaPembayaran.setNoTerimaPembayaran(TerimaPembayaranDAO.getId(con));
+            terimaPembayaran.setNoTerimaPembayaran(TerimaPembayaranDAO.getId(con, date));
             terimaPembayaran.setTglTerima(tglSql.format(date));
             TerimaPembayaranDAO.insert(con, terimaPembayaran);
 
@@ -3647,6 +3651,7 @@ public class Service {
 
             Date date = Function.getServerDate(con);
             String noKeuangan = KeuanganDAO.getId(con, date);
+            aset.setNoAset(AsetTetapDAO.getId(con, date));
             aset.setTglBeli(tglSql.format(date));
             AsetTetapDAO.insert(con, aset);
 
@@ -3772,7 +3777,7 @@ public class Service {
                 Date date = Function.getServerDate(con);
                 String noKeuangan = KeuanganDAO.getId(con, date);
                 
-                p.setNoPenyesuaian(PenyesuaianStokBahanDAO.getId(con));
+                p.setNoPenyesuaian(PenyesuaianStokBahanDAO.getId(con, date));
                 p.setTglPenyesuaian(tglSql.format(date));
 
                 double qty = p.getQty();
@@ -3851,7 +3856,7 @@ public class Service {
                 Date date = Function.getServerDate(con);
                 String noKeuangan = KeuanganDAO.getId(con, date);
 
-                p.setNoPenyesuaian(PenyesuaianStokBarangDAO.getId(con));
+                p.setNoPenyesuaian(PenyesuaianStokBarangDAO.getId(con, date));
                 p.setTglPenyesuaian(tglSql.format(date));
                 
                 double qty = p.getQty();
@@ -4032,9 +4037,11 @@ public class Service {
             StokBarang stokBarang = StokBarangDAO.get(con, tglBarang.format(date), kodeBarang, kodeGudang);
             if (stokBarang == null) {
                 status = "Stok barang " + kodeBarang + " tidak ditemukan";
-            } else if (stokBarang.getStokAkhir() < qtyOut) {
-                status = "Stok barang " + kodeBarang + " tidak mencukupi";
-            } else {
+            } 
+//            else if (stokBarang.getStokAkhir() < qtyOut) {
+//                status = "Stok barang " + kodeBarang + " tidak mencukupi";
+//            } 
+            else {
                 if (stokBarang.getTanggal().equals(tglBarang.format(date))) {
                     stokBarang.setStokMasuk(stokBarang.getStokMasuk() + qtyIn);
                     stokBarang.setStokKeluar(stokBarang.getStokKeluar() + qtyOut);
