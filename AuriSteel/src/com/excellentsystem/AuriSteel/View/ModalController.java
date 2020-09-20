@@ -283,7 +283,6 @@ public class ModalController  {
                     public String call() throws Exception{
                         try (Connection con = Koneksi.getConnection()) {
                             Keuangan k = new Keuangan();
-                            k.setTglKeuangan(tglSql.format(Function.getServerDate(con)));
                             k.setTipeKeuangan(controller.tipeKeuanganCombo.getSelectionModel().getSelectedItem());
                             k.setKategori("Tambah Modal");
                             k.setDeskripsi(controller.keteranganField.getText());
@@ -332,7 +331,6 @@ public class ModalController  {
                     public String call() throws Exception{
                         try (Connection con = Koneksi.getConnection()) {
                             Keuangan modal = new Keuangan();
-                            modal.setTglKeuangan(tglSql.format(Function.getServerDate(con)));
                             modal.setTipeKeuangan(controller.tipeKeuanganCombo.getSelectionModel().getSelectedItem());
                             modal.setKategori("Ambil Modal");
                             modal.setDeskripsi(controller.keteranganField.getText());
