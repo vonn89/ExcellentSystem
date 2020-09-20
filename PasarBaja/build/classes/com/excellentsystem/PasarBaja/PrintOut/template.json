@@ -1,0 +1,46 @@
+{
+     "pageFormat": {
+         "characterPitch": "12",
+         "lineSpacing": "1/8",
+         "pageLength": 36,
+         "pageWidth": 95,
+         "usePageLengthFromPrinter": false
+     },
+     "template": {
+         "header": [ "                                     SURAT JALAN                                     " ,
+                     "Tujuan Pengiriman :                                         No Surat Jalan  : ${noSuratJalan}",
+                     " Nama   : ${nama:50}Tgl Pengiriman  : ${tglPengiriman}",
+                     " Alamat : ${alamat:50}Jenis Kendaraan : ${jenisKendaraan}",
+                     " Kota   : ${kota:50}No Polisi       : ${noPolisi}",
+                     " Kontak Person : ${kontakPerson:43}Nama Supir      : ${namaSupir}",
+                     "                 ({noTelp})"
+         ],
+         "detail": [
+             {
+                "table": "table",
+                "border": true,
+                "columns": [
+                    { "caption": "No", "source": "no::center", "width": 4},
+                    { "caption": "Kode Barang", "source": "kodeBarang", "width": 20},
+                    { "caption": "Nama Barang", "source": "namaBarang", "width": 30 },
+                    { "caption": "Qty", "source": "qty::center", "width": 8 },
+                    { "caption": "Satuan", "source": "satuan::center", "width": 8 },
+                    { "caption": "Keterangan", "source": "keterangan", "width": 20 }
+                ]
+             }
+         ],
+         "footer": [ "Keterangan :",
+                     "1. Surat jalan ini merupakan bukti penerimaan barang",
+                     "2. Surat jalan ini bukan bukti penjualan(Faktur/Invoice)",
+                     "",
+                     "Barang sudah diterima dalam keadaan BAIK dan CUKUP oleh :",
+                     "Tgl Penerimaan : ",
+                     "",
+                     "",
+                     "",
+                     "",
+                     "",
+                     "       (Penerima)                (Bag. Pengiriman)                      (Bag. Gudang)            "
+         ] 
+     }
+ }
