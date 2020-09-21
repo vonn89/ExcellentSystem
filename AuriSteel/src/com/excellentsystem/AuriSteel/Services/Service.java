@@ -1618,7 +1618,7 @@ public class Service {
             for (PenjualanDetail d : stokBarang) {
                 status = insertStokAndLogBarang(con, date, d.getKodeBarang(), penjualan.getKodeGudang(), "Penjualan", penjualan.getNoPenjualan(),
                         0, 0, d.getQty(), (d.getNilai() * d.getQty()), status);
-                resetStokDanLogBarang(con, d.getKodeBarang(), penjualan.getKodeGudang(), tglSql.format(date), Function.getServerDate(con));
+//                resetStokDanLogBarang(con, d.getKodeBarang(), penjualan.getKodeGudang(), tglSql.format(date), Function.getServerDate(con));
             }
 
             if (status.equals("true")) {
@@ -3990,8 +3990,32 @@ public class Service {
         if (qtyIn != 0 || qtyOut != 0) {
             StokBahan stokBahan = StokBahanDAO.get(con, tglBarang.format(date), kodeBahan, kodeGudang);
             if (stokBahan == null) {
-                status = "Stok bahan " + kodeBahan + " tidak ditemukan";
-            } else if (stokBahan.getStokAkhir() < qtyOut) {
+                StokBahan stok = new StokBahan();
+                stok.setTanggal(tglBarang.format(date));
+                stok.setKodeBahan(kodeBahan);
+                stok.setKodeGudang(kodeGudang);
+                stok.setStokAwal(0);
+                stok.setStokMasuk(qtyIn);
+                stok.setStokKeluar(qtyOut);
+                stok.setStokAkhir(qtyIn - qtyOut);
+                StokBahanDAO.insert(con, stok);
+                
+                LogBahan logBahan = new LogBahan();
+                logBahan.setTanggal(tglSql.format(date));
+                logBahan.setKodeBahan(kodeBahan);
+                logBahan.setKodeGudang(kodeGudang);
+                logBahan.setKategori(kategori);
+                logBahan.setKeterangan(keterangan);
+                logBahan.setStokAwal(0);
+                logBahan.setNilaiAwal(0);
+                logBahan.setStokMasuk(qtyIn);
+                logBahan.setNilaiMasuk(nilaiIn);
+                logBahan.setStokKeluar(qtyOut);
+                logBahan.setNilaiKeluar(nilaiOut);
+                logBahan.setStokAkhir(qtyIn - qtyOut);
+                logBahan.setNilaiAkhir(nilaiIn - nilaiOut);
+                LogBahanDAO.insert(con, logBahan);
+            } else if (qtyOut>0 && stokBahan.getStokAkhir() < qtyOut) {
                 status = "Stok bahan " + kodeBahan + " tidak mencukupi";
             } else {
                 if (stokBahan.getTanggal().equals(tglBarang.format(date))) {
@@ -4039,7 +4063,7 @@ public class Service {
             if (stokBarang == null) {
                 status = "Stok barang " + kodeBarang + " tidak ditemukan";
             } 
-            else if (stokBarang.getStokAkhir() < qtyOut) {
+            else if (qtyOut>0 && stokBarang.getStokAkhir() < qtyOut) {
                 status = "Stok barang " + kodeBarang + " tidak mencukupi";
             } 
             else {
