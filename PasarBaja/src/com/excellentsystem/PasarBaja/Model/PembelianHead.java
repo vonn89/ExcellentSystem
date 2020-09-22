@@ -20,7 +20,6 @@ public class PembelianHead {
     private final StringProperty noPembelian = new SimpleStringProperty();
     private final StringProperty tglPembelian = new SimpleStringProperty();
     private final StringProperty kodeSupplier = new SimpleStringProperty();
-    private final StringProperty kodeGudang = new SimpleStringProperty();
     private final StringProperty paymentTerm = new SimpleStringProperty();
     private final DoubleProperty totalPembelian = new SimpleDoubleProperty();
     private final DoubleProperty totalBebanPembelian = new SimpleDoubleProperty();
@@ -36,17 +35,6 @@ public class PembelianHead {
     private List<PembelianDetail> listPembelianDetail;
     private List<BebanPembelian> listBebanPembelian;
 
-    public String getKodeGudang() {
-        return kodeGudang.get();
-    }
-
-    public void setKodeGudang(String value) {
-        kodeGudang.set(value);
-    }
-
-    public StringProperty kodeGudangProperty() {
-        return kodeGudang;
-    }
 
     public List<PembelianDetail> getListPembelianDetail() {
         return listPembelianDetail;

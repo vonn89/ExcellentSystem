@@ -18,8 +18,6 @@ public class User {
 
     private final StringProperty kodeUser = new SimpleStringProperty();
     private final StringProperty password = new SimpleStringProperty();
-    private final StringProperty nama = new SimpleStringProperty();
-    private final StringProperty level = new SimpleStringProperty();
     private final StringProperty status = new SimpleStringProperty();
     private List<Otoritas> otoritas;
 
@@ -40,30 +38,6 @@ public class User {
 
     public StringProperty statusProperty() {
         return status;
-    }
-
-    public String getLevel() {
-        return level.get();
-    }
-
-    public void setLevel(String value) {
-        level.set(value);
-    }
-
-    public StringProperty levelProperty() {
-        return level;
-    }
-
-    public String getNama() {
-        return nama.get();
-    }
-
-    public void setNama(String value) {
-        nama.set(value);
-    }
-
-    public StringProperty namaProperty() {
-        return nama;
     }
 
     public String getPassword() {

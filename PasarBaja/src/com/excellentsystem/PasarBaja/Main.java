@@ -160,10 +160,8 @@ public class Main extends Application {
                         updateProgress(50, 100);
                         return Function.downloadUpdateGoogleStorage("Auri Steel.exe");
                     }
-//                Service.createAbsensi(con, 01, 2020);
-////                if(Function.getServerDate(con).getDate()==1){
                     Service.setPenyusutanAset(con);
-////                }
+                    
                     updateProgress(70, 100);
                     Thread.sleep(500);
                     updateProgress(80, 100);

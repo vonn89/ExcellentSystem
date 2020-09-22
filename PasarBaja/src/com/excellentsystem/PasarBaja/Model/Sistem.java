@@ -15,7 +15,6 @@ import javafx.beans.property.StringProperty;
  */
 public class Sistem {
 
-    private final StringProperty tglSystem = new SimpleStringProperty();
     private final StringProperty nama = new SimpleStringProperty();
     private final StringProperty alamat = new SimpleStringProperty();
     private final StringProperty noTelp = new SimpleStringProperty();
@@ -121,18 +120,6 @@ public class Sistem {
 
     public StringProperty versionProperty() {
         return version;
-    }
-
-    public String getTglSystem() {
-        return tglSystem.get();
-    }
-
-    public void setTglSystem(String value) {
-        tglSystem.set(value);
-    }
-
-    public StringProperty tglSystemProperty() {
-        return tglSystem;
     }
 
 }

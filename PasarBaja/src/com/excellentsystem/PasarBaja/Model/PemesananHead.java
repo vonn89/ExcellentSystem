@@ -20,45 +20,18 @@ public class PemesananHead {
     private final StringProperty noPemesanan = new SimpleStringProperty();
     private final StringProperty tglPemesanan = new SimpleStringProperty();
     private final StringProperty kodeCustomer = new SimpleStringProperty();
-    private final StringProperty kodeCustomerInvoice = new SimpleStringProperty();
-    private final StringProperty paymentTerm = new SimpleStringProperty();
     private final DoubleProperty totalPemesanan = new SimpleDoubleProperty();
     private final DoubleProperty downPayment = new SimpleDoubleProperty();
     private final DoubleProperty sisaDownPayment = new SimpleDoubleProperty();
     private final StringProperty catatan = new SimpleStringProperty();
-    private final StringProperty kodeSales = new SimpleStringProperty();
     private final StringProperty kodeUser = new SimpleStringProperty();
     private final StringProperty tglBatal = new SimpleStringProperty();
     private final StringProperty userBatal = new SimpleStringProperty();
     private final StringProperty status = new SimpleStringProperty();
     private Customer customer;
-    private Pegawai sales;
     private List<PemesananDetail> listPemesananDetail;
     private List<Hutang> listHutang;
-    private Customer customerInvoice;
 
-    public Customer getCustomerInvoice() {
-        return customerInvoice;
-    }
-
-    public void setCustomerInvoice(Customer customerInvoice) {
-        this.customerInvoice = customerInvoice;
-    }
-
-    public String getKodeCustomerInvoice() {
-        return kodeCustomerInvoice.get();
-    }
-
-    public void setKodeCustomerInvoice(String value) {
-        kodeCustomerInvoice.set(value);
-    }
-
-    public StringProperty kodeCustomerInvoiceProperty() {
-        return kodeCustomerInvoice;
-    }
-    
-
-    
     public List<Hutang> getListHutang() {
         return listHutang;
     }
@@ -82,15 +55,7 @@ public class PemesananHead {
     public void setCustomer(Customer customer) {
         this.customer = customer;
     }
-
-    public Pegawai getSales() {
-        return sales;
-    }
-
-    public void setSales(Pegawai sales) {
-        this.sales = sales;
-    }
-
+    
     public double getSisaDownPayment() {
         return sisaDownPayment.get();
     }
@@ -114,19 +79,6 @@ public class PemesananHead {
 
     public DoubleProperty downPaymentProperty() {
         return downPayment;
-    }
-    
-
-    public String getPaymentTerm() {
-        return paymentTerm.get();
-    }
-
-    public void setPaymentTerm(String value) {
-        paymentTerm.set(value);
-    }
-
-    public StringProperty paymentTermProperty() {
-        return paymentTerm;
     }
     
 
@@ -189,18 +141,6 @@ public class PemesananHead {
 
     public DoubleProperty totalPemesananProperty() {
         return totalPemesanan;
-    }
-
-    public String getKodeSales() {
-        return kodeSales.get();
-    }
-
-    public void setKodeSales(String value) {
-        kodeSales.set(value);
-    }
-
-    public StringProperty kodeSalesProperty() {
-        return kodeSales;
     }
 
     public String getKodeUser() {

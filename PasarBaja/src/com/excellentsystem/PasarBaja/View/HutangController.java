@@ -7,31 +7,23 @@
 package com.excellentsystem.PasarBaja.View;
 
 import com.excellentsystem.PasarBaja.DAO.HutangDAO;
-import com.excellentsystem.PasarBaja.DAO.PemesananCoilHeadDAO;
 import com.excellentsystem.PasarBaja.Function;
 import static com.excellentsystem.PasarBaja.Function.createRow;
 import com.excellentsystem.PasarBaja.Koneksi;
 import com.excellentsystem.PasarBaja.Main;
 import static com.excellentsystem.PasarBaja.Main.df;
 import static com.excellentsystem.PasarBaja.Main.sistem;
-import static com.excellentsystem.PasarBaja.Main.tgl;
-import static com.excellentsystem.PasarBaja.Main.tglBarang;
 import static com.excellentsystem.PasarBaja.Main.tglLengkap;
 import static com.excellentsystem.PasarBaja.Main.tglSql;
 import com.excellentsystem.PasarBaja.Model.Hutang;
 import com.excellentsystem.PasarBaja.Model.Otoritas;
 import com.excellentsystem.PasarBaja.Model.Pembayaran;
-import com.excellentsystem.PasarBaja.Model.PemesananCoilHead;
 import com.excellentsystem.PasarBaja.Services.Service;
 import com.excellentsystem.PasarBaja.View.Dialog.DetailHutangController;
-import com.excellentsystem.PasarBaja.View.Dialog.JatuhTempoController;
 import com.excellentsystem.PasarBaja.View.Dialog.MessageController;
 import com.excellentsystem.PasarBaja.View.Dialog.NewHutangController;
 import com.excellentsystem.PasarBaja.View.Dialog.NewPembayaranController;
-import com.excellentsystem.PasarBaja.View.Dialog.NewPembelianBarangController;
 import com.excellentsystem.PasarBaja.View.Dialog.NewPembelianController;
-import com.excellentsystem.PasarBaja.View.Dialog.NewPemesananCoilController;
-import com.excellentsystem.PasarBaja.View.Dialog.NewPemesananCoilRpController;
 import com.excellentsystem.PasarBaja.View.Dialog.NewPemesananController;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -80,7 +72,6 @@ public class HutangController  {
     @FXML private TableColumn<Hutang, Number> jumlahHutangColumn;
     @FXML private TableColumn<Hutang, Number> pembayaranColumn;
     @FXML private TableColumn<Hutang, Number> sisaHutangColumn;
-    @FXML private TableColumn<Hutang, String> jatuhTempoColumn;
     
     @FXML private TextField searchField;
     @FXML private Label totalHutangField;
@@ -109,19 +100,6 @@ public class HutangController  {
         tglHutangColumn.setCellFactory(col -> Function.getWrapTableCell(tglHutangColumn));
         tglHutangColumn.setComparator(Function.sortDate(tglLengkap));
         
-        jatuhTempoColumn.setCellValueFactory(cellData -> { 
-            try{
-                if(cellData.getValue().getJatuhTempo().equals("2000-01-01"))
-                    return null;
-                else
-                    return new SimpleStringProperty(tgl.format(tglBarang.parse(cellData.getValue().getJatuhTempo())));
-            }catch(Exception ex){
-                return null;
-            }
-        });
-        jatuhTempoColumn.setCellFactory(col -> Function.getWrapTableCell(jatuhTempoColumn));
-        jatuhTempoColumn.setComparator(Function.sortDate(tgl));
-        
         jumlahHutangColumn.setCellValueFactory(cellData -> cellData.getValue().jumlahHutangProperty());
         jumlahHutangColumn.setCellFactory(col -> Function.getTableCell());
         
@@ -136,10 +114,6 @@ public class HutangController  {
         addNew.setOnAction((ActionEvent e)->{
             showNewHutang();
         });
-        MenuItem katHutang = new MenuItem("Add New Kategori Hutang");
-        katHutang.setOnAction((ActionEvent e)->{
-            mainApp.showKategoriHutang();
-        });
         MenuItem export = new MenuItem("Export Excel");
         export.setOnAction((ActionEvent e)->{
             exportExcel();
@@ -151,8 +125,6 @@ public class HutangController  {
         for(Otoritas o : sistem.getUser().getOtoritas()){
             if(o.getJenis().equals("Add New Hutang")&&o.isStatus())
                 rm.getItems().add(addNew);
-            if(o.getJenis().equals("Kategori Hutang")&&o.isStatus())
-                rm.getItems().add(katHutang);
             if(o.getJenis().equals("Export Excel")&&o.isStatus())
                 rm.getItems().add(export);
         }
@@ -171,10 +143,6 @@ public class HutangController  {
                         addNew.setOnAction((ActionEvent e)->{
                             showNewHutang();
                         });
-                        MenuItem katHutang = new MenuItem("Add New Kategori Hutang");
-                        katHutang.setOnAction((ActionEvent e)->{
-                            mainApp.showKategoriHutang();
-                        });
                         MenuItem lihat = new MenuItem("Detail Hutang");
                         lihat.setOnAction((ActionEvent e)->{
                             showDetailHutang(item);
@@ -183,25 +151,13 @@ public class HutangController  {
                         lihatPembelian.setOnAction((ActionEvent e)->{
                             showDetailPembelian(item);
                         });
-                        MenuItem lihatPembelianBarang = new MenuItem("Detail Pembelian Barang");
-                        lihatPembelianBarang.setOnAction((ActionEvent e)->{
-                            showDetailPembelianBarang(item);
-                        });
                         MenuItem lihatPemesanan = new MenuItem("Detail Pemesanan");
                         lihatPemesanan.setOnAction((ActionEvent e)->{
                             showDetailPemesanan(item);
                         });
-                        MenuItem lihatPemesananCoil = new MenuItem("Detail Pemesanan Coil");
-                        lihatPemesananCoil.setOnAction((ActionEvent e)->{
-                            showDetailPemesananCoil(item);
-                        });
                         MenuItem bayar = new MenuItem("Pembayaran Hutang");
                         bayar.setOnAction((ActionEvent e)->{
                             showPembayaran(item);
-                        });
-                        MenuItem tempo = new MenuItem("Set Jatuh Tempo");
-                        tempo.setOnAction((ActionEvent e)->{
-                            setJatuhTempo(item);
                         });
                         MenuItem export = new MenuItem("Export Excel");
                         export.setOnAction((ActionEvent e)->{
@@ -214,34 +170,18 @@ public class HutangController  {
                         for(Otoritas o : sistem.getUser().getOtoritas()){
                             if(o.getJenis().equals("Add New Hutang")&&o.isStatus())
                                 rm.getItems().add(addNew);
-                            if(o.getJenis().equals("Kategori Hutang")&&o.isStatus())
-                                rm.getItems().add(katHutang);
                             if(o.getJenis().equals("Detail Hutang")&&o.isStatus())
                                 rm.getItems().add(lihat);
                             if(o.getJenis().equals("Detail Pembelian")&&o.isStatus()&&
-                                    item.getKategori().equals("Hutang Pembelian")&&
-                                    item.getKeterangan().startsWith("PO-"))
+                                    item.getKategori().equals("Hutang Pembelian"))
                                 rm.getItems().add(lihatPembelian);
-                            if(o.getJenis().equals("Detail Pembelian Barang")&&o.isStatus()&&
-                                    item.getKategori().equals("Hutang Pembelian")&&
-                                    item.getKeterangan().startsWith("PB-"))
-                                rm.getItems().add(lihatPembelianBarang);
                             if(o.getJenis().equals("Detail Pemesanan")&&o.isStatus()&&
-                                    item.getKategori().equals("Terima Pembayaran Down Payment")&&
-                                    item.getKeterangan().startsWith("PI-"))
+                                    item.getKategori().equals("Terima Pembayaran Down Payment"))
                                 rm.getItems().add(lihatPemesanan);
-                            if(o.getJenis().equals("Detail Pemesanan Coil")&&o.isStatus()&&
-                                    item.getKategori().equals("Terima Pembayaran Down Payment")&&
-                                    item.getKeterangan().startsWith("PC-"))
-                                rm.getItems().add(lihatPemesananCoil);
                             if(o.getJenis().equals("Pembayaran Hutang")&&o.isStatus()&&
                                     item.getStatus().equals("open")&&
                                     !item.getKategori().equals("Terima Pembayaran Down Payment"))
                                 rm.getItems().add(bayar);
-                            if(o.getJenis().equals("Set Jatuh Tempo Hutang")&&o.isStatus()&&
-                                    item.getStatus().equals("open")&&
-                                    !item.getKategori().equals("Terima Pembayaran Down Payment"))
-                                rm.getItems().add(tempo);
                             if(o.getJenis().equals("Export Excel")&&o.isStatus())
                                 rm.getItems().add(export);
                         }
@@ -330,8 +270,7 @@ public class HutangController  {
                         checkColumn(temp.getKeterangan())||
                         checkColumn(temp.getTipeKeuangan())||
                         checkColumn(df.format(temp.getPembayaran()))||
-                        checkColumn(df.format(temp.getSisaHutang()))||
-                        checkColumn(tgl.format(tglBarang.parse(temp.getJatuhTempo()))))
+                        checkColumn(df.format(temp.getSisaHutang())))
                         filterData.add(temp);
                 }
             }
@@ -357,54 +296,12 @@ public class HutangController  {
         controller.setMainApp(mainApp,mainApp.MainStage, stage);
         controller.setDetailPembelian(hutang.getKeterangan());
     }
-    private void showDetailPembelianBarang(Hutang hutang){
-        Stage stage = new Stage();
-        FXMLLoader loader = mainApp.showDialog(mainApp.MainStage, stage, "View/Dialog/NewPembelianBarang.fxml");
-        NewPembelianBarangController controller = loader.getController();
-        controller.setMainApp(mainApp,mainApp.MainStage, stage);
-        controller.setDetailPembelian(hutang.getKeterangan());
-    }
     private void showDetailPemesanan(Hutang hutang){
         Stage stage = new Stage();
         FXMLLoader loader = mainApp.showDialog(mainApp.MainStage, stage, "View/Dialog/NewPemesanan.fxml");
         NewPemesananController controller = loader.getController();
         controller.setMainApp(mainApp,mainApp.MainStage, stage);
         controller.setDetailPemesanan(hutang.getKeterangan());
-    }
-    private void showDetailPemesananCoil(Hutang hutang){
-        Task<PemesananCoilHead> task = new Task<PemesananCoilHead>() {
-            @Override 
-            public PemesananCoilHead call() throws Exception{
-                try (Connection con = Koneksi.getConnection()) {
-                    return PemesananCoilHeadDAO.get(con, hutang.getKeterangan());
-                }
-            }
-        };
-        task.setOnRunning((e) -> {
-            mainApp.showLoadingScreen();
-        });
-        task.setOnSucceeded((WorkerStateEvent e) -> {
-            mainApp.closeLoading();
-            PemesananCoilHead p = task.getValue();
-            if(p.getKurs()!=1){
-                Stage stage = new Stage();
-                FXMLLoader loader = mainApp.showDialog(mainApp.MainStage, stage, "View/Dialog/NewPemesananCoil.fxml");
-                NewPemesananCoilController controller = loader.getController();
-                controller.setMainApp(mainApp, mainApp.MainStage, stage);
-                controller.setDetailPemesanan(p.getNoPemesanan());
-            }else{
-                Stage stage = new Stage();
-                FXMLLoader loader = mainApp.showDialog(mainApp.MainStage, stage, "View/Dialog/NewPemesananCoilRp.fxml");
-                NewPemesananCoilRpController controller = loader.getController();
-                controller.setMainApp(mainApp, mainApp.MainStage, stage);
-                controller.setDetailPemesanan(p.getNoPemesanan());
-            }
-        });
-        task.setOnFailed((e) -> {
-            mainApp.showMessage(Modality.NONE, "Error", task.getException().toString());
-            mainApp.closeLoading();
-        });
-        new Thread(task).start();
     }
     private void showDetailHutang(Hutang hutang){
         Stage stage = new Stage();
@@ -486,9 +383,6 @@ public class HutangController  {
                     @Override 
                     public String call() throws Exception{
                         try (Connection con = Koneksi.getConnection()) {
-                            String jatuhTempo = "2000-01-01";
-                            if(x.jatuhTempoField.getValue()!=null)
-                                jatuhTempo= x.jatuhTempoField.getValue().toString();
                             Hutang h = new Hutang();
                             h.setKategori(x.kategoriCombo.getSelectionModel().getSelectedItem());
                             h.setKeterangan(x.keteranganField.getText());
@@ -496,7 +390,6 @@ public class HutangController  {
                             h.setJumlahHutang(Double.parseDouble(x.jumlahRpField.getText().replaceAll(",", "")));
                             h.setPembayaran(0);
                             h.setSisaHutang(Double.parseDouble(x.jumlahRpField.getText().replaceAll(",", "")));
-                            h.setJatuhTempo(jatuhTempo);
                             h.setKodeUser(sistem.getUser().getKodeUser());
                             h.setStatus("open");
                             return Service.newHutang(con, h);
@@ -528,10 +421,8 @@ public class HutangController  {
         FXMLLoader loader = mainApp.showDialog(mainApp.MainStage, stage, "View/Dialog/NewPembayaran.fxml");
         NewPembayaranController controller = loader.getController();
         controller.setMainApp(mainApp, mainApp.MainStage, stage);
-        if(h.getKategori().equals("Hutang Pembelian") && h.getKeterangan().startsWith("PO"))
+        if(h.getKategori().equals("Hutang Pembelian"))
             controller.setPembayaranPembelian(h.getKeterangan());
-        else if(h.getKategori().equals("Hutang Pembelian") && h.getKeterangan().startsWith("PB"))
-            controller.setPembayaranPembelianBarang(h.getKeterangan());
         else
             controller.setPembayaranHutang(h);
         controller.saveButton.setOnAction((event) -> {
@@ -579,41 +470,6 @@ public class HutangController  {
             }
         });
     }
-    private void setJatuhTempo(Hutang hutang) {
-        Stage stage = new Stage();
-        FXMLLoader loader = mainApp.showDialog(mainApp.MainStage, stage, "View/Dialog/JatuhTempo.fxml");
-        JatuhTempoController controller = loader.getController();
-        controller.setMainApp(mainApp,mainApp.MainStage, stage);
-        controller.saveButton.setOnAction((event) -> {
-            Task<String> task = new Task<String>() {
-                @Override 
-                public String call() throws Exception{
-                    try (Connection con = Koneksi.getConnection()) {
-                        hutang.setJatuhTempo(controller.jatuhTempoPicker.getValue().toString());
-                        return Service.setJatuhTempoHutang(con, hutang);
-                    }
-                }
-            };
-            task.setOnRunning((e) -> {
-                mainApp.showLoadingScreen();
-            });
-            task.setOnSucceeded((e) -> {
-                mainApp.closeLoading();
-                getHutang();
-                if(task.getValue().equals("true")){
-                    mainApp.closeDialog(mainApp.MainStage, stage);
-                    mainApp.showMessage(Modality.NONE, "Success", "Jatuh tempo hutang berhasil disimpan");
-                }else{
-                    mainApp.showMessage(Modality.NONE, "Error", task.getValue());
-                }
-            });
-            task.setOnFailed((e) -> {
-                mainApp.closeLoading();
-                mainApp.showMessage(Modality.NONE, "Error", task.getException().toString());
-            });
-            new Thread(task).start();
-        });
-    }
     private void exportExcel() {
         try{
             FileChooser fileChooser = new FileChooser();
@@ -649,7 +505,6 @@ public class HutangController  {
                 sheet.getRow(rc).getCell(4).setCellValue("Total Hutang"); 
                 sheet.getRow(rc).getCell(5).setCellValue("Pembayaran"); 
                 sheet.getRow(rc).getCell(6).setCellValue("Sisa Hutang"); 
-                sheet.getRow(rc).getCell(7).setCellValue("Jatuh Tempo"); 
                 rc++;
                 double hutang = 0;
                 double pembayaran = 0;
@@ -663,8 +518,6 @@ public class HutangController  {
                     sheet.getRow(rc).getCell(4).setCellValue(b.getJumlahHutang());
                     sheet.getRow(rc).getCell(5).setCellValue(b.getPembayaran());
                     sheet.getRow(rc).getCell(6).setCellValue(b.getSisaHutang());
-                    if(!"2000-01-01".equals(b.getJatuhTempo()))
-                        sheet.getRow(rc).getCell(7).setCellValue(tgl.format(tglBarang.parse(b.getJatuhTempo())));
                     rc++;
                     hutang = hutang + b.getJumlahHutang();
                     pembayaran = pembayaran + b.getPembayaran();

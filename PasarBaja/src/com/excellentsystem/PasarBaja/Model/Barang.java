@@ -18,7 +18,6 @@ public class Barang {
 
     private final StringProperty kodeBarang = new SimpleStringProperty();
     private final StringProperty namaBarang = new SimpleStringProperty();
-    private final StringProperty spesifikasi = new SimpleStringProperty();
     private final StringProperty satuan = new SimpleStringProperty();
     private final DoubleProperty berat = new SimpleDoubleProperty();
     private final DoubleProperty hargaJual = new SimpleDoubleProperty();
@@ -44,9 +43,6 @@ public class Barang {
         return namaBarang.get();
     }
 
-    public String getSpesifikasi() {
-        return spesifikasi.get();
-    }
 
     public String getSatuan() {
         return satuan.get();
@@ -76,13 +72,6 @@ public class Barang {
         return namaBarang;
     }
 
-    public void setSpesifikasi(String value) {
-        spesifikasi.set(value);
-    }
-
-    public StringProperty spesifikasiProperty() {
-        return spesifikasi;
-    }
 
     public void setSatuan(String value) {
         satuan.set(value);

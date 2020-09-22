@@ -7,16 +7,13 @@
 package com.excellentsystem.PasarBaja.View;
 
 import com.excellentsystem.PasarBaja.DAO.CustomerDAO;
-import com.excellentsystem.PasarBaja.DAO.PegawaiDAO;
 import com.excellentsystem.PasarBaja.Function;
 import static com.excellentsystem.PasarBaja.Function.createRow;
 import com.excellentsystem.PasarBaja.Koneksi;
 import com.excellentsystem.PasarBaja.Main;
-import static com.excellentsystem.PasarBaja.Main.df;
 import static com.excellentsystem.PasarBaja.Main.sistem;
 import com.excellentsystem.PasarBaja.Model.Customer;
 import com.excellentsystem.PasarBaja.Model.Otoritas;
-import com.excellentsystem.PasarBaja.Model.Pegawai;
 import com.excellentsystem.PasarBaja.Services.Service;
 import com.excellentsystem.PasarBaja.View.Dialog.DetailCustomerController;
 import com.excellentsystem.PasarBaja.View.Dialog.MessageController;
@@ -34,7 +31,6 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.ContextMenu;
-import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableRow;
@@ -64,23 +60,11 @@ public class DataCustomerController  {
     @FXML private TableColumn<Customer, String> namaColumn;
     @FXML private TableColumn<Customer, String> alamatColumn;
     @FXML private TableColumn<Customer, String> kotaColumn;
-    @FXML private TableColumn<Customer, String> negaraColumn;
-    @FXML private TableColumn<Customer, String> kodePosColumn;
-    @FXML private TableColumn<Customer, String> emailColumn;
     @FXML private TableColumn<Customer, String> kontakPersonColumn;
     @FXML private TableColumn<Customer, String> noTelpColumn;
     @FXML private TableColumn<Customer, String> noHandphoneColumn;
-    @FXML private TableColumn<Customer, String> kodeSalesColumn;
-    @FXML private TableColumn<Customer, String> namaSalesColumn;
-    @FXML private TableColumn<Customer, String> bankColumn;
-    @FXML private TableColumn<Customer, String> atasNamaRekeningColumn;
-    @FXML private TableColumn<Customer, String> noRekeningColumn;
-    @FXML private TableColumn<Customer, Number> limitHutangColumn;
-    @FXML private TableColumn<Customer, Number> hutangColumn;
-    @FXML private TableColumn<Customer, Number> depositColumn;
+    @FXML private TableColumn<Customer, String> emailColumn;
     @FXML private TextField searchField;
-    @FXML private Label totalDepositLabel;
-    @FXML private Label totalHutangLabel;
     private Main mainApp;  
     private ObservableList<Customer> allCustomer = FXCollections.observableArrayList();
     private ObservableList<Customer> filterData = FXCollections.observableArrayList();
@@ -97,12 +81,6 @@ public class DataCustomerController  {
         kotaColumn.setCellValueFactory(cellData -> cellData.getValue().kotaProperty());
         kotaColumn.setCellFactory(col -> Function.getWrapTableCell(kotaColumn));
         
-        negaraColumn.setCellValueFactory(cellData -> cellData.getValue().negaraProperty());
-        negaraColumn.setCellFactory(col -> Function.getWrapTableCell(negaraColumn));
-        
-        kodePosColumn.setCellValueFactory(cellData -> cellData.getValue().kodePosProperty());
-        kodePosColumn.setCellFactory(col -> Function.getWrapTableCell(kodePosColumn));
-        
         emailColumn.setCellValueFactory(cellData -> cellData.getValue().emailProperty());
         emailColumn.setCellFactory(col -> Function.getWrapTableCell(emailColumn));
         
@@ -114,30 +92,6 @@ public class DataCustomerController  {
         
         noHandphoneColumn.setCellValueFactory(cellData ->cellData.getValue().noHandphoneProperty());
         noHandphoneColumn.setCellFactory(col -> Function.getWrapTableCell(noHandphoneColumn));
-        
-        kodeSalesColumn.setCellValueFactory(cellData ->cellData.getValue().kodeSalesProperty());
-        kodeSalesColumn.setCellFactory(col -> Function.getWrapTableCell(kodeSalesColumn));
-        
-        namaSalesColumn.setCellValueFactory(cellData ->cellData.getValue().getSales().namaProperty());
-        namaSalesColumn.setCellFactory(col -> Function.getWrapTableCell(namaSalesColumn));
-        
-        bankColumn.setCellValueFactory(cellData -> cellData.getValue().bankProperty());
-        bankColumn.setCellFactory(col -> Function.getWrapTableCell(bankColumn));
-        
-        atasNamaRekeningColumn.setCellValueFactory(cellData -> cellData.getValue().atasNamaRekeningProperty());
-        atasNamaRekeningColumn.setCellFactory(col -> Function.getWrapTableCell(atasNamaRekeningColumn));
-        
-        noRekeningColumn.setCellValueFactory(cellData -> cellData.getValue().noRekeningProperty());
-        noRekeningColumn.setCellFactory(col -> Function.getWrapTableCell(noRekeningColumn));
-        
-        limitHutangColumn.setCellValueFactory(cellData -> cellData.getValue().limitHutangProperty());
-        limitHutangColumn.setCellFactory(col -> Function.getTableCell());
-        
-        hutangColumn.setCellValueFactory(cellData -> cellData.getValue().hutangProperty());
-        hutangColumn.setCellFactory(col -> Function.getTableCell());
-        
-        depositColumn.setCellValueFactory(cellData -> cellData.getValue().depositProperty());
-        depositColumn.setCellFactory(col -> Function.getTableCell());
         
         final ContextMenu rm = new ContextMenu();
         MenuItem addNew = new MenuItem("Add New Customer");
@@ -234,14 +188,7 @@ public class DataCustomerController  {
             @Override 
             public List<Customer> call() throws Exception{
                 try (Connection con = Koneksi.getConnection()) {
-                    List<Pegawai> listPegawai = PegawaiDAO.getAllByStatus(con, "%");
                     List<Customer> allCustomer = CustomerDAO.getAllByStatus(con, "true");
-                    for(Customer c : allCustomer){
-                        for(Pegawai s : listPegawai){
-                            if(c.getKodeSales().equals(s.getKodePegawai()))
-                                c.setSales(s);
-                        }
-                    }
                     return allCustomer;
                 }
             }
@@ -277,35 +224,13 @@ public class DataCustomerController  {
                     checkColumn(temp.getNama())||
                     checkColumn(temp.getAlamat())||
                     checkColumn(temp.getKota())||
-                    checkColumn(temp.getNegara())||
-                    checkColumn(temp.getNegara())||
-                    checkColumn(temp.getKodePos())||
                     checkColumn(temp.getEmail())||
                     checkColumn(temp.getKontakPerson())||
                     checkColumn(temp.getNoTelp())||
-                    checkColumn(temp.getNoHandphone())||
-                    checkColumn(temp.getKodeSales())||
-                    checkColumn(temp.getSales().getNama())||
-                    checkColumn(temp.getBank())||
-                    checkColumn(temp.getAtasNamaRekening())||
-                    checkColumn(temp.getNoRekening())||
-                    checkColumn(df.format(temp.getLimitHutang()))||
-                    checkColumn(df.format(temp.getHutang()))||
-                    checkColumn(df.format(temp.getDeposit())))
+                    checkColumn(temp.getNoHandphone()))
                     filterData.add(temp);
             }
         }
-        hitungTotal();
-    }
-    private void hitungTotal(){
-        double deposit = 0;
-        double hutang = 0;
-        for(Customer c : filterData){
-            deposit = deposit + c.getDeposit();
-            hutang = hutang + c.getHutang();
-        }
-        totalDepositLabel.setText(df.format(deposit));
-        totalHutangLabel.setText(df.format(hutang));
     }
     private void newCustomer(){
         Stage stage = new Stage();
@@ -314,10 +239,8 @@ public class DataCustomerController  {
         x.setMainApp(mainApp, mainApp.MainStage, stage);
         x.setCustomerDetail(null);
         x.saveButton.setOnAction((ActionEvent ev)->{
-            if(x.kodeSalesCombo.getSelectionModel().getSelectedItem()==null)
-                mainApp.showMessage(Modality.NONE, "Warning", "Sales belum dipilih");
-            else if(x.limitHutangField.getText().equals(""))
-                mainApp.showMessage(Modality.NONE, "Warning", "Limit hutang masih kosong");
+            if(x.namaField.getText().equals(""))
+                mainApp.showMessage(Modality.NONE, "Warning", "Nama masih kosong");
             else{
                 Task<String> task = new Task<String>() {
                     @Override 
@@ -328,19 +251,10 @@ public class DataCustomerController  {
                             customer.setNama(x.namaField.getText());
                             customer.setAlamat(x.alamatField.getText());
                             customer.setKota(x.kotaField.getText());
-                            customer.setNegara(x.negaraField.getText());
-                            customer.setKodePos(x.kodePosField.getText());
                             customer.setEmail(x.emailField.getText());
                             customer.setKontakPerson(x.kontakPersonField.getText());
                             customer.setNoTelp(x.noTelpField.getText());
                             customer.setNoHandphone(x.noHandphoneField.getText());
-                            customer.setKodeSales(x.kodeSalesCombo.getSelectionModel().getSelectedItem().split(" - ")[0]);
-                            customer.setBank(x.bankField.getText());
-                            customer.setAtasNamaRekening(x.atasNamaRekeningField.getText());
-                            customer.setNoRekening(x.noRekeningField.getText());
-                            customer.setLimitHutang(Double.parseDouble(x.limitHutangField.getText().replaceAll(",", "")));
-                            customer.setHutang(0);
-                            customer.setDeposit(0);
                             customer.setStatus("true");
                             return Service.newCustomer(con, customer);
                         }
@@ -374,10 +288,8 @@ public class DataCustomerController  {
         x.setMainApp(mainApp,mainApp.MainStage, stage);
         x.setCustomerDetail(c);
         x.saveButton.setOnAction((ActionEvent ev)->{
-            if(x.kodeSalesCombo.getSelectionModel().getSelectedItem()==null)
-                mainApp.showMessage(Modality.NONE, "Warning", "Sales belum dipilih");
-            else if(x.limitHutangField.getText().equals(""))
-                mainApp.showMessage(Modality.NONE, "Warning", "Limit hutang masih kosong");
+            if(x.namaField.getText().equals(""))
+                mainApp.showMessage(Modality.NONE, "Warning", "Nama masih kosong");
             else{
                 Task<String> task = new Task<String>() {
                     @Override 
@@ -386,17 +298,10 @@ public class DataCustomerController  {
                             c.setNama(x.namaField.getText());
                             c.setAlamat(x.alamatField.getText());
                             c.setKota(x.kotaField.getText());
-                            c.setNegara(x.negaraField.getText());
-                            c.setKodePos(x.kodePosField.getText());
                             c.setEmail(x.emailField.getText());
                             c.setKontakPerson(x.kontakPersonField.getText());
                             c.setNoTelp(x.noTelpField.getText());
                             c.setNoHandphone(x.noHandphoneField.getText());
-                            c.setKodeSales(x.kodeSalesCombo.getSelectionModel().getSelectedItem().split(" - ")[0]);
-                            c.setBank(x.bankField.getText());
-                            c.setAtasNamaRekening(x.atasNamaRekeningField.getText());
-                            c.setNoRekening(x.noRekeningField.getText());
-                            c.setLimitHutang(Double.parseDouble(x.limitHutangField.getText().replaceAll(",", "")));
                             return Service.updateCustomer(con, c);
                         }
                     }
@@ -492,50 +397,24 @@ public class DataCustomerController  {
                 sheet.getRow(rc).getCell(1).setCellValue("Nama"); 
                 sheet.getRow(rc).getCell(2).setCellValue("Alamat"); 
                 sheet.getRow(rc).getCell(3).setCellValue("Kota"); 
-                sheet.getRow(rc).getCell(4).setCellValue("Negara"); 
-                sheet.getRow(rc).getCell(5).setCellValue("Kode Pos"); 
-                sheet.getRow(rc).getCell(6).setCellValue("Email"); 
-                sheet.getRow(rc).getCell(7).setCellValue("Kontak Person"); 
-                sheet.getRow(rc).getCell(8).setCellValue("No Telp"); 
-                sheet.getRow(rc).getCell(9).setCellValue("No Handphone"); 
-                sheet.getRow(rc).getCell(10).setCellValue("Sales"); 
-                sheet.getRow(rc).getCell(11).setCellValue("Bank"); 
-                sheet.getRow(rc).getCell(12).setCellValue("Atas Nama Rekening"); 
-                sheet.getRow(rc).getCell(13).setCellValue("No Rekening"); 
-                sheet.getRow(rc).getCell(14).setCellValue("Limit Hutang"); 
-                sheet.getRow(rc).getCell(15).setCellValue("Hutang"); 
-                sheet.getRow(rc).getCell(16).setCellValue("Deposit"); 
+                sheet.getRow(rc).getCell(4).setCellValue("Kontak Person"); 
+                sheet.getRow(rc).getCell(5).setCellValue("No Telp"); 
+                sheet.getRow(rc).getCell(6).setCellValue("No Handphone"); 
+                sheet.getRow(rc).getCell(7).setCellValue("Email"); 
                 rc++;
-                double hutang = 0;
-                double deposit = 0;
                 for (Customer b : filterData) {
                     createRow(workbook, sheet, rc, c,"Detail");
                     sheet.getRow(rc).getCell(0).setCellValue(b.getKodeCustomer());
                     sheet.getRow(rc).getCell(1).setCellValue(b.getNama());
                     sheet.getRow(rc).getCell(2).setCellValue(b.getAlamat());
                     sheet.getRow(rc).getCell(3).setCellValue(b.getKota());
-                    sheet.getRow(rc).getCell(4).setCellValue(b.getNegara());
-                    sheet.getRow(rc).getCell(5).setCellValue(b.getKodePos());
-                    sheet.getRow(rc).getCell(6).setCellValue(b.getEmail());
-                    sheet.getRow(rc).getCell(7).setCellValue(b.getKontakPerson());
-                    sheet.getRow(rc).getCell(8).setCellValue(b.getNoTelp());
-                    sheet.getRow(rc).getCell(9).setCellValue(b.getNoHandphone());
-                    sheet.getRow(rc).getCell(10).setCellValue(b.getSales().getNama());
-                    sheet.getRow(rc).getCell(11).setCellValue(b.getBank());
-                    sheet.getRow(rc).getCell(12).setCellValue(b.getAtasNamaRekening());
-                    sheet.getRow(rc).getCell(13).setCellValue(b.getNoRekening());
-                    sheet.getRow(rc).getCell(14).setCellValue(b.getLimitHutang());
-                    sheet.getRow(rc).getCell(15).setCellValue(b.getHutang());
-                    sheet.getRow(rc).getCell(16).setCellValue(b.getDeposit());
+                    sheet.getRow(rc).getCell(4).setCellValue(b.getKontakPerson());
+                    sheet.getRow(rc).getCell(5).setCellValue(b.getNoTelp());
+                    sheet.getRow(rc).getCell(6).setCellValue(b.getNoHandphone());
+                    sheet.getRow(rc).getCell(7).setCellValue(b.getEmail());
                     rc++;
                     
-                    hutang = hutang + b.getHutang();
-                    deposit = deposit + b.getDeposit();
                 }
-                createRow(workbook, sheet, rc, c,"Header");
-                sheet.getRow(rc).getCell(0).setCellValue("Total :");
-                sheet.getRow(rc).getCell(15).setCellValue(hutang);
-                sheet.getRow(rc).getCell(16).setCellValue(deposit);
                 for(int i=0 ; i<c ; i++){ sheet.autoSizeColumn(i);}
                 try (FileOutputStream outputStream = new FileOutputStream(file)) {
                     workbook.write(outputStream);

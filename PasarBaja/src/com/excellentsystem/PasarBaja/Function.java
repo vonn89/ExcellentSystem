@@ -55,8 +55,6 @@ import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.PBEKeySpec;
 import javax.crypto.spec.SecretKeySpec;
-import org.apache.commons.net.ftp.FTP;
-import org.apache.commons.net.ftp.FTPClient;
 import org.apache.poi.hssf.util.HSSFColor;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Font;
@@ -122,17 +120,6 @@ public class Function {
         return date;
     }
     public static TableCell getWrapTableCell(TableColumn tc){ 
-//        TableCell cell = new TableCell<Annotation, Number>(){
-//            @Override
-//            public void updateItem(Number value, boolean empty) {
-//                super.updateItem(value, empty);
-//                if (empty)
-//                    setText(null);
-//                else 
-//                    setText(df.format(value.doubleValue()));
-//            }
-//        };
-//        return cell;
         TableCell cell = new TableCell<>();
         Text text = new Text();
         text.setFill(Paint.valueOf("#333333"));
@@ -156,17 +143,6 @@ public class Function {
         return cell;
     }
     public static TreeTableCell getWrapTreeTableCell(TreeTableColumn tc){ 
-//        TableCell cell = new TableCell<Annotation, Number>(){
-//            @Override
-//            public void updateItem(Number value, boolean empty) {
-//                super.updateItem(value, empty);
-//                if (empty)
-//                    setText(null);
-//                else 
-//                    setText(df.format(value.doubleValue()));
-//            }
-//        };
-//        return cell;
         TreeTableCell cell = new TreeTableCell<>();
         Text text = new Text();
         text.setFill(Paint.valueOf("#333333"));
@@ -295,56 +271,6 @@ public class Function {
                 sheet.getRow(r).getCell(i).setCellStyle(null);
         }
     }
-    public static String downloadUpdate(String ftpServer, String user, String password, String filename)throws Exception{
-        FTPClient client = new FTPClient();
-        String status;
-        client.connect(ftpServer, 21);
-        boolean login = client.login(user, password);
-        if (login) {
-            client.enterLocalPassiveMode();
-            client.setFileType(FTP.BINARY_FILE_TYPE, FTP.BINARY_FILE_TYPE); 
-            client.setFileTransferMode(FTP.BINARY_FILE_TYPE);
-            
-            System.out.println("create backup");
-            Path sourceFile = Paths.get(filename);
-            Path targetFile = Paths.get(filename+" backup");
-            Files.copy(sourceFile, targetFile, StandardCopyOption.REPLACE_EXISTING);
-            
-            System.out.println("start download");
-            FileOutputStream fos = new FileOutputStream(filename);
-            boolean file = client.retrieveFile("/" + filename, fos);
-            if(file){
-                status = "Update Success - please restart application";
-            }else{
-                System.out.println("rollback file");
-                File fileasli = new File(filename);
-                File filebackup = new File(filename+" backup");
-                if (!fileasli.exists()) {
-                    fileasli.createNewFile();
-                }
-                FileChannel sourceChannel = new FileInputStream(filebackup).getChannel();
-                FileChannel destChannel = new FileOutputStream(fileasli).getChannel();
-                sourceChannel.transferTo(0, sourceChannel.size(), destChannel);
-                if (sourceChannel != null) 
-                    sourceChannel.close();
-                if (destChannel != null) 
-                    destChannel.close();
-                    
-                status = "Update Failed - please try again";
-            }
-            
-            System.out.println("delete backup");
-            Files.deleteIfExists(Paths.get(filename+" backup")); 
-            
-            client.logout();
-            if(fos!= null) 
-                fos.close();
-        }else{
-            status = "Update Failed - couldn't login to FTP server";
-        }
-        client.disconnect();
-        return status;
-    }
     public static String downloadUpdateGoogleStorage(String filename)throws Exception{
         String status = "";
         System.out.println("create backup");
@@ -363,7 +289,6 @@ public class Function {
             blob.downloadTo(Paths.get(filename));
             status = "Update Success - please restart application";
         }catch(Exception e){e.printStackTrace();
-            System.out.println(e);
             System.out.println("rollback file");
             File fileasli = new File(filename);
             File filebackup = new File(filename+" backup");

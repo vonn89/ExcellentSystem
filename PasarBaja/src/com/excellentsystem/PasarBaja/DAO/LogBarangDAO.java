@@ -95,40 +95,6 @@ public class LogBarangDAO {
         }
         return log;
     }
-//    public static List<LogBarang> getAllByDateAndGudang(Connection con, String tanggal, String gudang)throws Exception{
-//        PreparedStatement ps = con.prepareStatement("select * from tt_log_barang where left(tanggal,10) <= ? "
-//                + " and kode_gudang = ? order by tanggal desc");
-//        ps.setString(1, tanggal);
-//        ps.setString(2, gudang);
-//        ResultSet rs = ps.executeQuery();
-//        List<LogBarang> listLogBarang = new ArrayList<>();
-//        while(rs.next()){
-//            Boolean status = true;
-//            for(LogBarang temp :listLogBarang){
-//                if(temp.getKodeBarang().equals(rs.getString(2)) && 
-//                        temp.getKodeGudang().equals(rs.getString(3)))
-//                    status= false;
-//            }
-//            if(status){
-//                LogBarang l = new LogBarang();
-//                l.setTanggal(rs.getString(1));
-//                l.setKodeBarang(rs.getString(2));
-//                l.setKodeGudang(rs.getString(3));
-//                l.setKategori(rs.getString(4));
-//                l.setKeterangan(rs.getString(5));
-//                l.setStokAwal(rs.getDouble(6));
-//                l.setNilaiAwal(rs.getDouble(7));
-//                l.setStokMasuk(rs.getDouble(8));
-//                l.setNilaiMasuk(rs.getDouble(9));
-//                l.setStokKeluar(rs.getDouble(10));
-//                l.setNilaiKeluar(rs.getDouble(11));
-//                l.setStokAkhir(rs.getDouble(12));
-//                l.setNilaiAkhir(rs.getDouble(13));
-//                listLogBarang.add(l);
-//            }
-//        }
-//        return listLogBarang;
-//    }
     public static List<LogBarang> getAllByTanggalAndBarang(
             Connection con, String tglMulai, String tglAkhir, String kodeBarang)throws Exception{
         PreparedStatement ps = con.prepareStatement("select * from tt_log_barang "

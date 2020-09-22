@@ -25,7 +25,6 @@ public class Piutang {
     private final DoubleProperty jumlahPiutang = new SimpleDoubleProperty();
     private final DoubleProperty pembayaran = new SimpleDoubleProperty();
     private final DoubleProperty sisaPiutang = new SimpleDoubleProperty();
-    private final StringProperty jatuhTempo = new SimpleStringProperty();
     private final StringProperty kodeUser = new SimpleStringProperty();
     private final StringProperty status = new SimpleStringProperty();
     private PenjualanHead penjualanHead;
@@ -108,19 +107,7 @@ public class Piutang {
     public StringProperty statusProperty() {
         return status;
     }
-
-    public String getJatuhTempo() {
-        return jatuhTempo.get();
-    }
-
-    public void setJatuhTempo(String value) {
-        jatuhTempo.set(value);
-    }
-
-    public StringProperty jatuhTempoProperty() {
-        return jatuhTempo;
-    }
-
+    
     public double getPembayaran() {
         return pembayaran.get();
     }

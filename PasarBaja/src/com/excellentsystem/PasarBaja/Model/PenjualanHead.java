@@ -21,52 +21,21 @@ public class PenjualanHead {
     private final StringProperty tglPenjualan = new SimpleStringProperty();
     private final StringProperty noPemesanan = new SimpleStringProperty();
     private final StringProperty kodeCustomer = new SimpleStringProperty();
-    private final StringProperty kodeCustomerInvoice = new SimpleStringProperty();
-    private final StringProperty kodeGudang = new SimpleStringProperty();
     private final StringProperty tujuanKirim = new SimpleStringProperty();
     private final StringProperty supir = new SimpleStringProperty();
-    private final StringProperty paymentTerm = new SimpleStringProperty();
-    private final DoubleProperty totalPenjualan = new SimpleDoubleProperty();
     private final DoubleProperty totalBebanPenjualan = new SimpleDoubleProperty();
+    private final DoubleProperty totalPenjualan = new SimpleDoubleProperty();
     private final DoubleProperty pembayaran = new SimpleDoubleProperty();
     private final DoubleProperty sisaPembayaran = new SimpleDoubleProperty();
     private final StringProperty catatan = new SimpleStringProperty();
-    private final StringProperty kodeSales = new SimpleStringProperty();
     private final StringProperty kodeUser = new SimpleStringProperty();
     private final StringProperty tglBatal = new SimpleStringProperty();
     private final StringProperty userBatal = new SimpleStringProperty();
-    private final StringProperty tglPengiriman = new SimpleStringProperty();
-    private final StringProperty userPengiriman = new SimpleStringProperty();
     private final StringProperty status = new SimpleStringProperty();
     private Customer customer;
-    private Pegawai sales;
     private List<PenjualanDetail> listPenjualanDetail;
     private PemesananHead pemesananHead;
-    private Customer customerInvoice;
 
-    public String getUserPengiriman() {
-        return userPengiriman.get();
-    }
-
-    public void setUserPengiriman(String value) {
-        userPengiriman.set(value);
-    }
-
-    public StringProperty userPengirimanProperty() {
-        return userPengiriman;
-    }
-
-    public String getTglPengiriman() {
-        return tglPengiriman.get();
-    }
-
-    public void setTglPengiriman(String value) {
-        tglPengiriman.set(value);
-    }
-
-    public StringProperty tglPengirimanProperty() {
-        return tglPengiriman;
-    }
 
     public double getTotalBebanPenjualan() {
         return totalBebanPenjualan.get();
@@ -79,27 +48,6 @@ public class PenjualanHead {
     public DoubleProperty totalBebanPenjualanProperty() {
         return totalBebanPenjualan;
     }
-
-
-    public String getKodeCustomerInvoice() {
-        return kodeCustomerInvoice.get();
-    }
-
-    public void setKodeCustomerInvoice(String value) {
-        kodeCustomerInvoice.set(value);
-    }
-
-    public StringProperty kodeCustomerInvoiceProperty() {
-        return kodeCustomerInvoice;
-    }
-
-    public Customer getCustomerInvoice() {
-        return customerInvoice;
-    }
-
-    public void setCustomerInvoice(Customer customerInvoice) {
-        this.customerInvoice = customerInvoice;
-    }
     
     public String getTujuanKirim() {
         return tujuanKirim.get();
@@ -111,18 +59,6 @@ public class PenjualanHead {
 
     public StringProperty tujuanKirimProperty() {
         return tujuanKirim;
-    }
-
-    public String getKodeGudang() {
-        return kodeGudang.get();
-    }
-
-    public void setKodeGudang(String value) {
-        kodeGudang.set(value);
-    }
-
-    public StringProperty kodeGudangProperty() {
-        return kodeGudang;
     }
 
     public String getSupir() {
@@ -153,14 +89,6 @@ public class PenjualanHead {
         this.listPenjualanDetail = listPenjualanDetail;
     }
     
-    public Pegawai getSales() {
-        return sales;
-    }
-
-    public void setSales(Pegawai sales) {
-        this.sales = sales;
-    }
-    
     public Customer getCustomer() {
         return customer;
     }
@@ -181,19 +109,6 @@ public class PenjualanHead {
     public StringProperty noPemesananProperty() {
         return noPemesanan;
     }
-
-    public String getPaymentTerm() {
-        return paymentTerm.get();
-    }
-
-    public void setPaymentTerm(String value) {
-        paymentTerm.set(value);
-    }
-
-    public StringProperty paymentTermProperty() {
-        return paymentTerm;
-    }
-    
 
     public String getCatatan() {
         return catatan.get();
@@ -279,19 +194,7 @@ public class PenjualanHead {
     public DoubleProperty sisaPembayaranProperty() {
         return sisaPembayaran;
     }
-
-    public String getKodeSales() {
-        return kodeSales.get();
-    }
-
-    public void setKodeSales(String value) {
-        kodeSales.set(value);
-    }
-
-    public StringProperty kodeSalesProperty() {
-        return kodeSales;
-    }
-
+    
     public String getKodeUser() {
         return kodeUser.get();
     }

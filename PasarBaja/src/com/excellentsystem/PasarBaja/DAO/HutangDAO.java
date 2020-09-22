@@ -45,9 +45,8 @@ public class HutangDAO {
             h.setJumlahHutang(rs.getDouble(6));
             h.setPembayaran(rs.getDouble(7));
             h.setSisaHutang(rs.getDouble(8));
-            h.setJatuhTempo(rs.getString(9));
-            h.setKodeUser(rs.getString(10));
-            h.setStatus(rs.getString(11));
+            h.setKodeUser(rs.getString(9));
+            h.setStatus(rs.getString(10));
             listHutang.add(h);
         }
         return listHutang;
@@ -71,9 +70,8 @@ public class HutangDAO {
             h.setJumlahHutang(rs.getDouble(6));
             h.setPembayaran(rs.getDouble(7));
             h.setSisaHutang(rs.getDouble(8));
-            h.setJatuhTempo(rs.getString(9));
-            h.setKodeUser(rs.getString(10));
-            h.setStatus(rs.getString(11));
+            h.setKodeUser(rs.getString(9));
+            h.setStatus(rs.getString(10));
             allHutang.add(h);
         }
         return allHutang;
@@ -102,9 +100,8 @@ public class HutangDAO {
             h.setJumlahHutang(rs.getDouble(6));
             h.setPembayaran(rs.getDouble(7));
             h.setSisaHutang(rs.getDouble(8));
-            h.setJatuhTempo(rs.getString(9));
-            h.setKodeUser(rs.getString(10));
-            h.setStatus(rs.getString(11));
+            h.setKodeUser(rs.getString(9));
+            h.setStatus(rs.getString(10));
             listHutang.add(h);
         }
         return listHutang;
@@ -133,9 +130,8 @@ public class HutangDAO {
             h.setJumlahHutang(rs.getDouble(6));
             h.setPembayaran(rs.getDouble(7));
             h.setSisaHutang(rs.getDouble(8));
-            h.setJatuhTempo(rs.getString(9));
-            h.setKodeUser(rs.getString(10));
-            h.setStatus(rs.getString(11));
+            h.setKodeUser(rs.getString(9));
+            h.setStatus(rs.getString(10));
         }
         return h;
     }
@@ -154,9 +150,8 @@ public class HutangDAO {
             h.setJumlahHutang(rs.getDouble(6));
             h.setPembayaran(rs.getDouble(7));
             h.setSisaHutang(rs.getDouble(8));
-            h.setJatuhTempo(rs.getString(9));
-            h.setKodeUser(rs.getString(10));
-            h.setStatus(rs.getString(11));
+            h.setKodeUser(rs.getString(9));
+            h.setStatus(rs.getString(10));
         }
         return h;
     }
@@ -171,7 +166,7 @@ public class HutangDAO {
             return "HT-"+yymm.format(date)+new DecimalFormat("000").format(1);
     }
     public static void insert(Connection con, Hutang h)throws Exception{
-        PreparedStatement ps = con.prepareStatement("insert into tm_hutang values(?,?,?,?,?,?,?,?,?,?,?)");
+        PreparedStatement ps = con.prepareStatement("insert into tm_hutang values(?,?,?,?,?,?,?,?,?,?)");
         ps.setString(1, h.getNoHutang());
         ps.setString(2, h.getTglHutang());
         ps.setString(3, h.getKategori());
@@ -180,15 +175,14 @@ public class HutangDAO {
         ps.setDouble(6, h.getJumlahHutang());
         ps.setDouble(7, h.getPembayaran());
         ps.setDouble(8, h.getSisaHutang());
-        ps.setString(9, h.getJatuhTempo());
-        ps.setString(10, h.getKodeUser());
-        ps.setString(11, h.getStatus());
+        ps.setString(9, h.getKodeUser());
+        ps.setString(10, h.getStatus());
         ps.executeUpdate();
     }
     public static void update(Connection con, Hutang h)throws Exception{
         PreparedStatement ps = con.prepareStatement("update tm_hutang set "
                 + " tgl_hutang=?, kategori=?, keterangan=?, tipe_keuangan=?, "
-                + " jumlah_hutang=?, pembayaran=?, sisa_hutang=?, jatuh_tempo=?, "
+                + " jumlah_hutang=?, pembayaran=?, sisa_hutang=?, "
                 + " kode_user=?, status=? where no_hutang=?");
         ps.setString(1, h.getTglHutang());
         ps.setString(2, h.getKategori());
@@ -197,10 +191,9 @@ public class HutangDAO {
         ps.setDouble(5, h.getJumlahHutang());
         ps.setDouble(6, h.getPembayaran());
         ps.setDouble(7, h.getSisaHutang());
-        ps.setString(8, h.getJatuhTempo());
-        ps.setString(9, h.getKodeUser());
-        ps.setString(10, h.getStatus());
-        ps.setString(11, h.getNoHutang());
+        ps.setString(8, h.getKodeUser());
+        ps.setString(9, h.getStatus());
+        ps.setString(10, h.getNoHutang());
         ps.executeUpdate();
     }
     public static void delete(Connection con, Hutang h)throws Exception{

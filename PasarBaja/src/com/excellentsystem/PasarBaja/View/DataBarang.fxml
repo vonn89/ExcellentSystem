@@ -28,7 +28,6 @@
                <columns>
                   <TableColumn fx:id="kodeBarangColumn" maxWidth="2000.0" prefWidth="75.0" text="Kode Barang" />
                   <TableColumn fx:id="namaBarangColumn" prefWidth="75.0" text="Nama Barang" />
-                  <TableColumn fx:id="spesifikasiColumn" prefWidth="75.0" text="Spesifikasi" />
                   <TableColumn fx:id="satuanColumn" maxWidth="2000.0" prefWidth="75.0" text="Satuan" />
                   <TableColumn fx:id="beratColumn" maxWidth="2000.0" prefWidth="75.0" text="Berat" />
                   <TableColumn fx:id="hargaJualColumn" maxWidth="2000.0" prefWidth="75.0" text="Harga Jual" />

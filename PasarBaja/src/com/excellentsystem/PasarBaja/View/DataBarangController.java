@@ -57,7 +57,6 @@ public class DataBarangController  {
     @FXML private TableView<Barang> barangTable;
     @FXML private TableColumn<Barang, String> kodeBarangColumn;
     @FXML private TableColumn<Barang, String> namaBarangColumn;
-    @FXML private TableColumn<Barang, String> spesifikasiColumn;
     @FXML private TableColumn<Barang, Number> beratColumn;
     @FXML private TableColumn<Barang, String> satuanColumn;
     @FXML private TableColumn<Barang, Number> hargaJualColumn;
@@ -72,9 +71,6 @@ public class DataBarangController  {
         
         namaBarangColumn.setCellValueFactory(cellData -> cellData.getValue().namaBarangProperty());
         namaBarangColumn.setCellFactory(col -> Function.getWrapTableCell(namaBarangColumn));
-        
-        spesifikasiColumn.setCellValueFactory(cellData -> cellData.getValue().spesifikasiProperty());
-        spesifikasiColumn.setCellFactory(col -> Function.getWrapTableCell(spesifikasiColumn));
         
         satuanColumn.setCellValueFactory(cellData -> cellData.getValue().satuanProperty());
         satuanColumn.setCellFactory(col -> Function.getWrapTableCell(satuanColumn));
@@ -212,7 +208,6 @@ public class DataBarangController  {
             else{
                 if(checkColumn(temp.getKodeBarang())||
                     checkColumn(temp.getNamaBarang())||
-                    checkColumn(temp.getSpesifikasi())||
                     checkColumn(df.format(temp.getBerat()))||
                     checkColumn(temp.getSatuan())||
                     checkColumn(df.format(temp.getHargaJual())))
@@ -241,7 +236,6 @@ public class DataBarangController  {
                             Barang b = new Barang();
                             b.setKodeBarang(x.kodeBarangField.getText());
                             b.setNamaBarang(x.namaBarangField.getText());
-                            b.setSpesifikasi(x.spesifikasiField.getText());
                             b.setSatuan(x.satuanField.getText());
                             b.setBerat(Double.parseDouble(x.beratField.getText().replaceAll(",", "")));
                             b.setHargaJual(Double.parseDouble(x.hargaJualField.getText().replaceAll(",", "")));
@@ -290,7 +284,6 @@ public class DataBarangController  {
                     public String call() throws Exception{
                         try (Connection con = Koneksi.getConnection()) {
                             b.setNamaBarang(x.namaBarangField.getText());
-                            b.setSpesifikasi(x.spesifikasiField.getText());
                             b.setSatuan(x.satuanField.getText());
                             b.setBerat(Double.parseDouble(x.beratField.getText().replaceAll(",", "")));
                             b.setHargaJual(Double.parseDouble(x.hargaJualField.getText().replaceAll(",", "")));
@@ -377,19 +370,17 @@ public class DataBarangController  {
                 createRow(workbook, sheet, rc, c, "Header");
                 sheet.getRow(rc).getCell(0).setCellValue("Kode Barang"); 
                 sheet.getRow(rc).getCell(1).setCellValue("Nama Barang"); 
-                sheet.getRow(rc).getCell(2).setCellValue("Spesifikasi"); 
-                sheet.getRow(rc).getCell(3).setCellValue("Satuan"); 
-                sheet.getRow(rc).getCell(4).setCellValue("Berat"); 
-                sheet.getRow(rc).getCell(5).setCellValue("Harga Jual"); 
+                sheet.getRow(rc).getCell(2).setCellValue("Satuan"); 
+                sheet.getRow(rc).getCell(3).setCellValue("Berat"); 
+                sheet.getRow(rc).getCell(4).setCellValue("Harga Jual"); 
                 rc++;
                 for (Barang b : filterData) {
                     createRow(workbook, sheet, rc, c, "Detail");
                     sheet.getRow(rc).getCell(0).setCellValue(b.getKodeBarang());
                     sheet.getRow(rc).getCell(1).setCellValue(b.getNamaBarang());
-                    sheet.getRow(rc).getCell(2).setCellValue(b.getSpesifikasi());
-                    sheet.getRow(rc).getCell(3).setCellValue(b.getSatuan());
-                    sheet.getRow(rc).getCell(4).setCellValue(b.getBerat());
-                    sheet.getRow(rc).getCell(5).setCellValue(b.getHargaJual());
+                    sheet.getRow(rc).getCell(2).setCellValue(b.getSatuan());
+                    sheet.getRow(rc).getCell(3).setCellValue(b.getBerat());
+                    sheet.getRow(rc).getCell(4).setCellValue(b.getHargaJual());
                     rc++;
                 }
                 for(int i=0 ; i<c ; i++){ sheet.autoSizeColumn(i);}

@@ -36,23 +36,17 @@ public class PenjualanHeadDAO {
             p.setTglPenjualan(rs.getDate(2).toString()+" "+rs.getTime(2).toString());
             p.setNoPemesanan(rs.getString(3));
             p.setKodeCustomer(rs.getString(4));
-            p.setKodeCustomerInvoice(rs.getString(5));
-            p.setKodeGudang(rs.getString(6));
-            p.setTujuanKirim(rs.getString(7));
-            p.setSupir(rs.getString(8));
-            p.setPaymentTerm(rs.getString(9));
-            p.setTotalBebanPenjualan(rs.getDouble(10));
-            p.setTotalPenjualan(rs.getDouble(11));
-            p.setPembayaran(rs.getDouble(12));
-            p.setSisaPembayaran(rs.getDouble(13));
-            p.setCatatan(rs.getString(14));
-            p.setKodeSales(rs.getString(15));
-            p.setKodeUser(rs.getString(16));
-            p.setTglBatal(rs.getDate(17).toString()+" "+rs.getTime(17).toString());
-            p.setUserBatal(rs.getString(18));
-            p.setTglPengiriman(rs.getDate(19).toString()+" "+rs.getTime(19).toString());
-            p.setUserPengiriman(rs.getString(20));
-            p.setStatus(rs.getString(21));
+            p.setTujuanKirim(rs.getString(5));
+            p.setSupir(rs.getString(6));
+            p.setTotalBebanPenjualan(rs.getDouble(7));
+            p.setTotalPenjualan(rs.getDouble(8));
+            p.setPembayaran(rs.getDouble(9));
+            p.setSisaPembayaran(rs.getDouble(10));
+            p.setCatatan(rs.getString(11));
+            p.setKodeUser(rs.getString(12));
+            p.setTglBatal(rs.getDate(13).toString()+" "+rs.getTime(13).toString());
+            p.setUserBatal(rs.getString(14));
+            p.setStatus(rs.getString(15));
             allPenjualan.add(p);
         }
         return allPenjualan;
@@ -73,23 +67,17 @@ public class PenjualanHeadDAO {
             p.setTglPenjualan(rs.getDate(2).toString()+" "+rs.getTime(2).toString());
             p.setNoPemesanan(rs.getString(3));
             p.setKodeCustomer(rs.getString(4));
-            p.setKodeCustomerInvoice(rs.getString(5));
-            p.setKodeGudang(rs.getString(6));
-            p.setTujuanKirim(rs.getString(7));
-            p.setSupir(rs.getString(8));
-            p.setPaymentTerm(rs.getString(9));
-            p.setTotalBebanPenjualan(rs.getDouble(10));
-            p.setTotalPenjualan(rs.getDouble(11));
-            p.setPembayaran(rs.getDouble(12));
-            p.setSisaPembayaran(rs.getDouble(13));
-            p.setCatatan(rs.getString(14));
-            p.setKodeSales(rs.getString(15));
-            p.setKodeUser(rs.getString(16));
-            p.setTglBatal(rs.getDate(17).toString()+" "+rs.getTime(17).toString());
-            p.setUserBatal(rs.getString(18));
-            p.setTglPengiriman(rs.getDate(19).toString()+" "+rs.getTime(19).toString());
-            p.setUserPengiriman(rs.getString(20));
-            p.setStatus(rs.getString(21));
+            p.setTujuanKirim(rs.getString(5));
+            p.setSupir(rs.getString(6));
+            p.setTotalBebanPenjualan(rs.getDouble(7));
+            p.setTotalPenjualan(rs.getDouble(8));
+            p.setPembayaran(rs.getDouble(9));
+            p.setSisaPembayaran(rs.getDouble(10));
+            p.setCatatan(rs.getString(11));
+            p.setKodeUser(rs.getString(12));
+            p.setTglBatal(rs.getDate(13).toString()+" "+rs.getTime(13).toString());
+            p.setUserBatal(rs.getString(14));
+            p.setStatus(rs.getString(15));
             allPenjualan.add(p);
         }
         return allPenjualan;
@@ -110,23 +98,17 @@ public class PenjualanHeadDAO {
             p.setTglPenjualan(rs.getDate(2).toString()+" "+rs.getTime(2).toString());
             p.setNoPemesanan(rs.getString(3));
             p.setKodeCustomer(rs.getString(4));
-            p.setKodeCustomerInvoice(rs.getString(5));
-            p.setKodeGudang(rs.getString(6));
-            p.setTujuanKirim(rs.getString(7));
-            p.setSupir(rs.getString(8));
-            p.setPaymentTerm(rs.getString(9));
-            p.setTotalBebanPenjualan(rs.getDouble(10));
-            p.setTotalPenjualan(rs.getDouble(11));
-            p.setPembayaran(rs.getDouble(12));
-            p.setSisaPembayaran(rs.getDouble(13));
-            p.setCatatan(rs.getString(14));
-            p.setKodeSales(rs.getString(15));
-            p.setKodeUser(rs.getString(16));
-            p.setTglBatal(rs.getDate(17).toString()+" "+rs.getTime(17).toString());
-            p.setUserBatal(rs.getString(18));
-            p.setTglPengiriman(rs.getDate(19).toString()+" "+rs.getTime(19).toString());
-            p.setUserPengiriman(rs.getString(20));
-            p.setStatus(rs.getString(21));
+            p.setTujuanKirim(rs.getString(5));
+            p.setSupir(rs.getString(6));
+            p.setTotalBebanPenjualan(rs.getDouble(7));
+            p.setTotalPenjualan(rs.getDouble(8));
+            p.setPembayaran(rs.getDouble(9));
+            p.setSisaPembayaran(rs.getDouble(10));
+            p.setCatatan(rs.getString(11));
+            p.setKodeUser(rs.getString(12));
+            p.setTglBatal(rs.getDate(13).toString()+" "+rs.getTime(13).toString());
+            p.setUserBatal(rs.getString(14));
+            p.setStatus(rs.getString(15));
             allPenjualan.add(p);
         }
         return allPenjualan;
@@ -143,23 +125,17 @@ public class PenjualanHeadDAO {
             p.setTglPenjualan(rs.getDate(2).toString()+" "+rs.getTime(2).toString());
             p.setNoPemesanan(rs.getString(3));
             p.setKodeCustomer(rs.getString(4));
-            p.setKodeCustomerInvoice(rs.getString(5));
-            p.setKodeGudang(rs.getString(6));
-            p.setTujuanKirim(rs.getString(7));
-            p.setSupir(rs.getString(8));
-            p.setPaymentTerm(rs.getString(9));
-            p.setTotalBebanPenjualan(rs.getDouble(10));
-            p.setTotalPenjualan(rs.getDouble(11));
-            p.setPembayaran(rs.getDouble(12));
-            p.setSisaPembayaran(rs.getDouble(13));
-            p.setCatatan(rs.getString(14));
-            p.setKodeSales(rs.getString(15));
-            p.setKodeUser(rs.getString(16));
-            p.setTglBatal(rs.getDate(17).toString()+" "+rs.getTime(17).toString());
-            p.setUserBatal(rs.getString(18));
-            p.setTglPengiriman(rs.getDate(19).toString()+" "+rs.getTime(19).toString());
-            p.setUserPengiriman(rs.getString(20));
-            p.setStatus(rs.getString(21));
+            p.setTujuanKirim(rs.getString(5));
+            p.setSupir(rs.getString(6));
+            p.setTotalBebanPenjualan(rs.getDouble(7));
+            p.setTotalPenjualan(rs.getDouble(8));
+            p.setPembayaran(rs.getDouble(9));
+            p.setSisaPembayaran(rs.getDouble(10));
+            p.setCatatan(rs.getString(11));
+            p.setKodeUser(rs.getString(12));
+            p.setTglBatal(rs.getDate(13).toString()+" "+rs.getTime(13).toString());
+            p.setUserBatal(rs.getString(14));
+            p.setStatus(rs.getString(15));
         }
         return p;
     }
@@ -175,59 +151,45 @@ public class PenjualanHeadDAO {
     }
     public static void insert(Connection con, PenjualanHead p)throws Exception{
         PreparedStatement ps = con.prepareStatement("insert into tt_penjualan_head values("
-                + "?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
+                + "?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
         ps.setString(1, p.getNoPenjualan());
         ps.setString(2, p.getTglPenjualan());
         ps.setString(3, p.getNoPemesanan());
         ps.setString(4, p.getKodeCustomer());
-        ps.setString(5, p.getKodeCustomerInvoice());
-        ps.setString(6, p.getKodeGudang());
-        ps.setString(7, p.getTujuanKirim());
-        ps.setString(8, p.getSupir());
-        ps.setString(9, p.getPaymentTerm());
-        ps.setDouble(10, p.getTotalBebanPenjualan());
-        ps.setDouble(11, p.getTotalPenjualan());
-        ps.setDouble(12, p.getPembayaran());
-        ps.setDouble(13, p.getSisaPembayaran());
-        ps.setString(14, p.getCatatan());
-        ps.setString(15, p.getKodeSales());
-        ps.setString(16, p.getKodeUser());
-        ps.setString(17, p.getTglBatal());
-        ps.setString(18, p.getUserBatal());
-        ps.setString(19, p.getTglPengiriman());
-        ps.setString(20, p.getUserPengiriman());
-        ps.setString(21, p.getStatus());
+        ps.setString(5, p.getTujuanKirim());
+        ps.setString(6, p.getSupir());
+        ps.setDouble(7, p.getTotalBebanPenjualan());
+        ps.setDouble(8, p.getTotalPenjualan());
+        ps.setDouble(9, p.getPembayaran());
+        ps.setDouble(10, p.getSisaPembayaran());
+        ps.setString(11, p.getCatatan());
+        ps.setString(12, p.getKodeUser());
+        ps.setString(13, p.getTglBatal());
+        ps.setString(14, p.getUserBatal());
+        ps.setString(15, p.getStatus());
         ps.executeUpdate();
     }
     public static void update(Connection con, PenjualanHead p)throws Exception{
         PreparedStatement ps = con.prepareStatement("update tt_penjualan_head set "
-                + " tgl_penjualan=?, no_pemesanan=?, kode_customer=?, kode_customer_invoice=?, kode_gudang=?, "
-                + " tujuan_kirim=?, supir=?, payment_term=?, "
+                + " tgl_penjualan=?, no_pemesanan=?, kode_customer=?, tujuan_kirim=?, supir=?, "
                 + " total_beban_penjualan=?, total_penjualan=?, pembayaran=?, sisa_pembayaran=?, "
-                + " catatan=?, kode_sales=?, kode_user=?, "
-                + " tgl_batal=?, user_batal=?, tgl_pengiriman=?, user_pengiriman=?, status=? "
+                + " catatan=?, kode_user=?, tgl_batal=?, user_batal=?, status=? "
                 + " where no_penjualan=?");
         ps.setString(1, p.getTglPenjualan());
         ps.setString(2, p.getNoPemesanan());
         ps.setString(3, p.getKodeCustomer());
-        ps.setString(4, p.getKodeCustomerInvoice());
-        ps.setString(5, p.getKodeGudang());
-        ps.setString(6, p.getTujuanKirim());
-        ps.setString(7, p.getSupir());
-        ps.setString(8, p.getPaymentTerm());
-        ps.setDouble(9, p.getTotalBebanPenjualan());
-        ps.setDouble(10, p.getTotalPenjualan());
-        ps.setDouble(11, p.getPembayaran());
-        ps.setDouble(12, p.getSisaPembayaran());
-        ps.setString(13, p.getCatatan());
-        ps.setString(14, p.getKodeSales());
-        ps.setString(15, p.getKodeUser());
-        ps.setString(16, p.getTglBatal());
-        ps.setString(17, p.getUserBatal());
-        ps.setString(18, p.getTglPengiriman());
-        ps.setString(19, p.getUserPengiriman());
-        ps.setString(20, p.getStatus());
-        ps.setString(21, p.getNoPenjualan());
+        ps.setString(4, p.getTujuanKirim());
+        ps.setString(5, p.getSupir());
+        ps.setDouble(6, p.getTotalBebanPenjualan());
+        ps.setDouble(7, p.getTotalPenjualan());
+        ps.setDouble(8, p.getPembayaran());
+        ps.setDouble(9, p.getSisaPembayaran());
+        ps.setString(10, p.getCatatan());
+        ps.setString(11, p.getKodeUser());
+        ps.setString(12, p.getTglBatal());
+        ps.setString(13, p.getUserBatal());
+        ps.setString(14, p.getStatus());
+        ps.setString(15, p.getNoPenjualan());
         ps.executeUpdate();
     }
 }

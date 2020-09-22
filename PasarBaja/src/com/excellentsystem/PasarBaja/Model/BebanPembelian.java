@@ -7,7 +7,9 @@
 package com.excellentsystem.PasarBaja.Model;
 
 import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleDoubleProperty;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
@@ -18,9 +20,22 @@ import javafx.beans.property.StringProperty;
 public class BebanPembelian {
     
     private final StringProperty noPembelian = new SimpleStringProperty();
+    private final IntegerProperty no_urut = new SimpleIntegerProperty();
     private final StringProperty keterangan = new SimpleStringProperty();
     private final DoubleProperty jumlahRp = new SimpleDoubleProperty();
     private final StringProperty status = new SimpleStringProperty();
+
+    public int getNo_urut() {
+        return no_urut.get();
+    }
+
+    public void setNo_urut(int value) {
+        no_urut.set(value);
+    }
+
+    public IntegerProperty no_urutProperty() {
+        return no_urut;
+    }
 
     public String getStatus() {
         return status.get();

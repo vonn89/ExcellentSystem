@@ -29,11 +29,10 @@ public class BarangDAO {
             Barang b = new Barang();
             b.setKodeBarang(rs.getString(1));
             b.setNamaBarang(rs.getString(2));
-            b.setSpesifikasi(rs.getString(3));
-            b.setSatuan(rs.getString(4));
-            b.setBerat(rs.getDouble(5));
-            b.setHargaJual(rs.getDouble(6));
-            b.setStatus(rs.getString(7));
+            b.setSatuan(rs.getString(3));
+            b.setBerat(rs.getDouble(4));
+            b.setHargaJual(rs.getDouble(5));
+            b.setStatus(rs.getString(6));
             allBarang.add(b);
         }
         return allBarang;
@@ -47,36 +46,33 @@ public class BarangDAO {
             b = new Barang();
             b.setKodeBarang(rs.getString(1));
             b.setNamaBarang(rs.getString(2));
-            b.setSpesifikasi(rs.getString(3));
-            b.setSatuan(rs.getString(4));
-            b.setBerat(rs.getDouble(5));
-            b.setHargaJual(rs.getDouble(6));
-            b.setStatus(rs.getString(7));
+            b.setSatuan(rs.getString(3));
+            b.setBerat(rs.getDouble(4));
+            b.setHargaJual(rs.getDouble(5));
+            b.setStatus(rs.getString(6));
         }
         return b;
     }
     public static void insert(Connection con, Barang b)throws Exception{
-        PreparedStatement ps = con.prepareStatement("insert into tm_barang values(?,?,?,?,?,?,?)");
+        PreparedStatement ps = con.prepareStatement("insert into tm_barang values(?,?,?,?,?,?)");
         ps.setString(1, b.getKodeBarang());
         ps.setString(2, b.getNamaBarang());
-        ps.setString(3, b.getSpesifikasi());
-        ps.setString(4, b.getSatuan());
-        ps.setDouble(5, b.getBerat());
-        ps.setDouble(6, b.getHargaJual());
-        ps.setString(7, b.getStatus());
-        ps.executeUpdate();
-    }
-    public static void update(Connection con, Barang b)throws Exception{
-        PreparedStatement ps = con.prepareStatement("update tm_barang set "
-                + " nama_barang=?, spesifikasi=?, satuan=?, berat=?, harga_jual=?, status=? "
-                + " where kode_barang=? ");
-        ps.setString(1, b.getNamaBarang());
-        ps.setString(2, b.getSpesifikasi());
         ps.setString(3, b.getSatuan());
         ps.setDouble(4, b.getBerat());
         ps.setDouble(5, b.getHargaJual());
         ps.setString(6, b.getStatus());
-        ps.setString(7, b.getKodeBarang());
+        ps.executeUpdate();
+    }
+    public static void update(Connection con, Barang b)throws Exception{
+        PreparedStatement ps = con.prepareStatement("update tm_barang set "
+                + " nama_barang=?, satuan=?, berat=?, harga_jual=?, status=? "
+                + " where kode_barang=? ");
+        ps.setString(1, b.getNamaBarang());
+        ps.setString(2, b.getSatuan());
+        ps.setDouble(3, b.getBerat());
+        ps.setDouble(4, b.getHargaJual());
+        ps.setString(5, b.getStatus());
+        ps.setString(6, b.getKodeBarang());
         ps.executeUpdate();
     }
 }

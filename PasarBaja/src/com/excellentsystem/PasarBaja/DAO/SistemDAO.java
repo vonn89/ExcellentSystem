@@ -23,11 +23,10 @@ public class SistemDAO {
         ResultSet rs = get.executeQuery();
         while(rs.next()){
             sistem = new Sistem();
-            sistem.setTglSystem(rs.getString(1));
-            sistem.setNama(rs.getString(2));
-            sistem.setAlamat(rs.getString(3));
-            sistem.setNoTelp(rs.getString(4));
-            sistem.setVersion(rs.getString(5));
+            sistem.setNama(rs.getString(1));
+            sistem.setAlamat(rs.getString(2));
+            sistem.setNoTelp(rs.getString(3));
+            sistem.setVersion(rs.getString(4));
         }
         return sistem;
     }

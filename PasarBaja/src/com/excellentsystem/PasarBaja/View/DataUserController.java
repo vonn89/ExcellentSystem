@@ -31,7 +31,6 @@ import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
-import javafx.scene.control.ComboBox;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.PasswordField;
@@ -57,8 +56,6 @@ public class DataUserController  {
     
     @FXML private TableView<User> userTable;
     @FXML private TableColumn<User, String> kodeUserColumn;
-    @FXML private TableColumn<User, String> namaColumn;
-    @FXML private TableColumn<User, String> levelColumn;
     
     @FXML private TreeTableView<Otoritas> otoritasTable;
     @FXML private TreeTableColumn<Otoritas, String> jenisColumn;
@@ -67,8 +64,6 @@ public class DataUserController  {
     @FXML private CheckBox checkOtoritas;
     @FXML private TextField usernameField;
     @FXML private PasswordField passwordField;
-    @FXML private TextField namaField;
-    @FXML private ComboBox<String> levelCombo;
     @FXML private Button saveButton;
     @FXML private Button cancelButton;
     
@@ -80,12 +75,6 @@ public class DataUserController  {
     public void initialize() {
         kodeUserColumn.setCellValueFactory(cellData -> cellData.getValue().kodeUserProperty());
         kodeUserColumn.setCellFactory(col -> Function.getWrapTableCell(kodeUserColumn));
-        
-        namaColumn.setCellValueFactory(cellData -> cellData.getValue().namaProperty());
-        namaColumn.setCellFactory(col -> Function.getWrapTableCell(namaColumn));
-        
-        levelColumn.setCellValueFactory(cellData -> cellData.getValue().levelProperty());
-        levelColumn.setCellFactory(col -> Function.getWrapTableCell(levelColumn));
         
         jenisColumn.setCellValueFactory(cellData -> cellData.getValue().getValue().jenisProperty());
         jenisColumn.setCellFactory(col -> Function.getWrapTreeTableCell(jenisColumn));
@@ -158,15 +147,6 @@ public class DataUserController  {
     public void setMainApp(Main mainApp) {
         this.mainApp = mainApp;
         userTable.setItems(allUser);
-        ObservableList<String> allLevel = FXCollections.observableArrayList();
-        allLevel.clear();
-        allLevel.add("Pembelian");
-        allLevel.add("Penjualan");
-        allLevel.add("Keuangan");
-        allLevel.add("Produksi");
-        allLevel.add("Gudang");
-        allLevel.add("Manager");
-        levelCombo.setItems(allLevel);
         getUser();
     }
     @FXML
@@ -259,32 +239,12 @@ public class DataUserController  {
                     "Delete Supplier"
                 )
             ));
-            root.getChildren().add(createTreeItem("Data Pegawai",
-                Arrays.asList(
-                    "Add New Pegawai",
-                    "Edit Pegawai",
-                    "Delete Pegawai"
-                )
-            ));
-            root.getChildren().add(createTreeItem("Data Bahan",
-                Arrays.asList(
-                    "Edit Bahan"
-                )
-            ));
             root.getChildren().add(createTreeItem("Data Barang",
                 Arrays.asList(
                     "Add New Barang",
                     "Edit Barang",
                     "Delete Barang"
                 )
-            ));
-            root.getChildren().add(createTreeItem("Data Absensi",
-                Arrays.asList(
-                    "Edit Absensi"
-                )
-            ));
-            root.getChildren().add(createTreeItem("Laporan Absensi",
-                new ArrayList<>()
             ));
             root.getChildren().add(createTreeItem("Pemesanan",
                 Arrays.asList(
@@ -480,12 +440,8 @@ public class DataUserController  {
         otoritas.clear();
         usernameField.setText("");
         passwordField.setText("");
-        namaField.setText("");
-        levelCombo.getSelectionModel().clearSelection();
         usernameField.setDisable(true);
         passwordField.setDisable(true);
-        namaField.setDisable(true);
-        levelCombo.setDisable(true);
         saveButton.setDisable(true);
         cancelButton.setDisable(true);
         status="";
@@ -498,12 +454,8 @@ public class DataUserController  {
             otoritas.addAll(u.getOtoritas());
             usernameField.setText(u.getKodeUser());
             passwordField.setText(u.getPassword());
-            namaField.setText(u.getNama());
-            levelCombo.getSelectionModel().select(u.getLevel());
             usernameField.setDisable(true);
             passwordField.setDisable(false);
-            namaField.setDisable(false);
-            levelCombo.setDisable(false);
             saveButton.setDisable(false);
             cancelButton.setDisable(false);
             setTable();
@@ -513,12 +465,8 @@ public class DataUserController  {
         status = "new";
         usernameField.setText("");
         passwordField.setText("");
-        namaField.setText("");
-        levelCombo.getSelectionModel().clearSelection();
         usernameField.setDisable(false);
         passwordField.setDisable(false);
-        namaField.setDisable(false);
-        levelCombo.setDisable(false);
         saveButton.setDisable(false);
         cancelButton.setDisable(false);
 
@@ -535,8 +483,6 @@ public class DataUserController  {
                         User user = new User();
                         user.setKodeUser(usernameField.getText());
                         user.setPassword(passwordField.getText());
-                        user.setNama(namaField.getText());
-                        user.setLevel(levelCombo.getSelectionModel().getSelectedItem());
                         user.setStatus("true");
                         List<Otoritas> listOtoritas = new ArrayList<>();
                         for(TreeItem<Otoritas> head : otoritasTable.getRoot().getChildren()){

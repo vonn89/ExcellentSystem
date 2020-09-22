@@ -11,7 +11,6 @@ import com.excellentsystem.PasarBaja.Function;
 import static com.excellentsystem.PasarBaja.Function.createRow;
 import com.excellentsystem.PasarBaja.Koneksi;
 import com.excellentsystem.PasarBaja.Main;
-import static com.excellentsystem.PasarBaja.Main.df;
 import static com.excellentsystem.PasarBaja.Main.sistem;
 import com.excellentsystem.PasarBaja.Model.Otoritas;
 import com.excellentsystem.PasarBaja.Model.Supplier;
@@ -58,15 +57,10 @@ public class DataSupplierController  {
     @FXML private TableColumn<Supplier, String> namaColumn;
     @FXML private TableColumn<Supplier, String> alamatColumn;
     @FXML private TableColumn<Supplier, String> kotaColumn;
-    @FXML private TableColumn<Supplier, String> negaraColumn;
-    @FXML private TableColumn<Supplier, String> kodePosColumn;
-    @FXML private TableColumn<Supplier, String> emailColumn;
     @FXML private TableColumn<Supplier, String> kontakPersonColumn;
     @FXML private TableColumn<Supplier, String> noTelpColumn;
     @FXML private TableColumn<Supplier, String> noHandphoneColumn;
-    @FXML private TableColumn<Supplier, String> bankColumn;
-    @FXML private TableColumn<Supplier, String> atasNamaRekeningColumn;
-    @FXML private TableColumn<Supplier, String> noRekeningColumn;
+    @FXML private TableColumn<Supplier, String> emailColumn;
     @FXML private TextField searchField;
     
     private ObservableList<Supplier> allSupplier = FXCollections.observableArrayList();
@@ -85,12 +79,6 @@ public class DataSupplierController  {
         kotaColumn.setCellValueFactory(cellData -> cellData.getValue().kotaProperty());
         kotaColumn.setCellFactory(col -> Function.getWrapTableCell(kotaColumn));
         
-        negaraColumn.setCellValueFactory(cellData -> cellData.getValue().negaraProperty());
-        negaraColumn.setCellFactory(col -> Function.getWrapTableCell(negaraColumn));
-        
-        kodePosColumn.setCellValueFactory(cellData -> cellData.getValue().kodePosProperty());
-        kodePosColumn.setCellFactory(col -> Function.getWrapTableCell(kodePosColumn));
-        
         emailColumn.setCellValueFactory(cellData -> cellData.getValue().emailProperty());
         emailColumn.setCellFactory(col -> Function.getWrapTableCell(emailColumn));
         
@@ -102,15 +90,6 @@ public class DataSupplierController  {
         
         noHandphoneColumn.setCellValueFactory(cellData ->cellData.getValue().noHandphoneProperty());
         noHandphoneColumn.setCellFactory(col -> Function.getWrapTableCell(noHandphoneColumn));
-        
-        bankColumn.setCellValueFactory(cellData -> cellData.getValue().bankProperty());
-        bankColumn.setCellFactory(col -> Function.getWrapTableCell(bankColumn));
-        
-        atasNamaRekeningColumn.setCellValueFactory(cellData -> cellData.getValue().atasNamaRekeningProperty());
-        atasNamaRekeningColumn.setCellFactory(col -> Function.getWrapTableCell(atasNamaRekeningColumn));
-        
-        noRekeningColumn.setCellValueFactory(cellData -> cellData.getValue().noRekeningProperty());
-        noRekeningColumn.setCellFactory(col -> Function.getWrapTableCell(noRekeningColumn));
         
         final ContextMenu rm = new ContextMenu();
         MenuItem addNew = new MenuItem("Add New Supplier");
@@ -243,18 +222,10 @@ public class DataSupplierController  {
                     checkColumn(temp.getNama())||
                     checkColumn(temp.getAlamat())||
                     checkColumn(temp.getKota())||
-                    checkColumn(temp.getNegara())||
-                    checkColumn(temp.getKodePos())||
                     checkColumn(temp.getEmail())||
                     checkColumn(temp.getKontakPerson())||
                     checkColumn(temp.getNoTelp())||
-                    checkColumn(temp.getNoHandphone())||
-                    checkColumn(temp.getBank())||
-                    checkColumn(temp.getAtasNamaRekening())||
-                    checkColumn(temp.getNoRekening())||
-                    checkColumn(df.format(temp.getDeposit()))||
-                    checkColumn(df.format(temp.getHutang()))
-                        )
+                    checkColumn(temp.getNoHandphone()))
                     filterData.add(temp);
             }
         }
@@ -275,17 +246,10 @@ public class DataSupplierController  {
                         supplier.setNama(x.namaField.getText());
                         supplier.setAlamat(x.alamatField.getText());
                         supplier.setKota(x.kotaField.getText());
-                        supplier.setNegara(x.negaraField.getText());
-                        supplier.setKodePos(x.kodePosField.getText());
                         supplier.setEmail(x.emailField.getText());
                         supplier.setKontakPerson(x.kontakPersonField.getText());
                         supplier.setNoTelp(x.noTelpField.getText());
                         supplier.setNoHandphone(x.noHandphoneField.getText());
-                        supplier.setBank(x.bankField.getText());
-                        supplier.setAtasNamaRekening(x.atasNamaRekeningField.getText());
-                        supplier.setNoRekening(x.noRekeningField.getText());
-                        supplier.setDeposit(0);
-                        supplier.setHutang(0);
                         supplier.setStatus("true");
                         return Service.newSupplier(con, supplier);
                     }
@@ -325,15 +289,10 @@ public class DataSupplierController  {
                         supplier.setNama(x.namaField.getText());
                         supplier.setAlamat(x.alamatField.getText());
                         supplier.setKota(x.kotaField.getText());
-                        supplier.setNegara(x.negaraField.getText());
-                        supplier.setKodePos(x.kodePosField.getText());
                         supplier.setEmail(x.emailField.getText());
                         supplier.setKontakPerson(x.kontakPersonField.getText());
                         supplier.setNoTelp(x.noTelpField.getText());
                         supplier.setNoHandphone(x.noHandphoneField.getText());
-                        supplier.setBank(x.bankField.getText());
-                        supplier.setAtasNamaRekening(x.atasNamaRekeningField.getText());
-                        supplier.setNoRekening(x.noRekeningField.getText());
                         return Service.updateSupplier(con, supplier);
                     }
                 }
@@ -418,45 +377,23 @@ public class DataSupplierController  {
                 sheet.getRow(rc).getCell(1).setCellValue("Nama");  
                 sheet.getRow(rc).getCell(2).setCellValue("Alamat"); 
                 sheet.getRow(rc).getCell(3).setCellValue("Kota"); 
-                sheet.getRow(rc).getCell(4).setCellValue("Negara"); 
-                sheet.getRow(rc).getCell(5).setCellValue("Kode Pos"); 
-                sheet.getRow(rc).getCell(6).setCellValue("Email"); 
-                sheet.getRow(rc).getCell(7).setCellValue("Kontak Person"); 
-                sheet.getRow(rc).getCell(8).setCellValue("No Telp"); 
-                sheet.getRow(rc).getCell(9).setCellValue("No Handphone"); 
-                sheet.getRow(rc).getCell(10).setCellValue("Bank"); 
-                sheet.getRow(rc).getCell(11).setCellValue("Atas Nama Rekening"); 
-                sheet.getRow(rc).getCell(12).setCellValue("No Rekening"); 
-                sheet.getRow(rc).getCell(13).setCellValue("Deposit"); 
-                sheet.getRow(rc).getCell(14).setCellValue("Hutang"); 
+                sheet.getRow(rc).getCell(4).setCellValue("Kontak Person"); 
+                sheet.getRow(rc).getCell(5).setCellValue("No Telp"); 
+                sheet.getRow(rc).getCell(6).setCellValue("No Handphone"); 
+                sheet.getRow(rc).getCell(7).setCellValue("Email"); 
                 rc++;
-                double hutang = 0;
-                double deposit = 0;
                 for (Supplier b : filterData) {
                     createRow(workbook, sheet, rc, c, "Detail");
                     sheet.getRow(rc).getCell(0).setCellValue(b.getKodeSupplier());
                     sheet.getRow(rc).getCell(1).setCellValue(b.getNama());
                     sheet.getRow(rc).getCell(2).setCellValue(b.getAlamat());
                     sheet.getRow(rc).getCell(3).setCellValue(b.getKota());
-                    sheet.getRow(rc).getCell(4).setCellValue(b.getNegara());
-                    sheet.getRow(rc).getCell(5).setCellValue(b.getKodePos());
-                    sheet.getRow(rc).getCell(6).setCellValue(b.getEmail());
-                    sheet.getRow(rc).getCell(7).setCellValue(b.getKontakPerson());
-                    sheet.getRow(rc).getCell(8).setCellValue(b.getNoTelp());
-                    sheet.getRow(rc).getCell(9).setCellValue(b.getNoHandphone());
-                    sheet.getRow(rc).getCell(10).setCellValue(b.getBank());
-                    sheet.getRow(rc).getCell(11).setCellValue(b.getAtasNamaRekening());
-                    sheet.getRow(rc).getCell(12).setCellValue(b.getNoRekening());
-                    sheet.getRow(rc).getCell(13).setCellValue(b.getDeposit());
-                    sheet.getRow(rc).getCell(14).setCellValue(b.getHutang());
+                    sheet.getRow(rc).getCell(4).setCellValue(b.getKontakPerson());
+                    sheet.getRow(rc).getCell(5).setCellValue(b.getNoTelp());
+                    sheet.getRow(rc).getCell(6).setCellValue(b.getNoHandphone());
+                    sheet.getRow(rc).getCell(7).setCellValue(b.getEmail());
                     rc++;
-                    hutang = hutang + b.getHutang();
-                    deposit = deposit + b.getDeposit();
                 }
-                createRow(workbook, sheet, rc, c, "Header");
-                sheet.getRow(rc).getCell(0).setCellValue("Total :");
-                sheet.getRow(rc).getCell(13).setCellValue(hutang);
-                sheet.getRow(rc).getCell(14).setCellValue(deposit);
                 for(int i=0 ; i<c ; i++){ sheet.autoSizeColumn(i);}
                 try (FileOutputStream outputStream = new FileOutputStream(file)) {
                     workbook.write(outputStream);

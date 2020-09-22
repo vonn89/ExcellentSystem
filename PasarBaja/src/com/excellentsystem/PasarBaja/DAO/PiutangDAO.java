@@ -46,9 +46,8 @@ public class PiutangDAO {
             p.setJumlahPiutang(rs.getDouble(6));
             p.setPembayaran(rs.getDouble(7));
             p.setSisaPiutang(rs.getDouble(8));
-            p.setJatuhTempo(rs.getString(9));
-            p.setKodeUser(rs.getString(10));
-            p.setStatus(rs.getString(11));
+            p.setKodeUser(rs.getString(9));
+            p.setStatus(rs.getString(10));
             listPiutang.add(p);
         }
         return listPiutang;
@@ -72,9 +71,8 @@ public class PiutangDAO {
             p.setJumlahPiutang(rs.getDouble(6));
             p.setPembayaran(rs.getDouble(7));
             p.setSisaPiutang(rs.getDouble(8));
-            p.setJatuhTempo(rs.getString(9));
-            p.setKodeUser(rs.getString(10));
-            p.setStatus(rs.getString(11));
+            p.setKodeUser(rs.getString(9));
+            p.setStatus(rs.getString(10));
             allPiutang.add(p);
         }
         return allPiutang;
@@ -102,9 +100,8 @@ public class PiutangDAO {
             p.setJumlahPiutang(rs.getDouble(6));
             p.setPembayaran(rs.getDouble(7));
             p.setSisaPiutang(rs.getDouble(8));
-            p.setJatuhTempo(rs.getString(9));
-            p.setKodeUser(rs.getString(10));
-            p.setStatus(rs.getString(11));
+            p.setKodeUser(rs.getString(9));
+            p.setStatus(rs.getString(10));
         }
         return p;
     }
@@ -123,9 +120,8 @@ public class PiutangDAO {
             p.setJumlahPiutang(rs.getDouble(6));
             p.setPembayaran(rs.getDouble(7));
             p.setSisaPiutang(rs.getDouble(8));
-            p.setJatuhTempo(rs.getString(9));
-            p.setKodeUser(rs.getString(10));
-            p.setStatus(rs.getString(11));
+            p.setKodeUser(rs.getString(9));
+            p.setStatus(rs.getString(10));
         }
         return p;
     }
@@ -140,7 +136,7 @@ public class PiutangDAO {
             return "PT-"+yymm.format(date)+new DecimalFormat("000").format(1);
     }
     public static void insert(Connection con, Piutang p)throws Exception{
-        PreparedStatement ps = con.prepareStatement("insert into tm_piutang values(?,?,?,?,?,?,?,?,?,?,?)");
+        PreparedStatement ps = con.prepareStatement("insert into tm_piutang values(?,?,?,?,?,?,?,?,?,?)");
         ps.setString(1, p.getNoPiutang());
         ps.setString(2, p.getTglPiutang());
         ps.setString(3, p.getKategori());
@@ -149,15 +145,14 @@ public class PiutangDAO {
         ps.setDouble(6, p.getJumlahPiutang());
         ps.setDouble(7, p.getPembayaran());
         ps.setDouble(8, p.getSisaPiutang());
-        ps.setString(9, p.getJatuhTempo());
-        ps.setString(10, p.getKodeUser());
-        ps.setString(11, p.getStatus());
+        ps.setString(9, p.getKodeUser());
+        ps.setString(10, p.getStatus());
         ps.executeUpdate();
     }
     public static void update(Connection con, Piutang p)throws Exception{
         PreparedStatement ps = con.prepareStatement("update tm_piutang set "
                 + "tgl_piutang=?, kategori=?, keterangan=?, tipe_keuangan=?, "
-                + "jumlah_piutang=?, pembayaran=?, sisa_piutang=?,jatuh_tempo=?, "
+                + "jumlah_piutang=?, pembayaran=?, sisa_piutang=?, "
                 + "kode_user=?, status=? where no_piutang=?");
         ps.setString(1, p.getTglPiutang());
         ps.setString(2, p.getKategori());
@@ -166,10 +161,9 @@ public class PiutangDAO {
         ps.setDouble(5, p.getJumlahPiutang());
         ps.setDouble(6, p.getPembayaran());
         ps.setDouble(7, p.getSisaPiutang());
-        ps.setString(8, p.getJatuhTempo());
-        ps.setString(9, p.getKodeUser());
-        ps.setString(10, p.getStatus());
-        ps.setString(11, p.getNoPiutang());
+        ps.setString(8, p.getKodeUser());
+        ps.setString(9, p.getStatus());
+        ps.setString(10, p.getNoPiutang());
         ps.executeUpdate();
     }
     public static void delete(Connection con, Piutang p)throws Exception{
