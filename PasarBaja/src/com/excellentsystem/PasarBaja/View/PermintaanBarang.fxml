@@ -58,7 +58,6 @@
                   <TableColumn fx:id="satuanColumn" maxWidth="3000.0" prefWidth="75.0" text="Satuan" visible="false" />
                   <TableColumn fx:id="keteranganColumn" prefWidth="75.0" text="Keterangan" />
                   <TableColumn fx:id="catatanInternColumn" prefWidth="75.0" text="Catatan Intern" />
-                  <TableColumn fx:id="salesColumn" prefWidth="75.0" text="Sales" />
                   <TableColumn fx:id="qtyColumn" maxWidth="3000.0" prefWidth="75.0" text="Qty Order" visible="false" />
                   <TableColumn fx:id="qtyTerkirimColumn" maxWidth="3000.0" prefWidth="75.0" text="Qty Terkirim" visible="false" />
                   <TableColumn fx:id="qtySisaColumn" maxWidth="3000.0" prefWidth="75.0" text="Qty Sisa" />

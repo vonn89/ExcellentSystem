@@ -7,8 +7,6 @@ package com.excellentsystem.PasarBaja.View;
 
 import com.excellentsystem.PasarBaja.DAO.BebanPenjualanDetailDAO;
 import com.excellentsystem.PasarBaja.DAO.BebanPenjualanHeadDAO;
-import com.excellentsystem.PasarBaja.DAO.BebanProduksiDetailDAO;
-import com.excellentsystem.PasarBaja.DAO.BebanProduksiHeadDAO;
 import com.excellentsystem.PasarBaja.DAO.KeuanganDAO;
 import com.excellentsystem.PasarBaja.Function;
 import static com.excellentsystem.PasarBaja.Function.createRow;
@@ -21,7 +19,6 @@ import static com.excellentsystem.PasarBaja.Main.tglBarang;
 import static com.excellentsystem.PasarBaja.Main.tglLengkap;
 import static com.excellentsystem.PasarBaja.Main.tglSql;
 import com.excellentsystem.PasarBaja.Model.BebanPenjualanHead;
-import com.excellentsystem.PasarBaja.Model.BebanProduksiHead;
 import com.excellentsystem.PasarBaja.Model.KategoriKeuangan;
 import com.excellentsystem.PasarBaja.Model.KategoriTransaksi;
 import com.excellentsystem.PasarBaja.Model.Keuangan;
@@ -29,7 +26,6 @@ import com.excellentsystem.PasarBaja.Model.Otoritas;
 import com.excellentsystem.PasarBaja.Services.Service;
 import com.excellentsystem.PasarBaja.View.Dialog.MessageController;
 import com.excellentsystem.PasarBaja.View.Dialog.NewBebanPenjualanController;
-import com.excellentsystem.PasarBaja.View.Dialog.NewBebanProduksiController;
 import com.excellentsystem.PasarBaja.View.Dialog.NewKeuanganController;
 import com.excellentsystem.PasarBaja.View.Dialog.TransferKeuanganController;
 import java.io.File;
@@ -194,10 +190,6 @@ public class KeuanganController {
                         addNewBebanPenjualan.setOnAction((ActionEvent event) -> {
                             showNewBebanPenjualan();
                         });
-                        MenuItem addNewBebanProduksi = new MenuItem("Add New Beban Produksi");
-                        addNewBebanProduksi.setOnAction((ActionEvent event) -> {
-                            showNewBebanProduksi();
-                        });
                         MenuItem transfer = new MenuItem("Transfer Keuangan");
                         transfer.setOnAction((ActionEvent event) -> {
                             showTransfer();
@@ -210,10 +202,6 @@ public class KeuanganController {
                         detailBebanPenjualan.setOnAction((ActionEvent e) -> {
                             detailBebanPenjualan(item);
                         });
-                        MenuItem detailBebanProduksi = new MenuItem("Detail Beban Produksi");
-                        detailBebanProduksi.setOnAction((ActionEvent e) -> {
-                            detailBebanProduksi(item);
-                        });
                         MenuItem batal = new MenuItem("Batal Transaksi");
                         batal.setOnAction(e -> {
                             batal(item);
@@ -221,10 +209,6 @@ public class KeuanganController {
                         MenuItem batalBebanPenjualan = new MenuItem("Batal Beban Penjualan");
                         batalBebanPenjualan.setOnAction(e -> {
                             batalBebanPenjualan(item);
-                        });
-                        MenuItem batalBebanProduksi = new MenuItem("Batal Beban Produksi");
-                        batalBebanProduksi.setOnAction(e -> {
-                            batalBebanProduksi(item);
                         });
                         MenuItem export = new MenuItem("Export Excel");
                         export.setOnAction((ActionEvent e) -> {
@@ -246,21 +230,15 @@ public class KeuanganController {
                             if (item.getKategori().equals("Beban Penjualan Langsung")) {
                                 statusBebanPenjualan = true;
                             }
-                            if (item.getKategori().equals("Beban Produksi Langsung")) {
-                                statusBebanProduksi = true;
-                            }
                         }
                         for (Otoritas o : sistem.getUser().getOtoritas()) {
                             if (o.getJenis().equals("Add New Transaksi") && o.isStatus()) {
                                 rm.getItems().add(addNew);
                                 rm.getItems().add(addNewBebanPenjualan);
-                                rm.getItems().add(addNewBebanProduksi);
                             }
                             if (o.getJenis().equals("Detail Transaksi") && o.isStatus()) {
                                 if (statusBebanPenjualan) {
                                     rm.getItems().addAll(detailBebanPenjualan);
-                                }else if (statusBebanProduksi) {
-                                    rm.getItems().addAll(detailBebanProduksi);
                                 }else if(status){
                                     rm.getItems().add(lihatKeuangan);
                                 }
@@ -268,8 +246,6 @@ public class KeuanganController {
                             if (o.getJenis().equals("Batal Transaksi") && o.isStatus()) {
                                 if (statusBebanPenjualan) {
                                     rm.getItems().addAll(batalBebanPenjualan);
-                                }else if (statusBebanProduksi) {
-                                    rm.getItems().addAll(batalBebanProduksi);
                                 }else if(status){
                                     rm.getItems().add(batal);
                                 }
@@ -559,103 +535,6 @@ public class KeuanganController {
     }
 
 
-    private void showNewBebanProduksi() {
-        Stage stage = new Stage();
-        FXMLLoader loader = mainApp.showDialog(mainApp.MainStage, stage, "View/Dialog/NewBebanProduksi.fxml");
-        NewBebanProduksiController x = loader.getController();
-        x.setMainApp(mainApp, mainApp.MainStage, stage);
-        x.setNewBebanProduksi();
-        x.saveButton.setOnAction((ActionEvent event) -> {
-            if ("0".equals(x.jumlahRpField.getText().replaceAll(",", ""))
-                    || "".equals(x.jumlahRpField.getText().replaceAll(",", ""))) {
-                mainApp.showMessage(Modality.NONE, "Warning", "Jumlah Rp masih kosong");
-            } else if (x.keteranganField.getText().equals("")) {
-                mainApp.showMessage(Modality.NONE, "Warning", "Keterangan masih kosong");
-            } else if (x.tipeKeuanganCombo.getSelectionModel().getSelectedItem() == null) {
-                mainApp.showMessage(Modality.NONE, "Warning", "Tipe keuangan belum dipilih");
-            } else if (x.listDetail.isEmpty()) {
-                mainApp.showMessage(Modality.NONE, "Warning", "Produksi belum dipilih");
-            } else {
-                Task<String> task = new Task<String>() {
-                    @Override
-                    public String call() throws Exception {
-                        try (Connection con = Koneksi.getConnection()) {
-                            BebanProduksiHead b = new BebanProduksiHead();
-                            b.setKeterangan(x.keteranganField.getText());
-                            b.setTotalBebanProduksi(Double.parseDouble(x.jumlahRpField.getText().replaceAll(",", "")));
-                            b.setTipeKeuangan(x.tipeKeuanganCombo.getSelectionModel().getSelectedItem());
-                            b.setKodeUser(sistem.getUser().getKodeUser());
-                            b.setTglBatal("2000-01-01 00:00:00");
-                            b.setUserBatal("");
-                            b.setStatus("true");
-                            b.setListBebanProduksiDetail(x.listDetail);
-                            return Service.newBebanProduksi(con, b);
-                        }
-                    }
-                };
-                task.setOnRunning((e) -> {
-                    mainApp.showLoadingScreen();
-                });
-                task.setOnSucceeded((WorkerStateEvent e) -> {
-                    mainApp.closeLoading();
-                    getKeuangan();
-                    if (task.getValue().equals("true")) {
-                        mainApp.closeDialog(mainApp.MainStage, stage);
-                        mainApp.showMessage(Modality.NONE, "Success", "Beban produksi berhasil disimpan");
-                    } else {
-                        mainApp.showMessage(Modality.NONE, "Failed", task.getValue());
-                    }
-                });
-                task.setOnFailed((e) -> {
-                    mainApp.showMessage(Modality.NONE, "Error", task.getException().toString());
-                    mainApp.closeLoading();
-                });
-                new Thread(task).start();
-            }
-        });
-    }
-
-    private void detailBebanProduksi(Keuangan k) {
-        Stage child = new Stage();
-        FXMLLoader loader = mainApp.showDialog(mainApp.MainStage, child, "View/Dialog/NewBebanProduksi.fxml");
-        NewBebanProduksiController controller = loader.getController();
-        controller.setMainApp(mainApp, mainApp.MainStage, child);
-        controller.setDetailBebanProduksi(k.getDeskripsi());
-    }
-    private void batalBebanProduksi(Keuangan keu) {
-        MessageController controller = mainApp.showMessage(Modality.WINDOW_MODAL, "Confirmation",
-                "Batal beban produksi " + keu.getDeskripsi()+ " ?");
-        controller.OK.setOnAction((ActionEvent e) -> {
-            Task<String> task = new Task<String>() {
-                @Override
-                public String call() throws Exception {
-                    try (Connection con = Koneksi.getConnection()) {
-                        BebanProduksiHead b = BebanProduksiHeadDAO.get(con, keu.getDeskripsi());
-                        b.setListBebanProduksiDetail(BebanProduksiDetailDAO.getAllByNoBeban(con, keu.getDeskripsi()));
-                        return Service.batalBebanProduksi(con, b);
-                    }
-                }
-            };
-            task.setOnRunning((ex) -> {
-                mainApp.showLoadingScreen();
-            });
-            task.setOnSucceeded((WorkerStateEvent ex) -> {
-                mainApp.closeLoading();
-                getKeuangan();
-                if (task.getValue().equals("true")) {
-                    mainApp.showMessage(Modality.NONE, "Success", "Batal beban produksi berhasil disimpan");
-                } else {
-                    mainApp.showMessage(Modality.NONE, "Failed", task.getValue());
-                }
-            });
-            task.setOnFailed((ex) -> {
-                task.getException().printStackTrace();
-                mainApp.showMessage(Modality.NONE, "Error", task.getException().toString());
-                mainApp.closeLoading();
-            });
-            new Thread(task).start();
-        });
-    }
 
     private void showDetailKeuangan(Keuangan k) {
         Stage stage = new Stage();

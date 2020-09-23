@@ -5,20 +5,10 @@
  */
 package com.excellentsystem.PasarBaja.View;
 
-import com.excellentsystem.PasarBaja.DAO.HutangDAO;
-import com.excellentsystem.PasarBaja.DAO.PiutangDAO;
-import com.excellentsystem.PasarBaja.Function;
-import com.excellentsystem.PasarBaja.Koneksi;
 import com.excellentsystem.PasarBaja.Main;
 import static com.excellentsystem.PasarBaja.Main.sistem;
-import static com.excellentsystem.PasarBaja.Main.tglBarang;
 import com.excellentsystem.PasarBaja.Model.Helper.Notification;
-import com.excellentsystem.PasarBaja.Model.Hutang;
 import com.excellentsystem.PasarBaja.Model.Otoritas;
-import com.excellentsystem.PasarBaja.Model.Piutang;
-import java.sql.Connection;
-import java.util.Date;
-import java.util.List;
 import javafx.animation.Animation;
 import javafx.animation.Transition;
 import javafx.collections.FXCollections;
@@ -148,7 +138,6 @@ public class MainAppController {
             }
             title.setText("AURI STEEL METALINDO");
             setUser();
-            getAllNotif();
         }catch(Exception e){
             mainApp.showMessage(Modality.NONE, "Error", e.toString());
             e.printStackTrace();
@@ -341,38 +330,6 @@ public class MainAppController {
         }
         
     }
-    public void getAllNotif()throws Exception{
-        allNotif.clear();
-        try (Connection con = Koneksi.getConnection()) {
-            Date date = Function.getServerDate(con);
-            List<Piutang> allPiutang = PiutangDAO.getAllByStatus(con, "open");
-            for(Piutang p : allPiutang){
-                if(!p.getJatuhTempo().equals("2000-01-01")){
-                    if(tglBarang.parse(p.getJatuhTempo()).before(date)||tglBarang.parse(p.getJatuhTempo()).equals(date)){
-                        Notification notif = new Notification();
-                        notif.setNama(p.getKeterangan());
-                        notif.setJenisTransaksi(p.getKategori());
-                        notif.setNoTransaksi(p.getNoPiutang());
-                        notif.setJumlahRp(p.getSisaPiutang());
-                        allNotif.add(notif);
-                    }
-                }
-            }
-            List<Hutang> allHutang = HutangDAO.getAllByStatus(con, "open");
-            for(Hutang h : allHutang){
-                if(!h.getJatuhTempo().equals("2000-01-01")){
-                    if(tglBarang.parse(h.getJatuhTempo()).before(date)||tglBarang.parse(h.getJatuhTempo()).equals(date)){
-                        Notification notif = new Notification();
-                        notif.setNama(h.getKeterangan());
-                        notif.setJenisTransaksi(h.getKategori());
-                        notif.setNoTransaksi(h.getKategori());
-                        notif.setJumlahRp(h.getSisaHutang());
-                        allNotif.add(notif);
-                    }
-                }
-            }
-        }
-    }
     @FXML
     public void showHideMenu(){
         final Animation hideSidebar = new Transition() { 
@@ -429,7 +386,7 @@ public class MainAppController {
     }
     @FXML
     public void menuDashboard() {
-        mainApp.showDashboard();
+//        mainApp.showDashboard();
     }
     @FXML
     public void menuDataCustomer() {
@@ -440,38 +397,12 @@ public class MainAppController {
         mainApp.showDataSupplier();
     }
     @FXML
-    public void menuDataPegawai() {
-        mainApp.showDataPegawai();
-    }
-    @FXML
-    public void menuDataBahan() {
-        mainApp.showDataBahan();
-    }
-    @FXML
     public void menuDataBarang() {
         mainApp.showDataBarang();
     }
     @FXML
-    public void menuDataPaketBarang() {
-    }
-    @FXML
-    public void menuInputAbsensi() {
-        mainApp.showDataAbsensi();
-    }
-    @FXML
-    public void menuLaporanAbsensi() {
-    }
-    @FXML
     public void menuDataUser() {
         mainApp.showDataUser();
-    }
-    @FXML
-    private void menuDataGudang(){
-        mainApp.showGudang();
-    }
-    @FXML
-    private void showKategoriBahan(){
-        mainApp.showKategoriBahan();
     }
     @FXML
     private void showKategoriHutang(){
@@ -495,48 +426,20 @@ public class MainAppController {
         mainApp.showPenjualan();
     }
     @FXML
-    public void menuPenjualanCoil() {
-        mainApp.showPenjualanCoil();
-    }
-    @FXML
     public void menuPemesanan() {
         mainApp.showPemesanan();
-    }
-    @FXML
-    public void menuPemesananCoil() {
-        mainApp.showPemesananCoil();
     }
     @FXML
     public void menuPembelian() {
         mainApp.showPembelian();
     }
     @FXML
-    public void menuPembelianBarang() {
-        mainApp.showPembelianBarang();
-    }
-    @FXML
     public void menuPermintaanBarang() {
         mainApp.showPermintaanBarang();
     }
     @FXML
-    public void menuProduksiBarang() {
-        mainApp.showProduksiBarang();
-    }
-    @FXML
     public void menuPengirimanBarang() {
         mainApp.showPengirimanBarang();
-    }
-    @FXML
-    public void menuPengirimanCoil() {
-        mainApp.showPengirimanCoil();
-    }
-    @FXML
-    public void menuPindahBarang() {
-        mainApp.showPindahBarang();
-    }
-    @FXML
-    public void menuPindahBahan() {
-        mainApp.showPindahBahan();
     }
     @FXML
     public void menuKeuangan() {
@@ -560,88 +463,52 @@ public class MainAppController {
     }
     @FXML
     public void menuLaporanBarang() {
-        mainApp.showLaporanBarang();
-    }
-    @FXML
-    public void menuLaporanBahan() {
-        mainApp.showLaporanBahan();
-    }
-    @FXML
-    public void menuLaporanProduksiBarang() {
-        mainApp.showLaporanProduksiBarang();
-    }
-    @FXML
-    public void menuLaporanBarangDiproduksi() {
-        mainApp.showLaporanBarangDiproduksi();
-    }
-    @FXML
-    public void menuLaporanPenyesuaianStokBahan() {
-        mainApp.showLaporanPenyesuaianStokBahan();
+//        mainApp.showLaporanBarang();
     }
     @FXML
     public void menuLaporanPenyesuaianStokBarang() {
-        mainApp.showLaporanPenyesuaianStokBarang();
+//        mainApp.showLaporanPenyesuaianStokBarang();
     }
 
     @FXML
     public void menuLaporanPenjualan() {
-        mainApp.showLaporanPenjualan();
+//        mainApp.showLaporanPenjualan();
     }
     @FXML
     public void menuLaporanBarangTerjual() {
-        mainApp.showLaporanBarangTerjual();
-    }
-    @FXML
-    public void menuLaporanPenjualanCoil() {
-        mainApp.showLaporanPenjualanCoil();
-    }
-    @FXML
-    public void menuLaporanCoilTerjual() {
-        mainApp.showLaporanCoilTerjual();
+//        mainApp.showLaporanBarangTerjual();
     }
 
 
 
-    @FXML
-    public void menuLaporanPembelian() {
-        mainApp.showLaporanPembelian();
-    }
-    @FXML
-    public void menuLaporanBahanDibeli() {
-        mainApp.showLaporanBahanDibeli();
-    }
 
     @FXML
     public void menuLaporanKeuangan() {
-        mainApp.showLaporanKeuangan();
+//        mainApp.showLaporanKeuangan();
     }
 
     @FXML
     public void menuLaporanHutang() {
-        mainApp.showLaporanHutang();
+//        mainApp.showLaporanHutang();
     }
 
     @FXML
     public void menuLaporanPiutang() {
-        mainApp.showLaporanPiutang();
+//        mainApp.showLaporanPiutang();
     }
 
     @FXML
     public void menuLaporanUntungRugiPerpetual() {
-        mainApp.showLaporanUntungRugi();
+//        mainApp.showLaporanUntungRugi();
     }
     @FXML
     public void menuLaporanUntungRugiPeriode() {
-        mainApp.showLaporanUntungRugiPeriode();
+//        mainApp.showLaporanUntungRugiPeriode();
     }
 
 
     @FXML
     public void menuLaporanNeracaPerpetual() {
-        mainApp.showLaporanNeraca();
-    }
-    @FXML
-    public void menuLaporanUntungRugiSummary() {
-        mainApp.showLaporanUntungRugiSummary();
+//        mainApp.showLaporanNeraca();
     }
 }

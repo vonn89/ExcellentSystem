@@ -6,7 +6,6 @@
 package com.excellentsystem.PasarBaja.View;
 
 import com.excellentsystem.PasarBaja.DAO.CustomerDAO;
-import com.excellentsystem.PasarBaja.DAO.PegawaiDAO;
 import com.excellentsystem.PasarBaja.DAO.PemesananDetailDAO;
 import com.excellentsystem.PasarBaja.DAO.PemesananHeadDAO;
 import com.excellentsystem.PasarBaja.Function;
@@ -22,7 +21,6 @@ import static com.excellentsystem.PasarBaja.Main.tglSql;
 import com.excellentsystem.PasarBaja.Model.Customer;
 import com.excellentsystem.PasarBaja.Model.Hutang;
 import com.excellentsystem.PasarBaja.Model.Otoritas;
-import com.excellentsystem.PasarBaja.Model.Pegawai;
 import com.excellentsystem.PasarBaja.Model.PemesananDetail;
 import com.excellentsystem.PasarBaja.Model.PemesananHead;
 import com.excellentsystem.PasarBaja.PrintOut.Report;
@@ -78,15 +76,12 @@ public class PemesananController {
     @FXML private TableColumn<PemesananHead, String> tglPemesananColumn;
     @FXML private TableColumn<PemesananHead, String> namaCustomerColumn;
     @FXML private TableColumn<PemesananHead, String> alamatCustomerColumn;
-    @FXML private TableColumn<PemesananHead, String> namaInvoiceColumn;
-    @FXML private TableColumn<PemesananHead, String> paymentTermColumn;
     @FXML private TableColumn<PemesananHead, Number> totalPemesananColumn;
     @FXML private TableColumn<PemesananHead, Number> sisaPemesananColumn;
     @FXML private TableColumn<PemesananHead, Number> downPaymentColumn;
     @FXML private TableColumn<PemesananHead, Number> sisaDownPaymentColumn;
     @FXML private TableColumn<PemesananHead, String> statusColumn;
     @FXML private TableColumn<PemesananHead, String> catatanColumn;
-    @FXML private TableColumn<PemesananHead, String> namaSalesColumn;
     @FXML private TableColumn<PemesananHead, String> kodeUserColumn;
     
     @FXML private TextField searchField;
@@ -110,17 +105,8 @@ public class PemesananController {
         alamatCustomerColumn.setCellValueFactory(cellData -> cellData.getValue().getCustomer().alamatProperty());
         alamatCustomerColumn.setCellFactory(col -> Function.getWrapTableCell(alamatCustomerColumn));
         
-        namaInvoiceColumn.setCellValueFactory(cellData -> cellData.getValue().getCustomerInvoice().namaProperty());
-        namaInvoiceColumn.setCellFactory(col -> Function.getWrapTableCell(namaInvoiceColumn));
-        
-        paymentTermColumn.setCellValueFactory(cellData -> cellData.getValue().paymentTermProperty());
-        paymentTermColumn.setCellFactory(col -> Function.getWrapTableCell(paymentTermColumn));
-        
         catatanColumn.setCellValueFactory(cellData -> cellData.getValue().catatanProperty());
         catatanColumn.setCellFactory(col -> Function.getWrapTableCell(catatanColumn));
-        
-        namaSalesColumn.setCellValueFactory(cellData -> cellData.getValue().getSales().namaProperty());
-        namaSalesColumn.setCellFactory(col -> Function.getWrapTableCell(namaSalesColumn));
         
         kodeUserColumn.setCellValueFactory(cellData -> cellData.getValue().kodeUserProperty());
         kodeUserColumn.setCellFactory(col -> Function.getWrapTableCell(kodeUserColumn));
@@ -212,10 +198,6 @@ public class PemesananController {
                         detail.setOnAction((ActionEvent e)->{
                             lihatDetailPemesanan(item);
                         });
-                        MenuItem approve = new MenuItem("Approve Pemesanan");
-                        approve.setOnAction((ActionEvent e)->{
-                            approvePemesanan(item);
-                        });
                         MenuItem edit = new MenuItem("Edit Pemesanan");
                         edit.setOnAction((ActionEvent e)->{
                             editPemesanan(item);
@@ -259,9 +241,6 @@ public class PemesananController {
                                 rm.getItems().add(detail);
                             if(o.getJenis().equals("Edit Pemesanan")&&o.isStatus())
                                 rm.getItems().add(edit);
-                            if(o.getJenis().equals("Approve Pemesanan")&&o.isStatus()&&
-                                    item.getStatus().equals("wait"))
-                                rm.getItems().add(approve);
                             if(o.getJenis().equals("Batal Pemesanan")&&o.isStatus()&&
                                     (item.getStatus().equals("open")||item.getStatus().equals("wait"))&&item.getDownPayment()==0)
                                 rm.getItems().add(batal);
@@ -284,23 +263,6 @@ public class PemesananController {
                     }
                 }
             };
-            row.itemProperty().addListener((observable, oldValue, newValue) -> {
-                if(newValue!=null){
-                    double hutang = newValue.getCustomer().getHutang();
-                    double limitHutang = newValue.getCustomer().getLimitHutang();
-                    double sisaPemesanan = 0;
-                    double dp = newValue.getSisaDownPayment();
-                    for(PemesananDetail d : newValue.getListPemesananDetail()){
-                        sisaPemesanan = sisaPemesanan + ((d.getQty()-d.getQtyTerkirim()) * d.getHargaJual());
-                    }
-                    if (limitHutang-hutang-sisaPemesanan+dp<0)
-                        row.setStyle("-fx-background-color: #FFD8D1");//red
-                    else
-                        row.setStyle("");
-                }else
-                    row.setStyle("");
-            });
-            
             row.setOnMouseClicked((MouseEvent mouseEvent) -> {
                 if(mouseEvent.getButton().equals(MouseButton.PRIMARY)&&mouseEvent.getClickCount() == 2){
                     if(row.getItem()!=null){
@@ -327,7 +289,6 @@ public class PemesananController {
         this.mainApp = mainApp;
         ObservableList<String> groupBy = FXCollections.observableArrayList();
         groupBy.clear();
-        groupBy.add("On Review");
         groupBy.add("Wait");
         groupBy.add("Done");
         groupBy.add("Cancel");
@@ -349,11 +310,8 @@ public class PemesananController {
                         status = "open";
                     }else if(groupByCombo.getSelectionModel().getSelectedItem().equals("Cancel")){
                         status = "false";
-                    }else if(groupByCombo.getSelectionModel().getSelectedItem().equals("On Review")){
-                        status = "wait";
                     }
                     List<Customer> allCustomer = CustomerDAO.getAllByStatus(con, "%");
-                    List<Pegawai> allSales = PegawaiDAO.getAllByStatus(con, "%");
                     List<PemesananHead> allPemesanan = PemesananHeadDAO.getAllByDateAndStatus(
                         con, tglMulaiPicker.getValue().toString(), tglAkhirPicker.getValue().toString(), status);
                     List<PemesananDetail> listPemesananDetail = PemesananDetailDAO.getAllByDateAndStatus(
@@ -362,14 +320,6 @@ public class PemesananController {
                         for(Customer c: allCustomer){
                             if(p.getKodeCustomer().equals(c.getKodeCustomer()))
                                 p.setCustomer(c);
-                        }
-                        for(Customer c: allCustomer){
-                            if(p.getKodeCustomerInvoice().equals(c.getKodeCustomer()))
-                                p.setCustomerInvoice(c);
-                        }
-                        for(Pegawai s : allSales){
-                            if(p.getKodeSales().equals(s.getKodePegawai()))
-                                p.setSales(s);
                         }
                         List<PemesananDetail> detail = new ArrayList<>();
                         for(PemesananDetail d : listPemesananDetail){
@@ -413,16 +363,12 @@ public class PemesananController {
                 else{
                     if(checkColumn(temp.getNoPemesanan())||
                         checkColumn(tglLengkap.format(tglSql.parse(temp.getTglPemesanan())))||
-                        checkColumn(temp.getCustomerInvoice().getNama())||
-                        checkColumn(temp.getCustomerInvoice().getAlamat())||
                         checkColumn(temp.getCustomer().getNama())||
                         checkColumn(temp.getCustomer().getAlamat())||
-                        checkColumn(temp.getPaymentTerm())||
                         checkColumn(df.format(temp.getTotalPemesanan()))||
                         checkColumn(df.format(temp.getDownPayment()))||
                         checkColumn(df.format(temp.getSisaDownPayment()))||
                         checkColumn(temp.getCatatan())||
-                        checkColumn(temp.getSales().getNama())||
                         checkColumn(temp.getStatus()))
                         filterData.add(temp);
                 }
@@ -460,13 +406,8 @@ public class PemesananController {
         controller.saveButton.setOnAction((event) -> {
             if(controller.customer==null)
                 mainApp.showMessage(Modality.NONE, "Warning", "Customer belum dipilih");
-            else if(controller.customer.getLimitHutang()<controller.customer.getHutang()+
-                    Double.parseDouble(controller.grandtotalField.getText().replaceAll(",", ""))){
-                mainApp.showMessage(Modality.NONE, "Warning", "Pemesanan melebihi limit hutang customer");
-            }else if(controller.paymentTermCombo.getSelectionModel().getSelectedItem()==null)
-                mainApp.showMessage(Modality.NONE, "Warning", "Payment term belum dipilih");
             else if(controller.allPemesananDetail.isEmpty())
-                mainApp.showMessage(Modality.NONE, "Warning", "Barang tidak ada");
+                mainApp.showMessage(Modality.NONE, "Warning", "Barang masih kosong");
             else{
                 Task<String> task = new Task<String>() {
                     @Override 
@@ -474,13 +415,10 @@ public class PemesananController {
                         try (Connection con = Koneksi.getConnection()) {
                             PemesananHead pemesanan = new PemesananHead();
                             pemesanan.setKodeCustomer(controller.customer.getKodeCustomer());
-                            pemesanan.setKodeCustomerInvoice(controller.customerInvoice.getKodeCustomer());
-                            pemesanan.setPaymentTerm(controller.paymentTermCombo.getSelectionModel().getSelectedItem());
                             pemesanan.setTotalPemesanan(Double.parseDouble(controller.grandtotalField.getText().replaceAll(",", "")));
                             pemesanan.setDownPayment(0);
                             pemesanan.setSisaDownPayment(0);
                             pemesanan.setCatatan(controller.catatanField.getText());
-                            pemesanan.setKodeSales(controller.customer.getKodeSales());
                             pemesanan.setKodeUser(sistem.getUser().getKodeUser());
                             pemesanan.setTglBatal("2000-01-01 00:00:00");
                             pemesanan.setUserBatal("");
@@ -527,10 +465,8 @@ public class PemesananController {
         controller.saveButton.setOnAction((event) -> {
             if(controller.customer==null)
                 mainApp.showMessage(Modality.NONE, "Warning", "Customer belum dipilih");
-            else if(controller.paymentTermCombo.getSelectionModel().getSelectedItem()==null)
-                mainApp.showMessage(Modality.NONE, "Warning", "Payment term belum dipilih");
             else if(controller.allPemesananDetail.isEmpty())
-                mainApp.showMessage(Modality.NONE, "Warning", "Barang tidak ada");
+                mainApp.showMessage(Modality.NONE, "Warning", "Barang masih kosong");
             else if(Double.parseDouble(controller.grandtotalField.getText().replaceAll(",", ""))<p.getSisaDownPayment())
                 mainApp.showMessage(Modality.NONE, "Warning", "Tidak dapat disimpan karena jumlah dp lebih besar dari total penjualan");
             else{
@@ -539,11 +475,8 @@ public class PemesananController {
                     public String call() throws Exception{
                         try (Connection con = Koneksi.getConnection()) {
                             p.setKodeCustomer(controller.customer.getKodeCustomer());
-                            p.setKodeCustomerInvoice(controller.customerInvoice.getKodeCustomer());
-                            p.setPaymentTerm(controller.paymentTermCombo.getSelectionModel().getSelectedItem());
                             p.setTotalPemesanan(Double.parseDouble(controller.grandtotalField.getText().replaceAll(",", "")));
                             p.setCatatan(controller.catatanField.getText());
-                            p.setKodeSales(controller.customer.getKodeSales());
                             p.setKodeUser(sistem.getUser().getKodeUser());
                             p.setTglBatal("2000-01-01 00:00:00");
                             p.setUserBatal("");
@@ -629,38 +562,6 @@ public class PemesananController {
                 public String call() throws Exception{
                     try (Connection con = Koneksi.getConnection()) {
                         p.setStatus("close");
-                        return Service.selesaiApprovePemesanan(con, p);
-                    }
-                }
-            };
-            task.setOnRunning((e) -> {
-                mainApp.showLoadingScreen();
-            });
-            task.setOnSucceeded((we) -> {
-                mainApp.closeLoading();
-                getPemesanan();
-                if(task.getValue().equals("true")){
-                    mainApp.showMessage(Modality.NONE, "Success", "Data pemesanan berhasil disimpan");
-                }else{
-                    mainApp.showMessage(Modality.NONE, "Error", task.getValue());
-                }
-            });
-            task.setOnFailed((e) -> {
-                mainApp.showMessage(Modality.NONE, "Error", task.getException().toString());
-                mainApp.closeLoading();
-            });
-            new Thread(task).start();
-        });
-    }
-    private void approvePemesanan(PemesananHead p){
-        MessageController controller = mainApp.showMessage(Modality.WINDOW_MODAL, "Confirmation",
-            "Menyetujui pemesanan "+p.getNoPemesanan()+" , anda yakin ?");
-        controller.OK.setOnAction((ActionEvent evt) -> {
-            Task<String> task = new Task<String>() {
-                @Override 
-                public String call() throws Exception{
-                    try (Connection con = Koneksi.getConnection()) {
-                        p.setStatus("open");
                         return Service.selesaiApprovePemesanan(con, p);
                     }
                 }
@@ -863,11 +764,10 @@ public class PemesananController {
                 sheet.getRow(rc).getCell(0).setCellValue("No Pemesanan"); 
                 sheet.getRow(rc).getCell(1).setCellValue("Tgl Pemesanan");  
                 sheet.getRow(rc).getCell(2).setCellValue("Customer"); 
-                sheet.getRow(rc).getCell(3).setCellValue("Sales"); 
-                sheet.getRow(rc).getCell(4).setCellValue("Total Pemesanan"); 
-                sheet.getRow(rc).getCell(5).setCellValue("Sisa Pemesanan"); 
-                sheet.getRow(rc).getCell(6).setCellValue("Pembayaran Down Payment"); 
-                sheet.getRow(rc).getCell(7).setCellValue("Sisa Pembayaran Down Payment"); 
+                sheet.getRow(rc).getCell(3).setCellValue("Total Pemesanan"); 
+                sheet.getRow(rc).getCell(4).setCellValue("Sisa Pemesanan"); 
+                sheet.getRow(rc).getCell(5).setCellValue("Pembayaran Down Payment"); 
+                sheet.getRow(rc).getCell(6).setCellValue("Sisa Pembayaran Down Payment"); 
                 rc++;
                 double pemesanan = 0;
                 double sisaPemesanan = 0;
@@ -878,15 +778,14 @@ public class PemesananController {
                     sheet.getRow(rc).getCell(0).setCellValue(b.getNoPemesanan());
                     sheet.getRow(rc).getCell(1).setCellValue(tglLengkap.format(tglSql.parse(b.getTglPemesanan())));
                     sheet.getRow(rc).getCell(2).setCellValue(b.getCustomer().getNama());
-                    sheet.getRow(rc).getCell(3).setCellValue(b.getSales().getNama());
-                    sheet.getRow(rc).getCell(4).setCellValue(b.getTotalPemesanan());
+                    sheet.getRow(rc).getCell(3).setCellValue(b.getTotalPemesanan());
                     double x = 0;
                     for(PemesananDetail d : b.getListPemesananDetail()){
                         x = x + ((d.getQty()-d.getQtyTerkirim()) * d.getHargaJual());
                     }
-                    sheet.getRow(rc).getCell(5).setCellValue(x);
-                    sheet.getRow(rc).getCell(6).setCellValue(b.getDownPayment());
-                    sheet.getRow(rc).getCell(7).setCellValue(b.getSisaDownPayment());
+                    sheet.getRow(rc).getCell(4).setCellValue(x);
+                    sheet.getRow(rc).getCell(5).setCellValue(b.getDownPayment());
+                    sheet.getRow(rc).getCell(6).setCellValue(b.getSisaDownPayment());
                     rc++;
                     pemesanan = pemesanan + b.getTotalPemesanan();
                     sisaPemesanan = sisaPemesanan + x;
@@ -895,10 +794,10 @@ public class PemesananController {
                 }
                 createRow(workbook, sheet, rc, c, "Header");
                 sheet.getRow(rc).getCell(0).setCellValue("Total :");
-                sheet.getRow(rc).getCell(5).setCellValue(pemesanan);
-                sheet.getRow(rc).getCell(6).setCellValue(sisaPemesanan);
-                sheet.getRow(rc).getCell(7).setCellValue(pembayaran);
-                sheet.getRow(rc).getCell(8).setCellValue(sisaPembayaran);
+                sheet.getRow(rc).getCell(3).setCellValue(pemesanan);
+                sheet.getRow(rc).getCell(4).setCellValue(sisaPemesanan);
+                sheet.getRow(rc).getCell(5).setCellValue(pembayaran);
+                sheet.getRow(rc).getCell(6).setCellValue(sisaPembayaran);
                 for(int i=0 ; i<c ; i++){ sheet.autoSizeColumn(i);}
                 try (FileOutputStream outputStream = new FileOutputStream(file)) {
                     workbook.write(outputStream);

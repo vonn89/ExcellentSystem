@@ -30,7 +30,6 @@
                <columns>
                   <TableColumn fx:id="noPembelianColumn" prefWidth="75.0" text="No Pembelian" />
                   <TableColumn fx:id="tglPembelianColumn" prefWidth="75.0" text="Tgl Pembelian" />
-                  <TableColumn fx:id="gudangColumn" prefWidth="75.0" text="Gudang" />
                   <TableColumn fx:id="namaSupplierColumn" prefWidth="75.0" text="Supplier" />
                   <TableColumn fx:id="paymentTermColumn" prefWidth="75.0" text="Payment Term" />
                   <TableColumn fx:id="totalPembelianColumn" prefWidth="75.0" text="Total Pembelian" />

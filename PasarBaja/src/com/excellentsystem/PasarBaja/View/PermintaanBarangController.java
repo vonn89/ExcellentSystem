@@ -7,7 +7,6 @@ package com.excellentsystem.PasarBaja.View;
 
 import com.excellentsystem.PasarBaja.DAO.BarangDAO;
 import com.excellentsystem.PasarBaja.DAO.CustomerDAO;
-import com.excellentsystem.PasarBaja.DAO.PegawaiDAO;
 import com.excellentsystem.PasarBaja.DAO.PemesananDetailDAO;
 import com.excellentsystem.PasarBaja.DAO.PemesananHeadDAO;
 import com.excellentsystem.PasarBaja.Function;
@@ -23,7 +22,6 @@ import static com.excellentsystem.PasarBaja.Main.tglSql;
 import com.excellentsystem.PasarBaja.Model.Barang;
 import com.excellentsystem.PasarBaja.Model.Customer;
 import com.excellentsystem.PasarBaja.Model.Otoritas;
-import com.excellentsystem.PasarBaja.Model.Pegawai;
 import com.excellentsystem.PasarBaja.Model.PemesananDetail;
 import com.excellentsystem.PasarBaja.Model.PemesananHead;
 import com.excellentsystem.PasarBaja.PrintOut.Report;
@@ -85,7 +83,6 @@ public class PermintaanBarangController  {
     @FXML private TableColumn<PemesananDetail, Number> qtyTerkirimColumn;
     @FXML private TableColumn<PemesananDetail, Number> qtySisaColumn;
     @FXML private TableColumn<PemesananDetail, Number> tonaseColumn;
-    @FXML private TableColumn<PemesananDetail, String> salesColumn;
     
     @FXML private CheckBox checkAll;
     @FXML private Label totalQtyLabel;
@@ -122,10 +119,7 @@ public class PermintaanBarangController  {
         
         namaBarangColumn.setCellValueFactory(cellData -> cellData.getValue().namaBarangProperty());
         namaBarangColumn.setCellFactory(col -> Function.getWrapTableCell(namaBarangColumn));
-        
-        salesColumn.setCellValueFactory(cellData -> cellData.getValue().getPemesananHead().getSales().namaProperty());
-        salesColumn.setCellFactory(col -> Function.getWrapTableCell(salesColumn));
-        
+                
         keteranganColumn.setCellValueFactory(cellData -> cellData.getValue().keteranganProperty());
         keteranganColumn.setCellFactory(col -> Function.getWrapTableCell(keteranganColumn));
         
@@ -185,22 +179,6 @@ public class PermintaanBarangController  {
         permintaanTable.setContextMenu(rm);
         permintaanTable.setRowFactory((TableView<PemesananDetail> tableView) -> {
             final TableRow<PemesananDetail> row = new TableRow<PemesananDetail>(){};
-            row.itemProperty().addListener((observable, oldValue, newValue) -> {
-                if(newValue!=null){
-                    double hutang = newValue.getPemesananHead().getCustomer().getHutang();
-                    double limitHutang = newValue.getPemesananHead().getCustomer().getLimitHutang();
-                    double sisaPemesanan = 0;
-                    double downpayment = newValue.getPemesananHead().getSisaDownPayment();
-                    for(PemesananDetail d : newValue.getPemesananHead().getListPemesananDetail()){
-                        sisaPemesanan = sisaPemesanan + ((d.getQty()-d.getQtyTerkirim()) * d.getHargaJual());
-                    }
-                    if (limitHutang-hutang-sisaPemesanan+downpayment<0)
-                        row.setStyle("-fx-background-color: #FFD8D1");//red
-                    else
-                        row.setStyle("");
-                }else
-                    row.setStyle("");
-            });
             row.setOnMouseClicked((MouseEvent mouseEvent) -> {
                 if(mouseEvent.getButton().equals(MouseButton.PRIMARY)&&
                         mouseEvent.getClickCount() == 2){
@@ -255,7 +233,6 @@ public class PermintaanBarangController  {
             public List<PemesananDetail> call() throws Exception {
                 try (Connection con = Koneksi.getConnection()) {
                     List<Customer> allCustomer = CustomerDAO.getAllByStatus(con, "%");
-                    List<Pegawai> allPegawai = PegawaiDAO.getAllByStatus(con, "%");
                     List<Barang> allBarang = BarangDAO.getAllByStatus(con, "%");
                     List<PemesananDetail> allPemesananDetail = PemesananDetailDAO.getAllByDateAndStatus(con, 
                             tglMulaiPicker.getValue().toString(), tglAkhirPicker.getValue().toString(), "open");
@@ -278,10 +255,6 @@ public class PermintaanBarangController  {
                         for(Customer c: allCustomer){
                             if(d.getPemesananHead().getKodeCustomer().equals(c.getKodeCustomer()))
                                 d.getPemesananHead().setCustomer(c);
-                        }
-                        for(Pegawai p : allPegawai){
-                            if(d.getPemesananHead().getKodeSales().equals(p.getKodePegawai()))
-                                d.getPemesananHead().setSales(p);
                         }
                         for(Barang b : allBarang){
                             if(d.getKodeBarang().equals(b.getKodeBarang()))
@@ -339,13 +312,10 @@ public class PermintaanBarangController  {
                         checkColumn(tglLengkap.format(tglSql.parse(temp.getPemesananHead().getTglPemesanan())))||
                         checkColumn(temp.getPemesananHead().getKodeCustomer())||
                         checkColumn(temp.getPemesananHead().getCustomer().getNama())||
-                        checkColumn(temp.getPemesananHead().getSales().getNama())||
                         checkColumn(temp.getPemesananHead().getCustomer().getAlamat())||
-                        checkColumn(temp.getPemesananHead().getPaymentTerm())||
                         checkColumn(df.format(temp.getPemesananHead().getTotalPemesanan()))||
                         checkColumn(df.format(temp.getPemesananHead().getDownPayment()))||
                         checkColumn(temp.getPemesananHead().getCatatan())||
-                        checkColumn(temp.getPemesananHead().getKodeSales())||
                         checkColumn(temp.getPemesananHead().getStatus())||
                         checkColumn(temp.getPemesananHead().getKodeUser())||
                         checkColumn(temp.getKodeBarang())||
@@ -421,11 +391,10 @@ public class PermintaanBarangController  {
                 sheet.getRow(rc).getCell(5).setCellValue("Satuan"); 
                 sheet.getRow(rc).getCell(6).setCellValue("Keterangan"); 
                 sheet.getRow(rc).getCell(7).setCellValue("Catatan Intern"); 
-                sheet.getRow(rc).getCell(8).setCellValue("Sales"); 
-                sheet.getRow(rc).getCell(9).setCellValue("Qty Order"); 
-                sheet.getRow(rc).getCell(10).setCellValue("Qty Terkirim"); 
-                sheet.getRow(rc).getCell(11).setCellValue("Qty Sisa"); 
-                sheet.getRow(rc).getCell(12).setCellValue("Tonase"); 
+                sheet.getRow(rc).getCell(8).setCellValue("Qty Order"); 
+                sheet.getRow(rc).getCell(9).setCellValue("Qty Terkirim"); 
+                sheet.getRow(rc).getCell(10).setCellValue("Qty Sisa"); 
+                sheet.getRow(rc).getCell(11).setCellValue("Tonase"); 
                 rc++;
                 double qty = 0;
                 double qtyTerkirim = 0;
@@ -440,11 +409,10 @@ public class PermintaanBarangController  {
                     sheet.getRow(rc).getCell(5).setCellValue(b.getSatuan());
                     sheet.getRow(rc).getCell(6).setCellValue(b.getKeterangan());
                     sheet.getRow(rc).getCell(7).setCellValue(b.getKeterangan());
-                    sheet.getRow(rc).getCell(8).setCellValue(b.getPemesananHead().getSales().getNama());
-                    sheet.getRow(rc).getCell(9).setCellValue(b.getQty());
-                    sheet.getRow(rc).getCell(10).setCellValue(b.getQtyTerkirim());
-                    sheet.getRow(rc).getCell(11).setCellValue(b.getQty()-b.getQtyTerkirim());
-                    sheet.getRow(rc).getCell(12).setCellValue((b.getQty()-b.getQtyTerkirim())*b.getBarang().getBerat());
+                    sheet.getRow(rc).getCell(8).setCellValue(b.getQty());
+                    sheet.getRow(rc).getCell(9).setCellValue(b.getQtyTerkirim());
+                    sheet.getRow(rc).getCell(10).setCellValue(b.getQty()-b.getQtyTerkirim());
+                    sheet.getRow(rc).getCell(11).setCellValue((b.getQty()-b.getQtyTerkirim())*b.getBarang().getBerat());
                     rc++;
                     qty = qty + b.getQty();
                     qtyTerkirim = qtyTerkirim + b.getQtyTerkirim();
@@ -452,10 +420,10 @@ public class PermintaanBarangController  {
                 }
                 createRow(workbook, sheet, rc, c, "Header");
                 sheet.getRow(rc).getCell(0).setCellValue("Total :");
-                sheet.getRow(rc).getCell(9).setCellValue(qty);
-                sheet.getRow(rc).getCell(10).setCellValue(qtyTerkirim);
-                sheet.getRow(rc).getCell(11).setCellValue(qty-qtyTerkirim);
-                sheet.getRow(rc).getCell(12).setCellValue(berat);
+                sheet.getRow(rc).getCell(8).setCellValue(qty);
+                sheet.getRow(rc).getCell(9).setCellValue(qtyTerkirim);
+                sheet.getRow(rc).getCell(10).setCellValue(qty-qtyTerkirim);
+                sheet.getRow(rc).getCell(11).setCellValue(berat);
                 for(int i=0 ; i<c ; i++){ sheet.autoSizeColumn(i);}
                 try (FileOutputStream outputStream = new FileOutputStream(file)) {
                     workbook.write(outputStream);

@@ -8,7 +8,6 @@ package com.excellentsystem.PasarBaja.View.Dialog;
 import com.excellentsystem.PasarBaja.Function;
 import com.excellentsystem.PasarBaja.Main;
 import static com.excellentsystem.PasarBaja.Main.df;
-import static com.excellentsystem.PasarBaja.Main.sistem;
 import com.excellentsystem.PasarBaja.Model.Barang;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -60,9 +59,6 @@ public class DetailBarangController  {
             beratField.setText(df.format(b.getBerat()));
             satuanField.setText(b.getSatuan());
             hargaJualField.setText(df.format(b.getHargaJual()));
-            if(!"Manager".equals(sistem.getUser().getLevel())){
-                hargaJualField.setDisable(true);
-            }
         }
     } 
     public void close(){

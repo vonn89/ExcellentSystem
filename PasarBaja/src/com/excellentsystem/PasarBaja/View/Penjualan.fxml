@@ -30,17 +30,13 @@
               <columns>
                 <TableColumn fx:id="noPenjualanColumn" prefWidth="75.0" text="No Penjualan" />
                 <TableColumn fx:id="tglPenjualanColumn" prefWidth="75.0" text="Tgl Penjualan" />
-                  <TableColumn fx:id="gudangColumn" prefWidth="75.0" text="Gudang" />
                   <TableColumn fx:id="namaCustomerColumn" prefWidth="75.0" text="Nama Customer" />
                   <TableColumn fx:id="alamatCustomerColumn" prefWidth="75.0" text="Alamat Customer" visible="false" />
-                  <TableColumn fx:id="namaInvoiceColumn" prefWidth="75.0" text="Nama Invoice" visible="false" />
-                  <TableColumn fx:id="paymentTermColumn" prefWidth="75.0" text="Payment Term" visible="false" />
                   <TableColumn fx:id="totalPenjualanColumn" prefWidth="75.0" text="Total Penjualan" />
                   <TableColumn fx:id="pembayaranColumn" prefWidth="75.0" text="Pembayaran" />
                   <TableColumn fx:id="sisaPembayaranColumn" prefWidth="75.0" text="Sisa Pembayaran" />
                   <TableColumn fx:id="totalBebanPenjualanColumn" prefWidth="75.0" text="Total Beban Penjualan" />
                   <TableColumn fx:id="catatanColumn" prefWidth="75.0" text="Catatan" visible="false" />
-                  <TableColumn fx:id="namaSalesColumn" prefWidth="75.0" text="Sales" />
                   <TableColumn fx:id="kodeUserColumn" prefWidth="75.0" text="Kode User" visible="false" />
               </columns>
                <columnResizePolicy>

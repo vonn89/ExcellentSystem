@@ -6,7 +6,6 @@
 
 package com.excellentsystem.PasarBaja.View;
 
-import com.excellentsystem.PasarBaja.DAO.PenjualanCoilHeadDAO;
 import com.excellentsystem.PasarBaja.DAO.PiutangDAO;
 import com.excellentsystem.PasarBaja.Function;
 import static com.excellentsystem.PasarBaja.Function.createRow;
@@ -14,21 +13,15 @@ import com.excellentsystem.PasarBaja.Koneksi;
 import com.excellentsystem.PasarBaja.Main;
 import static com.excellentsystem.PasarBaja.Main.df;
 import static com.excellentsystem.PasarBaja.Main.sistem;
-import static com.excellentsystem.PasarBaja.Main.tgl;
-import static com.excellentsystem.PasarBaja.Main.tglBarang;
 import static com.excellentsystem.PasarBaja.Main.tglLengkap;
 import static com.excellentsystem.PasarBaja.Main.tglSql;
 import com.excellentsystem.PasarBaja.Model.Otoritas;
-import com.excellentsystem.PasarBaja.Model.PenjualanCoilHead;
 import com.excellentsystem.PasarBaja.Model.Piutang;
 import com.excellentsystem.PasarBaja.Model.TerimaPembayaran;
 import com.excellentsystem.PasarBaja.Services.Service;
 import com.excellentsystem.PasarBaja.View.Dialog.DetailPiutangController;
-import com.excellentsystem.PasarBaja.View.Dialog.JatuhTempoController;
 import com.excellentsystem.PasarBaja.View.Dialog.MessageController;
 import com.excellentsystem.PasarBaja.View.Dialog.NewPembayaranController;
-import com.excellentsystem.PasarBaja.View.Dialog.NewPenjualanCoilController;
-import com.excellentsystem.PasarBaja.View.Dialog.NewPenjualanCoilRpController;
 import com.excellentsystem.PasarBaja.View.Dialog.NewPenjualanController;
 import com.excellentsystem.PasarBaja.View.Dialog.NewPiutangController;
 import java.io.File;
@@ -78,7 +71,6 @@ public class PiutangController  {
     @FXML private TableColumn<Piutang, Number> jumlahPiutangColumn;
     @FXML private TableColumn<Piutang, Number> pembayaranColumn;
     @FXML private TableColumn<Piutang, Number> sisaPiutangColumn;
-    @FXML private TableColumn<Piutang, String> jatuhTempoColumn;
     
     @FXML private TextField searchField;
     @FXML private Label totalPiutangField;
@@ -107,19 +99,6 @@ public class PiutangController  {
         });
         tglPiutangColumn.setCellFactory(col -> Function.getWrapTableCell(tglPiutangColumn));
         tglPiutangColumn.setComparator(Function.sortDate(tglLengkap));
-        
-        jatuhTempoColumn.setCellValueFactory(cellData -> { 
-            try {
-                if(cellData.getValue().getJatuhTempo().equals("2000-01-01"))
-                    return null;
-                else
-                    return new SimpleStringProperty(tgl.format(tglBarang.parse(cellData.getValue().getJatuhTempo())));
-            } catch (Exception ex) {
-                return null;
-            }
-        });
-        jatuhTempoColumn.setCellFactory(col -> Function.getWrapTableCell(jatuhTempoColumn));
-        jatuhTempoColumn.setComparator(Function.sortDate(tgl));
         
         jumlahPiutangColumn.setCellValueFactory(cellData -> cellData.getValue().jumlahPiutangProperty());
         jumlahPiutangColumn.setCellFactory(col -> Function.getTableCell());
@@ -182,17 +161,9 @@ public class PiutangController  {
                         lihatPenjualan.setOnAction((ActionEvent e)->{
                             showDetailPenjualan(item);
                         });
-                        MenuItem lihatPenjualanCoil = new MenuItem("Detail Penjualan Coil");
-                        lihatPenjualanCoil.setOnAction((ActionEvent e)->{
-                            showDetailPenjualanCoil(item);
-                        });
                         MenuItem bayar = new MenuItem("Pembayaran Piutang");
                         bayar.setOnAction((ActionEvent e)->{
                             showPembayaran(item);
-                        });
-                        MenuItem tempo = new MenuItem("Set Jatuh Tempo");
-                        tempo.setOnAction((ActionEvent e)->{
-                            setJatuhTempo(item);
                         });
                         MenuItem export = new MenuItem("Export Excel");
                         export.setOnAction((ActionEvent e)->{
@@ -210,17 +181,10 @@ public class PiutangController  {
                             if(o.getJenis().equals("Detail Piutang")&&o.isStatus())
                                 rm.getItems().add(lihat);
                             if(o.getJenis().equals("Detail Penjualan")&&o.isStatus()&&
-                                    item.getKategori().equals("Piutang Penjualan")&&
-                                    item.getKeterangan().startsWith("PJ-"))
+                                    item.getKategori().equals("Piutang Penjualan"))
                                 rm.getItems().add(lihatPenjualan);
-                            if(o.getJenis().equals("Detail Penjualan")&&o.isStatus()&&
-                                    item.getKategori().equals("Piutang Penjualan")&&
-                                    item.getKeterangan().startsWith("PE-"))
-                                rm.getItems().add(lihatPenjualanCoil);
                             if(o.getJenis().equals("Terima Pembayaran Piutang")&&o.isStatus()&&item.getStatus().equals("open"))
                                 rm.getItems().add(bayar);
-                            if(o.getJenis().equals("Set Jatuh Tempo Piutang")&&o.isStatus()&&item.getStatus().equals("open"))
-                                rm.getItems().add(tempo);
                             if(o.getJenis().equals("Export Excel")&&o.isStatus())
                                 rm.getItems().add(export);
                         }
@@ -308,8 +272,7 @@ public class PiutangController  {
                         checkColumn(temp.getKategori())||
                         checkColumn(temp.getKeterangan())||
                         checkColumn(df.format(temp.getPembayaran()))||
-                        checkColumn(df.format(temp.getSisaPiutang()))||
-                        checkColumn(tgl.format(tglBarang.parse(temp.getJatuhTempo()))))
+                        checkColumn(df.format(temp.getSisaPiutang())))
                             filterData.add(temp);
                 }
             }
@@ -334,26 +297,6 @@ public class PiutangController  {
         NewPenjualanController controller = loader.getController();
         controller.setMainApp(mainApp,mainApp.MainStage, stage);
         controller.setDetailPenjualan(piutang.getKeterangan());
-    }
-    private void showDetailPenjualanCoil(Piutang piutang){
-        try(Connection con = Koneksi.getConnection()){
-            PenjualanCoilHead p = PenjualanCoilHeadDAO.get(con, piutang.getKeterangan());
-            if(p.getKurs()!=1){
-                Stage stage = new Stage();
-                FXMLLoader loader = mainApp.showDialog(mainApp.MainStage, stage, "View/Dialog/NewPenjualanCoil.fxml");
-                NewPenjualanCoilController controller = loader.getController();
-                controller.setMainApp(mainApp,mainApp.MainStage, stage);
-                controller.setDetailPenjualan(p.getNoPenjualan());
-            }else{
-                Stage stage = new Stage();
-                FXMLLoader loader = mainApp.showDialog(mainApp.MainStage, stage, "View/Dialog/NewPenjualanCoilRp.fxml");
-                NewPenjualanCoilRpController controller = loader.getController();
-                controller.setMainApp(mainApp,mainApp.MainStage, stage);
-                controller.setDetailPenjualan(p.getNoPenjualan());
-            }
-        }catch(Exception e){
-            mainApp.showMessage(Modality.NONE, "Error", e.toString());
-        }
     }
     private void showDetailPiutang(Piutang piutang){
         Stage stage = new Stage();
@@ -445,7 +388,6 @@ public class PiutangController  {
                             h.setJumlahPiutang(Double.parseDouble(x.jumlahRpField.getText().replaceAll(",", "")));
                             h.setPembayaran(0);
                             h.setSisaPiutang(Double.parseDouble(x.jumlahRpField.getText().replaceAll(",", "")));
-                            h.setJatuhTempo(jatuhTempo);
                             h.setKodeUser(sistem.getUser().getKodeUser());
                             h.setStatus("open");
                             return Service.newPiutang(con, h);
@@ -478,10 +420,7 @@ public class PiutangController  {
         NewPembayaranController controller = loader.getController();
         controller.setMainApp(mainApp, mainApp.MainStage, stage);
         if(p.getKategori().equals("Piutang Penjualan")){
-            if(p.getKeterangan().startsWith("PJ-"))
-                controller.setPembayaranPenjualan(p.getKeterangan());
-            else if(p.getKeterangan().startsWith("PE-"))
-                controller.setPembayaranPenjualanCoil(p.getKeterangan());
+            controller.setPembayaranPenjualan(p.getKeterangan());
         }else{
             controller.setPembayaranPiutang(p);
         }
@@ -530,40 +469,6 @@ public class PiutangController  {
             }
         });
     }
-    private void setJatuhTempo(Piutang piutang) {
-        Stage stage = new Stage();
-        FXMLLoader loader = mainApp.showDialog(mainApp.MainStage, stage, "View/Dialog/JatuhTempo.fxml");
-        JatuhTempoController controller = loader.getController();
-        controller.setMainApp(mainApp,mainApp.MainStage, stage);
-        controller.saveButton.setOnAction((event) -> {
-            Task<String> task = new Task<String>() {
-                @Override 
-                public String call() throws Exception{
-                    try (Connection con = Koneksi.getConnection()) {
-                        piutang.setJatuhTempo(controller.jatuhTempoPicker.getValue().toString());
-                        return Service.setJatuhTempoPiutang(con, piutang);
-                    }
-                }
-            };
-            task.setOnRunning((e) -> {
-                mainApp.showLoadingScreen();
-            });
-            task.setOnSucceeded((e) -> {
-                mainApp.closeLoading();
-                getPiutang();
-                if(task.getValue().equals("true")){
-                    mainApp.closeDialog(mainApp.MainStage, stage);
-                    mainApp.showMessage(Modality.NONE, "Success", "Jatuh tempo piutang berhasil disimpan");
-                }else
-                    mainApp.showMessage(Modality.NONE, "Failed", task.getValue());
-            });
-            task.setOnFailed((e) -> {
-                mainApp.closeLoading();
-                mainApp.showMessage(Modality.NONE, "Error", task.getException().toString());
-            });
-            new Thread(task).start();
-        });
-    }
     private void exportExcel() {
         try{
             FileChooser fileChooser = new FileChooser();
@@ -599,7 +504,6 @@ public class PiutangController  {
                 sheet.getRow(rc).getCell(4).setCellValue("Total Piutang"); 
                 sheet.getRow(rc).getCell(5).setCellValue("Pembayaran"); 
                 sheet.getRow(rc).getCell(6).setCellValue("Sisa Piutang"); 
-                sheet.getRow(rc).getCell(7).setCellValue("Jatuh Tempo"); 
                 rc++;
                 double piutang = 0;
                 double pembayaran = 0;
@@ -613,8 +517,6 @@ public class PiutangController  {
                     sheet.getRow(rc).getCell(4).setCellValue(b.getJumlahPiutang());
                     sheet.getRow(rc).getCell(5).setCellValue(b.getPembayaran());
                     sheet.getRow(rc).getCell(6).setCellValue(b.getSisaPiutang());
-                    if(!"2000-01-01".equals(b.getJatuhTempo()))
-                        sheet.getRow(rc).getCell(7).setCellValue(tgl.format(tglBarang.parse(b.getJatuhTempo())));
                     rc++;
                     piutang = piutang + b.getJumlahPiutang();
                     pembayaran = pembayaran + b.getPembayaran();

@@ -6,7 +6,6 @@
 package com.excellentsystem.PasarBaja.View;
 
 import com.excellentsystem.PasarBaja.DAO.CustomerDAO;
-import com.excellentsystem.PasarBaja.DAO.PegawaiDAO;
 import com.excellentsystem.PasarBaja.DAO.PenjualanDetailDAO;
 import com.excellentsystem.PasarBaja.DAO.PenjualanHeadDAO;
 import com.excellentsystem.PasarBaja.DAO.PiutangDAO;
@@ -22,7 +21,6 @@ import static com.excellentsystem.PasarBaja.Main.tglLengkap;
 import static com.excellentsystem.PasarBaja.Main.tglSql;
 import com.excellentsystem.PasarBaja.Model.Customer;
 import com.excellentsystem.PasarBaja.Model.Otoritas;
-import com.excellentsystem.PasarBaja.Model.Pegawai;
 import com.excellentsystem.PasarBaja.Model.PenjualanDetail;
 import com.excellentsystem.PasarBaja.Model.PenjualanHead;
 import com.excellentsystem.PasarBaja.Model.Piutang;
@@ -84,15 +82,9 @@ public class PenjualanController {
     @FXML
     private TableColumn<PenjualanHead, String> tglPenjualanColumn;
     @FXML
-    private TableColumn<PenjualanHead, String> gudangColumn;
-    @FXML
     private TableColumn<PenjualanHead, String> namaCustomerColumn;
     @FXML
     private TableColumn<PenjualanHead, String> alamatCustomerColumn;
-    @FXML
-    private TableColumn<PenjualanHead, String> namaInvoiceColumn;
-    @FXML
-    private TableColumn<PenjualanHead, String> paymentTermColumn;
     @FXML
     private TableColumn<PenjualanHead, Number> totalPenjualanColumn;
     @FXML
@@ -103,8 +95,6 @@ public class PenjualanController {
     private TableColumn<PenjualanHead, Number> sisaPembayaranColumn;
     @FXML
     private TableColumn<PenjualanHead, String> catatanColumn;
-    @FXML
-    private TableColumn<PenjualanHead, String> namaSalesColumn;
     @FXML
     private TableColumn<PenjualanHead, String> kodeUserColumn;
 
@@ -130,26 +120,14 @@ public class PenjualanController {
         noPenjualanColumn.setCellValueFactory(cellData -> cellData.getValue().noPenjualanProperty());
         noPenjualanColumn.setCellFactory(col -> Function.getWrapTableCell(noPenjualanColumn));
 
-        gudangColumn.setCellValueFactory(cellData -> cellData.getValue().kodeGudangProperty());
-        gudangColumn.setCellFactory(col -> Function.getWrapTableCell(gudangColumn));
-
         namaCustomerColumn.setCellValueFactory(cellData -> cellData.getValue().getCustomer().namaProperty());
         namaCustomerColumn.setCellFactory(col -> Function.getWrapTableCell(namaCustomerColumn));
 
         alamatCustomerColumn.setCellValueFactory(cellData -> cellData.getValue().getCustomer().alamatProperty());
         alamatCustomerColumn.setCellFactory(col -> Function.getWrapTableCell(alamatCustomerColumn));
 
-        namaInvoiceColumn.setCellValueFactory(cellData -> cellData.getValue().getCustomerInvoice().namaProperty());
-        namaInvoiceColumn.setCellFactory(col -> Function.getWrapTableCell(namaInvoiceColumn));
-
-        paymentTermColumn.setCellValueFactory(cellData -> cellData.getValue().paymentTermProperty());
-        paymentTermColumn.setCellFactory(col -> Function.getWrapTableCell(paymentTermColumn));
-
         catatanColumn.setCellValueFactory(cellData -> cellData.getValue().catatanProperty());
         catatanColumn.setCellFactory(col -> Function.getWrapTableCell(catatanColumn));
-
-        namaSalesColumn.setCellValueFactory(cellData -> cellData.getValue().getSales().namaProperty());
-        namaSalesColumn.setCellFactory(col -> Function.getWrapTableCell(namaSalesColumn));
 
         kodeUserColumn.setCellValueFactory(cellData -> cellData.getValue().kodeUserProperty());
         kodeUserColumn.setCellFactory(col -> Function.getWrapTableCell(kodeUserColumn));
@@ -318,22 +296,11 @@ public class PenjualanController {
                     List<PenjualanHead> allPenjualan = PenjualanHeadDAO.getAllByDateAndStatus(con,
                             tglMulaiPicker.getValue().toString(), tglAkhirPicker.getValue().toString(), "true");
                     List<Customer> allCustomer = CustomerDAO.getAllByStatus(con, "%");
-                    List<Pegawai> allSales = PegawaiDAO.getAllByStatus(con, "%");
                     List<PenjualanHead> listPenjualan = new ArrayList<>();
                     for (PenjualanHead p : allPenjualan) {
                         for (Customer c : allCustomer) {
                             if (p.getKodeCustomer().equals(c.getKodeCustomer())) {
                                 p.setCustomer(c);
-                            }
-                        }
-                        for (Customer c : allCustomer) {
-                            if (p.getKodeCustomerInvoice().equals(c.getKodeCustomer())) {
-                                p.setCustomerInvoice(c);
-                            }
-                        }
-                        for (Pegawai s : allSales) {
-                            if (p.getKodeSales().equals(s.getKodePegawai())) {
-                                p.setSales(s);
                             }
                         }
                         if (groupByCombo.getSelectionModel().getSelectedItem().equals("Semua")) {
@@ -382,16 +349,12 @@ public class PenjualanController {
                 } else {
                     if (checkColumn(temp.getNoPenjualan())
                             || checkColumn(tglLengkap.format(tglSql.parse(temp.getTglPenjualan())))
-                            || checkColumn(temp.getKodeGudang())
                             || checkColumn(temp.getCustomer().getNama())
-                            || checkColumn(temp.getCustomerInvoice().getNama())
                             || checkColumn(temp.getCustomer().getAlamat())
-                            || checkColumn(temp.getPaymentTerm())
                             || checkColumn(df.format(temp.getTotalPenjualan()))
                             || checkColumn(df.format(temp.getPembayaran()))
                             || checkColumn(df.format(temp.getSisaPembayaran()))
-                            || checkColumn(temp.getCatatan())
-                            || checkColumn(temp.getSales().getNama())) {
+                            || checkColumn(temp.getCatatan())) {
                         filterData.add(temp);
                     }
                 }
@@ -627,12 +590,10 @@ public class PenjualanController {
                 createRow(workbook, sheet, rc, c, "Header");
                 sheet.getRow(rc).getCell(0).setCellValue("No Penjualan");
                 sheet.getRow(rc).getCell(1).setCellValue("Tgl Penjualan");
-                sheet.getRow(rc).getCell(2).setCellValue("Gudang");
-                sheet.getRow(rc).getCell(3).setCellValue("Customer");
-                sheet.getRow(rc).getCell(4).setCellValue("Sales");
-                sheet.getRow(rc).getCell(5).setCellValue("Total Penjualan");
-                sheet.getRow(rc).getCell(6).setCellValue("Pembayaran");
-                sheet.getRow(rc).getCell(7).setCellValue("Sisa Pembayaran");
+                sheet.getRow(rc).getCell(2).setCellValue("Customer");
+                sheet.getRow(rc).getCell(3).setCellValue("Total Penjualan");
+                sheet.getRow(rc).getCell(4).setCellValue("Pembayaran");
+                sheet.getRow(rc).getCell(5).setCellValue("Sisa Pembayaran");
                 rc++;
                 double penjualan = 0;
                 double pembayaran = 0;
@@ -641,12 +602,10 @@ public class PenjualanController {
                     createRow(workbook, sheet, rc, c, "Detail");
                     sheet.getRow(rc).getCell(0).setCellValue(b.getNoPenjualan());
                     sheet.getRow(rc).getCell(1).setCellValue(tglLengkap.format(tglSql.parse(b.getTglPenjualan())));
-                    sheet.getRow(rc).getCell(2).setCellValue(b.getKodeGudang());
-                    sheet.getRow(rc).getCell(3).setCellValue(b.getCustomer().getNama());
-                    sheet.getRow(rc).getCell(4).setCellValue(b.getSales().getNama());
-                    sheet.getRow(rc).getCell(5).setCellValue(b.getTotalPenjualan());
-                    sheet.getRow(rc).getCell(6).setCellValue(b.getPembayaran());
-                    sheet.getRow(rc).getCell(7).setCellValue(b.getSisaPembayaran());
+                    sheet.getRow(rc).getCell(2).setCellValue(b.getCustomer().getNama());
+                    sheet.getRow(rc).getCell(3).setCellValue(b.getTotalPenjualan());
+                    sheet.getRow(rc).getCell(4).setCellValue(b.getPembayaran());
+                    sheet.getRow(rc).getCell(5).setCellValue(b.getSisaPembayaran());
                     rc++;
                     penjualan = penjualan + b.getTotalPenjualan();
                     pembayaran = pembayaran + b.getPembayaran();

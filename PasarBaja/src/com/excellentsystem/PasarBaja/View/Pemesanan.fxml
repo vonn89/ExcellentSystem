@@ -32,15 +32,12 @@
                 <TableColumn fx:id="tglPemesananColumn" prefWidth="75.0" text="Tgl Pemesanan" />
                   <TableColumn fx:id="namaCustomerColumn" prefWidth="75.0" text="Nama Customer" />
                   <TableColumn fx:id="alamatCustomerColumn" prefWidth="75.0" text="Alamat Customer" visible="false" />
-                  <TableColumn fx:id="namaInvoiceColumn" prefWidth="75.0" text="Nama Invoice" />
-                  <TableColumn fx:id="paymentTermColumn" prefWidth="75.0" text="Payment Term" visible="false" />
                   <TableColumn fx:id="totalPemesananColumn" prefWidth="75.0" text="Total Pemesanan" />
                   <TableColumn fx:id="sisaPemesananColumn" prefWidth="75.0" text="Sisa Pemesanan" />
                   <TableColumn fx:id="downPaymentColumn" prefWidth="75.0" text="Down Payment" />
                   <TableColumn fx:id="sisaDownPaymentColumn" prefWidth="75.0" text="Sisa Down Payment" />
                   <TableColumn fx:id="catatanColumn" prefWidth="75.0" text="Catatan" visible="false" />
                   <TableColumn fx:id="statusColumn" prefWidth="75.0" text="Status" visible="false" />
-                  <TableColumn fx:id="namaSalesColumn" prefWidth="75.0" text="Nama Sales" visible="false" />
                   <TableColumn fx:id="kodeUserColumn" prefWidth="75.0" text="Kode User" visible="false" />
               </columns>
                <columnResizePolicy>
