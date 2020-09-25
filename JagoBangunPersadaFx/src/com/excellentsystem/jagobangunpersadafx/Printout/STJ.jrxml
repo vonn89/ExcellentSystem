@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="SuratTandaJadi" pageWidth="595" pageHeight="842" columnWidth="483" leftMargin="56" rightMargin="56" topMargin="28" bottomMargin="28" isFloatColumnFooter="true" uuid="708404ea-03f0-4d9a-99fb-f8f07042c7b0">
 	<property name="ireport.zoom" value="1.210000000000001"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="0"/>
+	<property name="ireport.y" value="1421"/>
 	<style name="style1" pattern="" fontName="Times New Roman" fontSize="12">
 		<paragraph lineSpacing="1_1_2"/>
 	</style>
@@ -639,7 +639,7 @@
 				<text><![CDATA[Dalam hal PEMBELI tidak mendapatkan Surat Persetujuan Kredit dari bank / lembaga keuangan non bank (apabila ada) sebagaimana dimaskud dalam point no 4  diatas, maka Pembatalan SPU ini PEMBELI mendapatkan pengembalian uang Tanda Jadi dan uang yang telah dibayarkan 100% (Pembeli wajib melampirkan Surat Penolakan Persetujuan kredit dari bank / lembaga keuangan non bank) apabila PEMBELI tidak dapat melampirkan Surat Penolakan Kredit dari bank / lembaga keuangan non bank maka PEMBELI setuju dan sepakat uang Tanda Jadi tidak dikembalikan dan uang sebesar 100% yang telah dibayarkan (tidak termasuk uang Tanda Jadi) tidak dikembalikan (bila ada)]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="20" y="633" width="463" height="40" uuid="cd8d60ec-bb63-497e-8112-eda8ac7b445a"/>
+				<reportElement x="20" y="691" width="463" height="40" uuid="cd8d60ec-bb63-497e-8112-eda8ac7b445a"/>
 				<textElement textAlignment="Justified" verticalAlignment="Top">
 					<font fontName="Times New Roman" size="12"/>
 					<paragraph lineSpacing="1_1_2" tabStopWidth="40"/>
@@ -647,7 +647,7 @@
 				<text><![CDATA[PEMBELI wajib untuk menandatangani lampiran SPU Kavling / Rumah / Ruko dalam jangka waktu 14 hari kalender setelah mendapatkan pemberitahuan dari PT JBP.]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="20" y="673" width="463" height="20" uuid="57ecc91d-857e-42f2-a4f4-7ad25da1163f"/>
+				<reportElement x="20" y="731" width="463" height="20" uuid="57ecc91d-857e-42f2-a4f4-7ad25da1163f"/>
 				<textElement textAlignment="Justified" verticalAlignment="Top">
 					<font fontName="Times New Roman" size="12"/>
 					<paragraph lineSpacing="1_1_2" tabStopWidth="40"/>
@@ -655,7 +655,7 @@
 				<text><![CDATA[PEMBELI wajib tunduk pada peraturan yang dikeluarkan oleh PT JBP dan Estate Management.]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="20" y="693" width="463" height="155" uuid="2be266d5-95f7-441a-8036-cbafc4921bf3"/>
+				<reportElement x="20" y="751" width="463" height="155" uuid="2be266d5-95f7-441a-8036-cbafc4921bf3"/>
 				<textElement textAlignment="Justified" verticalAlignment="Top">
 					<font fontName="Times New Roman" size="12"/>
 					<paragraph lineSpacing="1_1_2" tabStopWidth="20"/>
@@ -666,7 +666,7 @@ b.	Fasilitas kredit dari bank / lembaga keuangan non bank tidak diberikan kepada
 ]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="20" y="848" width="463" height="40" uuid="3a827e12-726f-4e9e-93c8-b2a0f3fc9437"/>
+				<reportElement x="20" y="906" width="463" height="40" uuid="3a827e12-726f-4e9e-93c8-b2a0f3fc9437"/>
 				<textElement textAlignment="Justified" verticalAlignment="Top">
 					<font fontName="Times New Roman" size="12"/>
 					<paragraph lineSpacing="1_1_2" tabStopWidth="40"/>
@@ -674,7 +674,7 @@ b.	Fasilitas kredit dari bank / lembaga keuangan non bank tidak diberikan kepada
 				<text><![CDATA[Sehubungan dengan ketentuan point 9 di atas, maka PEMBELI wajib mangganti kerugian kepada PT JBP (bila ada).]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="20" y="888" width="463" height="115" uuid="1649b0ac-c40f-456f-87eb-16bac3ac5fbf"/>
+				<reportElement x="20" y="945" width="463" height="115" uuid="1649b0ac-c40f-456f-87eb-16bac3ac5fbf"/>
 				<textElement textAlignment="Justified" verticalAlignment="Top">
 					<font fontName="Times New Roman" size="12"/>
 					<paragraph lineSpacing="1_1_2" tabStopWidth="40"/>
@@ -682,7 +682,7 @@ b.	Fasilitas kredit dari bank / lembaga keuangan non bank tidak diberikan kepada
 				<text><![CDATA[Alamat dan nomor telepon PEMBELI di atas adalah benar dan segala administrasi surat-menyurat mempergunakan alamat dan nomor telepon di atas. Perubahan alamat dan nomor telepon wajib diinformasikan secara tertulis kepada PT JBP selambat-lambatnya 14 hari kalender sejak perubahan alamat dan nomor telepon tersebut dilakukan. Segala akibat yang timbul atas kelalaian memberikan informasi tentang perubahan tersebut menjadi tanggung jawab PEMBELI.]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="20" y="1003" width="463" height="40" uuid="a512aff4-b091-41c2-8ec9-d62b2537a7dd"/>
+				<reportElement x="20" y="1059" width="463" height="40" uuid="a512aff4-b091-41c2-8ec9-d62b2537a7dd"/>
 				<textElement textAlignment="Justified" verticalAlignment="Top">
 					<font fontName="Times New Roman" size="12"/>
 					<paragraph lineSpacing="1_1_2" tabStopWidth="40"/>
@@ -690,7 +690,7 @@ b.	Fasilitas kredit dari bank / lembaga keuangan non bank tidak diberikan kepada
 				<text><![CDATA[Hal-hal yang belum diatur dalam SPU akan diatur lebih lanjut dalam lampiran SPU dan merupakan satu kesatuan dan bagian yang tidak terpisahkan dalam SPU ini.]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="0" y="1076" width="483" height="40" uuid="b16ab5ec-5623-4175-a843-d8e135da37df"/>
+				<reportElement x="0" y="1130" width="483" height="40" uuid="b16ab5ec-5623-4175-a843-d8e135da37df"/>
 				<textElement textAlignment="Justified" verticalAlignment="Top">
 					<font fontName="Times New Roman" size="12"/>
 					<paragraph lineSpacing="1_1_2" tabStopWidth="40"/>
@@ -698,7 +698,7 @@ b.	Fasilitas kredit dari bank / lembaga keuangan non bank tidak diberikan kepada
 				<text><![CDATA[	PEMBELI dengan ini menyatakan telah membaca, mengerti dan menyetujui setiap seluruh syarat-syarat dan ketentuan-ketentuan dalam Surat Pemesanan Unit ini.]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="0" y="1141" width="200" height="20" uuid="16d14704-9c04-460d-891f-546553190b0c"/>
+				<reportElement x="0" y="1181" width="200" height="20" uuid="16d14704-9c04-460d-891f-546553190b0c"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="Times New Roman" size="12" isBold="true"/>
 					<paragraph lineSpacing="1_1_2" tabStopWidth="20"/>
@@ -706,7 +706,7 @@ b.	Fasilitas kredit dari bank / lembaga keuangan non bank tidak diberikan kepada
 				<text><![CDATA[Pembeli]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="283" y="1141" width="200" height="20" uuid="f2a7220c-3e51-4207-acf0-f240b3c45bfe"/>
+				<reportElement x="283" y="1181" width="200" height="20" uuid="f2a7220c-3e51-4207-acf0-f240b3c45bfe"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="Times New Roman" size="12" isBold="true"/>
 					<paragraph lineSpacing="1_1_2" tabStopWidth="20"/>
@@ -714,23 +714,23 @@ b.	Fasilitas kredit dari bank / lembaga keuangan non bank tidak diberikan kepada
 				<text><![CDATA[Administrasi]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="0" y="1231" width="200" height="20" uuid="30d5181b-df0b-4416-ac12-043e67a1fd4b"/>
+				<reportElement x="0" y="1260" width="200" height="20" uuid="30d5181b-df0b-4416-ac12-043e67a1fd4b"/>
 				<textElement textAlignment="Justified" verticalAlignment="Middle">
 					<font fontName="Times New Roman" size="12"/>
 					<paragraph lineSpacing="1_1_2" tabStopWidth="20"/>
 				</textElement>
-				<text><![CDATA[(                                                                )]]></text>
+				<text><![CDATA[(                                                         )]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="283" y="1231" width="200" height="20" uuid="68476e50-6554-491d-a753-7e126a2c1c51"/>
+				<reportElement x="283" y="1260" width="200" height="20" uuid="68476e50-6554-491d-a753-7e126a2c1c51"/>
 				<textElement textAlignment="Justified" verticalAlignment="Middle">
 					<font fontName="Times New Roman" size="12"/>
 					<paragraph lineSpacing="1_1_2" tabStopWidth="20"/>
 				</textElement>
-				<text><![CDATA[(                                                               )]]></text>
+				<text><![CDATA[(                                                        )]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="0" y="1281" width="100" height="20" uuid="bbc9c0f1-ee04-4abe-8a52-7fc8fcca6048"/>
+				<reportElement x="0" y="1290" width="100" height="20" uuid="bbc9c0f1-ee04-4abe-8a52-7fc8fcca6048"/>
 				<textElement textAlignment="Justified" verticalAlignment="Middle">
 					<font fontName="Times New Roman" size="12"/>
 					<paragraph lineSpacing="1_1_2" tabStopWidth="20"/>
@@ -799,64 +799,79 @@ b.	Fasilitas kredit dari bank / lembaga keuangan non bank tidak diberikan kepada
 				<textElement>
 					<font fontName="Times New Roman" size="12"/>
 				</textElement>
-				<text><![CDATA[6.]]></text>
+				<text><![CDATA[6A.]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="0" y="633" width="20" height="40" uuid="7cd8d32c-b235-484c-b4ba-b7417ebc69f4"/>
+				<reportElement x="0" y="691" width="20" height="40" uuid="7cd8d32c-b235-484c-b4ba-b7417ebc69f4"/>
 				<textElement>
 					<font fontName="Times New Roman" size="12"/>
 				</textElement>
 				<text><![CDATA[7.]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="0" y="673" width="20" height="20" uuid="ab5033f1-24eb-4963-a9b4-352f23044080"/>
+				<reportElement x="0" y="731" width="20" height="20" uuid="ab5033f1-24eb-4963-a9b4-352f23044080"/>
 				<textElement>
 					<font fontName="Times New Roman" size="12"/>
 				</textElement>
 				<text><![CDATA[8.]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="0" y="693" width="20" height="155" uuid="abc345a7-e13c-4a7c-9867-6b6a4f95e56b"/>
+				<reportElement x="0" y="751" width="20" height="155" uuid="abc345a7-e13c-4a7c-9867-6b6a4f95e56b"/>
 				<textElement>
 					<font fontName="Times New Roman" size="12"/>
 				</textElement>
 				<text><![CDATA[9.]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="0" y="848" width="20" height="40" uuid="7344b503-6a41-4dc0-ba55-3eb0553e7a0c"/>
+				<reportElement x="0" y="906" width="20" height="40" uuid="7344b503-6a41-4dc0-ba55-3eb0553e7a0c"/>
 				<textElement>
 					<font fontName="Times New Roman" size="12"/>
 				</textElement>
 				<text><![CDATA[10.]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="0" y="888" width="20" height="115" uuid="df034bce-ad4b-4bdf-8821-e88240b0fbed"/>
+				<reportElement x="0" y="945" width="20" height="115" uuid="df034bce-ad4b-4bdf-8821-e88240b0fbed"/>
 				<textElement>
 					<font fontName="Times New Roman" size="12"/>
 				</textElement>
 				<text><![CDATA[11.]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="0" y="1003" width="20" height="40" uuid="9781b896-a1d0-4cec-be54-57e85a42a725"/>
+				<reportElement x="0" y="1059" width="20" height="40" uuid="9781b896-a1d0-4cec-be54-57e85a42a725"/>
 				<textElement>
 					<font fontName="Times New Roman" size="12"/>
 				</textElement>
 				<text><![CDATA[12.]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="0" y="1043" width="20" height="20" uuid="2db48877-19e5-4577-8e44-b46587268475"/>
+				<reportElement x="0" y="1099" width="20" height="20" uuid="2db48877-19e5-4577-8e44-b46587268475"/>
 				<textElement>
 					<font fontName="Times New Roman" size="12"/>
 				</textElement>
 				<text><![CDATA[13.]]></text>
 			</staticText>
 			<textField pattern="yyyy">
-				<reportElement x="20" y="1043" width="463" height="20" uuid="491c1588-a04d-4742-adb4-d765c97cb7b3"/>
+				<reportElement x="20" y="1099" width="463" height="20" uuid="491c1588-a04d-4742-adb4-d765c97cb7b3"/>
 				<textElement verticalAlignment="Top">
 					<font fontName="Times New Roman" size="12"/>
 				</textElement>
 				<textFieldExpression><![CDATA["Pajak Bumi dan Bangunan wajib dibayar oleh PEMBELI sejak tahun "+$P{tahunPBB}]]></textFieldExpression>
 			</textField>
+			<staticText>
+				<reportElement x="0" y="633" width="20" height="60" uuid="49255312-448c-4e43-a0d7-bc00d2f36d0e"/>
+				<textElement>
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<text><![CDATA[6B.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="20" y="633" width="463" height="60" uuid="7f31eeaf-50b3-429a-b95e-0b41d979aa0d"/>
+				<textElement textAlignment="Justified">
+					<font fontName="Times New Roman" size="12"/>
+					<paragraph lineSpacing="1_1_2"/>
+				</textElement>
+				<text><![CDATA[Apabila terjadi penolakan dari pihak bank yang diakibatkan oleh kelalaian konsumen atau unsur kesengajaan dari konsumen yang mengakibatkan bank menolak membiayai kredit konsumen maka tanda jadi dan downpayment tidak dapat dikembalikan]]></text>
+			</staticText>
 		</band>
 	</summary>
 </jasperReport>
