@@ -316,7 +316,10 @@ public class NewPengirimanController  {
                                 detail.setCatatanIntern(controller.pemesananDetail.getCatatanIntern());
                                 detail.setSatuan(controller.pemesananDetail.getSatuan());
                                 detail.setQty(Double.parseDouble(controller.qtyField.getText().replaceAll(",", "")));
-                                detail.setNilai(log.getNilaiAkhir()/log.getStokAkhir());
+                                if(log.getStokAkhir()!=0)
+                                    detail.setNilai(log.getNilaiAkhir()/log.getStokAkhir());
+                                else
+                                    detail.setNilai(0);
                                 detail.setHargaJual(controller.pemesananDetail.getHargaJual());
                                 detail.setTotal(Double.parseDouble(controller.qtyField.getText().replaceAll(",", ""))*
                                         controller.pemesananDetail.getHargaJual());

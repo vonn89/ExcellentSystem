@@ -2077,7 +2077,6 @@ public class Service {
 
                 LogBahanDAO.delete(con, d.getKodeBahan(), penjualan.getKodeGudang(), "Penjualan", penjualan.getNoPenjualan());
 
-                resetStokDanLogBahan(con, d.getKodeBahan(), penjualan.getKodeGudang(), penjualan.getTglPenjualan(), date);
 
                 Bahan bahan = BahanDAO.get(con, d.getKodeBahan());
                 bahan.setStatus("true");
@@ -2245,7 +2244,6 @@ public class Service {
                         BahanDAO.delete(con, d.getKodeBahan());
 
                         LogBahanDAO.delete(con, d.getKodeBahan(), pembelian.getKodeGudang(), "Pembelian", pembelian.getNoPembelian());
-                        resetStokDanLogBahan(con, d.getKodeBahan(), pembelian.getKodeGudang(), pembelian.getTglPembelian(), date);
                     }
                 }
                 KeuanganDAO.delete(con, "Stok Bahan", pembelian.getKodeGudang(), "Pembelian - " + pembelian.getNoPembelian());
