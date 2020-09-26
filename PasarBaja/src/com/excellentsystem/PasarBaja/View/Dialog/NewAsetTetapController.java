@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package com.excellentsystem.PasarBaja.View.Dialog;
 
 import com.excellentsystem.PasarBaja.Function;
@@ -28,21 +27,34 @@ import javafx.stage.Stage;
  * @author Xtreme
  */
 public class NewAsetTetapController {
-    @FXML private AnchorPane penyusutanPane;
-    @FXML private Label title;
-    @FXML private Label harga;
-    @FXML public TextField namaField;
-    @FXML public ComboBox<String> kategoriCombo;
-    @FXML public TextArea keteranganField;
-    @FXML public TextField bulanField;
-    @FXML public TextField tahunField;
-    @FXML public TextField hargaField;
-    @FXML public ComboBox<String> tipeKeuanganCombo;
-    @FXML public Button saveButton;
-    private Main mainApp;   
+
+    @FXML
+    private AnchorPane penyusutanPane;
+    @FXML
+    private Label title;
+    @FXML
+    private Label harga;
+    @FXML
+    public TextField namaField;
+    @FXML
+    public ComboBox<String> kategoriCombo;
+    @FXML
+    public TextArea keteranganField;
+    @FXML
+    public TextField bulanField;
+    @FXML
+    public TextField tahunField;
+    @FXML
+    public TextField hargaField;
+    @FXML
+    public ComboBox<String> tipeKeuanganCombo;
+    @FXML
+    public Button saveButton;
+    private Main mainApp;
     private Stage stage;
     private Stage owner;
-    public void setMainApp(Main mainApp,Stage owner,Stage stage) {
+
+    public void setMainApp(Main mainApp, Stage owner, Stage stage) {
         this.mainApp = mainApp;
         this.stage = stage;
         this.owner = owner;
@@ -56,7 +68,7 @@ public class NewAsetTetapController {
         allKategori.add("Lain-lain");
         kategoriCombo.setItems(allKategori);
         ObservableList<String> listKeuangan = FXCollections.observableArrayList();
-        for(KategoriKeuangan kk : sistem.getListKategoriKeuangan()){
+        for (KategoriKeuangan kk : sistem.getListKategoriKeuangan()) {
             listKeuangan.add(kk.getKodeKeuangan());
         }
         tipeKeuanganCombo.setItems(listKeuangan);
@@ -66,8 +78,9 @@ public class NewAsetTetapController {
         stage.setOnCloseRequest((event) -> {
             mainApp.closeDialog(owner, stage);
         });
-    }   
-    public void setPenjualanAset(AsetTetap aset){
+    }
+
+    public void setPenjualanAset(AsetTetap aset) {
         if (aset != null) {
             title.setText("Penjualan Aset");
             harga.setText("Harga Jual");
@@ -83,7 +96,8 @@ public class NewAsetTetapController {
             close();
         }
     }
-    public void close(){
+
+    public void close() {
         mainApp.closeDialog(owner, stage);
-    }  
+    }
 }

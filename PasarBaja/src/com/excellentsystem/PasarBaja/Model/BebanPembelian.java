@@ -20,21 +20,21 @@ import javafx.beans.property.StringProperty;
 public class BebanPembelian {
     
     private final StringProperty noPembelian = new SimpleStringProperty();
-    private final IntegerProperty no_urut = new SimpleIntegerProperty();
+    private final IntegerProperty noUrut = new SimpleIntegerProperty();
     private final StringProperty keterangan = new SimpleStringProperty();
     private final DoubleProperty jumlahRp = new SimpleDoubleProperty();
     private final StringProperty status = new SimpleStringProperty();
 
-    public int getNo_urut() {
-        return no_urut.get();
+    public int getNoUrut() {
+        return noUrut.get();
     }
 
-    public void setNo_urut(int value) {
-        no_urut.set(value);
+    public void setNoUrut(int value) {
+        noUrut.set(value);
     }
 
-    public IntegerProperty no_urutProperty() {
-        return no_urut;
+    public IntegerProperty noUrutProperty() {
+        return noUrut;
     }
 
     public String getStatus() {

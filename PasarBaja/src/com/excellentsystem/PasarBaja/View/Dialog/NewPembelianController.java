@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package com.excellentsystem.PasarBaja.View.Dialog;
 
 import com.excellentsystem.PasarBaja.DAO.BebanPembelianDAO;
@@ -50,41 +49,63 @@ import javafx.stage.Stage;
  *
  * @author Xtreme
  */
-public class NewPembelianController  {
-    @FXML private TableView<PembelianDetail> pembelianDetailTable;
-    @FXML private TableColumn<PembelianDetail, String> kodeBarangColumn;
-    @FXML private TableColumn<PembelianDetail, String> namaBarangColumn;
-    @FXML private TableColumn<PembelianDetail, String> keteranganColumn;
-    @FXML private TableColumn<PembelianDetail, String> satuanColumn;
-    @FXML private TableColumn<PembelianDetail, Number> qtyColumn;
-    @FXML private TableColumn<PembelianDetail, Number> hargaBeliColumn;
-    @FXML private TableColumn<PembelianDetail, Number> totalColumn;
-    
-    @FXML private GridPane gridPane;
-    
-    @FXML private Label noPembelianField;
-    @FXML private Label tglPembelianField;
-    
-    @FXML private TextField namaField;
-    
-    @FXML public TextArea catatanField;
-    
-    @FXML private Label totalQtyField;
-    
-    @FXML public TextField bebanPembelianField;
-    @FXML public TextField totalPembelianField;
-    @FXML public TextField grandtotalField;
-    
-    @FXML private Button addSupplierButton;
-    @FXML public Button saveButton;
-    @FXML private Button cancelButton;
-    
+public class NewPembelianController {
+
+    @FXML
+    private TableView<PembelianDetail> pembelianDetailTable;
+    @FXML
+    private TableColumn<PembelianDetail, String> kodeBarangColumn;
+    @FXML
+    private TableColumn<PembelianDetail, String> namaBarangColumn;
+    @FXML
+    private TableColumn<PembelianDetail, String> keteranganColumn;
+    @FXML
+    private TableColumn<PembelianDetail, String> satuanColumn;
+    @FXML
+    private TableColumn<PembelianDetail, Number> qtyColumn;
+    @FXML
+    private TableColumn<PembelianDetail, Number> hargaBeliColumn;
+    @FXML
+    private TableColumn<PembelianDetail, Number> totalColumn;
+
+    @FXML
+    private GridPane gridPane;
+
+    @FXML
+    private Label noPembelianField;
+    @FXML
+    private Label tglPembelianField;
+
+    @FXML
+    private TextField namaField;
+
+    @FXML
+    public TextArea catatanField;
+
+    @FXML
+    private Label totalQtyField;
+
+    @FXML
+    public TextField bebanPembelianField;
+    @FXML
+    public TextField totalPembelianField;
+    @FXML
+    public TextField grandtotalField;
+
+    @FXML
+    private Button addSupplierButton;
+    @FXML
+    public Button saveButton;
+    @FXML
+    private Button cancelButton;
+
     public Supplier supplier;
     public ObservableList<PembelianDetail> allPembelianBarangDetail = FXCollections.observableArrayList();
     public List<BebanPembelian> allBebanPembelian = FXCollections.observableArrayList();
-    private Main mainApp;   
+    private Main mainApp;
     private Stage stage;
     private Stage owner;
+
     public void initialize() {
         kodeBarangColumn.setCellValueFactory(cellData -> cellData.getValue().kodeBarangProperty());
         namaBarangColumn.setCellValueFactory(cellData -> cellData.getValue().namaBarangProperty());
@@ -93,47 +114,48 @@ public class NewPembelianController  {
         qtyColumn.setCellValueFactory(cellData -> cellData.getValue().qtyProperty());
         hargaBeliColumn.setCellValueFactory(cellData -> cellData.getValue().hargaBeliProperty());
         totalColumn.setCellValueFactory(cellData -> cellData.getValue().totalProperty());
-        
+
         qtyColumn.setCellFactory(col -> Function.getTableCell());
         hargaBeliColumn.setCellFactory(col -> Function.getTableCell());
         totalColumn.setCellFactory(col -> Function.getTableCell());
         pembelianDetailTable.setItems(allPembelianBarangDetail);
-        
+
         ContextMenu cm = new ContextMenu();
         MenuItem addBahan = new MenuItem("Add New Barang");
-        addBahan.setOnAction((ActionEvent e)->{
+        addBahan.setOnAction((ActionEvent e) -> {
             addBarang();
         });
         MenuItem refresh = new MenuItem("Refresh");
-        refresh.setOnAction((ActionEvent e)->{
+        refresh.setOnAction((ActionEvent e) -> {
             pembelianDetailTable.refresh();
         });
         cm.getItems().addAll(addBahan, refresh);
         pembelianDetailTable.setContextMenu(cm);
         pembelianDetailTable.setRowFactory((TableView<PembelianDetail> tv) -> {
-            final TableRow<PembelianDetail> row = new TableRow<PembelianDetail>(){
+            final TableRow<PembelianDetail> row = new TableRow<PembelianDetail>() {
                 @Override
                 public void updateItem(PembelianDetail item, boolean empty) {
                     super.updateItem(item, empty);
                     if (empty) {
                         setContextMenu(cm);
-                    } else{
+                    } else {
                         final ContextMenu rm = new ContextMenu();
                         MenuItem addBahan = new MenuItem("Add New Barang");
-                        addBahan.setOnAction((ActionEvent e)->{
+                        addBahan.setOnAction((ActionEvent e) -> {
                             addBarang();
                         });
                         MenuItem delete = new MenuItem("Delete Barang");
-                        delete.setOnAction((ActionEvent e)->{
+                        delete.setOnAction((ActionEvent e) -> {
                             allPembelianBarangDetail.remove(item);
                             hitungTotal();
                         });
                         MenuItem refresh = new MenuItem("Refresh");
-                        refresh.setOnAction((ActionEvent e)->{
+                        refresh.setOnAction((ActionEvent e) -> {
                             pembelianDetailTable.refresh();
                         });
-                        if(saveButton.isVisible())
+                        if (saveButton.isVisible()) {
                             rm.getItems().addAll(addBahan, delete);
+                        }
                         rm.getItems().addAll(refresh);
                         setContextMenu(rm);
                     }
@@ -142,6 +164,7 @@ public class NewPembelianController  {
             return row;
         });
     }
+
     public void setMainApp(Main mainApp, Stage owner, Stage stage) {
         this.mainApp = mainApp;
         this.owner = owner;
@@ -149,37 +172,40 @@ public class NewPembelianController  {
         stage.setOnCloseRequest((event) -> {
             mainApp.closeDialog(owner, stage);
         });
-        stage.setHeight(mainApp.screenSize.getHeight()*0.9);
-        stage.setWidth(mainApp.screenSize.getWidth()*0.9);
+        stage.setHeight(mainApp.screenSize.getHeight() * 0.9);
+        stage.setWidth(mainApp.screenSize.getWidth() * 0.9);
         stage.setX((mainApp.screenSize.getWidth() - stage.getWidth()) / 2);
         stage.setY((mainApp.screenSize.getHeight() - stage.getHeight()) / 2);
     }
+
     @FXML
-    private void hitungTotal(){
+    private void hitungTotal() {
         double totalQty = 0;
         double totalPembelian = 0;
         double totalBeban = 0;
-        for(PembelianDetail d : allPembelianBarangDetail){
+        for (PembelianDetail d : allPembelianBarangDetail) {
             totalQty = totalQty + d.getQty();
             totalPembelian = totalPembelian + d.getTotal();
         }
-        for(BebanPembelian b : allBebanPembelian){
+        for (BebanPembelian b : allBebanPembelian) {
             totalBeban = totalBeban + b.getJumlahRp();
         }
         totalQtyField.setText(df.format(totalQty));
         bebanPembelianField.setText(df.format(totalBeban));
         totalPembelianField.setText(df.format(totalPembelian));
-        grandtotalField.setText(df.format(totalPembelian+totalBeban));
+        grandtotalField.setText(df.format(totalPembelian + totalBeban));
     }
-    public void setNewPembelian(){
+
+    public void setNewPembelian() {
         noPembelianField.setText("");
         tglPembelianField.setText("");
         allBebanPembelian = new ArrayList<>();
     }
-    public void setDetailPembelian(String noPembelian){
+
+    public void setDetailPembelian(String noPembelian) {
         Task<PembelianHead> task = new Task<PembelianHead>() {
-            @Override 
-            public PembelianHead call() throws Exception{
+            @Override
+            public PembelianHead call() throws Exception {
                 try (Connection con = Koneksi.getConnection()) {
                     PembelianHead p = PembelianHeadDAO.get(con, noPembelian);
                     p.setSupplier(SupplierDAO.get(con, p.getKodeSupplier()));
@@ -193,7 +219,7 @@ public class NewPembelianController  {
             mainApp.showLoadingScreen();
         });
         task.setOnSucceeded((ev) -> {
-            try{
+            try {
                 mainApp.closeLoading();
                 addSupplierButton.setVisible(false);
                 catatanField.setDisable(true);
@@ -201,12 +227,13 @@ public class NewPembelianController  {
                 cancelButton.setVisible(false);
                 AnchorPane.setBottomAnchor(gridPane, 0.0);
                 List<MenuItem> removeMenu = new ArrayList<>();
-                for(MenuItem m : pembelianDetailTable.getContextMenu().getItems()){
-                    if(m.getText().equals("Add New Barang"))
+                for (MenuItem m : pembelianDetailTable.getContextMenu().getItems()) {
+                    if (m.getText().equals("Add New Barang")) {
                         removeMenu.add(m);
+                    }
                 }
                 pembelianDetailTable.getContextMenu().getItems().removeAll(removeMenu);
-                
+
                 PembelianHead p = task.getValue();
                 noPembelianField.setText(p.getNoPembelian());
                 tglPembelianField.setText(tglLengkap.format(tglSql.parse(p.getTglPembelian())));
@@ -219,7 +246,7 @@ public class NewPembelianController  {
                 bebanPembelianField.setText(df.format(p.getTotalBebanPembelian()));
                 grandtotalField.setText(df.format(p.getGrandtotal()));
                 hitungTotal();
-            }catch(Exception e){
+            } catch (Exception e) {
                 e.printStackTrace();
                 mainApp.showMessage(Modality.NONE, "Error", e.toString());
             }
@@ -230,33 +257,36 @@ public class NewPembelianController  {
         });
         new Thread(task).start();
     }
+
     @FXML
-    private void close(){
+    private void close() {
         mainApp.closeDialog(owner, stage);
     }
+
     @FXML
-    private void addBarang(){
+    private void addBarang() {
         Stage child = new Stage();
         FXMLLoader loader = mainApp.showDialog(stage, child, "View/Dialog/AddBarangPembelian.fxml");
         AddBarangPembelianController controller = loader.getController();
         controller.setMainApp(mainApp, stage, child);
         controller.addButton.setOnAction((ActionEvent event) -> {
-            if(controller.barang==null)
+            if (controller.barang == null) {
                 mainApp.showMessage(Modality.NONE, "Warning", "Barang belum dipilih atau kode barang masih kosong");
-            else if(controller.qtyField.getText().equals("0")||controller.qtyField.getText().equals(""))
+            } else if (controller.qtyField.getText().equals("0") || controller.qtyField.getText().equals("")) {
                 mainApp.showMessage(Modality.NONE, "Warning", "Qty tidak boleh kosong");
-            else if(controller.totalField.getText().equals("0")||controller.totalField.getText().equals(""))
+            } else if (controller.totalField.getText().equals("0") || controller.totalField.getText().equals("")) {
                 mainApp.showMessage(Modality.NONE, "Warning", "Total tidak boleh kosong");
-            else{
-                mainApp.closeDialog(stage,child);
+            } else {
+                mainApp.closeDialog(stage, child);
                 PembelianDetail d = null;
-                for(PembelianDetail temp : allPembelianBarangDetail){
-                    if(temp.getKodeBarang().equals(controller.barang.getKodeBarang())&&
-                        temp.getKeterangan().equals(controller.keteranganField.getText())&&
-                        temp.getHargaBeli()==Double.parseDouble(controller.hargaBeliField.getText().replaceAll(",", "")))
-                            d = temp;
+                for (PembelianDetail temp : allPembelianBarangDetail) {
+                    if (temp.getKodeBarang().equals(controller.barang.getKodeBarang())
+                            && temp.getKeterangan().equals(controller.keteranganField.getText())
+                            && temp.getHargaBeli() == Double.parseDouble(controller.hargaBeliField.getText().replaceAll(",", ""))) {
+                        d = temp;
+                    }
                 }
-                if(d==null){
+                if (d == null) {
                     PembelianDetail detail = new PembelianDetail();
                     detail.setKodeBarang(controller.barang.getKodeBarang());
                     detail.setNamaBarang(controller.barang.getNamaBarang());
@@ -267,24 +297,26 @@ public class NewPembelianController  {
                     detail.setTotal(Double.parseDouble(controller.totalField.getText().replaceAll(",", "")));
                     allPembelianBarangDetail.add(detail);
                     hitungTotal();
-                }else{
-                    d.setQty(d.getQty()+Double.parseDouble(controller.qtyField.getText().replaceAll(",", "")));
-                    d.setTotal(d.getQty()*d.getHargaBeli());
+                } else {
+                    d.setQty(d.getQty() + Double.parseDouble(controller.qtyField.getText().replaceAll(",", "")));
+                    d.setTotal(d.getQty() * d.getHargaBeli());
                     pembelianDetailTable.refresh();
                     hitungTotal();
                 }
             }
         });
     }
+
     @FXML
-    private void addBeban(){
+    private void addBeban() {
         Stage child = new Stage();
         FXMLLoader loader = mainApp.showDialog(stage, child, "View/Dialog/DetailBebanPembelian.fxml");
         DetailBebanPembelianController controller = loader.getController();
         controller.setMainApp(mainApp, stage, child);
         controller.setDetailBebanPembelianCoil(allBebanPembelian);
-        if(!saveButton.isVisible())
+        if (!saveButton.isVisible()) {
             controller.viewBebanPembelianCoil();
+        }
         controller.saveAndCloseButton.setOnAction((ActionEvent event) -> {
             allBebanPembelian.clear();
             allBebanPembelian.addAll(controller.allBebanPembelianCoilDetail);
@@ -292,17 +324,19 @@ public class NewPembelianController  {
             mainApp.closeDialog(stage, child);
         });
     }
+
     @FXML
-    private void addSupplier(){
+    private void addSupplier() {
         Stage child = new Stage();
         FXMLLoader loader = mainApp.showDialog(stage, child, "View/Dialog/AddSupplier.fxml");
         AddSupplierController controller = loader.getController();
         controller.setMainApp(mainApp, stage, child);
         controller.supplierTable.setRowFactory(table -> {
-            TableRow<Supplier> row = new TableRow<Supplier>(){};
+            TableRow<Supplier> row = new TableRow<Supplier>() {
+            };
             row.setOnMouseClicked((MouseEvent mouseEvent) -> {
-                if(mouseEvent.getButton().equals(MouseButton.PRIMARY)&&mouseEvent.getClickCount() == 2){
-                    if(row.getItem()!=null){
+                if (mouseEvent.getButton().equals(MouseButton.PRIMARY) && mouseEvent.getClickCount() == 2) {
+                    if (row.getItem() != null) {
                         mainApp.closeDialog(stage, child);
                         supplier = row.getItem();
                         namaField.setText(supplier.getNama());

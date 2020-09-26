@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package com.excellentsystem.PasarBaja.View;
 
 import com.excellentsystem.PasarBaja.DAO.BarangDAO;
@@ -52,94 +51,108 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
  *
  * @author Xtreme
  */
-public class DataBarangController  {
+public class DataBarangController {
 
-    @FXML private TableView<Barang> barangTable;
-    @FXML private TableColumn<Barang, String> kodeBarangColumn;
-    @FXML private TableColumn<Barang, String> namaBarangColumn;
-    @FXML private TableColumn<Barang, Number> beratColumn;
-    @FXML private TableColumn<Barang, String> satuanColumn;
-    @FXML private TableColumn<Barang, Number> hargaJualColumn;
-    @FXML private TextField searchField;
-    
+    @FXML
+    private TableView<Barang> barangTable;
+    @FXML
+    private TableColumn<Barang, String> kodeBarangColumn;
+    @FXML
+    private TableColumn<Barang, String> namaBarangColumn;
+    @FXML
+    private TableColumn<Barang, Number> beratColumn;
+    @FXML
+    private TableColumn<Barang, String> satuanColumn;
+    @FXML
+    private TableColumn<Barang, Number> hargaJualColumn;
+    @FXML
+    private TextField searchField;
+
     private ObservableList<Barang> allBarang = FXCollections.observableArrayList();
     private ObservableList<Barang> filterData = FXCollections.observableArrayList();
-    private Main mainApp;  
+    private Main mainApp;
+
     public void initialize() {
         kodeBarangColumn.setCellValueFactory(cellData -> cellData.getValue().kodeBarangProperty());
         kodeBarangColumn.setCellFactory(col -> Function.getWrapTableCell(kodeBarangColumn));
-        
+
         namaBarangColumn.setCellValueFactory(cellData -> cellData.getValue().namaBarangProperty());
         namaBarangColumn.setCellFactory(col -> Function.getWrapTableCell(namaBarangColumn));
-        
+
         satuanColumn.setCellValueFactory(cellData -> cellData.getValue().satuanProperty());
         satuanColumn.setCellFactory(col -> Function.getWrapTableCell(satuanColumn));
-        
+
         beratColumn.setCellValueFactory(cellData -> cellData.getValue().beratProperty());
         beratColumn.setCellFactory(col -> Function.getTableCell());
-        
+
         hargaJualColumn.setCellValueFactory(cellData -> cellData.getValue().hargaJualProperty());
         hargaJualColumn.setCellFactory(col -> Function.getTableCell());
-        
+
         final ContextMenu rm = new ContextMenu();
         MenuItem addNew = new MenuItem("Add New Barang");
-        addNew.setOnAction((ActionEvent e)->{
+        addNew.setOnAction((ActionEvent e) -> {
             addNew();
         });
         MenuItem export = new MenuItem("Export Excel");
-        export.setOnAction((ActionEvent e)->{
+        export.setOnAction((ActionEvent e) -> {
             exportExcel();
         });
         MenuItem refresh = new MenuItem("Refresh");
-        refresh.setOnAction((ActionEvent e)->{
+        refresh.setOnAction((ActionEvent e) -> {
             getBarang();
         });
-        for(Otoritas o : sistem.getUser().getOtoritas()){
-            if(o.getJenis().equals("Add New Barang")&&o.isStatus())
+        for (Otoritas o : sistem.getUser().getOtoritas()) {
+            if (o.getJenis().equals("Add New Barang") && o.isStatus()) {
                 rm.getItems().add(addNew);
-            if(o.getJenis().equals("Export Excel")&&o.isStatus())
+            }
+            if (o.getJenis().equals("Export Excel") && o.isStatus()) {
                 rm.getItems().add(export);
+            }
         }
         rm.getItems().addAll(refresh);
         barangTable.setContextMenu(rm);
         barangTable.setRowFactory((TableView<Barang> tableView) -> {
-            final TableRow<Barang> row = new TableRow<Barang>(){
+            final TableRow<Barang> row = new TableRow<Barang>() {
                 @Override
                 public void updateItem(Barang item, boolean empty) {
                     super.updateItem(item, empty);
                     if (empty) {
                         setContextMenu(rm);
-                    } else{
+                    } else {
                         final ContextMenu rm = new ContextMenu();
                         MenuItem addNew = new MenuItem("Add New Barang");
-                        addNew.setOnAction((ActionEvent e)->{
+                        addNew.setOnAction((ActionEvent e) -> {
                             addNew();
                         });
                         MenuItem edit = new MenuItem("Edit Barang");
-                        edit.setOnAction((ActionEvent e)->{
+                        edit.setOnAction((ActionEvent e) -> {
                             editBarang(item);
                         });
                         MenuItem hapus = new MenuItem("Delete Barang");
-                        hapus.setOnAction((ActionEvent e)->{
+                        hapus.setOnAction((ActionEvent e) -> {
                             hapusBarang(item);
                         });
                         MenuItem export = new MenuItem("Export Excel");
-                        export.setOnAction((ActionEvent e)->{
+                        export.setOnAction((ActionEvent e) -> {
                             exportExcel();
                         });
                         MenuItem refresh = new MenuItem("Refresh");
-                        refresh.setOnAction((ActionEvent e)->{
+                        refresh.setOnAction((ActionEvent e) -> {
                             getBarang();
                         });
-                        for(Otoritas o : sistem.getUser().getOtoritas()){
-                            if(o.getJenis().equals("Add New Barang")&&o.isStatus())
+                        for (Otoritas o : sistem.getUser().getOtoritas()) {
+                            if (o.getJenis().equals("Add New Barang") && o.isStatus()) {
                                 rm.getItems().add(addNew);
-                            if(o.getJenis().equals("Edit Barang")&&o.isStatus())
+                            }
+                            if (o.getJenis().equals("Edit Barang") && o.isStatus()) {
                                 rm.getItems().add(edit);
-                            if(o.getJenis().equals("Delete Barang")&&o.isStatus())
+                            }
+                            if (o.getJenis().equals("Delete Barang") && o.isStatus()) {
                                 rm.getItems().add(hapus);
-                            if(o.getJenis().equals("Export Excel")&&o.isStatus())
+                            }
+                            if (o.getJenis().equals("Export Excel") && o.isStatus()) {
                                 rm.getItems().add(export);
+                            }
                         }
                         rm.getItems().addAll(refresh);
                         setContextMenu(rm);
@@ -147,11 +160,12 @@ public class DataBarangController  {
                 }
             };
             row.setOnMouseClicked((MouseEvent mouseEvent) -> {
-                if(mouseEvent.getButton().equals(MouseButton.PRIMARY)&&mouseEvent.getClickCount() == 2){
-                    if(row.getItem()!=null){
-                        for(Otoritas o : sistem.getUser().getOtoritas()){
-                            if(o.getJenis().equals("Edit Barang")&&o.isStatus())
+                if (mouseEvent.getButton().equals(MouseButton.PRIMARY) && mouseEvent.getClickCount() == 2) {
+                    if (row.getItem() != null) {
+                        for (Otoritas o : sistem.getUser().getOtoritas()) {
+                            if (o.getJenis().equals("Edit Barang") && o.isStatus()) {
                                 editBarang(row.getItem());
+                            }
                         }
                     }
                 }
@@ -166,17 +180,19 @@ public class DataBarangController  {
         });
         filterData.addAll(allBarang);
     }
+
     public void setMainApp(Main mainApp) {
         this.mainApp = mainApp;
         getBarang();
         barangTable.setItems(filterData);
     }
-    private void getBarang(){
+
+    private void getBarang() {
         Task<List<Barang>> task = new Task<List<Barang>>() {
-            @Override 
-            public List<Barang> call() throws Exception{
+            @Override
+            public List<Barang> call() throws Exception {
                 try (Connection con = Koneksi.getConnection()) {
-                    return BarangDAO.getAllByStatus(con,"true");
+                    return BarangDAO.getAllByStatus(con, "true");
                 }
             }
         };
@@ -194,44 +210,50 @@ public class DataBarangController  {
         });
         new Thread(task).start();
     }
-    private Boolean checkColumn(String column){
-        if(column!=null)
-            if(column.toLowerCase().contains(searchField.getText().toLowerCase()))
+
+    private Boolean checkColumn(String column) {
+        if (column != null) {
+            if (column.toLowerCase().contains(searchField.getText().toLowerCase())) {
                 return true;
+            }
+        }
         return false;
     }
+
     private void searchBarang() {
         filterData.clear();
         for (Barang temp : allBarang) {
-            if (searchField.getText() == null || searchField.getText().equals(""))
+            if (searchField.getText() == null || searchField.getText().equals("")) {
                 filterData.add(temp);
-            else{
-                if(checkColumn(temp.getKodeBarang())||
-                    checkColumn(temp.getNamaBarang())||
-                    checkColumn(df.format(temp.getBerat()))||
-                    checkColumn(temp.getSatuan())||
-                    checkColumn(df.format(temp.getHargaJual())))
+            } else {
+                if (checkColumn(temp.getKodeBarang())
+                        || checkColumn(temp.getNamaBarang())
+                        || checkColumn(df.format(temp.getBerat()))
+                        || checkColumn(temp.getSatuan())
+                        || checkColumn(df.format(temp.getHargaJual()))) {
                     filterData.add(temp);
+                }
             }
         }
     }
-    private void addNew(){
+
+    private void addNew() {
         Stage stage = new Stage();
         FXMLLoader loader = mainApp.showDialog(mainApp.MainStage, stage, "View/Dialog/DetailBarang.fxml");
         DetailBarangController x = loader.getController();
         x.setMainApp(mainApp, mainApp.MainStage, stage);
         x.setBarang(null);
         x.saveButton.setOnAction((ActionEvent event) -> {
-            if("".equals(x.kodeBarangField.getText()))
+            if ("".equals(x.kodeBarangField.getText())) {
                 mainApp.showMessage(Modality.NONE, "Warning", "Kode Barang masih kosong");
-            else if(x.beratField.getText().equals("")||x.beratField.getText().equals("0"))
+            } else if (x.beratField.getText().equals("") || x.beratField.getText().equals("0")) {
                 mainApp.showMessage(Modality.NONE, "Warning", "Berat masih kosong");
-            else if(x.hargaJualField.getText().equals("")||x.hargaJualField.getText().equals("0"))
+            } else if (x.hargaJualField.getText().equals("") || x.hargaJualField.getText().equals("0")) {
                 mainApp.showMessage(Modality.NONE, "Warning", "Harga jual masih kosong");
-            else{
+            } else {
                 Task<String> task = new Task<String>() {
-                    @Override 
-                    public String call() throws Exception{
+                    @Override
+                    public String call() throws Exception {
                         try (Connection con = Koneksi.getConnection()) {
                             Barang b = new Barang();
                             b.setKodeBarang(x.kodeBarangField.getText());
@@ -250,10 +272,10 @@ public class DataBarangController  {
                 task.setOnSucceeded((e) -> {
                     mainApp.closeLoading();
                     getBarang();
-                    if(task.getValue().equals("true")){
+                    if (task.getValue().equals("true")) {
                         mainApp.showMessage(Modality.NONE, "Success", "Data barang berhasil disimpan");
-                        mainApp.closeDialog(mainApp.MainStage,stage);
-                    }else{
+                        mainApp.closeDialog(mainApp.MainStage, stage);
+                    } else {
                         mainApp.showMessage(Modality.NONE, "Error", task.getValue());
                     }
                 });
@@ -265,23 +287,24 @@ public class DataBarangController  {
             }
         });
     }
-    private void editBarang(Barang b){
+
+    private void editBarang(Barang b) {
         Stage stage = new Stage();
         FXMLLoader loader = mainApp.showDialog(mainApp.MainStage, stage, "View/Dialog/DetailBarang.fxml");
         DetailBarangController x = loader.getController();
         x.setMainApp(mainApp, mainApp.MainStage, stage);
         x.setBarang(b);
         x.saveButton.setOnAction((ActionEvent event) -> {
-            if("".equals(x.kodeBarangField.getText()))
+            if ("".equals(x.kodeBarangField.getText())) {
                 mainApp.showMessage(Modality.NONE, "Warning", "Barang belum dipilih");
-            else if(x.beratField.getText().equals("")||x.beratField.getText().equals("0"))
+            } else if (x.beratField.getText().equals("") || x.beratField.getText().equals("0")) {
                 mainApp.showMessage(Modality.NONE, "Warning", "Berat masih kosong");
-            else if(x.hargaJualField.getText().equals("")||x.hargaJualField.getText().equals("0"))
+            } else if (x.hargaJualField.getText().equals("") || x.hargaJualField.getText().equals("0")) {
                 mainApp.showMessage(Modality.NONE, "Warning", "Harga jual masih kosong");
-            else{
+            } else {
                 Task<String> task = new Task<String>() {
-                    @Override 
-                    public String call() throws Exception{
+                    @Override
+                    public String call() throws Exception {
                         try (Connection con = Koneksi.getConnection()) {
                             b.setNamaBarang(x.namaBarangField.getText());
                             b.setSatuan(x.satuanField.getText());
@@ -297,10 +320,10 @@ public class DataBarangController  {
                 task.setOnSucceeded((e) -> {
                     mainApp.closeLoading();
                     getBarang();
-                    if(task.getValue().equals("true")){
+                    if (task.getValue().equals("true")) {
                         mainApp.showMessage(Modality.NONE, "Success", "Data barang berhasil disimpan");
-                        mainApp.closeDialog(mainApp.MainStage,stage);
-                    }else{
+                        mainApp.closeDialog(mainApp.MainStage, stage);
+                    } else {
                         mainApp.showMessage(Modality.NONE, "Error", task.getValue());
                     }
                 });
@@ -312,13 +335,14 @@ public class DataBarangController  {
             }
         });
     }
-    private void hapusBarang(Barang b){
+
+    private void hapusBarang(Barang b) {
         MessageController controller = mainApp.showMessage(Modality.WINDOW_MODAL, "Confirmation",
-                "Delete barang "+b.getKodeBarang()+"-"+b.getNamaBarang()+" ?");
+                "Delete barang " + b.getKodeBarang() + "-" + b.getNamaBarang() + " ?");
         controller.OK.setOnAction((ActionEvent ev) -> {
             Task<String> task = new Task<String>() {
-                @Override 
-                public String call() throws Exception{
+                @Override
+                public String call() throws Exception {
                     try (Connection con = Koneksi.getConnection()) {
                         return Service.deleteBarang(con, b);
                     }
@@ -330,9 +354,9 @@ public class DataBarangController  {
             task.setOnSucceeded((e) -> {
                 mainApp.closeLoading();
                 getBarang();
-                if(task.getValue().equals("true")){
+                if (task.getValue().equals("true")) {
                     mainApp.showMessage(Modality.NONE, "Success", "Data barang berhasil dihapus");
-                }else{
+                } else {
                     mainApp.showMessage(Modality.NONE, "Error", task.getValue());
                 }
             });
@@ -343,8 +367,9 @@ public class DataBarangController  {
             new Thread(task).start();
         });
     }
+
     private void exportExcel() {
-        try{
+        try {
             FileChooser fileChooser = new FileChooser();
             fileChooser.setTitle("Select location to export");
             fileChooser.getExtensionFilters().addAll(
@@ -365,14 +390,14 @@ public class DataBarangController  {
                 int rc = 0;
                 int c = 6;
                 createRow(workbook, sheet, rc, c, "Bold");
-                sheet.getRow(rc).getCell(0).setCellValue("Filter : "+searchField.getText());
+                sheet.getRow(rc).getCell(0).setCellValue("Filter : " + searchField.getText());
                 rc++;
                 createRow(workbook, sheet, rc, c, "Header");
-                sheet.getRow(rc).getCell(0).setCellValue("Kode Barang"); 
-                sheet.getRow(rc).getCell(1).setCellValue("Nama Barang"); 
-                sheet.getRow(rc).getCell(2).setCellValue("Satuan"); 
-                sheet.getRow(rc).getCell(3).setCellValue("Berat"); 
-                sheet.getRow(rc).getCell(4).setCellValue("Harga Jual"); 
+                sheet.getRow(rc).getCell(0).setCellValue("Kode Barang");
+                sheet.getRow(rc).getCell(1).setCellValue("Nama Barang");
+                sheet.getRow(rc).getCell(2).setCellValue("Satuan");
+                sheet.getRow(rc).getCell(3).setCellValue("Berat");
+                sheet.getRow(rc).getCell(4).setCellValue("Harga Jual");
                 rc++;
                 for (Barang b : filterData) {
                     createRow(workbook, sheet, rc, c, "Detail");
@@ -383,12 +408,14 @@ public class DataBarangController  {
                     sheet.getRow(rc).getCell(4).setCellValue(b.getHargaJual());
                     rc++;
                 }
-                for(int i=0 ; i<c ; i++){ sheet.autoSizeColumn(i);}
+                for (int i = 0; i < c; i++) {
+                    sheet.autoSizeColumn(i);
+                }
                 try (FileOutputStream outputStream = new FileOutputStream(file)) {
                     workbook.write(outputStream);
                 }
             }
-        }catch(Exception e){
+        } catch (Exception e) {
             mainApp.showMessage(Modality.NONE, "Error", e.toString());
             e.printStackTrace();
         }

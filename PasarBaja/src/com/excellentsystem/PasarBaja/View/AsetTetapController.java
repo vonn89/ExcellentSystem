@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package com.excellentsystem.PasarBaja.View;
 
 import com.excellentsystem.PasarBaja.DAO.AsetTetapDAO;
@@ -57,59 +56,79 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
  *
  * @author Xtreme
  */
-public class AsetTetapController  {
+public class AsetTetapController {
 
-    @FXML private TableView<AsetTetap> asetTetapTable;
-    @FXML private TableColumn<AsetTetap, String> noAsetTetapColumn;
-    @FXML private TableColumn<AsetTetap, String> namaColumn;
-    @FXML private TableColumn<AsetTetap, String> kategoriColumn;
-    @FXML private TableColumn<AsetTetap, String> keteranganColumn;
-    @FXML private TableColumn<AsetTetap, String> masaPakaiColumn;
-    @FXML private TableColumn<AsetTetap, Number> nilaiAwalColumn;
-    @FXML private TableColumn<AsetTetap, Number> penyusutanColumn;
-    @FXML private TableColumn<AsetTetap, Number> nilaiAkhirColumn;
-    @FXML private TableColumn<AsetTetap, Number> hargaJualColumn;
-    @FXML private TableColumn<AsetTetap, String> tglBeliColumn;
-    @FXML private TableColumn<AsetTetap, String> userBeliColumn;
-    @FXML private TableColumn<AsetTetap, String> tglJualColumn;
-    @FXML private TableColumn<AsetTetap, String> userJualColumn;
-    
-    @FXML private TextField searchField;
-    @FXML private Label totalAsetTetapLabel;
-    @FXML private Label totalPenyusutanLabel;
-    @FXML private ComboBox<String> groupByCombo;
-    
+    @FXML
+    private TableView<AsetTetap> asetTetapTable;
+    @FXML
+    private TableColumn<AsetTetap, String> noAsetTetapColumn;
+    @FXML
+    private TableColumn<AsetTetap, String> namaColumn;
+    @FXML
+    private TableColumn<AsetTetap, String> kategoriColumn;
+    @FXML
+    private TableColumn<AsetTetap, String> keteranganColumn;
+    @FXML
+    private TableColumn<AsetTetap, String> masaPakaiColumn;
+    @FXML
+    private TableColumn<AsetTetap, Number> nilaiAwalColumn;
+    @FXML
+    private TableColumn<AsetTetap, Number> penyusutanColumn;
+    @FXML
+    private TableColumn<AsetTetap, Number> nilaiAkhirColumn;
+    @FXML
+    private TableColumn<AsetTetap, Number> hargaJualColumn;
+    @FXML
+    private TableColumn<AsetTetap, String> tglBeliColumn;
+    @FXML
+    private TableColumn<AsetTetap, String> userBeliColumn;
+    @FXML
+    private TableColumn<AsetTetap, String> tglJualColumn;
+    @FXML
+    private TableColumn<AsetTetap, String> userJualColumn;
+
+    @FXML
+    private TextField searchField;
+    @FXML
+    private Label totalAsetTetapLabel;
+    @FXML
+    private Label totalPenyusutanLabel;
+    @FXML
+    private ComboBox<String> groupByCombo;
+
     private final ObservableList<AsetTetap> allAsetTetap = FXCollections.observableArrayList();
     private final ObservableList<AsetTetap> filterData = FXCollections.observableArrayList();
-    private Main mainApp;   
+    private Main mainApp;
+
     public void initialize() {
         noAsetTetapColumn.setCellValueFactory(cellData -> cellData.getValue().noAsetProperty());
         noAsetTetapColumn.setCellFactory(col -> Function.getWrapTableCell(noAsetTetapColumn));
-        
+
         namaColumn.setCellValueFactory(cellData -> cellData.getValue().namaProperty());
         namaColumn.setCellFactory(col -> Function.getWrapTableCell(namaColumn));
-        
+
         kategoriColumn.setCellValueFactory(cellData -> cellData.getValue().kategoriProperty());
         kategoriColumn.setCellFactory(col -> Function.getWrapTableCell(kategoriColumn));
-        
+
         keteranganColumn.setCellValueFactory(cellData -> cellData.getValue().keteranganProperty());
         keteranganColumn.setCellFactory(col -> Function.getWrapTableCell(keteranganColumn));
-        
+
         userBeliColumn.setCellValueFactory(cellData -> cellData.getValue().userBeliProperty());
         userBeliColumn.setCellFactory(col -> Function.getWrapTableCell(userBeliColumn));
-        
+
         userJualColumn.setCellValueFactory(cellData -> cellData.getValue().userJualProperty());
         userJualColumn.setCellFactory(col -> Function.getWrapTableCell(userJualColumn));
-        
-        masaPakaiColumn.setCellValueFactory(cellData -> { 
-            String masaPakai= "-";
-            if(cellData.getValue().getMasaPakai()!=0)
-                masaPakai=String.valueOf(cellData.getValue().getMasaPakai())+" Bulan";
+
+        masaPakaiColumn.setCellValueFactory(cellData -> {
+            String masaPakai = "-";
+            if (cellData.getValue().getMasaPakai() != 0) {
+                masaPakai = String.valueOf(cellData.getValue().getMasaPakai()) + " Bulan";
+            }
             return new SimpleStringProperty(masaPakai);
         });
         masaPakaiColumn.setCellFactory(col -> Function.getWrapTableCell(masaPakaiColumn));
-        
-        tglBeliColumn.setCellValueFactory(cellData -> { 
+
+        tglBeliColumn.setCellValueFactory(cellData -> {
             try {
                 return new SimpleStringProperty(tglLengkap.format(tglSql.parse(cellData.getValue().getTglBeli())));
             } catch (Exception ex) {
@@ -118,12 +137,13 @@ public class AsetTetapController  {
         });
         tglBeliColumn.setCellFactory(col -> Function.getWrapTableCell(tglBeliColumn));
         tglBeliColumn.setComparator(Function.sortDate(tglLengkap));
-        
-        tglJualColumn.setCellValueFactory(cellData -> { 
+
+        tglJualColumn.setCellValueFactory(cellData -> {
             try {
-                String tglJual="-";
-                if(cellData.getValue().getStatus().equals("false"))
+                String tglJual = "-";
+                if (cellData.getValue().getStatus().equals("false")) {
                     tglJual = tglLengkap.format(tglSql.parse(cellData.getValue().getTglJual()));
+                }
                 return new SimpleStringProperty(tglJual);
             } catch (Exception ex) {
                 return null;
@@ -131,19 +151,19 @@ public class AsetTetapController  {
         });
         tglJualColumn.setCellFactory(col -> Function.getWrapTableCell(tglJualColumn));
         tglJualColumn.setComparator(Function.sortDate(tglLengkap));
-        
+
         nilaiAwalColumn.setCellValueFactory(cellData -> cellData.getValue().nilaiAwalProperty());
         nilaiAwalColumn.setCellFactory(col -> Function.getTableCell());
-        
+
         penyusutanColumn.setCellValueFactory(cellData -> cellData.getValue().penyusutanProperty());
         penyusutanColumn.setCellFactory(col -> Function.getTableCell());
-        
+
         nilaiAkhirColumn.setCellValueFactory(cellData -> cellData.getValue().nilaiAkhirProperty());
         nilaiAkhirColumn.setCellFactory(col -> Function.getTableCell());
-        
+
         hargaJualColumn.setCellValueFactory(cellData -> cellData.getValue().hargaJualProperty());
         hargaJualColumn.setCellFactory(col -> Function.getTableCell());
-        
+
         allAsetTetap.addListener((ListChangeListener.Change<? extends AsetTetap> change) -> {
             searchAsetTetap();
         });
@@ -151,66 +171,72 @@ public class AsetTetapController  {
             searchAsetTetap();
         });
         filterData.addAll(allAsetTetap);
-        
+
         final ContextMenu rm = new ContextMenu();
         MenuItem beli = new MenuItem("Pembelian Aset Tetap");
-        beli.setOnAction((ActionEvent e)->{
+        beli.setOnAction((ActionEvent e) -> {
             showBeliAsetTetap();
         });
         MenuItem export = new MenuItem("Export Excel");
-        export.setOnAction((ActionEvent e)->{
+        export.setOnAction((ActionEvent e) -> {
             exportExcel();
         });
         MenuItem refresh = new MenuItem("Refresh");
-        refresh.setOnAction((ActionEvent e)->{
+        refresh.setOnAction((ActionEvent e) -> {
             getAsetTetap();
         });
-        for(Otoritas o : sistem.getUser().getOtoritas()){
-            if(o.getJenis().equals("Pembelian Aset Tetap")&&o.isStatus())
+        for (Otoritas o : sistem.getUser().getOtoritas()) {
+            if (o.getJenis().equals("Pembelian Aset Tetap") && o.isStatus()) {
                 rm.getItems().add(beli);
-            if(o.getJenis().equals("Export Excel")&&o.isStatus())
+            }
+            if (o.getJenis().equals("Export Excel") && o.isStatus()) {
                 rm.getItems().add(export);
+            }
         }
         rm.getItems().addAll(refresh);
         asetTetapTable.setContextMenu(rm);
         asetTetapTable.setRowFactory((TableView<AsetTetap> tableView) -> {
-            final TableRow<AsetTetap> row = new TableRow<AsetTetap>(){
+            final TableRow<AsetTetap> row = new TableRow<AsetTetap>() {
                 @Override
                 public void updateItem(AsetTetap item, boolean empty) {
                     super.updateItem(item, empty);
                     if (empty) {
                         setContextMenu(rm);
-                    } else{
+                    } else {
                         final ContextMenu rm = new ContextMenu();
                         MenuItem beli = new MenuItem("Pembelian Aset Tetap");
-                        beli.setOnAction((ActionEvent e)->{
+                        beli.setOnAction((ActionEvent e) -> {
                             showBeliAsetTetap();
                         });
                         MenuItem jual = new MenuItem("Penjualan Aset Tetap");
-                        jual.setOnAction((ActionEvent e)->{
+                        jual.setOnAction((ActionEvent e) -> {
                             showJualAsetTetap(item);
                         });
                         MenuItem detail = new MenuItem("Detail Aset Tetap");
-                        detail.setOnAction((ActionEvent e)->{
+                        detail.setOnAction((ActionEvent e) -> {
                             showDetailAsetTetap(item);
                         });
                         MenuItem export = new MenuItem("Export Excel");
-                        export.setOnAction((ActionEvent e)->{
+                        export.setOnAction((ActionEvent e) -> {
                             exportExcel();
                         });
                         MenuItem refresh = new MenuItem("Refresh");
-                        refresh.setOnAction((ActionEvent e)->{
+                        refresh.setOnAction((ActionEvent e) -> {
                             getAsetTetap();
                         });
-                        for(Otoritas o : sistem.getUser().getOtoritas()){
-                            if(o.getJenis().equals("Pembelian Aset Tetap")&&o.isStatus())
+                        for (Otoritas o : sistem.getUser().getOtoritas()) {
+                            if (o.getJenis().equals("Pembelian Aset Tetap") && o.isStatus()) {
                                 rm.getItems().add(beli);
-                            if(o.getJenis().equals("Penjualan Aset Tetap")&&o.isStatus())
+                            }
+                            if (o.getJenis().equals("Penjualan Aset Tetap") && o.isStatus()) {
                                 rm.getItems().add(jual);
-                            if(o.getJenis().equals("Detail Aset Tetap")&&o.isStatus())
+                            }
+                            if (o.getJenis().equals("Detail Aset Tetap") && o.isStatus()) {
                                 rm.getItems().add(detail);
-                            if(o.getJenis().equals("Export Excel")&&o.isStatus())
+                            }
+                            if (o.getJenis().equals("Export Excel") && o.isStatus()) {
                                 rm.getItems().add(export);
+                            }
                         }
                         rm.getItems().addAll(refresh);
                         setContextMenu(rm);
@@ -218,11 +244,12 @@ public class AsetTetapController  {
                 }
             };
             row.setOnMouseClicked((MouseEvent mouseEvent) -> {
-                if(mouseEvent.getButton().equals(MouseButton.PRIMARY)&&mouseEvent.getClickCount() == 2){
-                    if(row.getItem()!=null){
-                        for(Otoritas o : sistem.getUser().getOtoritas()){
-                            if(o.getJenis().equals("Detail Aset Tetap")&&o.isStatus())
+                if (mouseEvent.getButton().equals(MouseButton.PRIMARY) && mouseEvent.getClickCount() == 2) {
+                    if (row.getItem() != null) {
+                        for (Otoritas o : sistem.getUser().getOtoritas()) {
+                            if (o.getJenis().equals("Detail Aset Tetap") && o.isStatus()) {
                                 showDetailAsetTetap(row.getItem());
+                            }
                         }
                     }
                 }
@@ -230,6 +257,7 @@ public class AsetTetapController  {
             return row;
         });
     }
+
     public void setMainApp(Main mainApp) {
         this.mainApp = mainApp;
         asetTetapTable.setItems(filterData);
@@ -240,19 +268,21 @@ public class AsetTetapController  {
         groupByCombo.setItems(groupBy);
         groupByCombo.getSelectionModel().select("Tersedia");
         getAsetTetap();
-    } 
+    }
+
     @FXML
-    private void getAsetTetap(){
+    private void getAsetTetap() {
         Task<List<AsetTetap>> task = new Task<List<AsetTetap>>() {
-            @Override 
-            public List<AsetTetap> call() throws Exception{
+            @Override
+            public List<AsetTetap> call() throws Exception {
                 try (Connection con = Koneksi.getConnection()) {
                     String status = "%";
-                    if(groupByCombo.getSelectionModel().getSelectedItem().equals("Tersedia"))
+                    if (groupByCombo.getSelectionModel().getSelectedItem().equals("Tersedia")) {
                         status = "open";
-                    else if(groupByCombo.getSelectionModel().getSelectedItem().equals("Terjual"))
+                    } else if (groupByCombo.getSelectionModel().getSelectedItem().equals("Terjual")) {
                         status = "close";
-                    return AsetTetapDAO.getAllByStatus(con,status);
+                    }
+                    return AsetTetapDAO.getAllByStatus(con, status);
                 }
             }
         };
@@ -270,70 +300,76 @@ public class AsetTetapController  {
         });
         new Thread(task).start();
     }
-    private Boolean checkColumn(String column){
-        if(column!=null){
-            if(column.toLowerCase().contains(searchField.getText().toLowerCase()))
+
+    private Boolean checkColumn(String column) {
+        if (column != null) {
+            if (column.toLowerCase().contains(searchField.getText().toLowerCase())) {
                 return true;
+            }
         }
         return false;
     }
-    private void searchAsetTetap(){
-        try{
+
+    private void searchAsetTetap() {
+        try {
             filterData.clear();
             for (AsetTetap temp : allAsetTetap) {
-                if (searchField.getText() == null || searchField.getText().equals(""))
+                if (searchField.getText() == null || searchField.getText().equals("")) {
                     filterData.add(temp);
-                else{
-                    if(checkColumn(temp.getNoAset())||
-                        checkColumn(temp.getNama())||
-                        checkColumn(temp.getKategori())||
-                        checkColumn(temp.getKeterangan())||
-                        checkColumn(String.valueOf(temp.getMasaPakai()))||
-                        checkColumn(df.format(temp.getNilaiAwal()))||
-                        checkColumn(df.format(temp.getPenyusutan()))||
-                        checkColumn(df.format(temp.getNilaiAkhir()))||
-                        checkColumn(df.format(temp.getHargaJual()))||
-                        checkColumn(temp.getUserBeli())||
-                        checkColumn(temp.getUserJual())||
-                        checkColumn(tglLengkap.format(tglSql.parse(temp.getTglBeli())))||
-                        checkColumn(tglLengkap.format(tglSql.parse(temp.getTglJual()))))
+                } else {
+                    if (checkColumn(temp.getNoAset())
+                            || checkColumn(temp.getNama())
+                            || checkColumn(temp.getKategori())
+                            || checkColumn(temp.getKeterangan())
+                            || checkColumn(String.valueOf(temp.getMasaPakai()))
+                            || checkColumn(df.format(temp.getNilaiAwal()))
+                            || checkColumn(df.format(temp.getPenyusutan()))
+                            || checkColumn(df.format(temp.getNilaiAkhir()))
+                            || checkColumn(df.format(temp.getHargaJual()))
+                            || checkColumn(temp.getUserBeli())
+                            || checkColumn(temp.getUserJual())
+                            || checkColumn(tglLengkap.format(tglSql.parse(temp.getTglBeli())))
+                            || checkColumn(tglLengkap.format(tglSql.parse(temp.getTglJual())))) {
                         filterData.add(temp);
+                    }
                 }
             }
             hitungTotal();
-        }catch(Exception e){
+        } catch (Exception e) {
             mainApp.showMessage(Modality.NONE, "Error", e.toString());
         }
     }
-    private void hitungTotal(){
+
+    private void hitungTotal() {
         double totalAsetTetap = 0;
         double totalPenyusutan = 0;
-        for(AsetTetap temp : filterData){
+        for (AsetTetap temp : filterData) {
             totalAsetTetap = totalAsetTetap + temp.getNilaiAkhir();
             totalPenyusutan = totalPenyusutan + temp.getPenyusutan();
         }
         totalAsetTetapLabel.setText(df.format(totalAsetTetap));
         totalPenyusutanLabel.setText(df.format(totalPenyusutan));
     }
-    private void showBeliAsetTetap(){
+
+    private void showBeliAsetTetap() {
         Stage stage = new Stage();
         FXMLLoader loader = mainApp.showDialog(mainApp.MainStage, stage, "View/Dialog/NewAsetTetap.fxml");
         NewAsetTetapController controller = loader.getController();
-        controller.setMainApp(mainApp,mainApp.MainStage, stage);
+        controller.setMainApp(mainApp, mainApp.MainStage, stage);
         controller.saveButton.setOnAction((ActionEvent event) -> {
-            if("0".equals(controller.hargaField.getText().replaceAll(",", ""))||
-                    "".equals(controller.hargaField.getText().replaceAll(",", ""))){
+            if ("0".equals(controller.hargaField.getText().replaceAll(",", ""))
+                    || "".equals(controller.hargaField.getText().replaceAll(",", ""))) {
                 mainApp.showMessage(Modality.NONE, "Warning", "Harga beli masih kosong");
-            }else if(controller.kategoriCombo.getSelectionModel().getSelectedItem()==null){
+            } else if (controller.kategoriCombo.getSelectionModel().getSelectedItem() == null) {
                 mainApp.showMessage(Modality.NONE, "Warning", "Kategori belum dipilih");
-            }else if(controller.tipeKeuanganCombo.getSelectionModel().getSelectedItem()==null){
+            } else if (controller.tipeKeuanganCombo.getSelectionModel().getSelectedItem() == null) {
                 mainApp.showMessage(Modality.NONE, "Warning", "Tipe keuangan belum dipilih");
-            }else{
+            } else {
                 Task<String> task = new Task<String>() {
-                    @Override 
-                    public String call() throws Exception{
+                    @Override
+                    public String call() throws Exception {
                         try (Connection con = Koneksi.getConnection()) {
-                            int masaPakai = (Integer.parseInt(controller.tahunField.getText())*12)+Integer.parseInt(controller.bulanField.getText());
+                            int masaPakai = (Integer.parseInt(controller.tahunField.getText()) * 12) + Integer.parseInt(controller.bulanField.getText());
                             AsetTetap asetTetap = new AsetTetap();
                             asetTetap.setNama(controller.namaField.getText());
                             asetTetap.setKategori(controller.kategoriCombo.getSelectionModel().getSelectedItem());
@@ -347,7 +383,7 @@ public class AsetTetapController  {
                             asetTetap.setTglJual("2000-01-01 00:00:00");
                             asetTetap.setUserJual("");
                             asetTetap.setUserBeli(sistem.getUser().getKodeUser());
-                            return Service.pembelianAsetTetap(con, asetTetap, 
+                            return Service.pembelianAsetTetap(con, asetTetap,
                                     controller.tipeKeuanganCombo.getSelectionModel().getSelectedItem());
                         }
                     }
@@ -356,15 +392,16 @@ public class AsetTetapController  {
                     mainApp.showLoadingScreen();
                 });
                 task.setOnSucceeded((e) -> {
-                    try{
+                    try {
                         mainApp.closeLoading();
                         getAsetTetap();
-                        if(task.getValue().equals("true")){
+                        if (task.getValue().equals("true")) {
                             mainApp.showMessage(Modality.NONE, "Success", "Pembelian Aset Tetap berhasil disimpan");
-                            mainApp.closeDialog(mainApp.MainStage,stage);
-                        }else
+                            mainApp.closeDialog(mainApp.MainStage, stage);
+                        } else {
                             mainApp.showMessage(Modality.NONE, "Error", task.getValue());
-                    }catch(Exception ex){
+                        }
+                    } catch (Exception ex) {
                         mainApp.showMessage(Modality.NONE, "Error", ex.toString());
                     }
                 });
@@ -376,27 +413,28 @@ public class AsetTetapController  {
             }
         });
     }
-    private void showJualAsetTetap(AsetTetap aset){
+
+    private void showJualAsetTetap(AsetTetap aset) {
         Stage stage = new Stage();
         FXMLLoader loader = mainApp.showDialog(mainApp.MainStage, stage, "View/Dialog/NewAsetTetap.fxml");
         NewAsetTetapController controller = loader.getController();
         controller.setMainApp(mainApp, mainApp.MainStage, stage);
         controller.setPenjualanAset(aset);
         controller.saveButton.setOnAction((ActionEvent event) -> {
-            if("0".equals(controller.hargaField.getText().replaceAll(",", ""))||
-                    "".equals(controller.hargaField.getText().replaceAll(",", ""))){
+            if ("0".equals(controller.hargaField.getText().replaceAll(",", ""))
+                    || "".equals(controller.hargaField.getText().replaceAll(",", ""))) {
                 mainApp.showMessage(Modality.NONE, "Warning", "Harga jual masih kosong");
-            }else if(controller.tipeKeuanganCombo.getSelectionModel().getSelectedItem()==null){
+            } else if (controller.tipeKeuanganCombo.getSelectionModel().getSelectedItem() == null) {
                 mainApp.showMessage(Modality.NONE, "Warning", "Tipe keuangan belum dipilih");
-            }else{
+            } else {
                 Task<String> task = new Task<String>() {
-                    @Override 
-                    public String call() throws Exception{
+                    @Override
+                    public String call() throws Exception {
                         try (Connection con = Koneksi.getConnection()) {
                             aset.setHargaJual(Double.parseDouble(controller.hargaField.getText().replaceAll(",", "")));
                             aset.setStatus("close");
                             aset.setUserJual(sistem.getUser().getKodeUser());
-                            return Service.penjualanAsetTetap(con, aset, 
+                            return Service.penjualanAsetTetap(con, aset,
                                     controller.tipeKeuanganCombo.getSelectionModel().getSelectedItem());
                         }
                     }
@@ -405,16 +443,16 @@ public class AsetTetapController  {
                     mainApp.showLoadingScreen();
                 });
                 task.setOnSucceeded((WorkerStateEvent e) -> {
-                    try{
+                    try {
                         mainApp.closeLoading();
                         getAsetTetap();
-                        if(task.getValue().equals("true")){
+                        if (task.getValue().equals("true")) {
                             mainApp.showMessage(Modality.NONE, "Success", "Penjualan aset tetap berhasil disimpan");
                             mainApp.closeDialog(mainApp.MainStage, stage);
-                        }else{
+                        } else {
                             mainApp.showMessage(Modality.NONE, "Error", task.getValue());
                         }
-                    }catch(Exception ex){
+                    } catch (Exception ex) {
                         mainApp.showMessage(Modality.NONE, "Error", ex.toString());
                     }
                 });
@@ -426,15 +464,17 @@ public class AsetTetapController  {
             }
         });
     }
+
     private void showDetailAsetTetap(AsetTetap aset) {
         Stage stage = new Stage();
         FXMLLoader loader = mainApp.showDialog(mainApp.MainStage, stage, "View/Dialog/DetailAsetTetap.fxml");
         DetailAsetTetapController x = loader.getController();
-        x.setMainApp(mainApp,mainApp.MainStage, stage);
+        x.setMainApp(mainApp, mainApp.MainStage, stage);
         x.setDetail(aset);
     }
+
     private void exportExcel() {
-        try{
+        try {
             FileChooser fileChooser = new FileChooser();
             fileChooser.setTitle("Select location to export");
             fileChooser.getExtensionFilters().addAll(
@@ -451,28 +491,28 @@ public class AsetTetapController  {
                 } else {
                     throw new IllegalArgumentException("The specified file is not Excel file");
                 }
-                
+
                 Sheet sheet = workbook.createSheet("Data Aset Tetap");
                 int rc = 0;
                 int c = 11;
                 createRow(workbook, sheet, rc, c, "Bold");
-                sheet.getRow(rc).getCell(0).setCellValue("Status : "+groupByCombo.getSelectionModel().getSelectedItem());
+                sheet.getRow(rc).getCell(0).setCellValue("Status : " + groupByCombo.getSelectionModel().getSelectedItem());
                 rc++;
                 createRow(workbook, sheet, rc, c, "Bold");
-                sheet.getRow(rc).getCell(0).setCellValue("Filter : "+searchField.getText());
+                sheet.getRow(rc).getCell(0).setCellValue("Filter : " + searchField.getText());
                 rc++;
                 createRow(workbook, sheet, rc, c, "Header");
-                sheet.getRow(rc).getCell(0).setCellValue("No Aset"); 
-                sheet.getRow(rc).getCell(1).setCellValue("Nama"); 
-                sheet.getRow(rc).getCell(2).setCellValue("Kategori"); 
-                sheet.getRow(rc).getCell(3).setCellValue("Keterangan"); 
-                sheet.getRow(rc).getCell(4).setCellValue("Masa Pakai"); 
-                sheet.getRow(rc).getCell(5).setCellValue("Nilai Awal"); 
-                sheet.getRow(rc).getCell(6).setCellValue("Penyusutan"); 
-                sheet.getRow(rc).getCell(7).setCellValue("Nilai Akhir"); 
-                sheet.getRow(rc).getCell(8).setCellValue("Harga Jual"); 
-                sheet.getRow(rc).getCell(9).setCellValue("Tgl Beli"); 
-                sheet.getRow(rc).getCell(10).setCellValue("Tgl Jual"); 
+                sheet.getRow(rc).getCell(0).setCellValue("No Aset");
+                sheet.getRow(rc).getCell(1).setCellValue("Nama");
+                sheet.getRow(rc).getCell(2).setCellValue("Kategori");
+                sheet.getRow(rc).getCell(3).setCellValue("Keterangan");
+                sheet.getRow(rc).getCell(4).setCellValue("Masa Pakai");
+                sheet.getRow(rc).getCell(5).setCellValue("Nilai Awal");
+                sheet.getRow(rc).getCell(6).setCellValue("Penyusutan");
+                sheet.getRow(rc).getCell(7).setCellValue("Nilai Akhir");
+                sheet.getRow(rc).getCell(8).setCellValue("Harga Jual");
+                sheet.getRow(rc).getCell(9).setCellValue("Tgl Beli");
+                sheet.getRow(rc).getCell(10).setCellValue("Tgl Jual");
                 rc++;
                 double nilaiAwal = 0;
                 double penyusutan = 0;
@@ -490,10 +530,11 @@ public class AsetTetapController  {
                     sheet.getRow(rc).getCell(7).setCellValue(s.getNilaiAkhir());
                     sheet.getRow(rc).getCell(8).setCellValue(s.getHargaJual());
                     sheet.getRow(rc).getCell(9).setCellValue(tglLengkap.format(tglSql.parse(s.getTglBeli())));
-                    if("false".equals(s.getStatus()))
+                    if ("false".equals(s.getStatus())) {
                         sheet.getRow(rc).getCell(10).setCellValue(s.getTglJual());
+                    }
                     rc++;
-                    
+
                     nilaiAwal = nilaiAwal + s.getNilaiAwal();
                     penyusutan = penyusutan + s.getPenyusutan();
                     nilaiAkhir = nilaiAkhir + s.getNilaiAkhir();
@@ -505,12 +546,14 @@ public class AsetTetapController  {
                 sheet.getRow(rc).getCell(6).setCellValue(penyusutan);
                 sheet.getRow(rc).getCell(7).setCellValue(nilaiAkhir);
                 sheet.getRow(rc).getCell(8).setCellValue(hargaJual);
-                for(int i=0 ; i<c ; i++){ sheet.autoSizeColumn(i);}
+                for (int i = 0; i < c; i++) {
+                    sheet.autoSizeColumn(i);
+                }
                 try (FileOutputStream outputStream = new FileOutputStream(file)) {
                     workbook.write(outputStream);
                 }
             }
-        }catch(Exception e){
+        } catch (Exception e) {
             mainApp.showMessage(Modality.NONE, "Error", e.toString());
             e.printStackTrace();
         }

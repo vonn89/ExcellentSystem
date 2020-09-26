@@ -19,24 +19,32 @@ import javafx.stage.Stage;
  *
  * @author yunaz
  */
-public class DetailBarangController  {
+public class DetailBarangController {
 
-    @FXML public TextField kodeBarangField;
-    @FXML public TextField namaBarangField;
-    @FXML public TextField beratField;
-    @FXML public TextField satuanField;
-    @FXML public TextField hargaJualField;
-    
-    @FXML public Button saveButton;
+    @FXML
+    public TextField kodeBarangField;
+    @FXML
+    public TextField namaBarangField;
+    @FXML
+    public TextField beratField;
+    @FXML
+    public TextField satuanField;
+    @FXML
+    public TextField hargaJualField;
+
+    @FXML
+    public Button saveButton;
     private Main mainApp;
     private Stage stage;
     private Stage owner;
+
     public void initialize() {
         Function.setNumberField(beratField);
         Function.setNumberField(hargaJualField);
-        
-    }   
-    public void setMainApp(Main mainApp, Stage owner, Stage stage){
+
+    }
+
+    public void setMainApp(Main mainApp, Stage owner, Stage stage) {
         this.mainApp = mainApp;
         this.owner = owner;
         this.stage = stage;
@@ -44,7 +52,8 @@ public class DetailBarangController  {
             mainApp.closeDialog(owner, stage);
         });
     }
-    public void setBarang(Barang b){
+
+    public void setBarang(Barang b) {
         kodeBarangField.setDisable(false);
         hargaJualField.setDisable(false);
         kodeBarangField.setText("");
@@ -52,7 +61,7 @@ public class DetailBarangController  {
         beratField.setText("0");
         satuanField.setText("");
         hargaJualField.setText("0");
-        if(b!=null){
+        if (b != null) {
             kodeBarangField.setDisable(true);
             kodeBarangField.setText(b.getKodeBarang());
             namaBarangField.setText(b.getNamaBarang());
@@ -60,9 +69,10 @@ public class DetailBarangController  {
             satuanField.setText(b.getSatuan());
             hargaJualField.setText(df.format(b.getHargaJual()));
         }
-    } 
-    public void close(){
+    }
+
+    public void close() {
         mainApp.closeDialog(owner, stage);
     }
-    
+
 }

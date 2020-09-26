@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package com.excellentsystem.PasarBaja.View.Dialog;
 
 import com.excellentsystem.PasarBaja.DAO.SupplierDAO;
@@ -29,34 +28,45 @@ import javafx.stage.Stage;
  *
  * @author Xtreme
  */
-public class AddSupplierController  {
+public class AddSupplierController {
 
-    @FXML public TableView<Supplier> supplierTable;
-    @FXML private TableColumn<Supplier, String> kodeSupplierColumn;
-    @FXML private TableColumn<Supplier, String> namaColumn;
-    @FXML private TableColumn<Supplier, String> alamatColumn;
-    @FXML private TableColumn<Supplier, String> kotaColumn;
-    @FXML private TableColumn<Supplier, String> emailColumn;
-    @FXML private TableColumn<Supplier, String> kontakPersonColumn;
-    @FXML private TableColumn<Supplier, String> noTelpColumn;
-    @FXML private TableColumn<Supplier, String> noHandphoneColumn;
-    
-    @FXML private TextField searchField;
+    @FXML
+    public TableView<Supplier> supplierTable;
+    @FXML
+    private TableColumn<Supplier, String> kodeSupplierColumn;
+    @FXML
+    private TableColumn<Supplier, String> namaColumn;
+    @FXML
+    private TableColumn<Supplier, String> alamatColumn;
+    @FXML
+    private TableColumn<Supplier, String> kotaColumn;
+    @FXML
+    private TableColumn<Supplier, String> emailColumn;
+    @FXML
+    private TableColumn<Supplier, String> kontakPersonColumn;
+    @FXML
+    private TableColumn<Supplier, String> noTelpColumn;
+    @FXML
+    private TableColumn<Supplier, String> noHandphoneColumn;
+
+    @FXML
+    private TextField searchField;
     private ObservableList<Supplier> allSupplier = FXCollections.observableArrayList();
     private ObservableList<Supplier> filterData = FXCollections.observableArrayList();
-    private Main mainApp;  
+    private Main mainApp;
     private Stage stage;
     private Stage owner;
+
     public void initialize() {
         kodeSupplierColumn.setCellValueFactory(cellData -> cellData.getValue().kodeSupplierProperty());
         namaColumn.setCellValueFactory(cellData -> cellData.getValue().namaProperty());
         alamatColumn.setCellValueFactory(cellData -> cellData.getValue().alamatProperty());
         kotaColumn.setCellValueFactory(cellData -> cellData.getValue().kotaProperty());
         emailColumn.setCellValueFactory(cellData -> cellData.getValue().emailProperty());
-        kontakPersonColumn.setCellValueFactory(cellData ->cellData.getValue().kontakPersonProperty());
-        noTelpColumn.setCellValueFactory(cellData ->cellData.getValue().noTelpProperty());
-        noHandphoneColumn.setCellValueFactory(cellData ->cellData.getValue().noHandphoneProperty());
-        
+        kontakPersonColumn.setCellValueFactory(cellData -> cellData.getValue().kontakPersonProperty());
+        noTelpColumn.setCellValueFactory(cellData -> cellData.getValue().noTelpProperty());
+        noHandphoneColumn.setCellValueFactory(cellData -> cellData.getValue().noHandphoneProperty());
+
         allSupplier.addListener((ListChangeListener.Change<? extends Supplier> change) -> {
             searchSupplier();
         });
@@ -66,23 +76,25 @@ public class AddSupplierController  {
         filterData.addAll(allSupplier);
         supplierTable.setItems(filterData);
     }
-    public void setMainApp(Main mainApp,Stage owner,Stage stage) {
+
+    public void setMainApp(Main mainApp, Stage owner, Stage stage) {
         this.mainApp = mainApp;
         this.stage = stage;
         this.owner = owner;
         stage.setOnCloseRequest((event) -> {
             mainApp.closeDialog(owner, stage);
         });
-        stage.setHeight(mainApp.screenSize.getHeight()*0.9);
-        stage.setWidth(mainApp.screenSize.getWidth()*0.9);
+        stage.setHeight(mainApp.screenSize.getHeight() * 0.9);
+        stage.setWidth(mainApp.screenSize.getWidth() * 0.9);
         stage.setX((mainApp.screenSize.getWidth() - stage.getWidth()) / 2);
         stage.setY((mainApp.screenSize.getHeight() - stage.getHeight()) / 2);
         getSupplier();
     }
-    private void getSupplier(){
+
+    private void getSupplier() {
         Task<List<Supplier>> task = new Task<List<Supplier>>() {
-            @Override 
-            public List<Supplier> call() throws Exception{
+            @Override
+            public List<Supplier> call() throws Exception {
                 try (Connection con = Koneksi.getConnection()) {
                     return SupplierDAO.getAllByStatus(con, "true");
                 }
@@ -102,33 +114,38 @@ public class AddSupplierController  {
         });
         new Thread(task).start();
     }
-    private Boolean checkColumn(String column){
-        if(column!=null){
-            if(column.toLowerCase().contains(searchField.getText().toLowerCase()))
+
+    private Boolean checkColumn(String column) {
+        if (column != null) {
+            if (column.toLowerCase().contains(searchField.getText().toLowerCase())) {
                 return true;
+            }
         }
         return false;
     }
+
     private void searchSupplier() {
         filterData.clear();
         for (Supplier temp : allSupplier) {
-            if (searchField.getText() == null || searchField.getText().equals(""))
+            if (searchField.getText() == null || searchField.getText().equals("")) {
                 filterData.add(temp);
-            else{
-                if(checkColumn(temp.getKodeSupplier())||
-                    checkColumn(temp.getNama())||
-                    checkColumn(temp.getAlamat())||
-                    checkColumn(temp.getKota())||
-                    checkColumn(temp.getEmail())||
-                    checkColumn(temp.getKontakPerson())||
-                    checkColumn(temp.getNoTelp())||
-                    checkColumn(temp.getNoHandphone()))
+            } else {
+                if (checkColumn(temp.getKodeSupplier())
+                        || checkColumn(temp.getNama())
+                        || checkColumn(temp.getAlamat())
+                        || checkColumn(temp.getKota())
+                        || checkColumn(temp.getEmail())
+                        || checkColumn(temp.getKontakPerson())
+                        || checkColumn(temp.getNoTelp())
+                        || checkColumn(temp.getNoHandphone())) {
                     filterData.add(temp);
+                }
             }
         }
     }
-    public void close(){
+
+    public void close() {
         mainApp.closeDialog(owner, stage);
-    }   
-    
+    }
+
 }

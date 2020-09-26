@@ -36,32 +36,40 @@ import javafx.stage.Stage;
  */
 public class KategoriTransaksiController {
 
-    @FXML private TableView<KategoriTransaksi> kategoriTable;
-    @FXML private TableColumn<KategoriTransaksi, String> kodeKategoriTransaksiColumn;
-    @FXML private TableColumn<KategoriTransaksi, String> jenisKategoriTransaksiColumn;
-    
-    @FXML private TextField kodeKategoriTransaksiField;
-    @FXML private ComboBox<String> jenisKategoriTransaksiCombo;
+    @FXML
+    private TableView<KategoriTransaksi> kategoriTable;
+    @FXML
+    private TableColumn<KategoriTransaksi, String> kodeKategoriTransaksiColumn;
+    @FXML
+    private TableColumn<KategoriTransaksi, String> jenisKategoriTransaksiColumn;
+
+    @FXML
+    private TextField kodeKategoriTransaksiField;
+    @FXML
+    private ComboBox<String> jenisKategoriTransaksiCombo;
     private ObservableList<KategoriTransaksi> allKategoriTransaksi = FXCollections.observableArrayList();
-    
+
     private String status;
     private Main mainApp;
     private Stage stage;
     private Stage owner;
+
     public void initialize() {
         kodeKategoriTransaksiColumn.setCellValueFactory(cellData -> cellData.getValue().kodeKategoriProperty());
         jenisKategoriTransaksiColumn.setCellValueFactory(cellData -> cellData.getValue().jenisTransaksiProperty());
         kodeKategoriTransaksiField.setOnKeyPressed((KeyEvent keyEvent) -> {
-            if (keyEvent.getCode() == KeyCode.ENTER)  
+            if (keyEvent.getCode() == KeyCode.ENTER) {
                 jenisKategoriTransaksiCombo.requestFocus();
+            }
         });
-        jenisKategoriTransaksiCombo.setOnKeyPressed((KeyEvent keyEvent) ->{
-            if (keyEvent.getCode() == KeyCode.ENTER)  
+        jenisKategoriTransaksiCombo.setOnKeyPressed((KeyEvent keyEvent) -> {
+            if (keyEvent.getCode() == KeyCode.ENTER) {
                 saveKategoriTransaksi();
+            }
         });
         kategoriTable.getSelectionModel().selectedItemProperty().addListener(
-            (observable, oldValue, newValue) -> selectKategoriTransaksi(newValue));
-        
+                (observable, oldValue, newValue) -> selectKategoriTransaksi(newValue));
+
         final ContextMenu rm = new ContextMenu();
         MenuItem addNew = new MenuItem("Add New Kategori Transaksi");
         addNew.setOnAction((ActionEvent event) -> {
@@ -74,13 +82,13 @@ public class KategoriTransaksiController {
         rm.getItems().addAll(addNew, refresh);
         kategoriTable.setContextMenu(rm);
         kategoriTable.setRowFactory(table -> {
-            TableRow<KategoriTransaksi> row = new TableRow<KategoriTransaksi>(){
+            TableRow<KategoriTransaksi> row = new TableRow<KategoriTransaksi>() {
                 @Override
                 public void updateItem(KategoriTransaksi item, boolean empty) {
                     super.updateItem(item, empty);
                     if (empty) {
                         setContextMenu(rm);
-                    }else{
+                    } else {
                         final ContextMenu rm = new ContextMenu();
                         MenuItem addNew = new MenuItem("Add New Kategori Transaksi");
                         addNew.setOnAction((ActionEvent event) -> {
@@ -94,14 +102,15 @@ public class KategoriTransaksiController {
                         refresh.setOnAction((ActionEvent event) -> {
                             getKategoriTransaksi();
                         });
-                        rm.getItems().addAll(addNew, hapus,refresh);
+                        rm.getItems().addAll(addNew, hapus, refresh);
                         setContextMenu(rm);
                     }
                 }
             };
             return row;
         });
-    }    
+    }
+
     public void setMainApp(Main mainApp, Stage owner, Stage stage) {
         this.mainApp = mainApp;
         this.stage = stage;
@@ -119,11 +128,12 @@ public class KategoriTransaksiController {
             mainApp.closeDialog(owner, stage);
         });
     }
-    private void getKategoriTransaksi(){
+
+    private void getKategoriTransaksi() {
         Task<List<KategoriTransaksi>> task = new Task<List<KategoriTransaksi>>() {
-            @Override 
-            public List<KategoriTransaksi> call() throws Exception{
-                try(Connection con = Koneksi.getConnection()){
+            @Override
+            public List<KategoriTransaksi> call() throws Exception {
+                try (Connection con = Koneksi.getConnection()) {
                     return KategoriTransaksiDAO.getAllByStatus(con, "true");
                 }
             }
@@ -143,33 +153,36 @@ public class KategoriTransaksiController {
         });
         new Thread(task).start();
     }
-    private void newKategoriTransaksi(){
+
+    private void newKategoriTransaksi() {
         status = "insert";
         kodeKategoriTransaksiField.setText("");
         jenisKategoriTransaksiCombo.getSelectionModel().select("");
         kodeKategoriTransaksiField.setDisable(false);
     }
-    private void selectKategoriTransaksi(KategoriTransaksi k){
-        if(k!=null){
-            status="update";
+
+    private void selectKategoriTransaksi(KategoriTransaksi k) {
+        if (k != null) {
+            status = "update";
             kodeKategoriTransaksiField.setText(k.getKodeKategori());
             jenisKategoriTransaksiCombo.getSelectionModel().select(k.getJenisTransaksi());
             kodeKategoriTransaksiField.setDisable(true);
-        }else{
+        } else {
             status = "";
             kodeKategoriTransaksiField.setText("");
             jenisKategoriTransaksiCombo.getSelectionModel().clearSelection();
             kodeKategoriTransaksiField.setDisable(false);
         }
     }
-    private void deleteKategoriTransaksi(KategoriTransaksi temp){
+
+    private void deleteKategoriTransaksi(KategoriTransaksi temp) {
         MessageController controller = mainApp.showMessage(Modality.WINDOW_MODAL, "Confirmation",
-                "Delete Kategori Transaksi "+temp.getKodeKategori()+" ?");
+                "Delete Kategori Transaksi " + temp.getKodeKategori() + " ?");
         controller.OK.setOnAction((ActionEvent ex) -> {
             Task<String> task = new Task<String>() {
-                @Override 
-                public String call() throws Exception{
-                    try(Connection con = Koneksi.getConnection()){
+                @Override
+                public String call() throws Exception {
+                    try (Connection con = Koneksi.getConnection()) {
                         return Service.deleteKategoriTransaksi(con, temp);
                     }
                 }
@@ -181,12 +194,13 @@ public class KategoriTransaksiController {
                 mainApp.closeLoading();
                 getKategoriTransaksi();
                 String status = task.getValue();
-                if(status.equals("true")){
+                if (status.equals("true")) {
                     mainApp.showMessage(Modality.NONE, "Success", "Kategori Transaksi berhasil dihapus");
                     kodeKategoriTransaksiField.setText("");
                     jenisKategoriTransaksiCombo.getSelectionModel().select(null);
-                }else
+                } else {
                     mainApp.showMessage(Modality.NONE, "Failed", status);
+                }
             });
             task.setOnFailed((e) -> {
                 mainApp.closeLoading();
@@ -195,33 +209,36 @@ public class KategoriTransaksiController {
             new Thread(task).start();
         });
     }
+
     @FXML
-    private void saveKategoriTransaksi(){
-        if(kodeKategoriTransaksiField.getText().equals(""))
+    private void saveKategoriTransaksi() {
+        if (kodeKategoriTransaksiField.getText().equals("")) {
             mainApp.showMessage(Modality.NONE, "Warning", "Kode kategori masih kosong");
-        else if(jenisKategoriTransaksiCombo.getSelectionModel().getSelectedItem()==null)
+        } else if (jenisKategoriTransaksiCombo.getSelectionModel().getSelectedItem() == null) {
             mainApp.showMessage(Modality.NONE, "Warning", "Jenis Transaksi belum dipilih");
-        else{
+        } else {
             Boolean s = true;
-            for(KategoriTransaksi k : allKategoriTransaksi){
-                if(k.getKodeKategori().equals(kodeKategoriTransaksiField.getText()))
+            for (KategoriTransaksi k : allKategoriTransaksi) {
+                if (k.getKodeKategori().equals(kodeKategoriTransaksiField.getText())) {
                     s = false;
+                }
             }
-            if(s || status.equals("update")){
+            if (s || status.equals("update")) {
                 Task<String> task = new Task<String>() {
-                    @Override 
-                    public String call() throws Exception{
-                        try(Connection con = Koneksi.getConnection()){
+                    @Override
+                    public String call() throws Exception {
+                        try (Connection con = Koneksi.getConnection()) {
                             KategoriTransaksi k = new KategoriTransaksi();
                             k.setKodeKategori(kodeKategoriTransaksiField.getText());
                             k.setJenisTransaksi(jenisKategoriTransaksiCombo.getSelectionModel().getSelectedItem());
                             k.setStatus("true");
-                            if(status.equals("insert"))
+                            if (status.equals("insert")) {
                                 return Service.newKategoriTransaksi(con, k);
-                            else if(status.equals("update"))
+                            } else if (status.equals("update")) {
                                 return Service.updateKategoriTransaksi(con, k);
-                            else
+                            } else {
                                 return "Status insert/update error";
+                            }
                         }
                     }
                 };
@@ -232,11 +249,12 @@ public class KategoriTransaksiController {
                     mainApp.closeLoading();
                     getKategoriTransaksi();
                     String statusupdate = task.getValue();
-                    if(statusupdate.equals("true")){
+                    if (statusupdate.equals("true")) {
                         mainApp.showMessage(Modality.NONE, "Success", "Kategori Transaksi berhasil disimpan");
                         selectKategoriTransaksi(null);
-                    }else
+                    } else {
                         mainApp.showMessage(Modality.NONE, "Failed", statusupdate);
+                    }
                 });
                 task.setOnFailed((e) -> {
                     task.getException().printStackTrace();
@@ -244,13 +262,14 @@ public class KategoriTransaksiController {
                     mainApp.showMessage(Modality.NONE, "Error", task.getException().toString());
                 });
                 new Thread(task).start();
-            }else{
+            } else {
                 mainApp.showMessage(Modality.NONE, "Warning", "Kode Kategori Transaksi sudah terdaftar");
             }
         }
     }
+
     @FXML
-    private void close(){
+    private void close() {
         mainApp.closeDialog(owner, stage);
     }
 }

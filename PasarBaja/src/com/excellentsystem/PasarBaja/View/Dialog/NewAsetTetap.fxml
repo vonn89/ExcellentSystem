@@ -22,7 +22,7 @@
             </columnConstraints>
             <rowConstraints>
                 <RowConstraints fillHeight="false" maxHeight="30.0" minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES" />
-            <RowConstraints fillHeight="false" maxHeight="5.0" minHeight="5.0" prefHeight="5.0" vgrow="SOMETIMES" />
+                <RowConstraints fillHeight="false" maxHeight="5.0" minHeight="5.0" prefHeight="5.0" vgrow="SOMETIMES" />
                 <RowConstraints fillHeight="false" maxHeight="30.0" minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES" />
                 <RowConstraints fillHeight="false" maxHeight="30.0" minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES" />
                 <RowConstraints fillHeight="false" maxHeight="30.0" minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES" />
@@ -59,7 +59,7 @@
         <AnchorPane layoutX="-31.0" layoutY="365.0" prefHeight="30.0" prefWidth="500.0" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0">
             <children>
                 <Button fx:id="saveButton" layoutX="14.0" layoutY="3.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="100.0" styleClass="button2" text="Save" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="101.0" AnchorPane.topAnchor="0.0" />
-            <Button mnemonicParsing="false" onAction="#close" prefHeight="30.0" prefWidth="100.0" styleClass="button2" text="Cancel" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                <Button mnemonicParsing="false" onAction="#close" prefHeight="30.0" prefWidth="100.0" styleClass="button2" text="Cancel" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
             </children>
         </AnchorPane>
         <AnchorPane fx:id="penyusutanPane" layoutX="14.0" layoutY="341.0" prefHeight="95.0" style="-fx-border-color: black; -fx-border-radius: 1;" AnchorPane.bottomAnchor="60.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0">

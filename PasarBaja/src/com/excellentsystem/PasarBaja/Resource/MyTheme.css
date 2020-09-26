@@ -8,15 +8,6 @@ and open the template in the editor.
     Author     : Xtreme
 */
 
-@font-face {
-    src: url('Lato-Regular.ttf');
-}
-@font-face {
-    src: url('Lato-Bold.ttf');
-}
-@font-face {
-    src: url('BodonBk.ttf');
-}
 .root {
     /*-fx-accent: transparent;*/
     /*-fx-focus-color: transparent;*/
@@ -25,9 +16,9 @@ and open the template in the editor.
     /*-fx-box-border, -fx-inner-border, -fx-body-color;*/
     /*-fx-mark-color:seccolor1;*/
     seccolor1:#FF6B35;
-    seccolor2:#0E3862;
-    seccolor3:#0672A3;
-    seccolor4:#5DC2EC;
+    seccolor2:#065669;
+    seccolor3:#00a1bc;
+    seccolor4:#b4e2eb;
     seccolor5:#EDEDED;
     seccolor6:#FFFFFF;
     disabledcolor : #DDDDDD;

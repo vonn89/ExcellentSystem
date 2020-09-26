@@ -21,7 +21,7 @@ public class Koneksi {
 //        return DriverManager.getConnection(DbName,"admin","excellentsystem");
 
         
-        String DbName = "jdbc:mysql://34.87.153.33:3306/auristeel?"
+        String DbName = "jdbc:mysql://34.87.153.33:3306/pasarbaja?"
                 + "connectTimeout=10000&socketTimeout=10000&autoReconnect=true";
         Class.forName("com.mysql.jdbc.Driver");
         return DriverManager.getConnection(DbName,"root","yunaz051189");

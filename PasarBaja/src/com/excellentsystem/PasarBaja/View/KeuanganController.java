@@ -239,14 +239,14 @@ public class KeuanganController {
                             if (o.getJenis().equals("Detail Transaksi") && o.isStatus()) {
                                 if (statusBebanPenjualan) {
                                     rm.getItems().addAll(detailBebanPenjualan);
-                                }else if(status){
+                                } else if (status) {
                                     rm.getItems().add(lihatKeuangan);
                                 }
                             }
                             if (o.getJenis().equals("Batal Transaksi") && o.isStatus()) {
                                 if (statusBebanPenjualan) {
                                     rm.getItems().addAll(batalBebanPenjualan);
-                                }else if(status){
+                                } else if (status) {
                                     rm.getItems().add(batal);
                                 }
                             }
@@ -436,6 +436,7 @@ public class KeuanganController {
             }
         });
     }
+
     private void showNewBebanPenjualan() {
         Stage stage = new Stage();
         FXMLLoader loader = mainApp.showDialog(mainApp.MainStage, stage, "View/Dialog/NewBebanPenjualan.fxml");
@@ -499,9 +500,10 @@ public class KeuanganController {
         controller.setMainApp(mainApp, mainApp.MainStage, child);
         controller.setDetailBebanPenjualan(k.getDeskripsi());
     }
+
     private void batalBebanPenjualan(Keuangan keu) {
         MessageController controller = mainApp.showMessage(Modality.WINDOW_MODAL, "Confirmation",
-                "Batal beban penjualan " + keu.getDeskripsi()+ " ?");
+                "Batal beban penjualan " + keu.getDeskripsi() + " ?");
         controller.OK.setOnAction((ActionEvent e) -> {
             Task<String> task = new Task<String>() {
                 @Override
@@ -533,8 +535,6 @@ public class KeuanganController {
             new Thread(task).start();
         });
     }
-
-
 
     private void showDetailKeuangan(Keuangan k) {
         Stage stage = new Stage();

@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package com.excellentsystem.PasarBaja.View.Dialog;
 
 import com.excellentsystem.PasarBaja.Function;
@@ -30,19 +29,28 @@ import javafx.stage.Stage;
  *
  * @author Xtreme
  */
-public class NewKeuanganController  {
-    @FXML public ComboBox<String> kategoriCombo;
-    @FXML public TextArea keteranganField;
-    @FXML public TextField jumlahRpField;
-    @FXML public ComboBox<String> tipeKeuanganCombo;
-    @FXML public Button saveButton;
-    @FXML private Button cancelButton;
-    @FXML private GridPane gridPane;
-    private Main mainApp;   
+public class NewKeuanganController {
+
+    @FXML
+    public ComboBox<String> kategoriCombo;
+    @FXML
+    public TextArea keteranganField;
+    @FXML
+    public TextField jumlahRpField;
+    @FXML
+    public ComboBox<String> tipeKeuanganCombo;
+    @FXML
+    public Button saveButton;
+    @FXML
+    private Button cancelButton;
+    @FXML
+    private GridPane gridPane;
+    private Main mainApp;
     private Stage stage;
     private Stage owner;
     private ObservableList<String> allKategori = FXCollections.observableArrayList();
-    public void setMainApp(Main mainApp,Stage owner,Stage stage) {
+
+    public void setMainApp(Main mainApp, Stage owner, Stage stage) {
         this.mainApp = mainApp;
         this.stage = stage;
         this.owner = owner;
@@ -52,18 +60,20 @@ public class NewKeuanganController  {
         });
         kategoriCombo.setItems(allKategori);
         ObservableList<String> listKeuangan = FXCollections.observableArrayList();
-        for(KategoriKeuangan kk : sistem.getListKategoriKeuangan()){
+        for (KategoriKeuangan kk : sistem.getListKategoriKeuangan()) {
             listKeuangan.add(kk.getKodeKeuangan());
         }
         tipeKeuanganCombo.setItems(listKeuangan);
-    }  
-    public void setKategoriTransaksi(List<KategoriTransaksi> listKategori){
+    }
+
+    public void setKategoriTransaksi(List<KategoriTransaksi> listKategori) {
         allKategori.clear();
-        for(KategoriTransaksi k : listKategori){
+        for (KategoriTransaksi k : listKategori) {
             allKategori.add(k.getKodeKategori());
         }
     }
-    public void setDetailKeuangan(Keuangan k){
+
+    public void setDetailKeuangan(Keuangan k) {
         AnchorPane.setBottomAnchor(gridPane, 0.0);
         saveButton.setVisible(false);
         cancelButton.setVisible(false);
@@ -71,14 +81,15 @@ public class NewKeuanganController  {
         keteranganField.setDisable(true);
         jumlahRpField.setDisable(true);
         tipeKeuanganCombo.setDisable(true);
-        
+
         kategoriCombo.getSelectionModel().select(k.getKategori());
         keteranganField.setText(k.getDeskripsi());
         jumlahRpField.setText(df.format(k.getJumlahRp()));
         tipeKeuanganCombo.getSelectionModel().select(k.getTipeKeuangan());
     }
-    public void close(){
+
+    public void close() {
         mainApp.closeDialog(owner, stage);
-    }    
-    
+    }
+
 }

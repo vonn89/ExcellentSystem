@@ -3,9 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package com.excellentsystem.PasarBaja.View;
-
 
 import static com.excellentsystem.PasarBaja.Function.decrypt;
 import com.excellentsystem.PasarBaja.Main;
@@ -28,37 +26,45 @@ import javafx.stage.Modality;
  *
  * @author Xtreme
  */
-public class LoginController  {
-    @FXML private Label versionLabel;
-    @FXML private Label warning;
-    @FXML private TextField username;
-    @FXML private PasswordField password;
-    @FXML private CheckBox rememberMeCheck;
+public class LoginController {
+
+    @FXML
+    private Label versionLabel;
+    @FXML
+    private Label warning;
+    @FXML
+    private TextField username;
+    @FXML
+    private PasswordField password;
+    @FXML
+    private CheckBox rememberMeCheck;
     private Main mainApp;
     private int attempt = 0;
-    @FXML 
-    private void handleLoginButton() throws Exception{
-        if("".equals(username.getText())){
+
+    @FXML
+    private void handleLoginButton() throws Exception {
+        if ("".equals(username.getText())) {
             warning.setText("username masih kosong");
-        }else if(password.getText().equals("")){
+        } else if (password.getText().equals("")) {
             warning.setText("password masih kosong");
-        }else if(attempt>=3){
+        } else if (attempt >= 3) {
             System.exit(0);
-        }else{
-            try{
+        } else {
+            try {
                 User user = null;
-                for(User u : sistem.getListUser()){
-                    if(u.getKodeUser().equals(username.getText()))
+                for (User u : sistem.getListUser()) {
+                    if (u.getKodeUser().equals(username.getText())) {
                         user = u;
+                    }
                 }
-                if(user==null){
+                if (user == null) {
                     warning.setText("Username tidak ditemukan");
-                    attempt = attempt +1;
-                }else if(!password.getText().equals(decrypt(user.getPassword(), key))){
+                    attempt = attempt + 1;
+                } else if (!password.getText().equals(decrypt(user.getPassword(), key))) {
                     warning.setText("Password masih salah");
-                    attempt = attempt +1;
-                }else{
-                    if(rememberMeCheck.isSelected()){
+                    attempt = attempt + 1;
+                } else {
+                    if (rememberMeCheck.isSelected()) {
                         try (FileWriter fw = new FileWriter(new File("password"), false)) {
                             fw.write(user.getKodeUser());
                             fw.write(System.lineSeparator());
@@ -66,7 +72,7 @@ public class LoginController  {
                             fw.write(System.lineSeparator());
                             fw.write(String.valueOf(rememberMeCheck.isSelected()));
                         }
-                    }else{
+                    } else {
                         try (FileWriter fw = new FileWriter(new File("password"), false)) {
                             fw.write("");
                         }
@@ -74,33 +80,31 @@ public class LoginController  {
                     sistem.setUser(user);
                     mainApp.showMainScene();
                 }
-            }catch(Exception e){
+            } catch (Exception e) {
                 e.printStackTrace();
                 mainApp.showMessage(Modality.NONE, "Error", e.toString());
             }
         }
     }
-    public void setMainApp(Main mainApp){
-        try{
+
+    public void setMainApp(Main mainApp) {
+        try {
             this.mainApp = mainApp;
-            versionLabel.setText("Ver. "+mainApp.version);
-            
+            versionLabel.setText("Ver. " + mainApp.version);
+
             BufferedReader text = new BufferedReader(new FileReader("password"));
             String user = text.readLine();
-            if(user!=null){
+            if (user != null) {
                 username.setText(user);
                 password.setText(decrypt(text.readLine(), key));
                 rememberMeCheck.setSelected(Boolean.valueOf(text.readLine()));
             }
-            
+
             warning.setText("");
         } catch (Exception ex) {
             ex.printStackTrace();
             warning.setText(ex.toString());
         }
     }
-      
 
-    
-    
 }

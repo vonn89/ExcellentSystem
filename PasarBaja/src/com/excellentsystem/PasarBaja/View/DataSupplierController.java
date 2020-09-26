@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package com.excellentsystem.PasarBaja.View;
 
 import com.excellentsystem.PasarBaja.DAO.SupplierDAO;
@@ -51,105 +50,123 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
  *
  * @author Xtreme
  */
-public class DataSupplierController  {
-    @FXML private TableView<Supplier> supplierTable;
-    @FXML private TableColumn<Supplier, String> kodeSupplierColumn;
-    @FXML private TableColumn<Supplier, String> namaColumn;
-    @FXML private TableColumn<Supplier, String> alamatColumn;
-    @FXML private TableColumn<Supplier, String> kotaColumn;
-    @FXML private TableColumn<Supplier, String> kontakPersonColumn;
-    @FXML private TableColumn<Supplier, String> noTelpColumn;
-    @FXML private TableColumn<Supplier, String> noHandphoneColumn;
-    @FXML private TableColumn<Supplier, String> emailColumn;
-    @FXML private TextField searchField;
-    
+public class DataSupplierController {
+
+    @FXML
+    private TableView<Supplier> supplierTable;
+    @FXML
+    private TableColumn<Supplier, String> kodeSupplierColumn;
+    @FXML
+    private TableColumn<Supplier, String> namaColumn;
+    @FXML
+    private TableColumn<Supplier, String> alamatColumn;
+    @FXML
+    private TableColumn<Supplier, String> kotaColumn;
+    @FXML
+    private TableColumn<Supplier, String> kontakPersonColumn;
+    @FXML
+    private TableColumn<Supplier, String> noTelpColumn;
+    @FXML
+    private TableColumn<Supplier, String> noHandphoneColumn;
+    @FXML
+    private TableColumn<Supplier, String> emailColumn;
+    @FXML
+    private TextField searchField;
+
     private ObservableList<Supplier> allSupplier = FXCollections.observableArrayList();
     private ObservableList<Supplier> filterData = FXCollections.observableArrayList();
-    private Main mainApp;      
+    private Main mainApp;
+
     public void initialize() {
         kodeSupplierColumn.setCellValueFactory(cellData -> cellData.getValue().kodeSupplierProperty());
         kodeSupplierColumn.setCellFactory(col -> Function.getWrapTableCell(kodeSupplierColumn));
-        
+
         namaColumn.setCellValueFactory(cellData -> cellData.getValue().namaProperty());
         namaColumn.setCellFactory(col -> Function.getWrapTableCell(namaColumn));
-        
+
         alamatColumn.setCellValueFactory(cellData -> cellData.getValue().alamatProperty());
         alamatColumn.setCellFactory(col -> Function.getWrapTableCell(alamatColumn));
-        
+
         kotaColumn.setCellValueFactory(cellData -> cellData.getValue().kotaProperty());
         kotaColumn.setCellFactory(col -> Function.getWrapTableCell(kotaColumn));
-        
+
         emailColumn.setCellValueFactory(cellData -> cellData.getValue().emailProperty());
         emailColumn.setCellFactory(col -> Function.getWrapTableCell(emailColumn));
-        
-        kontakPersonColumn.setCellValueFactory(cellData ->cellData.getValue().kontakPersonProperty());
+
+        kontakPersonColumn.setCellValueFactory(cellData -> cellData.getValue().kontakPersonProperty());
         kontakPersonColumn.setCellFactory(col -> Function.getWrapTableCell(kontakPersonColumn));
-        
-        noTelpColumn.setCellValueFactory(cellData ->cellData.getValue().noTelpProperty());
+
+        noTelpColumn.setCellValueFactory(cellData -> cellData.getValue().noTelpProperty());
         noTelpColumn.setCellFactory(col -> Function.getWrapTableCell(noTelpColumn));
-        
-        noHandphoneColumn.setCellValueFactory(cellData ->cellData.getValue().noHandphoneProperty());
+
+        noHandphoneColumn.setCellValueFactory(cellData -> cellData.getValue().noHandphoneProperty());
         noHandphoneColumn.setCellFactory(col -> Function.getWrapTableCell(noHandphoneColumn));
-        
+
         final ContextMenu rm = new ContextMenu();
         MenuItem addNew = new MenuItem("Add New Supplier");
-        addNew.setOnAction((ActionEvent e)->{
+        addNew.setOnAction((ActionEvent e) -> {
             newSupplier();
         });
         MenuItem export = new MenuItem("Export Excel");
-        export.setOnAction((ActionEvent e)->{
+        export.setOnAction((ActionEvent e) -> {
             exportExcel();
         });
         MenuItem refresh = new MenuItem("Refresh");
-        refresh.setOnAction((ActionEvent e)->{
+        refresh.setOnAction((ActionEvent e) -> {
             getSupplier();
         });
-        for(Otoritas o : sistem.getUser().getOtoritas()){
-            if(o.getJenis().equals("Add New Supplier")&&o.isStatus())
+        for (Otoritas o : sistem.getUser().getOtoritas()) {
+            if (o.getJenis().equals("Add New Supplier") && o.isStatus()) {
                 rm.getItems().add(addNew);
-            if(o.getJenis().equals("Export Excel")&&o.isStatus())
+            }
+            if (o.getJenis().equals("Export Excel") && o.isStatus()) {
                 rm.getItems().add(export);
+            }
         }
         rm.getItems().addAll(refresh);
         supplierTable.setContextMenu(rm);
         supplierTable.setRowFactory((TableView<Supplier> tableView) -> {
-            final TableRow<Supplier> row = new TableRow<Supplier>(){
+            final TableRow<Supplier> row = new TableRow<Supplier>() {
                 @Override
                 public void updateItem(Supplier item, boolean empty) {
                     super.updateItem(item, empty);
                     if (empty) {
                         setContextMenu(rm);
-                    } else{
+                    } else {
                         final ContextMenu rm = new ContextMenu();
                         MenuItem addNew = new MenuItem("Add New Supplier");
-                        addNew.setOnAction((ActionEvent e)->{
+                        addNew.setOnAction((ActionEvent e) -> {
                             newSupplier();
                         });
                         MenuItem edit = new MenuItem("Edit Supplier");
-                        edit.setOnAction((ActionEvent e)->{
+                        edit.setOnAction((ActionEvent e) -> {
                             editSupplier(item);
                         });
                         MenuItem hapus = new MenuItem("Delete Supplier");
-                        hapus.setOnAction((ActionEvent e)->{
+                        hapus.setOnAction((ActionEvent e) -> {
                             deleteSupplier(item);
                         });
                         MenuItem export = new MenuItem("Export Excel");
-                        export.setOnAction((ActionEvent e)->{
+                        export.setOnAction((ActionEvent e) -> {
                             exportExcel();
                         });
                         MenuItem refresh = new MenuItem("Refresh");
-                        refresh.setOnAction((ActionEvent e)->{
+                        refresh.setOnAction((ActionEvent e) -> {
                             getSupplier();
                         });
-                        for(Otoritas o : sistem.getUser().getOtoritas()){
-                            if(o.getJenis().equals("Add New Supplier")&&o.isStatus())
+                        for (Otoritas o : sistem.getUser().getOtoritas()) {
+                            if (o.getJenis().equals("Add New Supplier") && o.isStatus()) {
                                 rm.getItems().add(addNew);
-                            if(o.getJenis().equals("Edit Supplier")&&o.isStatus())
+                            }
+                            if (o.getJenis().equals("Edit Supplier") && o.isStatus()) {
                                 rm.getItems().add(edit);
-                            if(o.getJenis().equals("Delete Supplier")&&o.isStatus())
+                            }
+                            if (o.getJenis().equals("Delete Supplier") && o.isStatus()) {
                                 rm.getItems().add(hapus);
-                            if(o.getJenis().equals("Export Excel")&&o.isStatus())
+                            }
+                            if (o.getJenis().equals("Export Excel") && o.isStatus()) {
                                 rm.getItems().add(export);
+                            }
                         }
                         rm.getItems().addAll(refresh);
                         setContextMenu(rm);
@@ -157,11 +174,12 @@ public class DataSupplierController  {
                 }
             };
             row.setOnMouseClicked((MouseEvent mouseEvent) -> {
-                if(mouseEvent.getButton().equals(MouseButton.PRIMARY)&&mouseEvent.getClickCount() == 2){
-                    if(row.getItem()!=null){
-                        for(Otoritas o : sistem.getUser().getOtoritas()){
-                            if(o.getJenis().equals("Edit Supplier")&&o.isStatus())
+                if (mouseEvent.getButton().equals(MouseButton.PRIMARY) && mouseEvent.getClickCount() == 2) {
+                    if (row.getItem() != null) {
+                        for (Otoritas o : sistem.getUser().getOtoritas()) {
+                            if (o.getJenis().equals("Edit Supplier") && o.isStatus()) {
                                 editSupplier(row.getItem());
+                            }
                         }
                     }
                 }
@@ -172,20 +190,22 @@ public class DataSupplierController  {
             searchSupplier();
         });
         searchField.textProperty().addListener(
-            (ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
-            searchSupplier();
-        });
+                (ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
+                    searchSupplier();
+                });
         filterData.addAll(allSupplier);
     }
+
     public void setMainApp(Main mainApp) {
         this.mainApp = mainApp;
         getSupplier();
         supplierTable.setItems(filterData);
     }
-    private void getSupplier(){
+
+    private void getSupplier() {
         Task<List<Supplier>> task = new Task<List<Supplier>>() {
-            @Override 
-            public List<Supplier> call() throws Exception{
+            @Override
+            public List<Supplier> call() throws Exception {
                 try (Connection con = Koneksi.getConnection()) {
                     return SupplierDAO.getAllByStatus(con, "true");
                 }
@@ -205,41 +225,46 @@ public class DataSupplierController  {
         });
         new Thread(task).start();
     }
-    private Boolean checkColumn(String column){
-        if(column!=null){
-            if(column.toLowerCase().contains(searchField.getText().toLowerCase()))
+
+    private Boolean checkColumn(String column) {
+        if (column != null) {
+            if (column.toLowerCase().contains(searchField.getText().toLowerCase())) {
                 return true;
+            }
         }
         return false;
     }
+
     private void searchSupplier() {
         filterData.clear();
         for (Supplier temp : allSupplier) {
-            if (searchField.getText() == null || searchField.getText().equals(""))
+            if (searchField.getText() == null || searchField.getText().equals("")) {
                 filterData.add(temp);
-            else{
-                if(checkColumn(temp.getKodeSupplier())||
-                    checkColumn(temp.getNama())||
-                    checkColumn(temp.getAlamat())||
-                    checkColumn(temp.getKota())||
-                    checkColumn(temp.getEmail())||
-                    checkColumn(temp.getKontakPerson())||
-                    checkColumn(temp.getNoTelp())||
-                    checkColumn(temp.getNoHandphone()))
+            } else {
+                if (checkColumn(temp.getKodeSupplier())
+                        || checkColumn(temp.getNama())
+                        || checkColumn(temp.getAlamat())
+                        || checkColumn(temp.getKota())
+                        || checkColumn(temp.getEmail())
+                        || checkColumn(temp.getKontakPerson())
+                        || checkColumn(temp.getNoTelp())
+                        || checkColumn(temp.getNoHandphone())) {
                     filterData.add(temp);
+                }
             }
         }
     }
-    private void newSupplier(){
+
+    private void newSupplier() {
         Stage stage = new Stage();
         FXMLLoader loader = mainApp.showDialog(mainApp.MainStage, stage, "View/Dialog/DetailSupplier.fxml");
         DetailSupplierController x = loader.getController();
         x.setMainApp(mainApp, mainApp.MainStage, stage);
         x.setSupplierDetail(null);
-        x.saveButton.setOnAction((ActionEvent ev)->{
+        x.saveButton.setOnAction((ActionEvent ev) -> {
             Task<String> task = new Task<String>() {
-                @Override 
-                public String call() throws Exception{
+                @Override
+                public String call() throws Exception {
                     try (Connection con = Koneksi.getConnection()) {
                         Supplier supplier = new Supplier();
                         supplier.setKodeSupplier(SupplierDAO.getId(con));
@@ -261,10 +286,10 @@ public class DataSupplierController  {
             task.setOnSucceeded((e) -> {
                 mainApp.closeLoading();
                 getSupplier();
-                if(task.getValue().equals("true")){
+                if (task.getValue().equals("true")) {
                     mainApp.showMessage(Modality.NONE, "Success", "Data supplier berhasil disimpan");
                     mainApp.closeDialog(mainApp.MainStage, stage);
-                }else{
+                } else {
                     mainApp.showMessage(Modality.NONE, "Failed", task.getValue());
                 }
             });
@@ -275,16 +300,17 @@ public class DataSupplierController  {
             new Thread(task).start();
         });
     }
-    private void editSupplier(Supplier supplier){
+
+    private void editSupplier(Supplier supplier) {
         Stage stage = new Stage();
         FXMLLoader loader = mainApp.showDialog(mainApp.MainStage, stage, "View/Dialog/DetailSupplier.fxml");
         DetailSupplierController x = loader.getController();
         x.setMainApp(mainApp, mainApp.MainStage, stage);
         x.setSupplierDetail(supplier);
-        x.saveButton.setOnAction((ActionEvent ev)->{
+        x.saveButton.setOnAction((ActionEvent ev) -> {
             Task<String> task = new Task<String>() {
-                @Override 
-                public String call() throws Exception{
+                @Override
+                public String call() throws Exception {
                     try (Connection con = Koneksi.getConnection()) {
                         supplier.setNama(x.namaField.getText());
                         supplier.setAlamat(x.alamatField.getText());
@@ -303,10 +329,10 @@ public class DataSupplierController  {
             task.setOnSucceeded((e) -> {
                 mainApp.closeLoading();
                 getSupplier();
-                if(task.getValue().equals("true")){
+                if (task.getValue().equals("true")) {
                     mainApp.showMessage(Modality.NONE, "Success", "Data supplier berhasil disimpan");
                     mainApp.closeDialog(mainApp.MainStage, stage);
-                }else{
+                } else {
                     mainApp.showMessage(Modality.NONE, "Failed", task.getValue());
                 }
             });
@@ -317,13 +343,14 @@ public class DataSupplierController  {
             new Thread(task).start();
         });
     }
-    private void deleteSupplier(Supplier supplier){
+
+    private void deleteSupplier(Supplier supplier) {
         MessageController controller = mainApp.showMessage(Modality.WINDOW_MODAL, "Confirmation",
-                "Delete supplier "+supplier.getKodeSupplier()+"-"+supplier.getNama()+" ?");
+                "Delete supplier " + supplier.getKodeSupplier() + "-" + supplier.getNama() + " ?");
         controller.OK.setOnAction((ActionEvent ec) -> {
             Task<String> task = new Task<String>() {
-                @Override 
-                public String call() throws Exception{
+                @Override
+                public String call() throws Exception {
                     try (Connection con = Koneksi.getConnection()) {
                         return Service.deleteSupplier(con, supplier);
                     }
@@ -335,9 +362,9 @@ public class DataSupplierController  {
             task.setOnSucceeded((e) -> {
                 mainApp.closeLoading();
                 getSupplier();
-                if(task.getValue().equals("true")){
+                if (task.getValue().equals("true")) {
                     mainApp.showMessage(Modality.NONE, "Success", "Data supplier berhasil dihapus");
-                }else{
+                } else {
                     mainApp.showMessage(Modality.NONE, "Failed", task.getValue());
                 }
             });
@@ -348,8 +375,9 @@ public class DataSupplierController  {
             new Thread(task).start();
         });
     }
+
     private void exportExcel() {
-        try{
+        try {
             FileChooser fileChooser = new FileChooser();
             fileChooser.setTitle("Select location to export");
             fileChooser.getExtensionFilters().addAll(
@@ -370,17 +398,17 @@ public class DataSupplierController  {
                 int rc = 0;
                 int c = 15;
                 createRow(workbook, sheet, rc, c, "Bold");
-                sheet.getRow(rc).getCell(0).setCellValue("Filter : "+searchField.getText());
+                sheet.getRow(rc).getCell(0).setCellValue("Filter : " + searchField.getText());
                 rc++;
                 createRow(workbook, sheet, rc, c, "Header");
-                sheet.getRow(rc).getCell(0).setCellValue("Kode Supplier"); 
-                sheet.getRow(rc).getCell(1).setCellValue("Nama");  
-                sheet.getRow(rc).getCell(2).setCellValue("Alamat"); 
-                sheet.getRow(rc).getCell(3).setCellValue("Kota"); 
-                sheet.getRow(rc).getCell(4).setCellValue("Kontak Person"); 
-                sheet.getRow(rc).getCell(5).setCellValue("No Telp"); 
-                sheet.getRow(rc).getCell(6).setCellValue("No Handphone"); 
-                sheet.getRow(rc).getCell(7).setCellValue("Email"); 
+                sheet.getRow(rc).getCell(0).setCellValue("Kode Supplier");
+                sheet.getRow(rc).getCell(1).setCellValue("Nama");
+                sheet.getRow(rc).getCell(2).setCellValue("Alamat");
+                sheet.getRow(rc).getCell(3).setCellValue("Kota");
+                sheet.getRow(rc).getCell(4).setCellValue("Kontak Person");
+                sheet.getRow(rc).getCell(5).setCellValue("No Telp");
+                sheet.getRow(rc).getCell(6).setCellValue("No Handphone");
+                sheet.getRow(rc).getCell(7).setCellValue("Email");
                 rc++;
                 for (Supplier b : filterData) {
                     createRow(workbook, sheet, rc, c, "Detail");
@@ -394,12 +422,14 @@ public class DataSupplierController  {
                     sheet.getRow(rc).getCell(7).setCellValue(b.getEmail());
                     rc++;
                 }
-                for(int i=0 ; i<c ; i++){ sheet.autoSizeColumn(i);}
+                for (int i = 0; i < c; i++) {
+                    sheet.autoSizeColumn(i);
+                }
                 try (FileOutputStream outputStream = new FileOutputStream(file)) {
                     workbook.write(outputStream);
                 }
             }
-        }catch(Exception e){
+        } catch (Exception e) {
             mainApp.showMessage(Modality.NONE, "Error", e.toString());
             e.printStackTrace();
         }

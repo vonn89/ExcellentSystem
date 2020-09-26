@@ -7,12 +7,9 @@ package com.excellentsystem.PasarBaja.View;
 
 import com.excellentsystem.PasarBaja.Main;
 import static com.excellentsystem.PasarBaja.Main.sistem;
-import com.excellentsystem.PasarBaja.Model.Helper.Notification;
 import com.excellentsystem.PasarBaja.Model.Otoritas;
 import javafx.animation.Animation;
 import javafx.animation.Transition;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -31,144 +28,143 @@ import javafx.util.Duration;
  */
 public class MainAppController {
 
-    
-    @FXML public VBox vbox;
-    @FXML private Accordion accordion;
-    @FXML private Label title;
-    
-    @FXML private TitledPane loginButton;
-    @FXML private MenuButton logoutButton;
-    @FXML private MenuButton ubahPasswordButton;
-    
-    @FXML private TitledPane dashboardPane;
-    
-    @FXML private TitledPane masterPane;
-    @FXML private VBox masterVbox;
-    @FXML private MenuButton menuDataCustomer;
-    @FXML private MenuButton menuDataSupplier;
-    @FXML private MenuButton menuDataPegawai;
-    @FXML private MenuButton menuDataBahan;
-    @FXML private MenuButton menuDataBarang;
-    
-    @FXML private TitledPane absensiPane;
-    @FXML private VBox absensiVbox;
-    @FXML private MenuButton menuInputAbsensi;
-    @FXML private MenuButton menuLaporanAbsensi;
-    
-    @FXML private TitledPane penjualanPane;
-    @FXML private VBox penjualanVbox;
-    @FXML private MenuButton menuPemesanan;
-    @FXML private MenuButton menuPenjualan;
-    @FXML private MenuButton menuPemesananCoil;
-    @FXML private MenuButton menuPenjualanCoil;
-    
-    @FXML private TitledPane pembelianPane;
-    @FXML private VBox pembelianVbox;
-    @FXML private MenuButton menuPembelianBarang;
-    @FXML private MenuButton menuPembelian;
-    
-    @FXML private TitledPane barangPane;
-    @FXML private VBox barangVbox;
-    @FXML private MenuButton menuPermintaanBarang;
-    @FXML private MenuButton menuProduksiBarang;
-    @FXML private MenuButton menuPengirimanBarang;
-    @FXML private MenuButton menuPengirimanCoil;
-    @FXML private MenuButton menuPindahBarang;
-    @FXML private MenuButton menuPindahBahan;
-    
-    @FXML private TitledPane keuanganPane;
-    @FXML private VBox keuanganVbox;
-    @FXML private MenuButton menuKeuangan;
-    @FXML private MenuButton menuHutang;
-    @FXML private MenuButton menuPiutang;
-    @FXML private MenuButton menuModal;
-    @FXML private MenuButton menuAsetTetap;
-    
-    @FXML private TitledPane laporanPane;
-    @FXML private VBox laporanVbox;
-    @FXML private MenuButton menuLaporanBarang;
-    @FXML private MenuButton menuLaporanPenjualan;
-    @FXML private MenuButton menuLaporanPembelian;
-    @FXML private MenuButton menuLaporanKeuangan;
-    @FXML private MenuButton menuLaporanManagerial;
-    
-    @FXML private TitledPane pengaturanPane;
-    @FXML private VBox pengaturanVbox;
-    @FXML private MenuButton menuDataUser;
-    @FXML private MenuButton menuDataGudang;
-    @FXML private MenuButton menuKategoriBahan;
-    @FXML private MenuButton menuKategoriHutang;
-    @FXML private MenuButton menuKategoriPiutang;
-    @FXML private MenuButton menuKategoriKeuangan;
-    @FXML private MenuButton menuKategoriTransaksi;
-    
+    @FXML
+    public VBox vbox;
+    @FXML
+    private Accordion accordion;
+    @FXML
+    private Label title;
+
+    @FXML
+    private TitledPane loginButton;
+    @FXML
+    private MenuButton logoutButton;
+    @FXML
+    private MenuButton ubahPasswordButton;
+
+    @FXML
+    private TitledPane masterPane;
+    @FXML
+    private VBox masterVbox;
+    @FXML
+    private MenuButton menuDataCustomer;
+    @FXML
+    private MenuButton menuDataSupplier;
+    @FXML
+    private MenuButton menuDataBarang;
+
+    @FXML
+    private TitledPane penjualanPane;
+    @FXML
+    private VBox penjualanVbox;
+    @FXML
+    private MenuButton menuPemesanan;
+    @FXML
+    private MenuButton menuPenjualan;
+
+    @FXML
+    private TitledPane pembelianPane;
+
+    @FXML
+    private TitledPane barangPane;
+    @FXML
+    private VBox barangVbox;
+    @FXML
+    private MenuButton menuPermintaanBarang;
+    @FXML
+    private MenuButton menuPengirimanBarang;
+
+    @FXML
+    private TitledPane keuanganPane;
+    @FXML
+    private VBox keuanganVbox;
+    @FXML
+    private MenuButton menuKeuangan;
+    @FXML
+    private MenuButton menuHutang;
+    @FXML
+    private MenuButton menuPiutang;
+    @FXML
+    private MenuButton menuModal;
+    @FXML
+    private MenuButton menuAsetTetap;
+
+    @FXML
+    private TitledPane laporanPane;
+    @FXML
+    private VBox laporanVbox;
+    @FXML
+    private MenuButton menuLaporanBarang;
+    @FXML
+    private MenuButton menuLaporanPenjualan;
+    @FXML
+    private MenuButton menuLaporanPembelian;
+    @FXML
+    private MenuButton menuLaporanKeuangan;
+    @FXML
+    private MenuButton menuLaporanManagerial;
+
+    @FXML
+    private TitledPane pengaturanPane;
+    @FXML
+    private VBox pengaturanVbox;
+    @FXML
+    private MenuButton menuDataUser;
+    @FXML
+    private MenuButton menuKategoriHutang;
+    @FXML
+    private MenuButton menuKategoriPiutang;
+    @FXML
+    private MenuButton menuKategoriKeuangan;
+    @FXML
+    private MenuButton menuKategoriTransaksi;
+
     private Main mainApp;
-    private ObservableList<Notification> allNotif = FXCollections.observableArrayList();
+
     public void setMainApp(Main mainApp) {
-        try{
+        try {
             this.mainApp = mainApp;
             vbox.setPrefWidth(0);
             vbox.setVisible(false);
-            for(Node n : vbox.getChildren()){
+            for (Node n : vbox.getChildren()) {
                 n.managedProperty().bind(n.visibleProperty());
             }
-            for(Node n : masterVbox.getChildren()){
+            for (Node n : masterVbox.getChildren()) {
                 n.managedProperty().bind(n.visibleProperty());
             }
-            for(Node n : absensiVbox.getChildren()){
+            for (Node n : penjualanVbox.getChildren()) {
                 n.managedProperty().bind(n.visibleProperty());
             }
-            for(Node n : penjualanVbox.getChildren()){
+            for (Node n : barangVbox.getChildren()) {
                 n.managedProperty().bind(n.visibleProperty());
             }
-            for(Node n : pembelianVbox.getChildren()){
+            for (Node n : keuanganVbox.getChildren()) {
                 n.managedProperty().bind(n.visibleProperty());
             }
-            for(Node n : barangVbox.getChildren()){
+            for (Node n : laporanVbox.getChildren()) {
                 n.managedProperty().bind(n.visibleProperty());
             }
-            for(Node n : keuanganVbox.getChildren()){
+            for (Node n : pengaturanVbox.getChildren()) {
                 n.managedProperty().bind(n.visibleProperty());
             }
-            for(Node n : laporanVbox.getChildren()){
-                n.managedProperty().bind(n.visibleProperty());
-            }
-            for(Node n : pengaturanVbox.getChildren()){
-                n.managedProperty().bind(n.visibleProperty());
-            }
-            title.setText("AURI STEEL METALINDO");
+            title.setText("PASAR BAJA");
             setUser();
-        }catch(Exception e){
+        } catch (Exception e) {
             mainApp.showMessage(Modality.NONE, "Error", e.toString());
             e.printStackTrace();
         }
     }
-    public void setUser() {
-        dashboardPane.setVisible(false);
 
+    public void setUser() {
         menuDataCustomer.setVisible(false);
         menuDataSupplier.setVisible(false);
-        menuDataPegawai.setVisible(false);
-        menuDataBahan.setVisible(false);
         menuDataBarang.setVisible(false);
 
-        menuInputAbsensi.setVisible(false);
-        menuLaporanAbsensi.setVisible(false);
-        
         menuPemesanan.setVisible(false);
         menuPenjualan.setVisible(false);
-        menuPemesananCoil.setVisible(false);
-        menuPenjualanCoil.setVisible(false);
-
-        menuPembelian.setVisible(false);
-        menuPembelianBarang.setVisible(false);
 
         menuPermintaanBarang.setVisible(false);
-        menuProduksiBarang.setVisible(false);
         menuPengirimanBarang.setVisible(false);
-        menuPengirimanCoil.setVisible(false);
-        menuPindahBahan.setVisible(false);
-        menuPindahBarang.setVisible(false);
 
         menuKeuangan.setVisible(false);
         menuHutang.setVisible(false);
@@ -183,163 +179,119 @@ public class MainAppController {
         menuLaporanManagerial.setVisible(false);
 
         menuDataUser.setVisible(false);
-        menuDataGudang.setVisible(false);
-        menuKategoriBahan.setVisible(false);
         menuKategoriHutang.setVisible(false);
         menuKategoriPiutang.setVisible(false);
         menuKategoriKeuangan.setVisible(false);
         menuKategoriTransaksi.setVisible(false);
-        if(sistem.getUser()==null){
+        if (sistem.getUser() == null) {
             mainApp.showLoginScene();
-        }else{
+        } else {
             logoutButton.setVisible(true);
             ubahPasswordButton.setVisible(true);
-            loginButton.setText("User : "+sistem.getUser().getKodeUser());
-            for(Otoritas o : sistem.getUser().getOtoritas()){
-                if(o.getJenis().equals("Dashboard")){
-                    if(o.isStatus())
-                        dashboardPane.setVisible(true);
-                    else
-                        accordion.getPanes().remove(dashboardPane);
-                }else if(o.getJenis().equals("Data Customer")){
+            loginButton.setText("User : " + sistem.getUser().getKodeUser());
+            for (Otoritas o : sistem.getUser().getOtoritas()) {
+                if (o.getJenis().equals("Data Customer")) {
                     menuDataCustomer.setVisible(o.isStatus());
-                }else if(o.getJenis().equals("Data Supplier")){
+                } else if (o.getJenis().equals("Data Supplier")) {
                     menuDataSupplier.setVisible(o.isStatus());
-                }else if(o.getJenis().equals("Data Pegawai")){
-                    menuDataPegawai.setVisible(o.isStatus());
-                }else if(o.getJenis().equals("Data Bahan")){
-                    menuDataBahan.setVisible(o.isStatus());
-                }else if(o.getJenis().equals("Data Barang")){
+                } else if (o.getJenis().equals("Data Barang")) {
                     menuDataBarang.setVisible(o.isStatus());
-                }else if(o.getJenis().equals("Data Absensi")){
-                    menuInputAbsensi.setVisible(o.isStatus());
-                }else if(o.getJenis().equals("Laporan Absensi")){
-                    menuLaporanAbsensi.setVisible(o.isStatus());
-                }else if(o.getJenis().equals("Pemesanan")){
+                } else if (o.getJenis().equals("Pemesanan")) {
                     menuPemesanan.setVisible(o.isStatus());
-                }else if(o.getJenis().equals("Penjualan")){
+                } else if (o.getJenis().equals("Penjualan")) {
                     menuPenjualan.setVisible(o.isStatus());
-                }else if(o.getJenis().equals("Pemesanan Coil")){
-                    menuPemesananCoil.setVisible(o.isStatus());
-                }else if(o.getJenis().equals("Penjualan Coil")){
-                    menuPenjualanCoil.setVisible(o.isStatus());
-                }else if(o.getJenis().equals("Pembelian")){
-                    menuPembelian.setVisible(o.isStatus());
-                }else if(o.getJenis().equals("Pembelian Barang")){
-                    menuPembelianBarang.setVisible(o.isStatus());
-                }else if(o.getJenis().equals("Permintaan Barang")){
+                } else if (o.getJenis().equals("Pembelian")) {
+                    if (o.isStatus()) {
+                        pembelianPane.setVisible(true);
+                    } else {
+                        accordion.getPanes().remove(pembelianPane);
+                    }
+                } else if (o.getJenis().equals("Permintaan Barang")) {
                     menuPermintaanBarang.setVisible(o.isStatus());
-                }else if(o.getJenis().equals("Produksi Barang")){
-                    menuProduksiBarang.setVisible(o.isStatus());
-                }else if(o.getJenis().equals("Pengiriman Barang")){
+                } else if (o.getJenis().equals("Pengiriman Barang")) {
                     menuPengirimanBarang.setVisible(o.isStatus());
-                }else if(o.getJenis().equals("Pengiriman Coil")){
-                    menuPengirimanCoil.setVisible(o.isStatus());
-                }else if(o.getJenis().equals("Pindah Bahan")){
-                    menuPindahBahan.setVisible(o.isStatus());
-                }else if(o.getJenis().equals("Pindah Barang")){
-                    menuPindahBarang.setVisible(o.isStatus());
-                }else if(o.getJenis().equals("Keuangan")){
+                } else if (o.getJenis().equals("Keuangan")) {
                     menuKeuangan.setVisible(o.isStatus());
-                }else if(o.getJenis().equals("Hutang")){
+                } else if (o.getJenis().equals("Hutang")) {
                     menuHutang.setVisible(o.isStatus());
-                }else if(o.getJenis().equals("Piutang")){
+                } else if (o.getJenis().equals("Piutang")) {
                     menuPiutang.setVisible(o.isStatus());
-                }else if(o.getJenis().equals("Modal")){
+                } else if (o.getJenis().equals("Modal")) {
                     menuModal.setVisible(o.isStatus());
-                }else if(o.getJenis().equals("Aset Tetap")){
+                } else if (o.getJenis().equals("Aset Tetap")) {
                     menuAsetTetap.setVisible(o.isStatus());
-                }else if(o.getJenis().equals("Laporan Barang")){
+                } else if (o.getJenis().equals("Laporan Barang")) {
                     menuLaporanBarang.setVisible(o.isStatus());
-                }else if(o.getJenis().equals("Laporan Penjualan")){
+                } else if (o.getJenis().equals("Laporan Penjualan")) {
                     menuLaporanPenjualan.setVisible(o.isStatus());
-                }else if(o.getJenis().equals("Laporan Pembelian")){
+                } else if (o.getJenis().equals("Laporan Pembelian")) {
                     menuLaporanPembelian.setVisible(o.isStatus());
-                }else if(o.getJenis().equals("Laporan Keuangan")){
+                } else if (o.getJenis().equals("Laporan Keuangan")) {
                     menuLaporanKeuangan.setVisible(o.isStatus());
-                }else if(o.getJenis().equals("Laporan Managerial")){
+                } else if (o.getJenis().equals("Laporan Managerial")) {
                     menuLaporanManagerial.setVisible(o.isStatus());
-                }else if(o.getJenis().equals("Data User")){
+                } else if (o.getJenis().equals("Data User")) {
                     menuDataUser.setVisible(o.isStatus());
-                }else if(o.getJenis().equals("Data Gudang")){
-                    menuDataGudang.setVisible(o.isStatus());
-                }else if(o.getJenis().equals("Kategori Bahan")){
-                    menuKategoriBahan.setVisible(o.isStatus());
-                }else if(o.getJenis().equals("Kategori Hutang")){
+                } else if (o.getJenis().equals("Kategori Hutang")) {
                     menuKategoriHutang.setVisible(o.isStatus());
-                }else if(o.getJenis().equals("Kategori Piutang")){
+                } else if (o.getJenis().equals("Kategori Piutang")) {
                     menuKategoriPiutang.setVisible(o.isStatus());
-                }else if(o.getJenis().equals("Kategori Keuangan")){
+                } else if (o.getJenis().equals("Kategori Keuangan")) {
                     menuKategoriKeuangan.setVisible(o.isStatus());
-                }else if(o.getJenis().equals("Kategori Transaksi")){
+                } else if (o.getJenis().equals("Kategori Transaksi")) {
                     menuKategoriTransaksi.setVisible(o.isStatus());
                 }
             }
-            if(menuDataCustomer.isVisible()==false &&
-                    menuDataSupplier.isVisible()==false &&
-                    menuDataPegawai.isVisible()==false &&
-                    menuDataBahan.isVisible()==false &&
-                    menuDataBarang.isVisible()==false ){
+            if (menuDataCustomer.isVisible() == false
+                    && menuDataSupplier.isVisible() == false
+                    && menuDataBarang.isVisible() == false) {
                 accordion.getPanes().remove(masterPane);
             }
-            if(menuInputAbsensi.isVisible()==false &&
-                    menuLaporanAbsensi.isVisible()==false ){
-                accordion.getPanes().remove(absensiPane);
-            }
-            if(menuPemesanan.isVisible()==false &&
-                    menuPenjualan.isVisible()==false &&
-                    menuPemesananCoil.isVisible()==false &&
-                    menuPenjualanCoil.isVisible()==false){
+            if (menuPemesanan.isVisible() == false
+                    && menuPenjualan.isVisible() == false) {
                 accordion.getPanes().remove(penjualanPane);
             }
-            if(menuPembelian.isVisible()==false &&
-                    menuPembelianBarang.isVisible()==false){
-                accordion.getPanes().remove(pembelianPane);
-            }
-            if(menuPermintaanBarang.isVisible()==false &&
-                    menuProduksiBarang.isVisible()==false &&
-                    menuPengirimanBarang.isVisible()==false &&
-                    menuPengirimanCoil.isVisible()==false &&
-                    menuPindahBahan.isVisible()==false &&
-                    menuPindahBarang.isVisible()==false){
+            if (menuPermintaanBarang.isVisible() == false
+                    && menuPengirimanBarang.isVisible() == false) {
                 accordion.getPanes().remove(barangPane);
             }
-            if(menuKeuangan.isVisible()==false &&
-                    menuHutang.isVisible()==false &&
-                    menuPiutang.isVisible()==false &&
-                    menuModal.isVisible()==false &&
-                    menuAsetTetap.isVisible()==false){
+            if (menuKeuangan.isVisible() == false
+                    && menuHutang.isVisible() == false
+                    && menuPiutang.isVisible() == false
+                    && menuModal.isVisible() == false
+                    && menuAsetTetap.isVisible() == false) {
                 accordion.getPanes().remove(keuanganPane);
             }
-            if(menuLaporanBarang.isVisible()==false &&
-                    menuLaporanPenjualan.isVisible()==false &&
-                    menuLaporanPembelian.isVisible()==false &&
-                    menuLaporanKeuangan.isVisible()==false &&
-                    menuLaporanManagerial.isVisible()==false){
+            if (menuLaporanBarang.isVisible() == false
+                    && menuLaporanPenjualan.isVisible() == false
+                    && menuLaporanPembelian.isVisible() == false
+                    && menuLaporanKeuangan.isVisible() == false
+                    && menuLaporanManagerial.isVisible() == false) {
                 accordion.getPanes().remove(laporanPane);
             }
-            if(menuDataUser.isVisible()==false &&
-                    menuDataGudang.isVisible()==false &&
-                    menuKategoriBahan.isVisible()==false &&
-                    menuKategoriHutang.isVisible()==false &&
-                    menuKategoriPiutang.isVisible()==false&&
-                    menuKategoriKeuangan.isVisible()==false&&
-                    menuKategoriTransaksi.isVisible()==false){
+            if (menuDataUser.isVisible() == false
+                    && menuKategoriHutang.isVisible() == false
+                    && menuKategoriPiutang.isVisible() == false
+                    && menuKategoriKeuangan.isVisible() == false
+                    && menuKategoriTransaksi.isVisible() == false) {
                 accordion.getPanes().remove(pengaturanPane);
             }
         }
-        
+
     }
+
     @FXML
-    public void showHideMenu(){
-        final Animation hideSidebar = new Transition() { 
-            { setCycleDuration(Duration.millis(10)); }
+    public void showHideMenu() {
+        final Animation hideSidebar = new Transition() {
+            {
+                setCycleDuration(Duration.millis(10));
+            }
+
             @Override
             protected void interpolate(double frac) {
-                final double curWidth = 220 * (1.0 - frac);
+                final double curWidth = 200 * (1.0 - frac);
                 vbox.setPrefWidth(curWidth);
                 masterPane.setExpanded(false);
-                absensiPane.setExpanded(false);
                 penjualanPane.setExpanded(false);
                 pembelianPane.setExpanded(false);
                 barangPane.setExpanded(false);
@@ -353,71 +305,82 @@ public class MainAppController {
             vbox.setVisible(false);
         });
         final Animation showSidebar = new Transition() {
-            { setCycleDuration(Duration.millis(10)); }
+            {
+                setCycleDuration(Duration.millis(10));
+            }
+
             @Override
             protected void interpolate(double frac) {
-              final double curWidth = 220 * frac;
-              vbox.setPrefWidth(curWidth);
+                final double curWidth = 200 * frac;
+                vbox.setPrefWidth(curWidth);
             }
         };
         if (showSidebar.statusProperty().get() == Animation.Status.STOPPED && hideSidebar.statusProperty().get() == Animation.Status.STOPPED) {
-            if (vbox.isVisible()) 
+            if (vbox.isVisible()) {
                 hideSidebar.play();
-            else {
+            } else {
                 vbox.setVisible(true);
                 showSidebar.play();
             }
         }
     }
-    public void setTitle(String x){
+
+    public void setTitle(String x) {
         title.setText(x);
     }
+
     @FXML
     public void menuLogout() {
         mainApp.showLoginScene();
     }
+
     @FXML
     public void menuExit() {
         System.exit(0);
     }
+
     @FXML
     public void menushowUbahPassword() {
         mainApp.showUbahPassword();
     }
-    @FXML
-    public void menuDashboard() {
-//        mainApp.showDashboard();
-    }
+
     @FXML
     public void menuDataCustomer() {
         mainApp.showDataCustomer();
     }
+
     @FXML
     public void menuDataSupplier() {
         mainApp.showDataSupplier();
     }
+
     @FXML
     public void menuDataBarang() {
         mainApp.showDataBarang();
     }
+
     @FXML
     public void menuDataUser() {
         mainApp.showDataUser();
     }
+
     @FXML
-    private void showKategoriHutang(){
+    private void showKategoriHutang() {
         mainApp.showKategoriHutang();
     }
+
     @FXML
-    private void showKategoriPiutang(){
+    private void showKategoriPiutang() {
         mainApp.showKategoriPiutang();
     }
+
     @FXML
-    private void showKategoriKeuangan(){
+    private void showKategoriKeuangan() {
         mainApp.showKategoriKeuangan();
     }
+
     @FXML
-    private void showKategoriTransaksi(){
+    private void showKategoriTransaksi() {
         mainApp.showKategoriTransaksi();
     }
 
@@ -425,90 +388,109 @@ public class MainAppController {
     public void menuPenjualan() {
         mainApp.showPenjualan();
     }
+
     @FXML
     public void menuPemesanan() {
         mainApp.showPemesanan();
     }
+
     @FXML
     public void menuPembelian() {
         mainApp.showPembelian();
     }
+
     @FXML
     public void menuPermintaanBarang() {
         mainApp.showPermintaanBarang();
     }
+
     @FXML
     public void menuPengirimanBarang() {
         mainApp.showPengirimanBarang();
     }
+
     @FXML
     public void menuKeuangan() {
         mainApp.showKeuangan();
     }
+
     @FXML
     public void menuHutang() {
         mainApp.showHutang();
     }
+
     @FXML
     public void menuPiutang() {
         mainApp.showPiutang();
     }
+
     @FXML
     public void menuModal() {
         mainApp.showModal();
     }
+
     @FXML
     public void menuAsetTetap() {
         mainApp.showAsetTetap();
     }
+
     @FXML
     public void menuLaporanBarang() {
-//        mainApp.showLaporanBarang();
+        mainApp.showLaporanBarang();
     }
+
     @FXML
     public void menuLaporanPenyesuaianStokBarang() {
-//        mainApp.showLaporanPenyesuaianStokBarang();
+        mainApp.showLaporanPenyesuaianStokBarang();
     }
 
     @FXML
     public void menuLaporanPenjualan() {
-//        mainApp.showLaporanPenjualan();
+        mainApp.showLaporanPenjualan();
     }
+
     @FXML
     public void menuLaporanBarangTerjual() {
-//        mainApp.showLaporanBarangTerjual();
+        mainApp.showLaporanBarangTerjual();
     }
 
+    @FXML
+    public void menuLaporanPembelian() {
+        mainApp.showLaporanPembelian();
+    }
 
-
+    @FXML
+    public void menuLaporanBarangDibeli() {
+        mainApp.showLaporanBarangDibeli();
+    }
 
     @FXML
     public void menuLaporanKeuangan() {
-//        mainApp.showLaporanKeuangan();
+        mainApp.showLaporanKeuangan();
     }
 
     @FXML
     public void menuLaporanHutang() {
-//        mainApp.showLaporanHutang();
+        mainApp.showLaporanHutang();
     }
 
     @FXML
     public void menuLaporanPiutang() {
-//        mainApp.showLaporanPiutang();
+        mainApp.showLaporanPiutang();
     }
 
     @FXML
-    public void menuLaporanUntungRugiPerpetual() {
-//        mainApp.showLaporanUntungRugi();
+    public void menuLaporanUntungRugi() {
+        mainApp.showLaporanUntungRugi();
     }
+
     @FXML
     public void menuLaporanUntungRugiPeriode() {
-//        mainApp.showLaporanUntungRugiPeriode();
+        mainApp.showLaporanUntungRugiPeriode();
     }
 
-
     @FXML
-    public void menuLaporanNeracaPerpetual() {
-//        mainApp.showLaporanNeraca();
+    public void menuLaporanNeraca() {
+        mainApp.showLaporanNeraca();
     }
 }

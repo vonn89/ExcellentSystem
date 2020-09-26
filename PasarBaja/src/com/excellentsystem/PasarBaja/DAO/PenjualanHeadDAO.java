@@ -83,37 +83,6 @@ public class PenjualanHeadDAO {
         return allPenjualan;
         
     }
-    public static List<PenjualanHead> getAllByTglKirimAndStatus(Connection con, String tglMulai,String tglAkhir, String status)throws Exception{
-        String sql = "select * from tt_penjualan_head where left(tgl_pengiriman,10) between ? and ? ";
-        if(!status.equals("%"))
-            sql = sql + " and status = '"+status+"' ";
-        PreparedStatement ps = con.prepareStatement(sql);
-        ps.setString(1, tglMulai);
-        ps.setString(2, tglAkhir);
-        List<PenjualanHead> allPenjualan = new ArrayList<>();
-        ResultSet rs = ps.executeQuery();
-        while(rs.next()){
-            PenjualanHead p = new PenjualanHead();
-            p.setNoPenjualan(rs.getString(1));
-            p.setTglPenjualan(rs.getDate(2).toString()+" "+rs.getTime(2).toString());
-            p.setNoPemesanan(rs.getString(3));
-            p.setKodeCustomer(rs.getString(4));
-            p.setTujuanKirim(rs.getString(5));
-            p.setSupir(rs.getString(6));
-            p.setTotalBebanPenjualan(rs.getDouble(7));
-            p.setTotalPenjualan(rs.getDouble(8));
-            p.setPembayaran(rs.getDouble(9));
-            p.setSisaPembayaran(rs.getDouble(10));
-            p.setCatatan(rs.getString(11));
-            p.setKodeUser(rs.getString(12));
-            p.setTglBatal(rs.getDate(13).toString()+" "+rs.getTime(13).toString());
-            p.setUserBatal(rs.getString(14));
-            p.setStatus(rs.getString(15));
-            allPenjualan.add(p);
-        }
-        return allPenjualan;
-        
-    }
     public static PenjualanHead get(Connection con, String noPenjualan)throws Exception{
         PreparedStatement ps = con.prepareStatement("select * from tt_penjualan_head where no_penjualan = ?");
         ps.setString(1, noPenjualan);

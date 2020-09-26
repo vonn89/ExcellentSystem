@@ -22,19 +22,26 @@ import javafx.stage.Stage;
  *
  * @author Xtreme
  */
-public class TransferKeuanganController  {
+public class TransferKeuanganController {
 
-    @FXML public ComboBox<String> keCombo;
-    @FXML public TextField keteranganField;
-    @FXML public TextField jumlahRpField;
-    @FXML public ComboBox<String> dariCombo;
-    @FXML public Button saveButton;
-    private Main mainApp;   
+    @FXML
+    public ComboBox<String> keCombo;
+    @FXML
+    public TextField keteranganField;
+    @FXML
+    public TextField jumlahRpField;
+    @FXML
+    public ComboBox<String> dariCombo;
+    @FXML
+    public Button saveButton;
+    private Main mainApp;
     private Stage stage;
     private Stage owner;
-    public void initialize(){
+
+    public void initialize() {
         Function.setNumberField(jumlahRpField);
     }
+
     public void setMainApp(Main mainApp, Stage owner, Stage stage) {
         this.mainApp = mainApp;
         this.stage = stage;
@@ -43,15 +50,16 @@ public class TransferKeuanganController  {
             mainApp.closeDialog(owner, stage);
         });
         ObservableList<String> listKeuangan = FXCollections.observableArrayList();
-        for(KategoriKeuangan kk : sistem.getListKategoriKeuangan()){
+        for (KategoriKeuangan kk : sistem.getListKategoriKeuangan()) {
             listKeuangan.add(kk.getKodeKeuangan());
         }
         dariCombo.setItems(listKeuangan);
         keCombo.setItems(listKeuangan);
-    }   
+    }
+
     @FXML
-    private void close(){
+    private void close() {
         mainApp.closeDialog(owner, stage);
-    }      
-    
+    }
+
 }

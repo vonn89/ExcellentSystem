@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package com.excellentsystem.PasarBaja.View.Dialog;
 
 import com.excellentsystem.PasarBaja.DAO.CustomerDAO;
@@ -43,67 +42,86 @@ import javafx.stage.Stage;
  */
 public class NewPenjualanController {
 
-    @FXML private TableView<PenjualanDetail> penjualanDetailTable;
-    @FXML private TableColumn<PenjualanDetail, String> kodeBarangColumn;
-    @FXML private TableColumn<PenjualanDetail, String> namaBarangColumn;
-    @FXML private TableColumn<PenjualanDetail, String> keteranganColumn;
-    @FXML private TableColumn<PenjualanDetail, String> satuanColumn;
-    @FXML private TableColumn<PenjualanDetail, Number> qtyColumn;
-    @FXML private TableColumn<PenjualanDetail, Number> hargaJualColumn;
-    @FXML private TableColumn<PenjualanDetail, Number> hargaJualPPNColumn;
-    @FXML private TableColumn<PenjualanDetail, Number> subTotalColumn;
-    
-    @FXML private Label noPenjualanField;
-    @FXML private Label tglPenjualanField;
-    
-    @FXML private TextField namaField;
-    @FXML private TextArea alamatField;
-    
-    @FXML private TextArea catatanField;
-    
-    @FXML private Label totalQtyField;
-    @FXML private TextField totalPenjualanField;
-    @FXML private TextField ppnField;
-    @FXML private TextField grandtotalField;
-    
+    @FXML
+    private TableView<PenjualanDetail> penjualanDetailTable;
+    @FXML
+    private TableColumn<PenjualanDetail, String> kodeBarangColumn;
+    @FXML
+    private TableColumn<PenjualanDetail, String> namaBarangColumn;
+    @FXML
+    private TableColumn<PenjualanDetail, String> keteranganColumn;
+    @FXML
+    private TableColumn<PenjualanDetail, String> satuanColumn;
+    @FXML
+    private TableColumn<PenjualanDetail, Number> qtyColumn;
+    @FXML
+    private TableColumn<PenjualanDetail, Number> hargaJualColumn;
+    @FXML
+    private TableColumn<PenjualanDetail, Number> hargaJualPPNColumn;
+    @FXML
+    private TableColumn<PenjualanDetail, Number> subTotalColumn;
+
+    @FXML
+    private Label noPenjualanField;
+    @FXML
+    private Label tglPenjualanField;
+
+    @FXML
+    private TextField namaField;
+    @FXML
+    private TextArea alamatField;
+
+    @FXML
+    private TextArea catatanField;
+
+    @FXML
+    private Label totalQtyField;
+    @FXML
+    private TextField totalPenjualanField;
+    @FXML
+    private TextField ppnField;
+    @FXML
+    private TextField grandtotalField;
+
     private PenjualanHead penjualan;
     private ObservableList<PenjualanDetail> allPenjualanDetail = FXCollections.observableArrayList();
-    private Main mainApp;   
+    private Main mainApp;
     private Stage stage;
     private Stage owner;
+
     public void initialize() {
         kodeBarangColumn.setCellValueFactory(cellData -> cellData.getValue().kodeBarangProperty());
         namaBarangColumn.setCellValueFactory(cellData -> cellData.getValue().namaBarangProperty());
         keteranganColumn.setCellValueFactory(cellData -> cellData.getValue().keteranganProperty());
         satuanColumn.setCellValueFactory(cellData -> cellData.getValue().satuanProperty());
-        hargaJualColumn.setCellValueFactory(cellData -> new SimpleDoubleProperty(cellData.getValue().getHargaJual()/1.1));
+        hargaJualColumn.setCellValueFactory(cellData -> new SimpleDoubleProperty(cellData.getValue().getHargaJual() / 1.1));
         hargaJualPPNColumn.setCellValueFactory(cellData -> new SimpleDoubleProperty(cellData.getValue().getHargaJual()));
-        subTotalColumn.setCellValueFactory(cellData -> new SimpleDoubleProperty(cellData.getValue().getTotal()/1.1));
+        subTotalColumn.setCellValueFactory(cellData -> new SimpleDoubleProperty(cellData.getValue().getTotal() / 1.1));
         qtyColumn.setCellValueFactory(cellData -> new SimpleDoubleProperty(cellData.getValue().getQty()));
         hargaJualColumn.setCellFactory(col -> Function.getTableCell());
         hargaJualPPNColumn.setCellFactory(col -> Function.getTableCell());
         subTotalColumn.setCellFactory(col -> Function.getTableCell());
         qtyColumn.setCellFactory(col -> Function.getTableCell());
         penjualanDetailTable.setItems(allPenjualanDetail);
-        
+
         ContextMenu cm = new ContextMenu();
         MenuItem refresh = new MenuItem("Refresh");
-        refresh.setOnAction((ActionEvent e)->{
+        refresh.setOnAction((ActionEvent e) -> {
             penjualanDetailTable.refresh();
         });
         cm.getItems().addAll(refresh);
         penjualanDetailTable.setContextMenu(cm);
         penjualanDetailTable.setRowFactory((TableView<PenjualanDetail> tv) -> {
-            final TableRow<PenjualanDetail> row = new TableRow<PenjualanDetail>(){
+            final TableRow<PenjualanDetail> row = new TableRow<PenjualanDetail>() {
                 @Override
                 public void updateItem(PenjualanDetail item, boolean empty) {
                     super.updateItem(item, empty);
                     if (empty) {
                         setContextMenu(cm);
-                    } else{
+                    } else {
                         final ContextMenu rm = new ContextMenu();
                         MenuItem refresh = new MenuItem("Refresh");
-                        refresh.setOnAction((ActionEvent e)->{
+                        refresh.setOnAction((ActionEvent e) -> {
                             penjualanDetailTable.refresh();
                         });
                         rm.getItems().addAll(refresh);
@@ -114,6 +132,7 @@ public class NewPenjualanController {
             return row;
         });
     }
+
     public void setMainApp(Main mainApp, Stage owner, Stage stage) {
         this.mainApp = mainApp;
         this.owner = owner;
@@ -121,15 +140,16 @@ public class NewPenjualanController {
         stage.setOnCloseRequest((event) -> {
             mainApp.closeDialog(owner, stage);
         });
-        stage.setHeight(mainApp.screenSize.getHeight()*0.9);
-        stage.setWidth(mainApp.screenSize.getWidth()*0.9);
+        stage.setHeight(mainApp.screenSize.getHeight() * 0.9);
+        stage.setWidth(mainApp.screenSize.getWidth() * 0.9);
         stage.setX((mainApp.screenSize.getWidth() - stage.getWidth()) / 2);
         stage.setY((mainApp.screenSize.getHeight() - stage.getHeight()) / 2);
     }
-    public void setDetailPenjualan(String noPenjualan){
+
+    public void setDetailPenjualan(String noPenjualan) {
         Task<String> task = new Task<String>() {
-            @Override 
-            public String call() throws Exception{
+            @Override
+            public String call() throws Exception {
                 try (Connection con = Koneksi.getConnection()) {
                     penjualan = PenjualanHeadDAO.get(con, noPenjualan);
                     penjualan.setPemesananHead(PemesananHeadDAO.get(con, penjualan.getNoPemesanan()));
@@ -143,7 +163,7 @@ public class NewPenjualanController {
             mainApp.showLoadingScreen();
         });
         task.setOnSucceeded((ev) -> {
-            try{
+            try {
                 mainApp.closeLoading();
                 noPenjualanField.setText(penjualan.getNoPenjualan());
                 tglPenjualanField.setText(tglLengkap.format(tglSql.parse(penjualan.getTglPenjualan())));
@@ -151,15 +171,15 @@ public class NewPenjualanController {
                 alamatField.setText(penjualan.getCustomer().getAlamat());
                 catatanField.setText(penjualan.getCatatan());
                 allPenjualanDetail.addAll(penjualan.getListPenjualanDetail());
-                totalPenjualanField.setText(df.format(penjualan.getTotalPenjualan()/1.1));
-                ppnField.setText(df.format(penjualan.getTotalPenjualan()/1.1*0.1));
+                totalPenjualanField.setText(df.format(penjualan.getTotalPenjualan() / 1.1));
+                ppnField.setText(df.format(penjualan.getTotalPenjualan() / 1.1 * 0.1));
                 grandtotalField.setText(df.format(penjualan.getTotalPenjualan()));
                 double qty = 0;
-                for(PenjualanDetail d : allPenjualanDetail){
+                for (PenjualanDetail d : allPenjualanDetail) {
                     qty = qty + d.getQty();
                 }
                 totalQtyField.setText(df.format(qty));
-            }catch(Exception e){
+            } catch (Exception e) {
                 mainApp.showMessage(Modality.NONE, "Error", e.toString());
             }
         });
@@ -169,8 +189,9 @@ public class NewPenjualanController {
         });
         new Thread(task).start();
     }
+
     @FXML
-    private void backToDataPenjualan(){
+    private void backToDataPenjualan() {
         mainApp.closeDialog(owner, stage);
     }
 }

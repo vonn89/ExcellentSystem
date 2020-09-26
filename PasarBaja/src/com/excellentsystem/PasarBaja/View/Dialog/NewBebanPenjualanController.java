@@ -46,26 +46,38 @@ import javafx.stage.Stage;
  *
  * @author ASUS
  */
-public class NewBebanPenjualanController  {
+public class NewBebanPenjualanController {
 
-    @FXML private TextField noBebanPenjualanField;
-    @FXML private TextField tglBebanPenjualanField;
-    @FXML private TextArea penjualanField;
-    @FXML public TextField keteranganField;
-    @FXML public TextField jumlahRpField;
-    @FXML public ComboBox<String> tipeKeuanganCombo;
-    
-    @FXML private Button addPenjualanButton;
-    @FXML private Button resetPenjualanButton;
-    @FXML public Button saveButton;
-    @FXML private Button cancelButton;
-    @FXML private GridPane gridPane;
-    
+    @FXML
+    private TextField noBebanPenjualanField;
+    @FXML
+    private TextField tglBebanPenjualanField;
+    @FXML
+    private TextArea penjualanField;
+    @FXML
+    public TextField keteranganField;
+    @FXML
+    public TextField jumlahRpField;
+    @FXML
+    public ComboBox<String> tipeKeuanganCombo;
+
+    @FXML
+    private Button addPenjualanButton;
+    @FXML
+    private Button resetPenjualanButton;
+    @FXML
+    public Button saveButton;
+    @FXML
+    private Button cancelButton;
+    @FXML
+    private GridPane gridPane;
+
     public List<BebanPenjualanDetail> listDetail = new ArrayList<>();
-    private Main mainApp;   
+    private Main mainApp;
     private Stage stage;
     private Stage owner;
-    public void setMainApp(Main mainApp,Stage owner,Stage stage) {
+
+    public void setMainApp(Main mainApp, Stage owner, Stage stage) {
         this.mainApp = mainApp;
         this.stage = stage;
         this.owner = owner;
@@ -73,20 +85,22 @@ public class NewBebanPenjualanController  {
         stage.setOnCloseRequest((event) -> {
             mainApp.closeDialog(owner, stage);
         });
-    }  
-    public void setNewBebanPenjualan(){
+    }
+
+    public void setNewBebanPenjualan() {
         noBebanPenjualanField.setText("");
         tglBebanPenjualanField.setText("");
         ObservableList<String> listKeuangan = FXCollections.observableArrayList();
-        for(KategoriKeuangan kk : sistem.getListKategoriKeuangan()){
+        for (KategoriKeuangan kk : sistem.getListKategoriKeuangan()) {
             listKeuangan.add(kk.getKodeKeuangan());
         }
         tipeKeuanganCombo.setItems(listKeuangan);
     }
-    public void setDetailBebanPenjualan(String noBeban){
+
+    public void setDetailBebanPenjualan(String noBeban) {
         Task<BebanPenjualanHead> task = new Task<BebanPenjualanHead>() {
-            @Override 
-            public BebanPenjualanHead call()throws Exception {
+            @Override
+            public BebanPenjualanHead call() throws Exception {
                 try (Connection con = Koneksi.getConnection()) {
                     BebanPenjualanHead b = BebanPenjualanHeadDAO.get(con, noBeban);
                     b.setListBebanPenjualanDetail(BebanPenjualanDetailDAO.getAllByNoBeban(con, noBeban));
@@ -113,10 +127,11 @@ public class NewBebanPenjualanController  {
                 noBebanPenjualanField.setText(b.getNoBebanPenjualan());
                 tglBebanPenjualanField.setText(tglLengkap.format(tglSql.parse(b.getTglBebanPenjualan())));
                 String penjualan = "";
-                for(BebanPenjualanDetail d : b.getListBebanPenjualanDetail()){
+                for (BebanPenjualanDetail d : b.getListBebanPenjualanDetail()) {
                     penjualan = penjualan + d.getNoPenjualan();
-                    if(b.getListBebanPenjualanDetail().indexOf(d) < b.getListBebanPenjualanDetail().size()-1)
+                    if (b.getListBebanPenjualanDetail().indexOf(d) < b.getListBebanPenjualanDetail().size() - 1) {
                         penjualan = penjualan + "\n";
+                    }
                 }
                 penjualanField.setText(penjualan);
                 keteranganField.setText(b.getKeterangan());
@@ -132,27 +147,28 @@ public class NewBebanPenjualanController  {
         });
         new Thread(task).start();
     }
+
     @FXML
-    private void addPenjualan(){
+    private void addPenjualan() {
         Stage child = new Stage();
         FXMLLoader loader = mainApp.showDialog(stage, child, "View/Dialog/AddPenjualan.fxml");
         AddPenjualanController x = loader.getController();
         x.setMainApp(mainApp, stage, child);
         x.penjualanHeadTable.setRowFactory(table -> {
-            final TableRow<PenjualanHead> row = new TableRow<PenjualanHead>(){
+            final TableRow<PenjualanHead> row = new TableRow<PenjualanHead>() {
                 @Override
                 public void updateItem(PenjualanHead item, boolean empty) {
                     super.updateItem(item, empty);
                     if (empty) {
                         setContextMenu(null);
-                    } else{
+                    } else {
                         final ContextMenu rm = new ContextMenu();
                         MenuItem detailPenjualan = new MenuItem("Detail Penjualan");
-                        detailPenjualan.setOnAction((ActionEvent e)->{
+                        detailPenjualan.setOnAction((ActionEvent e) -> {
                             detailPenjualan(item, child);
                         });
                         MenuItem detailBebanPenjualan = new MenuItem("Detail Beban Penjualan");
-                        detailBebanPenjualan.setOnAction((ActionEvent e)->{
+                        detailBebanPenjualan.setOnAction((ActionEvent e) -> {
                             detailBebanPenjualan(item, child);
                         });
                         rm.getItems().addAll(detailPenjualan, detailBebanPenjualan);
@@ -161,27 +177,28 @@ public class NewBebanPenjualanController  {
                 }
             };
             row.setOnMouseClicked((MouseEvent mouseEvent) -> {
-                if(mouseEvent.getButton().equals(MouseButton.PRIMARY)&&
-                        mouseEvent.getClickCount() == 2){
-                    if(row.getItem()!=null){
-                        try{
+                if (mouseEvent.getButton().equals(MouseButton.PRIMARY)
+                        && mouseEvent.getClickCount() == 2) {
+                    if (row.getItem() != null) {
+                        try {
                             mainApp.closeDialog(stage, child);
                             PenjualanHead p = row.getItem();
                             boolean status = true;
-                            for(BebanPenjualanDetail d : listDetail){
-                                if(d.getNoPenjualan().equals(p.getNoPenjualan()))
+                            for (BebanPenjualanDetail d : listDetail) {
+                                if (d.getNoPenjualan().equals(p.getNoPenjualan())) {
                                     status = false;
+                                }
                             }
-                            if(status){
+                            if (status) {
                                 BebanPenjualanDetail d = new BebanPenjualanDetail();
                                 d.setNoPenjualan(p.getNoPenjualan());
                                 d.setPenjualanHead(p);
                                 listDetail.add(d);
-                                penjualanField.appendText(p.getNoPenjualan()+" "+p.getCustomer().getNama()+"\n");
-                            }else{
+                                penjualanField.appendText(p.getNoPenjualan() + " " + p.getCustomer().getNama() + "\n");
+                            } else {
                                 mainApp.showMessage(Modality.NONE, "Warning", "Penjualan sudah diinput");
                             }
-                        }catch(Exception e){
+                        } catch (Exception e) {
                             mainApp.showMessage(Modality.NONE, "Error", e.toString());
                         }
                     }
@@ -190,27 +207,31 @@ public class NewBebanPenjualanController  {
             return row;
         });
     }
+
     @FXML
-    private void resetPenjualan(){
+    private void resetPenjualan() {
         penjualanField.setText("");
         listDetail.clear();
     }
-    private void detailPenjualan(PenjualanHead p, Stage owner){
+
+    private void detailPenjualan(PenjualanHead p, Stage owner) {
         Stage child = new Stage();
         FXMLLoader loader = mainApp.showDialog(owner, child, "View/Dialog/NewPenjualan.fxml");
         NewPenjualanController controller = loader.getController();
         controller.setMainApp(mainApp, owner, child);
         controller.setDetailPenjualan(p.getNoPenjualan());
     }
-    private void detailBebanPenjualan(PenjualanHead p, Stage owner){
+
+    private void detailBebanPenjualan(PenjualanHead p, Stage owner) {
         Stage child = new Stage();
         FXMLLoader loader = mainApp.showDialog(owner, child, "View/Dialog/DetailBebanPenjualan.fxml");
         DetailBebanPenjualanController controller = loader.getController();
         controller.setMainApp(mainApp, owner, child);
         controller.setDetailBebanPenjualan(p.getNoPenjualan());
     }
-    public void close(){
+
+    public void close() {
         mainApp.closeDialog(owner, stage);
-    }    
-    
+    }
+
 }

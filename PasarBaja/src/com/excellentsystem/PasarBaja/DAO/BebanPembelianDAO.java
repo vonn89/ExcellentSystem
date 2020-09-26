@@ -33,9 +33,10 @@ public class BebanPembelianDAO {
         while(rs.next()){
             BebanPembelian b = new BebanPembelian();
             b.setNoPembelian(rs.getString(1));
-            b.setKeterangan(rs.getString(2));
-            b.setJumlahRp(rs.getDouble(3));
-            b.setStatus(rs.getString(4));
+            b.setNoUrut(rs.getInt(2));
+            b.setKeterangan(rs.getString(3));
+            b.setJumlahRp(rs.getDouble(4));
+            b.setStatus(rs.getString(5));
             allBeban.add(b);
         }
         return allBeban;
@@ -48,19 +49,21 @@ public class BebanPembelianDAO {
         while(rs.next()){
             BebanPembelian b = new BebanPembelian();
             b.setNoPembelian(rs.getString(1));
-            b.setKeterangan(rs.getString(2));
-            b.setJumlahRp(rs.getDouble(3));
-            b.setStatus(rs.getString(4));
+            b.setNoUrut(rs.getInt(2));
+            b.setKeterangan(rs.getString(3));
+            b.setJumlahRp(rs.getDouble(4));
+            b.setStatus(rs.getString(5));
             allBeban.add(b);
         }
         return allBeban;
     }
     public static void insert(Connection con, BebanPembelian b)throws Exception{
-        PreparedStatement ps = con.prepareStatement("insert into tt_beban_pembelian values (?,?,?,?)");
+        PreparedStatement ps = con.prepareStatement("insert into tt_beban_pembelian values (?,?,?,?,?)");
         ps.setString(1, b.getNoPembelian());
-        ps.setString(2, b.getKeterangan());
-        ps.setDouble(3, b.getJumlahRp());
-        ps.setString(4, b.getStatus());
+        ps.setInt(2, b.getNoUrut());
+        ps.setString(3, b.getKeterangan());
+        ps.setDouble(4, b.getJumlahRp());
+        ps.setString(5, b.getStatus());
         ps.executeUpdate();
     }
 }

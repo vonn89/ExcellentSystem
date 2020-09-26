@@ -40,29 +40,38 @@ import javafx.stage.Stage;
  */
 public class AddPemesananController {
 
-    @FXML public TableView<PemesananHead> pemesananHeadTable;
-    @FXML private TableColumn<PemesananHead, String> noPemesananHeadColumn;
-    @FXML private TableColumn<PemesananHead, String> tglPemesananColumn;
-    @FXML private TableColumn<PemesananHead, String> namaCustomerColumn;
-    @FXML private TableColumn<PemesananHead, String> alamatCustomerColumn;
-    @FXML private TableColumn<PemesananHead, String> catatanColumn;
-    @FXML private TableColumn<PemesananHead, String> kodeUserColumn;
-    
-    @FXML private TextField searchField;
+    @FXML
+    public TableView<PemesananHead> pemesananHeadTable;
+    @FXML
+    private TableColumn<PemesananHead, String> noPemesananHeadColumn;
+    @FXML
+    private TableColumn<PemesananHead, String> tglPemesananColumn;
+    @FXML
+    private TableColumn<PemesananHead, String> namaCustomerColumn;
+    @FXML
+    private TableColumn<PemesananHead, String> alamatCustomerColumn;
+    @FXML
+    private TableColumn<PemesananHead, String> catatanColumn;
+    @FXML
+    private TableColumn<PemesananHead, String> kodeUserColumn;
+
+    @FXML
+    private TextField searchField;
     private ObservableList<PemesananHead> allPemesanan = FXCollections.observableArrayList();
     private ObservableList<PemesananHead> filterData = FXCollections.observableArrayList();
-    private Main mainApp;  
+    private Main mainApp;
     private Stage stage;
     private Stage owner;
+
     public void initialize() {
         noPemesananHeadColumn.setCellValueFactory(cellData -> cellData.getValue().noPemesananProperty());
         namaCustomerColumn.setCellValueFactory(cellData -> cellData.getValue().getCustomer().namaProperty());
         namaCustomerColumn.setCellFactory(col -> Function.getWrapTableCell(namaCustomerColumn));
         alamatCustomerColumn.setCellValueFactory(cellData -> cellData.getValue().getCustomer().alamatProperty());
         alamatCustomerColumn.setCellFactory(col -> Function.getWrapTableCell(alamatCustomerColumn));
-        catatanColumn.setCellValueFactory(cellData ->cellData.getValue().catatanProperty());
-        kodeUserColumn.setCellValueFactory(cellData ->cellData.getValue().kodeUserProperty());
-        tglPemesananColumn.setCellValueFactory(cellData -> { 
+        catatanColumn.setCellValueFactory(cellData -> cellData.getValue().catatanProperty());
+        kodeUserColumn.setCellValueFactory(cellData -> cellData.getValue().kodeUserProperty());
+        tglPemesananColumn.setCellValueFactory(cellData -> {
             try {
                 return new SimpleStringProperty(tglLengkap.format(tglSql.parse(cellData.getValue().getTglPemesanan())));
             } catch (Exception ex) {
@@ -78,45 +87,49 @@ public class AddPemesananController {
         filterData.addAll(allPemesanan);
         pemesananHeadTable.setItems(filterData);
     }
-    public void setMainApp(Main mainApp,Stage owner,Stage stage) {
+
+    public void setMainApp(Main mainApp, Stage owner, Stage stage) {
         this.mainApp = mainApp;
         this.owner = owner;
         this.stage = stage;
         stage.setOnCloseRequest((event) -> {
             mainApp.closeDialog(owner, stage);
         });
-        stage.setHeight(mainApp.screenSize.getHeight()*0.9);
-        stage.setWidth(mainApp.screenSize.getWidth()*0.9);
+        stage.setHeight(mainApp.screenSize.getHeight() * 0.9);
+        stage.setWidth(mainApp.screenSize.getWidth() * 0.9);
         stage.setX((mainApp.screenSize.getWidth() - stage.getWidth()) / 2);
         stage.setY((mainApp.screenSize.getHeight() - stage.getHeight()) / 2);
         getPemesanan();
     }
-    private void getPemesanan(){
+
+    private void getPemesanan() {
         Task<List<PemesananHead>> task = new Task<List<PemesananHead>>() {
-            @Override 
-            public List<PemesananHead> call() throws Exception{
-                try(Connection con = Koneksi.getConnection()){
-                    List<PemesananHead> allPemesanan = PemesananHeadDAO.getAllByDateAndStatus(con, 
+            @Override
+            public List<PemesananHead> call() throws Exception {
+                try (Connection con = Koneksi.getConnection()) {
+                    List<PemesananHead> allPemesanan = PemesananHeadDAO.getAllByDateAndStatus(con,
                             "2000-01-01", "2050-01-01", "open");
-                    List<PemesananDetail> allDetail = PemesananDetailDAO.getAllByDateAndStatus(con, 
+                    List<PemesananDetail> allDetail = PemesananDetailDAO.getAllByDateAndStatus(con,
                             "2000-01-01", "2050-01-01", "open");
                     List<Customer> allCustomer = CustomerDAO.getAllByStatus(con, "%");
-                    for(PemesananHead p : allPemesanan){
+                    for (PemesananHead p : allPemesanan) {
                         List<PemesananDetail> detail = new ArrayList<>();
-                        for(PemesananDetail d : allDetail){
-                            if(d.getNoPemesanan().equals(p.getNoPemesanan()))
+                        for (PemesananDetail d : allDetail) {
+                            if (d.getNoPemesanan().equals(p.getNoPemesanan())) {
                                 detail.add(d);
+                            }
                         }
                         p.setListPemesananDetail(detail);
-                        for(Customer c: allCustomer){
-                            if(p.getKodeCustomer().equals(c.getKodeCustomer()))
+                        for (Customer c : allCustomer) {
+                            if (p.getKodeCustomer().equals(c.getKodeCustomer())) {
                                 p.setCustomer(c);
+                            }
                         }
                     }
                     return allPemesanan;
                 }
             }
-            
+
         };
         task.setOnRunning((e) -> {
             mainApp.showLoadingScreen();
@@ -132,39 +145,44 @@ public class AddPemesananController {
         });
         new Thread(task).start();
     }
-    private Boolean checkColumn(String column){
-        if(column!=null){
-            if(column.toLowerCase().contains(searchField.getText().toLowerCase()))
+
+    private Boolean checkColumn(String column) {
+        if (column != null) {
+            if (column.toLowerCase().contains(searchField.getText().toLowerCase())) {
                 return true;
+            }
         }
         return false;
     }
+
     private void searchPemesanan() {
-        try{
+        try {
             filterData.clear();
             for (PemesananHead temp : allPemesanan) {
-                if (searchField.getText() == null || searchField.getText().equals(""))
+                if (searchField.getText() == null || searchField.getText().equals("")) {
                     filterData.add(temp);
-                else{
-                    if(checkColumn(temp.getNoPemesanan())||
-                        checkColumn(tglLengkap.format(tglSql.parse(temp.getTglPemesanan())))||
-                        checkColumn(temp.getKodeCustomer())||
-                        checkColumn(temp.getCustomer().getNama())||
-                        checkColumn(temp.getCustomer().getAlamat())||
-                        checkColumn(df.format(temp.getTotalPemesanan()))||
-                        checkColumn(df.format(temp.getDownPayment()))||
-                        checkColumn(temp.getCatatan())||
-                        checkColumn(temp.getKodeUser())||
-                        checkColumn(temp.getTglBatal())||
-                        checkColumn(temp.getUserBatal()))
+                } else {
+                    if (checkColumn(temp.getNoPemesanan())
+                            || checkColumn(tglLengkap.format(tglSql.parse(temp.getTglPemesanan())))
+                            || checkColumn(temp.getKodeCustomer())
+                            || checkColumn(temp.getCustomer().getNama())
+                            || checkColumn(temp.getCustomer().getAlamat())
+                            || checkColumn(df.format(temp.getTotalPemesanan()))
+                            || checkColumn(df.format(temp.getDownPayment()))
+                            || checkColumn(temp.getCatatan())
+                            || checkColumn(temp.getKodeUser())
+                            || checkColumn(temp.getTglBatal())
+                            || checkColumn(temp.getUserBatal())) {
                         filterData.add(temp);
+                    }
                 }
             }
-        }catch(Exception e){
+        } catch (Exception e) {
             mainApp.showMessage(Modality.NONE, "Error", e.toString());
         }
     }
-    public void close(){
+
+    public void close() {
         mainApp.closeDialog(owner, stage);
     }
 }

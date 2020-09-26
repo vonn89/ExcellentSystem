@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package com.excellentsystem.PasarBaja.View;
 
 import com.excellentsystem.PasarBaja.DAO.KeuanganDAO;
@@ -50,35 +49,45 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
-
 /**
  * FXML Controller class
  *
  * @author Xtreme
  */
-public class ModalController  {
+public class ModalController {
 
-    @FXML TableView<Keuangan> modalTable;
-    @FXML private TableColumn<Keuangan, String> noPerubahanModalColumn;
-    @FXML private TableColumn<Keuangan, String> tglPerubahanModalColumn;
-    @FXML private TableColumn<Keuangan, String> kategoriColumn;
-    @FXML private TableColumn<Keuangan, String> deskripsiColumn;
-    @FXML private TableColumn<Keuangan, Number> jumlahRpColumn;
-    @FXML private TableColumn<Keuangan, String> kodeUserColumn;
-    @FXML private TextField searchField;
-    @FXML private Label modalAkhirField;
-    @FXML private DatePicker tglMulaiPicker;
-    @FXML private DatePicker tglAkhirPicker;
+    @FXML
+    TableView<Keuangan> modalTable;
+    @FXML
+    private TableColumn<Keuangan, String> noPerubahanModalColumn;
+    @FXML
+    private TableColumn<Keuangan, String> tglPerubahanModalColumn;
+    @FXML
+    private TableColumn<Keuangan, String> kategoriColumn;
+    @FXML
+    private TableColumn<Keuangan, String> deskripsiColumn;
+    @FXML
+    private TableColumn<Keuangan, Number> jumlahRpColumn;
+    @FXML
+    private TableColumn<Keuangan, String> kodeUserColumn;
+    @FXML
+    private TextField searchField;
+    @FXML
+    private Label modalAkhirField;
+    @FXML
+    private DatePicker tglMulaiPicker;
+    @FXML
+    private DatePicker tglAkhirPicker;
     private Double modalAkhir;
-    private Main mainApp;   
+    private Main mainApp;
     private ObservableList<Keuangan> allKeuangan = FXCollections.observableArrayList();
     private ObservableList<Keuangan> filterData = FXCollections.observableArrayList();
-    
+
     public void initialize() {
         noPerubahanModalColumn.setCellValueFactory(cellData -> cellData.getValue().noKeuanganProperty());
         noPerubahanModalColumn.setCellFactory(col -> Function.getWrapTableCell(noPerubahanModalColumn));
-        
-        tglPerubahanModalColumn.setCellValueFactory(cellData -> { 
+
+        tglPerubahanModalColumn.setCellValueFactory(cellData -> {
             try {
                 return new SimpleStringProperty(tglLengkap.format(tglSql.parse(cellData.getValue().getTglKeuangan())));
             } catch (Exception ex) {
@@ -87,19 +96,19 @@ public class ModalController  {
         });
         tglPerubahanModalColumn.setCellFactory(col -> Function.getWrapTableCell(tglPerubahanModalColumn));
         tglPerubahanModalColumn.setComparator(Function.sortDate(tglLengkap));
-        
+
         kategoriColumn.setCellValueFactory(cellData -> cellData.getValue().kategoriProperty());
         kategoriColumn.setCellFactory(col -> Function.getWrapTableCell(kategoriColumn));
-        
+
         deskripsiColumn.setCellValueFactory(cellData -> cellData.getValue().deskripsiProperty());
         deskripsiColumn.setCellFactory(col -> Function.getWrapTableCell(deskripsiColumn));
-        
+
         kodeUserColumn.setCellValueFactory(cellData -> cellData.getValue().kodeUserProperty());
         kodeUserColumn.setCellFactory(col -> Function.getWrapTableCell(kodeUserColumn));
-        
+
         jumlahRpColumn.setCellValueFactory(cellData -> cellData.getValue().jumlahRpProperty());
         jumlahRpColumn.setCellFactory(col -> Function.getTableCell());
-        
+
         tglMulaiPicker.setConverter(Function.getTglConverter());
         tglMulaiPicker.setValue(LocalDate.now().minusMonths(1));
         tglMulaiPicker.setDayCellFactory((final DatePicker datePicker) -> Function.getDateCellMulai(tglAkhirPicker));
@@ -116,20 +125,23 @@ public class ModalController  {
             showAmbilModal();
         });
         MenuItem export = new MenuItem("Export Excel");
-        export.setOnAction((ActionEvent e)->{
+        export.setOnAction((ActionEvent e) -> {
             exportExcel();
         });
         MenuItem refresh = new MenuItem("Refresh");
         refresh.setOnAction((ActionEvent event) -> {
             getModal();
         });
-        for(Otoritas o : sistem.getUser().getOtoritas()){
-            if(o.getJenis().equals("Tambah Modal")&&o.isStatus())
+        for (Otoritas o : sistem.getUser().getOtoritas()) {
+            if (o.getJenis().equals("Tambah Modal") && o.isStatus()) {
                 rm.getItems().add(tambah);
-            if(o.getJenis().equals("Ambil Modal")&&o.isStatus())
+            }
+            if (o.getJenis().equals("Ambil Modal") && o.isStatus()) {
                 rm.getItems().add(ambil);
-            if(o.getJenis().equals("Export Excel")&&o.isStatus())
+            }
+            if (o.getJenis().equals("Export Excel") && o.isStatus()) {
                 rm.getItems().add(export);
+            }
         }
         rm.getItems().addAll(refresh);
         modalTable.setContextMenu(rm);
@@ -140,7 +152,7 @@ public class ModalController  {
                     super.updateItem(item, empty);
                     if (empty) {
                         setContextMenu(rm);
-                    } else{
+                    } else {
                         ContextMenu rm = new ContextMenu();
                         MenuItem tambah = new MenuItem("Tambah Modal");
                         tambah.setOnAction((ActionEvent event) -> {
@@ -151,20 +163,23 @@ public class ModalController  {
                             showAmbilModal();
                         });
                         MenuItem export = new MenuItem("Export Excel");
-                        export.setOnAction((ActionEvent e)->{
+                        export.setOnAction((ActionEvent e) -> {
                             exportExcel();
                         });
                         MenuItem refresh = new MenuItem("Refresh");
                         refresh.setOnAction((ActionEvent event) -> {
                             getModal();
                         });
-                        for(Otoritas o : sistem.getUser().getOtoritas()){
-                            if(o.getJenis().equals("Tambah Modal")&&o.isStatus())
+                        for (Otoritas o : sistem.getUser().getOtoritas()) {
+                            if (o.getJenis().equals("Tambah Modal") && o.isStatus()) {
                                 rm.getItems().add(tambah);
-                            if(o.getJenis().equals("Ambil Modal")&&o.isStatus())
+                            }
+                            if (o.getJenis().equals("Ambil Modal") && o.isStatus()) {
                                 rm.getItems().add(ambil);
-                            if(o.getJenis().equals("Export Excel")&&o.isStatus())
+                            }
+                            if (o.getJenis().equals("Export Excel") && o.isStatus()) {
                                 rm.getItems().add(export);
+                            }
                         }
                         rm.getItems().addAll(refresh);
                         setContextMenu(rm);
@@ -177,37 +192,43 @@ public class ModalController  {
             searchModal();
         });
         searchField.textProperty().addListener(
-            (ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
-            searchModal();
-        });
+                (ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
+                    searchModal();
+                });
         filterData.addAll(allKeuangan);
     }
-    public void setMainApp(Main mainApp){
+
+    public void setMainApp(Main mainApp) {
         this.mainApp = mainApp;
         getModal();
         modalTable.setItems(filterData);
     }
+
     @FXML
-    private void getModal(){
+    private void getModal() {
         Task<List<Keuangan>> task = new Task<List<Keuangan>>() {
-            @Override 
-            public List<Keuangan> call() throws Exception{
+            @Override
+            public List<Keuangan> call() throws Exception {
                 try (Connection con = Koneksi.getConnection()) {
-                    modalAkhir = KeuanganDAO.getSaldoAkhir(con, tglAkhirPicker.getValue().toString(),"Modal");
-                    List<Keuangan> modal =  KeuanganDAO.getAllByTipeKeuanganAndTanggal(con, "Modal",
-                        tglMulaiPicker.getValue().toString(),tglAkhirPicker.getValue().toString());
+                    modalAkhir = KeuanganDAO.getSaldoAkhir(con, tglAkhirPicker.getValue().toString(), "Modal");
+                    List<Keuangan> modal = KeuanganDAO.getAllByTipeKeuanganAndTanggal(con, "Modal",
+                            tglMulaiPicker.getValue().toString(), tglAkhirPicker.getValue().toString());
                     List<Keuangan> keuanganBefore = KeuanganDAO.getAllByTanggal(
                             con, "", tglAkhirPicker.getValue().toString());
                     double ur = 0;
-                    for(Keuangan k : keuanganBefore){
-                        if(k.getTipeKeuangan().equals("Penjualan"))
+                    for (Keuangan k : keuanganBefore) {
+                        if (k.getTipeKeuangan().equals("Penjualan")) {
                             ur = ur + k.getJumlahRp();
-                        if(k.getTipeKeuangan().equals("Pendapatan/Beban"))
+                        }
+                        if (k.getTipeKeuangan().equals("Pendapatan/Beban")) {
                             ur = ur + k.getJumlahRp();
-                        if(k.getTipeKeuangan().equals("HPP"))
+                        }
+                        if (k.getTipeKeuangan().equals("HPP")) {
                             ur = ur - k.getJumlahRp();
-                        if(k.getTipeKeuangan().equals("Retur Penjualan"))
+                        }
+                        if (k.getTipeKeuangan().equals("Retur Penjualan")) {
                             ur = ur - k.getJumlahRp();
+                        }
                     }
                     modalAkhir = modalAkhir + ur;
                     Keuangan k = new Keuangan();
@@ -229,7 +250,7 @@ public class ModalController  {
         task.setOnSucceeded((WorkerStateEvent e) -> {
             mainApp.closeLoading();
             allKeuangan.clear();
-            allKeuangan.addAll(task.getValue());                
+            allKeuangan.addAll(task.getValue());
             modalAkhirField.setText(df.format(modalAkhir));
         });
         task.setOnFailed((e) -> {
@@ -238,49 +259,54 @@ public class ModalController  {
         });
         new Thread(task).start();
     }
-    private Boolean checkColumn(String column){
-        if(column!=null){
-            if(column.toLowerCase().contains(searchField.getText().toLowerCase()))
+
+    private Boolean checkColumn(String column) {
+        if (column != null) {
+            if (column.toLowerCase().contains(searchField.getText().toLowerCase())) {
                 return true;
+            }
         }
         return false;
     }
+
     private void searchModal() {
-        try{
+        try {
             filterData.clear();
             for (Keuangan temp : allKeuangan) {
-                if (searchField.getText() == null || searchField.getText().equals(""))
+                if (searchField.getText() == null || searchField.getText().equals("")) {
                     filterData.add(temp);
-                else{
-                    if(checkColumn(temp.getNoKeuangan())||
-                        checkColumn(tglLengkap.format(tglSql.parse(temp.getTglKeuangan())))||
-                        checkColumn(temp.getKategori())||
-                        checkColumn(temp.getDeskripsi())||
-                        checkColumn(df.format(temp.getJumlahRp()))||
-                        checkColumn(temp.getKodeUser()))
+                } else {
+                    if (checkColumn(temp.getNoKeuangan())
+                            || checkColumn(tglLengkap.format(tglSql.parse(temp.getTglKeuangan())))
+                            || checkColumn(temp.getKategori())
+                            || checkColumn(temp.getDeskripsi())
+                            || checkColumn(df.format(temp.getJumlahRp()))
+                            || checkColumn(temp.getKodeUser())) {
                         filterData.add(temp);
+                    }
                 }
             }
-        }catch(Exception e){
+        } catch (Exception e) {
             mainApp.showMessage(Modality.NONE, "Error", e.toString());
         }
     }
-    private void showTambahModal(){
+
+    private void showTambahModal() {
         Stage stage = new Stage();
         FXMLLoader loader = mainApp.showDialog(mainApp.MainStage, stage, "View/Dialog/NewModal.fxml");
         NewModalController controller = loader.getController();
-        controller.setMainApp(mainApp,mainApp.MainStage, stage);
+        controller.setMainApp(mainApp, mainApp.MainStage, stage);
         controller.setTitle("Tambah Modal");
         controller.saveButton.setOnAction((ActionEvent event) -> {
-            if("0".equals(controller.jumlahRpField.getText().replaceAll(",", ""))||
-                    "".equals(controller.jumlahRpField.getText().replaceAll(",", "")))
+            if ("0".equals(controller.jumlahRpField.getText().replaceAll(",", ""))
+                    || "".equals(controller.jumlahRpField.getText().replaceAll(",", ""))) {
                 mainApp.showMessage(Modality.NONE, "Warning", "Jumlah Rp masih kosong");
-            else if(controller.tipeKeuanganCombo.getSelectionModel().getSelectedItem()==null)
+            } else if (controller.tipeKeuanganCombo.getSelectionModel().getSelectedItem() == null) {
                 mainApp.showMessage(Modality.NONE, "Warning", "Tipe keuangan belum dipilih");
-            else{
+            } else {
                 Task<String> task = new Task<String>() {
-                    @Override 
-                    public String call() throws Exception{
+                    @Override
+                    public String call() throws Exception {
                         try (Connection con = Koneksi.getConnection()) {
                             Keuangan k = new Keuangan();
                             k.setTipeKeuangan(controller.tipeKeuanganCombo.getSelectionModel().getSelectedItem());
@@ -298,10 +324,10 @@ public class ModalController  {
                 task.setOnSucceeded((WorkerStateEvent e) -> {
                     mainApp.closeLoading();
                     getModal();
-                    if(task.getValue().equals("true")){
-                        mainApp.closeDialog(mainApp.MainStage,stage);
+                    if (task.getValue().equals("true")) {
+                        mainApp.closeDialog(mainApp.MainStage, stage);
                         mainApp.showMessage(Modality.NONE, "Success", "Penambahan modal berhasil disimpan");
-                    }else{
+                    } else {
                         mainApp.showMessage(Modality.NONE, "Failed", task.getValue());
                     }
                 });
@@ -313,28 +339,29 @@ public class ModalController  {
             }
         });
     }
-    private void showAmbilModal(){
+
+    private void showAmbilModal() {
         Stage stage = new Stage();
         FXMLLoader loader = mainApp.showDialog(mainApp.MainStage, stage, "View/Dialog/NewModal.fxml");
         NewModalController controller = loader.getController();
-        controller.setMainApp(mainApp,mainApp.MainStage, stage);
+        controller.setMainApp(mainApp, mainApp.MainStage, stage);
         controller.setTitle("Ambil Modal");
         controller.saveButton.setOnAction((ActionEvent event) -> {
-            if("0".equals(controller.jumlahRpField.getText().replaceAll(",", ""))||
-                    "".equals(controller.jumlahRpField.getText().replaceAll(",", ""))){
+            if ("0".equals(controller.jumlahRpField.getText().replaceAll(",", ""))
+                    || "".equals(controller.jumlahRpField.getText().replaceAll(",", ""))) {
                 mainApp.showMessage(Modality.NONE, "Warning", "Jumlah Rp masih kosong");
-            }else if(controller.tipeKeuanganCombo.getSelectionModel().getSelectedItem()==null){
+            } else if (controller.tipeKeuanganCombo.getSelectionModel().getSelectedItem() == null) {
                 mainApp.showMessage(Modality.NONE, "Warning", "Tipe keuangan belum dipilih");
-            }else{
+            } else {
                 Task<String> task = new Task<String>() {
-                    @Override 
-                    public String call() throws Exception{
+                    @Override
+                    public String call() throws Exception {
                         try (Connection con = Koneksi.getConnection()) {
                             Keuangan modal = new Keuangan();
                             modal.setTipeKeuangan(controller.tipeKeuanganCombo.getSelectionModel().getSelectedItem());
                             modal.setKategori("Ambil Modal");
                             modal.setDeskripsi(controller.keteranganField.getText());
-                            modal.setJumlahRp(Double.parseDouble(controller.jumlahRpField.getText().replaceAll(",", ""))*-1);
+                            modal.setJumlahRp(Double.parseDouble(controller.jumlahRpField.getText().replaceAll(",", "")) * -1);
                             modal.setKodeUser(sistem.getUser().getKodeUser());
                             return Service.newModal(con, modal);
                         }
@@ -346,10 +373,10 @@ public class ModalController  {
                 task.setOnSucceeded((WorkerStateEvent e) -> {
                     mainApp.closeLoading();
                     getModal();
-                    if(task.getValue().equals("true")){
-                        mainApp.closeDialog(mainApp.MainStage,stage);
+                    if (task.getValue().equals("true")) {
+                        mainApp.closeDialog(mainApp.MainStage, stage);
                         mainApp.showMessage(Modality.NONE, "Success", "Pengambilan modal berhasil disimpan");
-                    }else{
+                    } else {
                         mainApp.showMessage(Modality.NONE, "Failed", task.getValue());
                     }
                 });
@@ -361,8 +388,9 @@ public class ModalController  {
             }
         });
     }
-    private void exportExcel(){
-        try{
+
+    private void exportExcel() {
+        try {
             FileChooser fileChooser = new FileChooser();
             fileChooser.setTitle("Select location to export");
             fileChooser.getExtensionFilters().addAll(
@@ -383,14 +411,14 @@ public class ModalController  {
                 int rc = 0;
                 int c = 5;
                 createRow(workbook, sheet, rc, c, "Bold");
-                sheet.getRow(rc).getCell(0).setCellValue("Filter : "+searchField.getText());
+                sheet.getRow(rc).getCell(0).setCellValue("Filter : " + searchField.getText());
                 rc++;
                 createRow(workbook, sheet, rc, c, "Header");
-                sheet.getRow(rc).getCell(0).setCellValue("No Keuangan"); 
-                sheet.getRow(rc).getCell(1).setCellValue("Tgl Keuangan");  
-                sheet.getRow(rc).getCell(2).setCellValue("Kategori"); 
-                sheet.getRow(rc).getCell(3).setCellValue("Keterangan"); 
-                sheet.getRow(rc).getCell(4).setCellValue("Jumlah Rp"); 
+                sheet.getRow(rc).getCell(0).setCellValue("No Keuangan");
+                sheet.getRow(rc).getCell(1).setCellValue("Tgl Keuangan");
+                sheet.getRow(rc).getCell(2).setCellValue("Kategori");
+                sheet.getRow(rc).getCell(3).setCellValue("Keterangan");
+                sheet.getRow(rc).getCell(4).setCellValue("Jumlah Rp");
                 rc++;
                 double jumlahRp = 0;
                 for (Keuangan b : filterData) {
@@ -406,12 +434,14 @@ public class ModalController  {
                 createRow(workbook, sheet, rc, c, "Header");
                 sheet.getRow(rc).getCell(0).setCellValue("Total :");
                 sheet.getRow(rc).getCell(4).setCellValue(jumlahRp);
-                for(int i=0 ; i<c ; i++){ sheet.autoSizeColumn(i);}
+                for (int i = 0; i < c; i++) {
+                    sheet.autoSizeColumn(i);
+                }
                 try (FileOutputStream outputStream = new FileOutputStream(file)) {
                     workbook.write(outputStream);
                 }
             }
-        }catch(Exception e){
+        } catch (Exception e) {
             mainApp.showMessage(Modality.NONE, "Error", e.toString());
             e.printStackTrace();
         }

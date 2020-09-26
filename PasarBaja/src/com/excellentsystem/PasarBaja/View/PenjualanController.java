@@ -6,7 +6,6 @@
 package com.excellentsystem.PasarBaja.View;
 
 import com.excellentsystem.PasarBaja.DAO.CustomerDAO;
-import com.excellentsystem.PasarBaja.DAO.PenjualanDetailDAO;
 import com.excellentsystem.PasarBaja.DAO.PenjualanHeadDAO;
 import com.excellentsystem.PasarBaja.DAO.PiutangDAO;
 import com.excellentsystem.PasarBaja.Function;
@@ -21,11 +20,9 @@ import static com.excellentsystem.PasarBaja.Main.tglLengkap;
 import static com.excellentsystem.PasarBaja.Main.tglSql;
 import com.excellentsystem.PasarBaja.Model.Customer;
 import com.excellentsystem.PasarBaja.Model.Otoritas;
-import com.excellentsystem.PasarBaja.Model.PenjualanDetail;
 import com.excellentsystem.PasarBaja.Model.PenjualanHead;
 import com.excellentsystem.PasarBaja.Model.Piutang;
 import com.excellentsystem.PasarBaja.Model.TerimaPembayaran;
-import com.excellentsystem.PasarBaja.PrintOut.Report;
 import com.excellentsystem.PasarBaja.Services.Service;
 import com.excellentsystem.PasarBaja.View.Dialog.DetailBebanPenjualanController;
 import com.excellentsystem.PasarBaja.View.Dialog.DetailPiutangController;
@@ -436,7 +433,6 @@ public class PenjualanController {
         });
     }
 
-
     private void lihatDetailPemesanan(PenjualanHead p) {
         Stage stage = new Stage();
         FXMLLoader loader = mainApp.showDialog(mainApp.MainStage, stage, "View/Dialog/NewPemesanan.fxml");
@@ -528,31 +524,31 @@ public class PenjualanController {
     }
 
     private void printInvoice(PenjualanHead p) {
-        try (Connection con = Koneksi.getConnection()) {
-            List<PenjualanDetail> listPenjualan = PenjualanDetailDAO.getAllPenjualanDetail(con, p.getNoPenjualan());
-            for (PenjualanDetail d : listPenjualan) {
-                d.setPenjualanHead(p);
-            }
-            Report report = new Report();
-            report.printInvoice(listPenjualan, p.getTotalPenjualan());
-        } catch (Exception e) {
-            e.printStackTrace();
-            mainApp.showMessage(Modality.NONE, "Error", e.toString());
-        }
+//        try (Connection con = Koneksi.getConnection()) {
+//            List<PenjualanDetail> listPenjualan = PenjualanDetailDAO.getAllPenjualanDetail(con, p.getNoPenjualan());
+//            for (PenjualanDetail d : listPenjualan) {
+//                d.setPenjualanHead(p);
+//            }
+//            Report report = new Report();
+//            report.printInvoice(listPenjualan, p.getTotalPenjualan());
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            mainApp.showMessage(Modality.NONE, "Error", e.toString());
+//        }
     }
 
     private void printInvoiceSoftCopy(PenjualanHead p) {
-        try (Connection con = Koneksi.getConnection()) {
-            List<PenjualanDetail> listPenjualan = PenjualanDetailDAO.getAllPenjualanDetail(con, p.getNoPenjualan());
-            for (PenjualanDetail d : listPenjualan) {
-                d.setPenjualanHead(p);
-            }
-            Report report = new Report();
-            report.printInvoiceSoftcopy(listPenjualan, p.getTotalPenjualan());
-        } catch (Exception e) {
-            e.printStackTrace();
-            mainApp.showMessage(Modality.NONE, "Error", e.toString());
-        }
+//        try (Connection con = Koneksi.getConnection()) {
+//            List<PenjualanDetail> listPenjualan = PenjualanDetailDAO.getAllPenjualanDetail(con, p.getNoPenjualan());
+//            for (PenjualanDetail d : listPenjualan) {
+//                d.setPenjualanHead(p);
+//            }
+//            Report report = new Report();
+//            report.printInvoiceSoftcopy(listPenjualan, p.getTotalPenjualan());
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            mainApp.showMessage(Modality.NONE, "Error", e.toString());
+//        }
     }
 
     private void exportExcel() {

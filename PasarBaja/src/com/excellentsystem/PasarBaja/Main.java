@@ -41,6 +41,18 @@ import com.excellentsystem.PasarBaja.View.PengirimanBarangController;
 import com.excellentsystem.PasarBaja.View.PenjualanController;
 import com.excellentsystem.PasarBaja.View.PermintaanBarangController;
 import com.excellentsystem.PasarBaja.View.PiutangController;
+import com.excellentsystem.PasarBaja.View.Report.LaporanBarangController;
+import com.excellentsystem.PasarBaja.View.Report.LaporanBarangDibeliController;
+import com.excellentsystem.PasarBaja.View.Report.LaporanBarangTerjualController;
+import com.excellentsystem.PasarBaja.View.Report.LaporanHutangController;
+import com.excellentsystem.PasarBaja.View.Report.LaporanKeuanganController;
+import com.excellentsystem.PasarBaja.View.Report.LaporanNeracaController;
+import com.excellentsystem.PasarBaja.View.Report.LaporanPembelianController;
+import com.excellentsystem.PasarBaja.View.Report.LaporanPenjualanController;
+import com.excellentsystem.PasarBaja.View.Report.LaporanPenyesuaianStokBarangController;
+import com.excellentsystem.PasarBaja.View.Report.LaporanPiutangController;
+import com.excellentsystem.PasarBaja.View.Report.LaporanUntungRugiController;
+import com.excellentsystem.PasarBaja.View.Report.LaporanUntungRugiPeriodeController;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.io.IOException;
@@ -99,18 +111,16 @@ public class Main extends Application {
     public static Sistem sistem;
     private double x = 0;
     private double y = 0;
-    public final String version = "2.2.6";
+    public final String version = "1.0.0";
     public static SecretKeySpec key;
     @Override
     public void start(Stage stage)  {
         MainStage = stage;
-        MainStage.setTitle("Auri Steel Metalindo");
+        MainStage.setTitle("Pasar Baja");
         MainStage.setMaximized(true);
         MainStage.getIcons().add(new Image(getClass().getResourceAsStream("Resource/icon.png")));
         screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-//            Font.loadFont(getClass().getResourceAsStream("Resource/Lato-Regular.ttf"), 12);
-//            Font.loadFont(getClass().getResourceAsStream("Resource/Lato-Bold.ttf"), 12);
-//            Font.loadFont(getClass().getResourceAsStream("Resource/BodonBk.ttf"), 12);
+        
         ProgressBar progress = new ProgressBar();
         Label updateLabel = new Label();
         Task<String> task = new Task<String>() {
@@ -146,7 +156,7 @@ public class Main extends Application {
                     if(!version.equals(sistem.getVersion())){
                         updateMessage("updating software...");
                         updateProgress(50, 100);
-                        return Function.downloadUpdateGoogleStorage("Auri Steel.exe");
+                        return Function.downloadUpdateGoogleStorage("Pasar Baja.exe");
                     }
                     Service.setPenyusutanAset(con);
                     
@@ -252,13 +262,6 @@ public class Main extends Application {
             alert.showAndWait();
         }
     }
-//    public DashboardController showDashboard(){
-//        FXMLLoader loader = changeStage("View/Dashboard.fxml");
-//        DashboardController controller = loader.getController();
-//        controller.setMainApp(this);
-//        setTitle("Dashboard");
-//        return controller;
-//    }
     public DataCustomerController showDataCustomer(){
         FXMLLoader loader = changeStage("View/DataCustomer.fxml");
         DataCustomerController controller = loader.getController();
@@ -357,90 +360,90 @@ public class Main extends Application {
         setTitle("Aset Tetap");
         return controller;
     }
-//    public LaporanBarangController showLaporanBarang(){
-//        FXMLLoader loader = changeStage("View/Report/LaporanBarang.fxml");
-//        LaporanBarangController controller = loader.getController();
-//        controller.setMainApp(this);
-//        setTitle("Laporan Barang");
-//        return controller;
-//    }
-//    public LaporanPenyesuaianStokBarangController showLaporanPenyesuaianStokBarang(){
-//        FXMLLoader loader = changeStage("View/Report/LaporanPenyesuaianStokBarang.fxml");
-//        LaporanPenyesuaianStokBarangController controller = loader.getController();
-//        controller.setMainApp(this);
-//        setTitle("Laporan Penyesuaian Stok Barang");
-//        return controller;
-//    }
-//    public LaporanPenjualanController showLaporanPenjualan(){
-//        FXMLLoader loader = changeStage("View/Report/LaporanPenjualan.fxml");
-//        LaporanPenjualanController controller = loader.getController();
-//        controller.setMainApp(this);
-//        setTitle("Laporan Penjualan");
-//        return controller;
-//    }
-//    public LaporanBarangTerjualController showLaporanBarangTerjual(){
-//        FXMLLoader loader = changeStage("View/Report/LaporanBarangTerjual.fxml");
-//        LaporanBarangTerjualController controller = loader.getController();
-//        controller.setMainApp(this);
-//        setTitle("Laporan Barang Terjual");
-//        return controller;
-//    }
-//    public LaporanPembelianController showLaporanPembelian(){
-//        FXMLLoader loader = changeStage("View/Report/LaporanPembelian.fxml");
-//        LaporanPembelianController controller = loader.getController();
-//        controller.setMainApp(this);
-//        setTitle("Laporan Pembelian");
-//        return controller;
-//    }
-//    public LaporanBarangDibeliController showLaporanBarangDibeli(){
-//        FXMLLoader loader = changeStage("View/Report/LaporanBarangDibeli.fxml");
-//        LaporanBarangDibeliController controller = loader.getController();
-//        controller.setMainApp(this);
-//        setTitle("Laporan Barang Dibeli");
-//        return controller;
-//    }
-//    public LaporanKeuanganController showLaporanKeuangan(){
-//        FXMLLoader loader = changeStage("View/Report/LaporanKeuangan.fxml");
-//        LaporanKeuanganController controller = loader.getController();
-//        controller.setMainApp(this);
-//        setTitle("Laporan Keuangan");
-//        return controller;
-//    }
-//    public LaporanHutangController showLaporanHutang(){
-//        FXMLLoader loader = changeStage("View/Report/LaporanHutang.fxml");
-//        LaporanHutangController controller = loader.getController();
-//        controller.setMainApp(this);
-//        setTitle("Laporan Hutang");
-//        return controller;
-//    }
-//    public LaporanPiutangController showLaporanPiutang(){
-//        FXMLLoader loader = changeStage("View/Report/LaporanPiutang.fxml");
-//        LaporanPiutangController controller = loader.getController();
-//        controller.setMainApp(this);
-//        setTitle("Laporan Piutang");
-//        return controller;
-//    }
-//    public LaporanUntungRugiController showLaporanUntungRugi(){
-//        FXMLLoader loader = changeStage("View/Report/LaporanUntungRugi.fxml");
-//        LaporanUntungRugiController controller = loader.getController();
-//        controller.setMainApp(this);
-//        setTitle("Laporan Untung Rugi");
-//        return controller;
-//    }
-//    public LaporanUntungRugiPeriodeController showLaporanUntungRugiPeriode(){
-//        FXMLLoader loader = changeStage("View/Report/LaporanUntungRugiPeriode.fxml");
-//        LaporanUntungRugiPeriodeController controller = loader.getController();
-//        controller.setMainApp(this);
-//        setTitle("Laporan Untung Rugi Periode");
-//        return controller;
-//    }
-//    public LaporanNeracaController showLaporanNeraca(){
-//        FXMLLoader loader = changeStage("View/Report/LaporanNeraca.fxml");
-//        LaporanNeracaController controller = loader.getController();
-//        controller.setMainApp(this);
-//        setTitle("Laporan Neraca");
-//        return controller;
-//    }
+    public LaporanBarangController showLaporanBarang(){
+        FXMLLoader loader = changeStage("View/Report/LaporanBarang.fxml");
+        LaporanBarangController controller = loader.getController();
+        controller.setMainApp(this);
+        setTitle("Laporan Barang");
+        return controller;
+    }
+    public LaporanPenyesuaianStokBarangController showLaporanPenyesuaianStokBarang(){
+        FXMLLoader loader = changeStage("View/Report/LaporanPenyesuaianStokBarang.fxml");
+        LaporanPenyesuaianStokBarangController controller = loader.getController();
+        controller.setMainApp(this);
+        setTitle("Laporan Penyesuaian Stok Barang");
+        return controller;
+    }
+    public LaporanPenjualanController showLaporanPenjualan(){
+        FXMLLoader loader = changeStage("View/Report/LaporanPenjualan.fxml");
+        LaporanPenjualanController controller = loader.getController();
+        controller.setMainApp(this);
+        setTitle("Laporan Penjualan");
+        return controller;
+    }
+    public LaporanBarangTerjualController showLaporanBarangTerjual(){
+        FXMLLoader loader = changeStage("View/Report/LaporanBarangTerjual.fxml");
+        LaporanBarangTerjualController controller = loader.getController();
+        controller.setMainApp(this);
+        setTitle("Laporan Barang Terjual");
+        return controller;
+    }
+    public LaporanPembelianController showLaporanPembelian(){
+        FXMLLoader loader = changeStage("View/Report/LaporanPembelian.fxml");
+        LaporanPembelianController controller = loader.getController();
+        controller.setMainApp(this);
+        setTitle("Laporan Pembelian");
+        return controller;
+    }
+    public LaporanBarangDibeliController showLaporanBarangDibeli(){
+        FXMLLoader loader = changeStage("View/Report/LaporanBarangDibeli.fxml");
+        LaporanBarangDibeliController controller = loader.getController();
+        controller.setMainApp(this);
+        setTitle("Laporan Barang Dibeli");
+        return controller;
+    }
+    public LaporanKeuanganController showLaporanKeuangan(){
+        FXMLLoader loader = changeStage("View/Report/LaporanKeuangan.fxml");
+        LaporanKeuanganController controller = loader.getController();
+        controller.setMainApp(this);
+        setTitle("Laporan Keuangan");
+        return controller;
+    }
+    public LaporanHutangController showLaporanHutang(){
+        FXMLLoader loader = changeStage("View/Report/LaporanHutang.fxml");
+        LaporanHutangController controller = loader.getController();
+        controller.setMainApp(this);
+        setTitle("Laporan Hutang");
+        return controller;
+    }
+    public LaporanPiutangController showLaporanPiutang(){
+        FXMLLoader loader = changeStage("View/Report/LaporanPiutang.fxml");
+        LaporanPiutangController controller = loader.getController();
+        controller.setMainApp(this);
+        setTitle("Laporan Piutang");
+        return controller;
+    }
+    public LaporanUntungRugiController showLaporanUntungRugi(){
+        FXMLLoader loader = changeStage("View/Report/LaporanUntungRugi.fxml");
+        LaporanUntungRugiController controller = loader.getController();
+        controller.setMainApp(this);
+        setTitle("Laporan Untung Rugi");
+        return controller;
+    }
+    public LaporanUntungRugiPeriodeController showLaporanUntungRugiPeriode(){
+        FXMLLoader loader = changeStage("View/Report/LaporanUntungRugiPeriode.fxml");
+        LaporanUntungRugiPeriodeController controller = loader.getController();
+        controller.setMainApp(this);
+        setTitle("Laporan Untung Rugi Periode");
+        return controller;
+    }
+    public LaporanNeracaController showLaporanNeraca(){
+        FXMLLoader loader = changeStage("View/Report/LaporanNeraca.fxml");
+        LaporanNeracaController controller = loader.getController();
+        controller.setMainApp(this);
+        setTitle("Laporan Neraca");
+        return controller;
+    }
     public KategoriHutangController showKategoriHutang(){
         Stage stage = new Stage();
         FXMLLoader loader = showDialog(MainStage ,stage, "View/Dialog/KategoriHutang.fxml");

@@ -35,18 +35,21 @@ import javafx.stage.Stage;
  */
 public class KategoriPiutangController {
 
+    @FXML
+    private TableView<KategoriPiutang> kategoriPiutangTable;
+    @FXML
+    private TableColumn<KategoriPiutang, String> kodeKategoriPiutangColumn;
 
-    @FXML private TableView<KategoriPiutang> kategoriPiutangTable;
-    @FXML private TableColumn<KategoriPiutang, String> kodeKategoriPiutangColumn;
-    
-    @FXML private TextField kodeKategoriPiutangField;
+    @FXML
+    private TextField kodeKategoriPiutangField;
     private ObservableList<KategoriPiutang> allKategoriPiutang = FXCollections.observableArrayList();
     private Main mainApp;
     private Stage stage;
     private Stage owner;
+
     public void initialize() {
         kodeKategoriPiutangColumn.setCellValueFactory(cellData -> cellData.getValue().kodeKategoriProperty());
-        
+
         final ContextMenu rm = new ContextMenu();
         MenuItem refresh = new MenuItem("Refresh");
         refresh.setOnAction((ActionEvent event) -> {
@@ -55,13 +58,13 @@ public class KategoriPiutangController {
         rm.getItems().addAll(refresh);
         kategoriPiutangTable.setContextMenu(rm);
         kategoriPiutangTable.setRowFactory(table -> {
-            TableRow<KategoriPiutang> row = new TableRow<KategoriPiutang>(){
+            TableRow<KategoriPiutang> row = new TableRow<KategoriPiutang>() {
                 @Override
                 public void updateItem(KategoriPiutang item, boolean empty) {
                     super.updateItem(item, empty);
                     if (empty) {
                         setContextMenu(rm);
-                    }else{
+                    } else {
                         final ContextMenu rm = new ContextMenu();
                         MenuItem hapus = new MenuItem("Delete Kategori Piutang");
                         hapus.setOnAction((ActionEvent event) -> {
@@ -71,7 +74,7 @@ public class KategoriPiutangController {
                         refresh.setOnAction((ActionEvent event) -> {
                             getKategoriPiutang();
                         });
-                        rm.getItems().addAll(hapus,refresh);
+                        rm.getItems().addAll(hapus, refresh);
                         setContextMenu(rm);
                     }
                 }
@@ -79,11 +82,12 @@ public class KategoriPiutangController {
             return row;
         });
         kodeKategoriPiutangField.setOnKeyPressed((KeyEvent keyEvent) -> {
-            if (keyEvent.getCode() == KeyCode.ENTER)  {
+            if (keyEvent.getCode() == KeyCode.ENTER) {
                 saveKategoriPiutang();
             }
         });
-    }    
+    }
+
     public void setMainApp(Main mainApp, Stage owner, Stage stage) {
         this.mainApp = mainApp;
         this.stage = stage;
@@ -94,11 +98,12 @@ public class KategoriPiutangController {
             mainApp.closeDialog(owner, stage);
         });
     }
-    private void getKategoriPiutang(){
+
+    private void getKategoriPiutang() {
         Task<List<KategoriPiutang>> task = new Task<List<KategoriPiutang>>() {
-            @Override 
-            public List<KategoriPiutang> call() throws Exception{
-                try(Connection con = Koneksi.getConnection()){
+            @Override
+            public List<KategoriPiutang> call() throws Exception {
+                try (Connection con = Koneksi.getConnection()) {
                     return KategoriPiutangDAO.getAll(con);
                 }
             }
@@ -118,14 +123,15 @@ public class KategoriPiutangController {
         });
         new Thread(task).start();
     }
-    private void deleteKategoriPiutang(KategoriPiutang temp){
+
+    private void deleteKategoriPiutang(KategoriPiutang temp) {
         MessageController controller = mainApp.showMessage(Modality.WINDOW_MODAL, "Confirmation",
-                "Delete Kategori Piutang "+temp.getKodeKategori()+" ?");
+                "Delete Kategori Piutang " + temp.getKodeKategori() + " ?");
         controller.OK.setOnAction((ActionEvent ex) -> {
             Task<String> task = new Task<String>() {
-                @Override 
-                public String call() throws Exception{
-                    try(Connection con = Koneksi.getConnection()){
+                @Override
+                public String call() throws Exception {
+                    try (Connection con = Koneksi.getConnection()) {
                         return Service.deleteKategoriPiutang(con, temp);
                     }
                 }
@@ -137,11 +143,12 @@ public class KategoriPiutangController {
                 mainApp.closeLoading();
                 getKategoriPiutang();
                 String status = task.getValue();
-                if(status.equals("true")){
+                if (status.equals("true")) {
                     mainApp.showMessage(Modality.NONE, "Success", "Kategori Piutang berhasil dihapus");
                     kodeKategoriPiutangField.setText("");
-                }else
+                } else {
                     mainApp.showMessage(Modality.NONE, "Failed", status);
+                }
             });
             task.setOnFailed((e) -> {
                 mainApp.closeLoading();
@@ -150,25 +157,28 @@ public class KategoriPiutangController {
             new Thread(task).start();
         });
     }
+
     @FXML
-    private void saveKategoriPiutang(){
-        if(kodeKategoriPiutangField.getText().equals(""))
+    private void saveKategoriPiutang() {
+        if (kodeKategoriPiutangField.getText().equals("")) {
             mainApp.showMessage(Modality.NONE, "Warning", "Kode kategori masih kosong");
-        else{
+        } else {
             Boolean s = true;
-            for(KategoriPiutang k : allKategoriPiutang){
-                if(k.getKodeKategori().equals(kodeKategoriPiutangField.getText()))
+            for (KategoriPiutang k : allKategoriPiutang) {
+                if (k.getKodeKategori().equals(kodeKategoriPiutangField.getText())) {
                     s = false;
+                }
             }
-            if(kodeKategoriPiutangField.getText().equals("Piutang Penjualan"))
+            if (kodeKategoriPiutangField.getText().equals("Piutang Penjualan")) {
                 s = false;
-            if(s){
+            }
+            if (s) {
                 KategoriPiutang k = new KategoriPiutang();
                 k.setKodeKategori(kodeKategoriPiutangField.getText());
                 Task<String> task = new Task<String>() {
-                    @Override 
-                    public String call() throws Exception{
-                        try(Connection con = Koneksi.getConnection()){
+                    @Override
+                    public String call() throws Exception {
+                        try (Connection con = Koneksi.getConnection()) {
                             return Service.newKategoriPiutang(con, k);
                         }
                     }
@@ -180,25 +190,27 @@ public class KategoriPiutangController {
                     mainApp.closeLoading();
                     getKategoriPiutang();
                     String status = task.getValue();
-                    if(status.equals("true")){
+                    if (status.equals("true")) {
                         mainApp.showMessage(Modality.NONE, "Success", "Kategori Piutang berhasil disimpan");
                         kodeKategoriPiutangField.setText("");
-                    }else
+                    } else {
                         mainApp.showMessage(Modality.NONE, "Failed", status);
+                    }
                 });
                 task.setOnFailed((e) -> {
                     mainApp.closeLoading();
                     mainApp.showMessage(Modality.NONE, "Error", task.getException().toString());
                 });
                 new Thread(task).start();
-            }else{
+            } else {
                 mainApp.showMessage(Modality.NONE, "Warning", "Kode Kategori sudah terdaftar");
             }
         }
-    }  
+    }
+
     @FXML
-    private void close(){
+    private void close() {
         mainApp.closeDialog(owner, stage);
     }
-    
+
 }
