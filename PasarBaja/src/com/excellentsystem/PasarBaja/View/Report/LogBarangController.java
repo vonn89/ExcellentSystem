@@ -16,15 +16,13 @@ import static com.excellentsystem.PasarBaja.Main.tglSql;
 import com.excellentsystem.PasarBaja.Model.LogBarang;
 import com.excellentsystem.PasarBaja.Model.Otoritas;
 import com.excellentsystem.PasarBaja.Model.StokBarang;
-import com.excellentsystem.PasarBaja.PrintOut.Report;
+import com.excellentsystem.PasarBaja.View.Dialog.NewPembelianController;
 import com.excellentsystem.PasarBaja.View.Dialog.NewPenjualanController;
-import com.excellentsystem.PasarBaja.View.Dialog.NewProduksiBarangController;
 import com.excellentsystem.PasarBaja.View.Dialog.PenyesuaianStokController;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.sql.Connection;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import javafx.beans.property.SimpleStringProperty;
@@ -54,30 +52,46 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
  *
  * @author excellent
  */
-public class LogBarangController  {
+public class LogBarangController {
 
-    @FXML private TableView<LogBarang> barangTable;
-    @FXML private TableColumn<LogBarang, String> tanggalColumn;
-    @FXML private TableColumn<LogBarang, String> kategoriColumn;
-    @FXML private TableColumn<LogBarang, String> keteranganColumn;
-    @FXML private TableColumn<LogBarang, Number> stokAwalColumn;
-    @FXML private TableColumn<LogBarang, Number> stokMasukColumn;
-    @FXML private TableColumn<LogBarang, Number> stokKeluarColumn;
-    @FXML private TableColumn<LogBarang, Number> stokAkhirColumn;
-    @FXML private TableColumn<LogBarang, Number> nilaiAwalColumn;
-    @FXML private TableColumn<LogBarang, Number> nilaiMasukColumn;
-    @FXML private TableColumn<LogBarang, Number> nilaiKeluarColumn;
-    @FXML private TableColumn<LogBarang, Number> nilaiAkhirColumn;
-    @FXML private Label kodeBarangLabel;
-    @FXML private DatePicker tglAwalPicker;
-    @FXML private DatePicker tglAkhirPicker;
+    @FXML
+    private TableView<LogBarang> barangTable;
+    @FXML
+    private TableColumn<LogBarang, String> tanggalColumn;
+    @FXML
+    private TableColumn<LogBarang, String> kategoriColumn;
+    @FXML
+    private TableColumn<LogBarang, String> keteranganColumn;
+    @FXML
+    private TableColumn<LogBarang, Number> stokAwalColumn;
+    @FXML
+    private TableColumn<LogBarang, Number> stokMasukColumn;
+    @FXML
+    private TableColumn<LogBarang, Number> stokKeluarColumn;
+    @FXML
+    private TableColumn<LogBarang, Number> stokAkhirColumn;
+    @FXML
+    private TableColumn<LogBarang, Number> nilaiAwalColumn;
+    @FXML
+    private TableColumn<LogBarang, Number> nilaiMasukColumn;
+    @FXML
+    private TableColumn<LogBarang, Number> nilaiKeluarColumn;
+    @FXML
+    private TableColumn<LogBarang, Number> nilaiAkhirColumn;
+    @FXML
+    private Label kodeBarangLabel;
+    @FXML
+    private DatePicker tglAwalPicker;
+    @FXML
+    private DatePicker tglAkhirPicker;
     private Stage stage;
-    private Main mainApp;   
+    private Main mainApp;
     private Stage owner;
     private final ObservableList<LogBarang> allBarang = FXCollections.observableArrayList();
     private StokBarang stokBarang;
+
     public void initialize() {
-        tanggalColumn.setCellValueFactory(cellData -> { 
+        tanggalColumn.setCellValueFactory(cellData -> {
             try {
                 return new SimpleStringProperty(tglLengkap.format(tglSql.parse(cellData.getValue().getTanggal())));
             } catch (Exception ex) {
@@ -110,23 +124,18 @@ public class LogBarangController  {
         tglAkhirPicker.setValue(LocalDate.now());
         tglAkhirPicker.setDayCellFactory((final DatePicker datePicker) -> Function.getDateCellAkhir(tglAwalPicker));
         final ContextMenu rm = new ContextMenu();
-        MenuItem print = new MenuItem("Print Laporan");
-        print.setOnAction((ActionEvent e)->{
-            print();
-        });
         MenuItem export = new MenuItem("Export Excel");
-        export.setOnAction((ActionEvent e)->{
+        export.setOnAction((ActionEvent e) -> {
             exportExcel();
         });
         MenuItem refresh = new MenuItem("Refresh");
-        refresh.setOnAction((ActionEvent e)->{
+        refresh.setOnAction((ActionEvent e) -> {
             getLogBarang();
         });
-        for(Otoritas o : sistem.getUser().getOtoritas()){
-            if(o.getJenis().equals("Print Laporan")&&o.isStatus())
-                rm.getItems().addAll(print);
-            if(o.getJenis().equals("Export Excel")&&o.isStatus())
+        for (Otoritas o : sistem.getUser().getOtoritas()) {
+            if (o.getJenis().equals("Export Excel") && o.isStatus()) {
                 rm.getItems().addAll(export);
+            }
         }
         rm.getItems().addAll(refresh);
         barangTable.setContextMenu(rm);
@@ -137,54 +146,45 @@ public class LogBarangController  {
                     super.updateItem(item, empty);
                     if (empty) {
                         setContextMenu(rm);
-                    } else{
+                    } else {
                         ContextMenu rm = new ContextMenu();
                         MenuItem detailPenjualan = new MenuItem("Detail Penjualan");
-                        detailPenjualan.setOnAction((ActionEvent e)->{
+                        detailPenjualan.setOnAction((ActionEvent e) -> {
                             lihatDetailPenjualan(item);
                         });
-                        MenuItem detailReturPenjualan = new MenuItem("Detail Retur Penjualan");
-                        detailReturPenjualan.setOnAction((ActionEvent e)->{
-                            lihatDetailReturPenjualan(item);
-                        });
-                        MenuItem detailProduksi = new MenuItem("Detail Produksi");
-                        detailProduksi.setOnAction((ActionEvent e)->{
-                            lihatDetailProduksi(item);
+                        MenuItem detailPembelian = new MenuItem("Detail Pembelian");
+                        detailPembelian.setOnAction((ActionEvent e) -> {
+                            lihatDetailPembelian(item);
                         });
                         MenuItem detailPenyesuaian = new MenuItem("Detail Penyesuaian Stok");
                         detailPenyesuaian.setOnAction((ActionEvent event) -> {
                             showDetailPenyesuaianStok(item);
                         });
-                        MenuItem print = new MenuItem("Print Laporan");
-                        print.setOnAction((ActionEvent e)->{
-                            print();
-                        });
                         MenuItem export = new MenuItem("Export Excel");
-                        export.setOnAction((ActionEvent e)->{
+                        export.setOnAction((ActionEvent e) -> {
                             exportExcel();
                         });
                         MenuItem refresh = new MenuItem("Refresh");
                         refresh.setOnAction((ActionEvent event) -> {
                             getLogBarang();
                         });
-                        for(Otoritas o : sistem.getUser().getOtoritas()){
-                            if(o.getJenis().equals("Detail Penjualan")&&o.isStatus()&&
-                                (item.getKategori().equals("Penjualan")||item.getKategori().equals("Batal Penjualan")))
+                        for (Otoritas o : sistem.getUser().getOtoritas()) {
+                            if (o.getJenis().equals("Detail Penjualan") && o.isStatus()
+                                    && (item.getKategori().equals("Penjualan") || item.getKategori().equals("Batal Penjualan"))) {
                                 rm.getItems().add(detailPenjualan);
-                            if(o.getJenis().equals("Detail Retur Penjualan")&&o.isStatus()&&
-                                (item.getKategori().equals("Retur Penjualan")||item.getKategori().equals("Batal Retur Penjualan")))
-                                rm.getItems().add(detailReturPenjualan);
-                            if(o.getJenis().equals("Detail Produksi")&&o.isStatus()&&
-                                (item.getKategori().equals("Produksi")||item.getKategori().equals("Batal Produksi")))
-                                rm.getItems().add(detailProduksi);
+                            }
+                            if (o.getJenis().equals("Detail Pembelian") && o.isStatus()
+                                    && (item.getKategori().equals("Pembelian") || item.getKategori().equals("Batal Pembelian"))) {
+                                rm.getItems().add(detailPembelian);
+                            }
                         }
-                        if(item.getKategori().equals("Penyesuaian Stok Barang"))
+                        if (item.getKategori().equals("Penyesuaian Stok Barang")) {
                             rm.getItems().add(detailPenyesuaian);
-                        for(Otoritas o : sistem.getUser().getOtoritas()){
-                            if(o.getJenis().equals("Print Laporan")&&o.isStatus())
-                                rm.getItems().addAll(print);
-                            if(o.getJenis().equals("Export Excel")&&o.isStatus())
+                        }
+                        for (Otoritas o : sistem.getUser().getOtoritas()) {
+                            if (o.getJenis().equals("Export Excel") && o.isStatus()) {
                                 rm.getItems().addAll(export);
+                            }
                         }
                         rm.getItems().addAll(refresh);
                         setContextMenu(rm);
@@ -193,8 +193,9 @@ public class LogBarangController  {
             };
             return row;
         });
-    }    
-    public void setMainApp(Main mainApp, Stage owner, Stage stage){
+    }
+
+    public void setMainApp(Main mainApp, Stage owner, Stage stage) {
         this.mainApp = mainApp;
         this.owner = owner;
         this.stage = stage;
@@ -202,25 +203,27 @@ public class LogBarangController  {
         stage.setOnCloseRequest((event) -> {
             mainApp.closeDialog(owner, stage);
         });
-        stage.setHeight(mainApp.screenSize.getHeight()*0.9);
-        stage.setWidth(mainApp.screenSize.getWidth()*0.9);
+        stage.setHeight(mainApp.screenSize.getHeight() * 0.9);
+        stage.setWidth(mainApp.screenSize.getWidth() * 0.9);
         stage.setX((mainApp.screenSize.getWidth() - stage.getWidth()) / 2);
         stage.setY((mainApp.screenSize.getHeight() - stage.getHeight()) / 2);
-    } 
-    public void setBarang(StokBarang b){
+    }
+
+    public void setBarang(StokBarang b) {
         stokBarang = b;
         kodeBarangLabel.setText(b.getKodeBarang());
         getLogBarang();
     }
+
     @FXML
-    private void getLogBarang(){
+    private void getLogBarang() {
         Task<List<LogBarang>> task = new Task<List<LogBarang>>() {
-            @Override 
-            public List<LogBarang> call() throws Exception{
-                try(Connection con = Koneksi.getConnection()){
-                    List<LogBarang> allStok = LogBarangDAO.getAllByTanggalAndBarangAndGudang(con, 
-                            tglAwalPicker.getValue().toString(), tglAkhirPicker.getValue().toString(), 
-                            stokBarang.getKodeBarang(), stokBarang.getKodeGudang());
+            @Override
+            public List<LogBarang> call() throws Exception {
+                try (Connection con = Koneksi.getConnection()) {
+                    List<LogBarang> allStok = LogBarangDAO.getAllByTanggalAndBarang(con,
+                            tglAwalPicker.getValue().toString(), tglAkhirPicker.getValue().toString(),
+                            stokBarang.getKodeBarang());
                     return allStok;
                 }
             }
@@ -240,59 +243,38 @@ public class LogBarangController  {
         });
         new Thread(task).start();
     }
-    private void lihatDetailPenjualan(LogBarang log){
+
+    private void lihatDetailPenjualan(LogBarang log) {
         Stage child = new Stage();
         FXMLLoader loader = mainApp.showDialog(stage, child, "View/Dialog/NewPenjualan.fxml");
         NewPenjualanController controller = loader.getController();
-        controller.setMainApp(mainApp,stage, child);
+        controller.setMainApp(mainApp, stage, child);
         controller.setDetailPenjualan(log.getKeterangan());
     }
-    private void lihatDetailReturPenjualan(LogBarang log){
-        try(Connection con = Koneksi.getConnection()){
-//            ReturPenjualanHead r = ReturPenjualanHeadDAO.get(con, log.getKeterangan());
-//            Stage child = new Stage();
-//            FXMLLoader loader = mainApp.showDialog(stage, child, "View/Dialog/NewReturPenjualan.fxml");
-//            NewReturPenjualanController controller = loader.getController();
-//            controller.setMainApp(mainApp, stage, child);
-//            controller.setDetailReturPenjualan(r);
-        }catch(Exception e){
-            mainApp.showMessage(Modality.NONE, "Error", e.toString());
-        }
-    }
-    private void lihatDetailProduksi(LogBarang log){
+
+    private void lihatDetailPembelian(LogBarang log) {
         Stage child = new Stage();
-        FXMLLoader loader = mainApp.showDialog(stage, child, "View/Dialog/NewProduksiBarang.fxml");
-        NewProduksiBarangController controller = loader.getController();
+        FXMLLoader loader = mainApp.showDialog(stage, child, "View/Dialog/NewPembelian.fxml");
+        NewPembelianController controller = loader.getController();
         controller.setMainApp(mainApp, stage, child);
-        controller.setDetailProduksi(log.getKeterangan());
+        controller.setDetailPembelian(log.getKeterangan());
     }
-    private void showDetailPenyesuaianStok(LogBarang log){
+
+    private void showDetailPenyesuaianStok(LogBarang log) {
         Stage child = new Stage();
-        FXMLLoader loader = mainApp.showDialog(stage, child ,"View/Dialog/Child/PenyesuaianStok.fxml");
+        FXMLLoader loader = mainApp.showDialog(stage, child, "View/Dialog/PenyesuaianStok.fxml");
         PenyesuaianStokController controller = loader.getController();
         controller.setMainApp(mainApp, stage, child);
-        controller.setPenyesuaianStokBahan(log.getKeterangan());
+        controller.setPenyesuaianStokBarang(log.getKeterangan());
     }
+
     @FXML
-    private void close(){
+    private void close() {
         mainApp.closeDialog(owner, stage);
     }
-    private void print(){
-        try{
-            List<LogBarang> listLogBarang = new ArrayList<>();
-            for(LogBarang d : allBarang){
-                listLogBarang.add(d);
-            }
-            Report report = new Report();
-            report.printLaporanLogBarang(listLogBarang, tglAwalPicker.getValue().toString(),
-                    tglAkhirPicker.getValue().toString(), stokBarang.getBarang().getNamaBarang());
-        }catch(Exception e){
-            e.printStackTrace();
-            mainApp.showMessage(Modality.NONE, "Error", e.toString());
-        }
-    }
-    private void exportExcel(){
-        try{
+
+    private void exportExcel() {
+        try {
             FileChooser fileChooser = new FileChooser();
             fileChooser.setTitle("Select location to export");
             fileChooser.getExtensionFilters().addAll(
@@ -324,22 +306,22 @@ public class LogBarangController  {
                 sheet.getRow(rc).getCell(0).setCellValue("Satuan");
                 sheet.getRow(rc).getCell(1).setCellValue(stokBarang.getBarang().getSatuan());
                 rc++;
-                
+
                 createRow(workbook, sheet, rc, c, "Header");
-                sheet.getRow(rc).getCell(0).setCellValue("Tanggal"); 
-                sheet.getRow(rc).getCell(1).setCellValue("Kategori"); 
-                sheet.getRow(rc).getCell(2).setCellValue("Keterangan"); 
-                sheet.getRow(rc).getCell(3).setCellValue("Stok Awal");  
-                sheet.getRow(rc).getCell(4).setCellValue("Nilai Awal");  
-                sheet.getRow(rc).getCell(5).setCellValue("Stok Masuk");  
-                sheet.getRow(rc).getCell(6).setCellValue("Nilai Masuk");  
-                sheet.getRow(rc).getCell(7).setCellValue("Stok Keluar");  
-                sheet.getRow(rc).getCell(8).setCellValue("Nilai Keluar");  
-                sheet.getRow(rc).getCell(9).setCellValue("Stok Akhir");  
-                sheet.getRow(rc).getCell(10).setCellValue("Nilai Akhir");  
+                sheet.getRow(rc).getCell(0).setCellValue("Tanggal");
+                sheet.getRow(rc).getCell(1).setCellValue("Kategori");
+                sheet.getRow(rc).getCell(2).setCellValue("Keterangan");
+                sheet.getRow(rc).getCell(3).setCellValue("Stok Awal");
+                sheet.getRow(rc).getCell(4).setCellValue("Nilai Awal");
+                sheet.getRow(rc).getCell(5).setCellValue("Stok Masuk");
+                sheet.getRow(rc).getCell(6).setCellValue("Nilai Masuk");
+                sheet.getRow(rc).getCell(7).setCellValue("Stok Keluar");
+                sheet.getRow(rc).getCell(8).setCellValue("Nilai Keluar");
+                sheet.getRow(rc).getCell(9).setCellValue("Stok Akhir");
+                sheet.getRow(rc).getCell(10).setCellValue("Nilai Akhir");
                 rc++;
-                
-                for(LogBarang s: allBarang){
+
+                for (LogBarang s : allBarang) {
                     createRow(workbook, sheet, rc, c, "Detail");
                     sheet.getRow(rc).getCell(0).setCellValue(tglLengkap.format(tglSql.parse(s.getTanggal())));
                     sheet.getRow(rc).getCell(1).setCellValue(s.getKategori());
@@ -354,12 +336,14 @@ public class LogBarangController  {
                     sheet.getRow(rc).getCell(10).setCellValue(s.getNilaiAkhir());
                     rc++;
                 }
-                for(int i=0 ; i<c ; i++){ sheet.autoSizeColumn(i);}
+                for (int i = 0; i < c; i++) {
+                    sheet.autoSizeColumn(i);
+                }
                 try (FileOutputStream outputStream = new FileOutputStream(file)) {
                     workbook.write(outputStream);
                 }
             }
-        }catch(Exception e){
+        } catch (Exception e) {
             mainApp.showMessage(Modality.NONE, "Error", e.toString());
             e.printStackTrace();
         }

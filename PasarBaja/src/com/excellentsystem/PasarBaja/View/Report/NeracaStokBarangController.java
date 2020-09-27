@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package com.excellentsystem.PasarBaja.View.Report;
 
 import com.excellentsystem.PasarBaja.DAO.BarangDAO;
@@ -19,12 +18,10 @@ import com.excellentsystem.PasarBaja.Model.Barang;
 import com.excellentsystem.PasarBaja.Model.LogBarang;
 import com.excellentsystem.PasarBaja.Model.Otoritas;
 import com.excellentsystem.PasarBaja.Model.StokBarang;
-import com.excellentsystem.PasarBaja.PrintOut.Report;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.sql.Connection;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.collections.FXCollections;
@@ -56,23 +53,34 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
  * @author Xtreme
  */
 public class NeracaStokBarangController {
-    
-    @FXML private TableView<StokBarang> barangTable;
-    @FXML private TableColumn<StokBarang, String> kodeBarangColumn;
-    @FXML private TableColumn<StokBarang, String> namaBarangColumn;
-    @FXML private TableColumn<StokBarang, String> satuanColumn;
-    @FXML private TableColumn<StokBarang, Number> hargaJualColumn;
-    @FXML private TableColumn<StokBarang, Number> nilaiColumn;
-    @FXML private TableColumn<StokBarang, Number> mutasiAkhirColumn;
-    
-    @FXML private Label totalQtyField;
-    @FXML private Label totalNilaiField;
-    @FXML private Label totalJualField;
-    
+
+    @FXML
+    private TableView<StokBarang> barangTable;
+    @FXML
+    private TableColumn<StokBarang, String> kodeBarangColumn;
+    @FXML
+    private TableColumn<StokBarang, String> namaBarangColumn;
+    @FXML
+    private TableColumn<StokBarang, String> satuanColumn;
+    @FXML
+    private TableColumn<StokBarang, Number> hargaJualColumn;
+    @FXML
+    private TableColumn<StokBarang, Number> nilaiColumn;
+    @FXML
+    private TableColumn<StokBarang, Number> mutasiAkhirColumn;
+
+    @FXML
+    private Label totalQtyField;
+    @FXML
+    private Label totalNilaiField;
+    @FXML
+    private Label totalJualField;
+
     private ObservableList<StokBarang> allBarang = FXCollections.observableArrayList();
-    private Main mainApp;  
+    private Main mainApp;
     private Stage owner;
     private Stage stage;
+
     public void initialize() {
         kodeBarangColumn.setCellValueFactory(cellData -> cellData.getValue().getBarang().kodeBarangProperty());
         namaBarangColumn.setCellValueFactory(cellData -> cellData.getValue().getBarang().namaBarangProperty());
@@ -80,70 +88,61 @@ public class NeracaStokBarangController {
         hargaJualColumn.setCellValueFactory(cellData -> cellData.getValue().getBarang().hargaJualProperty());
         nilaiColumn.setCellValueFactory(cellData -> {
             double nilai = 0;
-            if(cellData.getValue().getLogBarang().getStokAkhir()!=0)
-                nilai = cellData.getValue().getLogBarang().getNilaiAkhir()/
-                    cellData.getValue().getLogBarang().getStokAkhir();
+            if (cellData.getValue().getLogBarang().getStokAkhir() != 0) {
+                nilai = cellData.getValue().getLogBarang().getNilaiAkhir()
+                        / cellData.getValue().getLogBarang().getStokAkhir();
+            }
             return new SimpleDoubleProperty(nilai);
         });
         hargaJualColumn.setCellFactory(col -> Function.getTableCell());
         nilaiColumn.setCellFactory(col -> Function.getTableCell());
-        mutasiAkhirColumn.setCellValueFactory( cellData -> cellData.getValue().stokAkhirProperty());
+        mutasiAkhirColumn.setCellValueFactory(cellData -> cellData.getValue().stokAkhirProperty());
         mutasiAkhirColumn.setCellFactory(col -> Function.getTableCell());
-        
+
         final ContextMenu rm = new ContextMenu();
-        MenuItem print = new MenuItem("Print Laporan");
-        print.setOnAction((ActionEvent e)->{
-            print();
-        });
         MenuItem export = new MenuItem("Export Excel");
-        export.setOnAction((ActionEvent e)->{
+        export.setOnAction((ActionEvent e) -> {
             exportExcel();
         });
         MenuItem refresh = new MenuItem("Refresh");
-        refresh.setOnAction((ActionEvent e)->{
+        refresh.setOnAction((ActionEvent e) -> {
         });
-        for(Otoritas o : sistem.getUser().getOtoritas()){
-            if(o.getJenis().equals("Print Laporan")&&o.isStatus())
-                rm.getItems().addAll(print);
-            if(o.getJenis().equals("Export Excel")&&o.isStatus())
+        for (Otoritas o : sistem.getUser().getOtoritas()) {
+            if (o.getJenis().equals("Export Excel") && o.isStatus()) {
                 rm.getItems().addAll(export);
+            }
         }
         rm.getItems().addAll(refresh);
         barangTable.setContextMenu(rm);
         barangTable.setRowFactory((TableView<StokBarang> tableView) -> {
-            final TableRow<StokBarang> row = new TableRow<StokBarang>(){
+            final TableRow<StokBarang> row = new TableRow<StokBarang>() {
                 @Override
                 public void updateItem(StokBarang item, boolean empty) {
                     super.updateItem(item, empty);
                     if (empty) {
                         setContextMenu(rm);
-                    } else{
+                    } else {
                         final ContextMenu rm = new ContextMenu();
                         MenuItem kartu = new MenuItem("Lihat Kartu Stok");
-                        kartu.setOnAction((ActionEvent e)->{
+                        kartu.setOnAction((ActionEvent e) -> {
                             showKartuStok(item);
                         });
                         MenuItem logBarang = new MenuItem("Lihat Log Barang");
-                        logBarang.setOnAction((ActionEvent e)->{
+                        logBarang.setOnAction((ActionEvent e) -> {
                             showLogBarang(item);
                         });
-                        MenuItem print = new MenuItem("Print Laporan");
-                        print.setOnAction((ActionEvent e)->{
-                            print();
-                        });
                         MenuItem export = new MenuItem("Export Excel");
-                        export.setOnAction((ActionEvent e)->{
+                        export.setOnAction((ActionEvent e) -> {
                             exportExcel();
                         });
                         MenuItem refresh = new MenuItem("Refresh");
-                        refresh.setOnAction((ActionEvent e)->{
+                        refresh.setOnAction((ActionEvent e) -> {
                         });
                         rm.getItems().addAll(kartu, logBarang);
-                        for(Otoritas o : sistem.getUser().getOtoritas()){
-                            if(o.getJenis().equals("Print Laporan")&&o.isStatus())
-                                rm.getItems().addAll(print);
-                            if(o.getJenis().equals("Export Excel")&&o.isStatus())
+                        for (Otoritas o : sistem.getUser().getOtoritas()) {
+                            if (o.getJenis().equals("Export Excel") && o.isStatus()) {
                                 rm.getItems().addAll(export);
+                            }
                         }
                         rm.getItems().addAll(refresh);
                         setContextMenu(rm);
@@ -151,50 +150,53 @@ public class NeracaStokBarangController {
                 }
             };
             row.setOnMouseClicked((MouseEvent mouseEvent) -> {
-                if(mouseEvent.getButton().equals(MouseButton.PRIMARY)&&mouseEvent.getClickCount() == 2){
-                    if(row.getItem()!=null)
+                if (mouseEvent.getButton().equals(MouseButton.PRIMARY) && mouseEvent.getClickCount() == 2) {
+                    if (row.getItem() != null) {
                         showLogBarang(row.getItem());
+                    }
                 }
             });
             return row;
         });
         barangTable.setItems(allBarang);
     }
-    public void setMainApp(Main mainApp, Stage owner,Stage stage){
+
+    public void setMainApp(Main mainApp, Stage owner, Stage stage) {
         this.mainApp = mainApp;
         this.owner = owner;
         this.stage = stage;
         stage.setOnCloseRequest((event) -> {
             mainApp.closeDialog(owner, stage);
         });
-        stage.setHeight(mainApp.screenSize.getHeight()*0.9);
-        stage.setWidth(mainApp.screenSize.getWidth()*0.9);
+        stage.setHeight(mainApp.screenSize.getHeight() * 0.9);
+        stage.setWidth(mainApp.screenSize.getWidth() * 0.9);
         stage.setX((mainApp.screenSize.getWidth() - stage.getWidth()) / 2);
         stage.setY((mainApp.screenSize.getHeight() - stage.getHeight()) / 2);
     }
-    public void getBarang(LocalDate tglAkhir, String gudang){
+
+    public void getBarang(LocalDate tglAkhir) {
         Task<List<StokBarang>> task = new Task<List<StokBarang>>() {
-            @Override 
-            public List<StokBarang> call() throws Exception{
-                try(Connection con = Koneksi.getConnection()){
+            @Override
+            public List<StokBarang> call() throws Exception {
+                try (Connection con = Koneksi.getConnection()) {
                     List<Barang> listBarang = BarangDAO.getAllByStatus(con, "%");
-                    List<LogBarang> listLogBarang = LogBarangDAO.getAllByTanggalAndGudang(con, tglAkhir.toString(), gudang);
-                    List<StokBarang> temp = StokBarangDAO.getAllByTanggalAndGudang(con, tglAkhir.toString(), gudang);
-                    for(StokBarang s : temp){
-                        for(Barang b : listBarang){
-                            if(b.getKodeBarang().equals(s.getKodeBarang()))
+                    List<LogBarang> listLogBarang = LogBarangDAO.getAllByTanggal(con, tglAkhir.toString());
+                    List<StokBarang> temp = StokBarangDAO.getAllByTanggal(con, tglAkhir.toString());
+                    for (StokBarang s : temp) {
+                        for (Barang b : listBarang) {
+                            if (b.getKodeBarang().equals(s.getKodeBarang())) {
                                 s.setBarang(b);
+                            }
                         }
-                        for(LogBarang b : listLogBarang){
-                            if(b.getKodeBarang().equals(s.getKodeBarang()))
+                        for (LogBarang b : listLogBarang) {
+                            if (b.getKodeBarang().equals(s.getKodeBarang())) {
                                 s.setLogBarang(b);
+                            }
                         }
-//                        LogBarang l = LogBarangDAO.getByTanggalAndBarangAndGudang(con, tglAkhir.toString(), s.getKodeBarang(), s.getKodeGudang());
-                        if(s.getLogBarang()==null){
+                        if (s.getLogBarang() == null) {
                             LogBarang l = new LogBarang();
                             l.setTanggal(tglAkhir.toString());
                             l.setKodeBarang(s.getKodeBarang());
-                            l.setKodeGudang(s.getKodeGudang());
                             l.setKategori("");
                             l.setKeterangan("");
                             l.setStokAwal(0);
@@ -227,52 +229,44 @@ public class NeracaStokBarangController {
         });
         new Thread(task).start();
     }
-    private void hitungTotal(){
-        double totalQty =0;
+
+    private void hitungTotal() {
+        double totalQty = 0;
         double totalHPP = 0;
         double totalJual = 0;
-        for(StokBarang temp : allBarang){
+        for (StokBarang temp : allBarang) {
             totalQty = totalQty + temp.getStokAkhir();
             totalHPP = totalHPP + temp.getLogBarang().getNilaiAkhir();
-            totalJual = totalJual + (temp.getBarang().getHargaJual()*temp.getStokAkhir());
+            totalJual = totalJual + (temp.getBarang().getHargaJual() * temp.getStokAkhir());
         }
         totalQtyField.setText(df.format(totalQty));
         totalNilaiField.setText(df.format(totalHPP));
         totalJualField.setText(df.format(totalJual));
     }
-    private void showLogBarang(StokBarang s){
+
+    private void showLogBarang(StokBarang s) {
         Stage child = new Stage();
         FXMLLoader loader = mainApp.showDialog(stage, child, "View/Report/LogBarang.fxml");
         LogBarangController x = loader.getController();
         x.setMainApp(mainApp, stage, child);
         x.setBarang(s);
     }
-    private void showKartuStok(StokBarang b){
+
+    private void showKartuStok(StokBarang b) {
         Stage child = new Stage();
-        FXMLLoader loader = mainApp.showDialog(stage ,child, "View/Report/LaporanKartuStokBarang.fxml");
+        FXMLLoader loader = mainApp.showDialog(stage, child, "View/Report/LaporanKartuStokBarang.fxml");
         LaporanKartuStokBarangController controller = loader.getController();
         controller.setMainApp(mainApp, stage, child);
         controller.setBarang(b);
     }
-    private void print(){
-        try{
-            List<StokBarang> listStokBarang = new ArrayList<>();
-            for(StokBarang d : allBarang){
-                listStokBarang.add(d);
-            }
-            Report report = new Report();
-            report.printLaporanBarang(listStokBarang);
-        }catch(Exception e){
-            e.printStackTrace();
-            mainApp.showMessage(Modality.NONE, "Error", e.toString());
-        }
-    }
-    @FXML 
-    private void close(){
+
+    @FXML
+    private void close() {
         mainApp.closeDialog(owner, stage);
     }
-    private void exportExcel(){
-        try{
+
+    private void exportExcel() {
+        try {
             FileChooser fileChooser = new FileChooser();
             fileChooser.setTitle("Select location to export");
             fileChooser.getExtensionFilters().addAll(
@@ -293,12 +287,12 @@ public class NeracaStokBarangController {
                 int rc = 0;
                 int c = 6;
                 createRow(workbook, sheet, rc, c, "Header");
-                sheet.getRow(rc).getCell(0).setCellValue("Kode Barang"); 
-                sheet.getRow(rc).getCell(1).setCellValue("Nama Barang"); 
-                sheet.getRow(rc).getCell(2).setCellValue("Satuan"); 
+                sheet.getRow(rc).getCell(0).setCellValue("Kode Barang");
+                sheet.getRow(rc).getCell(1).setCellValue("Nama Barang");
+                sheet.getRow(rc).getCell(2).setCellValue("Satuan");
                 sheet.getRow(rc).getCell(3).setCellValue("Nilai Pokok");
                 sheet.getRow(rc).getCell(4).setCellValue("Harga Jual");
-                sheet.getRow(rc).getCell(5).setCellValue("Stok Akhir"); 
+                sheet.getRow(rc).getCell(5).setCellValue("Stok Akhir");
                 rc++;
                 double totalStok = 0;
                 for (StokBarang b : allBarang) {
@@ -307,8 +301,9 @@ public class NeracaStokBarangController {
                     sheet.getRow(rc).getCell(1).setCellValue(b.getBarang().getNamaBarang());
                     sheet.getRow(rc).getCell(2).setCellValue(b.getBarang().getSatuan());
                     double nilai = 0;
-                    if(b.getLogBarang().getStokAkhir()!=0)
-                        nilai = b.getLogBarang().getNilaiAkhir()/b.getLogBarang().getStokAkhir();
+                    if (b.getLogBarang().getStokAkhir() != 0) {
+                        nilai = b.getLogBarang().getNilaiAkhir() / b.getLogBarang().getStokAkhir();
+                    }
                     sheet.getRow(rc).getCell(3).setCellValue(nilai);
                     sheet.getRow(rc).getCell(4).setCellValue(b.getBarang().getHargaJual());
                     sheet.getRow(rc).getCell(5).setCellValue(b.getStokAkhir());
@@ -319,12 +314,14 @@ public class NeracaStokBarangController {
                 sheet.getRow(rc).getCell(4).setCellValue("Total");
                 sheet.getRow(rc).getCell(5).setCellValue(totalStok);
                 rc++;
-                for(int i=0 ; i<c ; i++){ sheet.autoSizeColumn(i);}
+                for (int i = 0; i < c; i++) {
+                    sheet.autoSizeColumn(i);
+                }
                 try (FileOutputStream outputStream = new FileOutputStream(file)) {
                     workbook.write(outputStream);
                 }
             }
-        }catch(Exception e){
+        } catch (Exception e) {
             mainApp.showMessage(Modality.NONE, "Error", e.toString());
             e.printStackTrace();
         }

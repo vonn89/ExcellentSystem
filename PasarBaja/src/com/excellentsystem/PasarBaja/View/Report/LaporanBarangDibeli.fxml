@@ -13,7 +13,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
 
-<AnchorPane id="AnchorPane" prefHeight="628.0" prefWidth="1024.0" styleClass="stage" stylesheets="@../../Resource/MyTheme.css" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.excellentsystem.PasarBaja.View.Report.LaporanBarangTerjualController">
+<AnchorPane id="AnchorPane" prefHeight="628.0" prefWidth="1024.0" styleClass="stage" stylesheets="@../../Resource/MyTheme.css" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.excellentsystem.PasarBaja.View.Report.LaporanBarangDibeliController">
     <children>
         <GridPane layoutX="27.0" layoutY="22.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
             <columnConstraints>
@@ -31,13 +31,13 @@
                         <Label text="Tanggal">
               
                         </Label>
-                        <DatePicker fx:id="tglPenjualanMulaiPicker" editable="false" onAction="#getPenjualan" prefHeight="35.0" prefWidth="140.0" />
+                        <DatePicker fx:id="tglPembelianMulaiPicker" editable="false" onAction="#getPembelian" prefHeight="35.0" prefWidth="140.0" />
                         <Label text="-">
            
                         </Label>
-                        <DatePicker fx:id="tglPenjualanAkhirPicker" editable="false" onAction="#getPenjualan" prefHeight="35.0" prefWidth="140.0" />
+                        <DatePicker fx:id="tglPembelianAkhirPicker" editable="false" onAction="#getPembelian" prefHeight="35.0" prefWidth="140.0" />
                         <Label text="Group By" />
-                        <ComboBox fx:id="groupByCombo" onAction="#getPenjualan" prefHeight="35.0" prefWidth="140.0" />
+                        <ComboBox fx:id="groupByCombo" onAction="#getPembelian" prefHeight="35.0" prefWidth="140.0" />
                     </children>
                 </HBox>
                 <TextField fx:id="searchField" maxWidth="300.0" prefHeight="35.0" promptText="Search..." styleClass="search-field" GridPane.halignment="RIGHT" />
@@ -47,35 +47,26 @@
                    
                         </Label>
                         <Label fx:id="totalQtyField" alignment="CENTER_RIGHT" style="-fx-font-weight: bold;" text="0" HBox.hgrow="ALWAYS" />
-                        <Label alignment="CENTER_RIGHT" text="Total Nilai" HBox.hgrow="ALWAYS">
+                        <Label alignment="CENTER_RIGHT" text="Total Pembelian" HBox.hgrow="ALWAYS">
                     
                         </Label>
-                        <Label fx:id="totalNilaiField" alignment="CENTER_RIGHT" style="-fx-font-weight: bold;" text="0" HBox.hgrow="ALWAYS" />
-                        <Label alignment="CENTER_RIGHT" text="Total Penjualan" HBox.hgrow="ALWAYS">
-                    
-                        </Label>
-                        <Label fx:id="totalPenjualanField" alignment="CENTER_RIGHT" style="-fx-font-weight: bold;" text="0" HBox.hgrow="ALWAYS" />
+                        <Label fx:id="totalPembelianField" alignment="CENTER_RIGHT" style="-fx-font-weight: bold;" text="0" HBox.hgrow="ALWAYS" />
                     </children>
                     <padding>
                         <Insets right="10.0" />
                     </padding>
                 </HBox>
-                <TreeTableView fx:id="penjualanDetailTable" prefHeight="200.0" prefWidth="200.0" showRoot="false" tableMenuButtonVisible="true" GridPane.rowIndex="2">
+                <TreeTableView fx:id="pembelianDetailTable" prefHeight="200.0" prefWidth="200.0" showRoot="false" tableMenuButtonVisible="true" GridPane.rowIndex="2">
                     <columns>
-                        <TreeTableColumn fx:id="noPenjualanColumn" prefWidth="75.0" text="No Penjualan" />
-                        <TreeTableColumn fx:id="tglPenjualanColumn" prefWidth="75.0" text="Tgl Penjualan" visible="false" />
-                        <TreeTableColumn fx:id="gudangColumn" prefWidth="75.0" text="Gudang" visible="false" />
-                        <TreeTableColumn fx:id="namaCustomerColumn" prefWidth="75.0" text="Customer" />
-                        <TreeTableColumn fx:id="namaSalesColumn" prefWidth="75.0" text="Sales" visible="false" />
+                        <TreeTableColumn fx:id="noPembelianColumn" prefWidth="75.0" text="No Pembelian" />
+                        <TreeTableColumn fx:id="tglPembelianColumn" prefWidth="75.0" text="Tgl Pembelian" visible="false" />
+                        <TreeTableColumn fx:id="namaSupplierColumn" prefWidth="75.0" text="Supplier" />
                         <TreeTableColumn fx:id="kodeBarangColumn" prefWidth="75.0" text="Kode Barang" visible="false" />
                         <TreeTableColumn fx:id="namaBarangColumn" prefWidth="75.0" text="Nama Barang" />
                         <TreeTableColumn fx:id="satuanColumn" prefWidth="75.0" text="Satuan" />
                         <TreeTableColumn fx:id="qtyColumn" prefWidth="75.0" text="Qty" />
-                        <TreeTableColumn fx:id="nilaiColumn" prefWidth="75.0" text="Nilai" />
-                        <TreeTableColumn fx:id="totalNilaiColumn" prefWidth="75.0" text="Total Nilai" />
-                        <TreeTableColumn fx:id="hargaJualColumn" prefWidth="75.0" text="Harga" />
+                        <TreeTableColumn fx:id="hargaBeliColumn" prefWidth="75.0" text="Harga" />
                         <TreeTableColumn fx:id="totalColumn" prefWidth="75.0" text="Total Harga" />
-                        <TreeTableColumn fx:id="persentaseColumn" maxWidth="2000.0" prefWidth="75.0" text="\%" />
                     </columns>
                     <columnResizePolicy>
                         <TreeTableView fx:constant="CONSTRAINED_RESIZE_POLICY" />

@@ -9,13 +9,7 @@ import com.excellentsystem.PasarBaja.DAO.KeuanganDAO;
 import com.excellentsystem.PasarBaja.Function;
 import com.excellentsystem.PasarBaja.Koneksi;
 import com.excellentsystem.PasarBaja.Main;
-import static com.excellentsystem.PasarBaja.Main.sistem;
-import static com.excellentsystem.PasarBaja.Main.tgl;
-import static com.excellentsystem.PasarBaja.Main.tglBarang;
-import com.excellentsystem.PasarBaja.Model.Helper.Neraca;
 import com.excellentsystem.PasarBaja.Model.Keuangan;
-import com.excellentsystem.PasarBaja.Model.Otoritas;
-import com.excellentsystem.PasarBaja.PrintOut.Report;
 import java.sql.Connection;
 import java.text.DecimalFormat;
 import java.time.LocalDate;
@@ -60,7 +54,6 @@ public class LaporanNeracaController  {
     @FXML private Label totalPassivaLabel;
     private ObservableList<Keuangan> keuangan = FXCollections.observableArrayList();
     private ObservableList<Keuangan> piutang = FXCollections.observableArrayList();
-    private ObservableList<Keuangan> stokBahan = FXCollections.observableArrayList();
     private ObservableList<Keuangan> stokBarang = FXCollections.observableArrayList();
     private ObservableList<Keuangan> asetTetap = FXCollections.observableArrayList();
     private ObservableList<Keuangan> hutang = FXCollections.observableArrayList();
@@ -80,18 +73,10 @@ public class LaporanNeracaController  {
         tglAkhirPicker.setDayCellFactory((final DatePicker datePicker) -> Function.getDateCellAkhir(tglAwalPicker));
         
         final ContextMenu rm = new ContextMenu();
-        MenuItem print = new MenuItem("Print Laporan");
-        print.setOnAction((ActionEvent event) -> {
-            print();
-        });
         MenuItem refresh = new MenuItem("Refresh");
         refresh.setOnAction((ActionEvent event) -> {
             getKeuangan();
         });
-        for(Otoritas o : sistem.getUser().getOtoritas()){
-            if(o.getJenis().equals("Print Laporan")&&o.isStatus())
-                rm.getItems().addAll(print);
-        }
         rm.getItems().addAll(refresh);
         pane.setOnContextMenuRequested((e) -> {
             rm.show(pane, e.getScreenX(), e.getScreenY());
@@ -109,7 +94,6 @@ public class LaporanNeracaController  {
                 try (Connection con = Koneksi.getConnection()) {
                     keuangan.clear();
                     piutang.clear();
-                    stokBahan.clear();
                     stokBarang.clear();
                     asetTetap.clear();
                     hutang.clear();
@@ -119,8 +103,6 @@ public class LaporanNeracaController  {
                     for(Keuangan k : allKeuangan){
                         if(k.getTipeKeuangan().equalsIgnoreCase("Piutang"))
                             piutang.add(k);
-                        else if(k.getTipeKeuangan().equalsIgnoreCase("Stok Bahan"))
-                            stokBahan.add(k);
                         else if(k.getTipeKeuangan().equalsIgnoreCase("Stok Barang"))
                             stokBarang.add(k);
                         else if(k.getTipeKeuangan().equalsIgnoreCase("Aset Tetap"))
@@ -130,7 +112,6 @@ public class LaporanNeracaController  {
                         else if(k.getTipeKeuangan().equalsIgnoreCase("Modal"))
                             modal.add(k);
                         else if(!k.getTipeKeuangan().equalsIgnoreCase("Penjualan")&&
-                                !k.getTipeKeuangan().equalsIgnoreCase("Retur Penjualan")&&
                                 !k.getTipeKeuangan().equalsIgnoreCase("HPP")&&
                                 !k.getTipeKeuangan().equalsIgnoreCase("Pendapatan/Beban")){
                             keuangan.add(k);
@@ -138,7 +119,6 @@ public class LaporanNeracaController  {
                     }
                     double urDitahan = 
                         KeuanganDAO.getSaldoAwal(con, tglAwalPicker.getValue().toString(), "Penjualan")-
-                        KeuanganDAO.getSaldoAwal(con, tglAwalPicker.getValue().toString(), "Retur Penjualan")-
                         KeuanganDAO.getSaldoAwal(con, tglAwalPicker.getValue().toString(), "HPP")+
                         KeuanganDAO.getSaldoAwal(con, tglAwalPicker.getValue().toString(), "Pendapatan/Beban");
                     Keuangan keuurditahan = new Keuangan();
@@ -153,8 +133,6 @@ public class LaporanNeracaController  {
                     
                     untungRugi.addAll(KeuanganDAO.getAllByTipeKeuanganAndTanggal(con,
                             "Penjualan",tglAwalPicker.getValue().toString(),tglAkhirPicker.getValue().toString()));
-                    untungRugi.addAll(KeuanganDAO.getAllByTipeKeuanganAndTanggal(con,
-                            "Retur Penjualan",tglAwalPicker.getValue().toString(),tglAkhirPicker.getValue().toString()));
                     untungRugi.addAll(KeuanganDAO.getAllByTipeKeuanganAndTanggal(con,
                             "HPP",tglAwalPicker.getValue().toString(),tglAkhirPicker.getValue().toString()));
                     untungRugi.addAll(KeuanganDAO.getAllByTipeKeuanganAndTanggal(con,
@@ -256,46 +234,19 @@ public class LaporanNeracaController  {
             
             double totalAsetLancar = 0;
             rowAktiva = rowAktiva + 1;
-            addBoldText("Stok Persediaan Bahan Baku & Barang", 0, rowAktiva);
+            addBoldText("Stok Persediaan Barang", 0, rowAktiva);
             rowAktiva = rowAktiva + 1;
             
-            double stokBahanSMG = 0;
-            double stokBahanSBY = 0;
-            for(Keuangan k : stokBahan){
-                if(k.getKategori().equals("SMG"))
-                    stokBahanSMG = stokBahanSMG + k.getJumlahRp();
-                if(k.getKategori().equals("SBY"))
-                    stokBahanSBY = stokBahanSBY + k.getJumlahRp();
-            }
-            addHyperLinkStokBahanText("Stok Persedian Bahan Baku - SMG","SMG", 0, rowAktiva);
-            addNormalText(df.format(stokBahanSMG), 1, rowAktiva);
-            totalAsetLancar = totalAsetLancar + stokBahanSMG;
-            rowAktiva = rowAktiva + 1;
-            
-            addHyperLinkStokBahanText("Stok Persedian Bahan Baku - SBY","SBY", 0, rowAktiva);
-            addNormalText(df.format(stokBahanSBY), 1, rowAktiva);
-            totalAsetLancar = totalAsetLancar + stokBahanSBY;
-            rowAktiva = rowAktiva + 1;
-            
-            double stokBarangSMG = 0;
-            double stokBarangSBY = 0;
+            double stok = 0;
             for(Keuangan k : stokBarang){
-                if(k.getKategori().equals("SMG"))
-                    stokBarangSMG = stokBarangSMG + k.getJumlahRp();
-                if(k.getKategori().equals("SBY"))
-                    stokBarangSBY = stokBarangSBY + k.getJumlahRp();
+                stok = stok + k.getJumlahRp();
             }
-            addHyperLinkStokBarangText("Stok Persedian Barang - SMG","SMG", 0, rowAktiva);
-            addNormalText(df.format(stokBarangSMG), 1, rowAktiva);
-            totalAsetLancar = totalAsetLancar + stokBarangSMG;
+            addHyperLinkStokBarangText("Stok Persedian Barang", 0, rowAktiva);
+            addNormalText(df.format(stok), 1, rowAktiva);
+            totalAsetLancar = totalAsetLancar + stok;
             rowAktiva = rowAktiva + 1;
-            
-            addHyperLinkStokBarangText("Stok Persedian Barang - SBY","SBY", 0, rowAktiva);
-            addNormalText(df.format(stokBarangSBY), 1, rowAktiva);
-            totalAsetLancar = totalAsetLancar + stokBarangSBY;
-            rowAktiva = rowAktiva + 1;
-            
-            addBoldText("Total Stok Persediaan Bahan Baku & Barang", 0, rowAktiva);
+                        
+            addBoldText("Total Stok Persediaan Barang", 0, rowAktiva);
             addBoldText(df.format(totalAsetLancar), 1, rowAktiva);
             rowAktiva = rowAktiva + 1;
             
@@ -459,20 +410,7 @@ public class LaporanNeracaController  {
         });
         gridPane.add(hyperlink, column, row);
     }
-    private void addHyperLinkStokBahanText(String text, String gudang, int column, int row){
-        Hyperlink hyperlink = new Hyperlink(text);
-        hyperlink.setStyle("-fx-font-size:12;"
-                + "-fx-border-color:transparent;");
-        hyperlink.setOnAction((e) -> {
-            Stage stage = new Stage();
-            FXMLLoader loader = mainApp.showDialog(mainApp.MainStage, stage, "View/Report/NeracaStokBahan.fxml");
-            NeracaStokBahanController x = loader.getController();
-            x.setMainApp(mainApp, mainApp.MainStage, stage);
-            x.getBahan(tglAkhirPicker.getValue(),gudang);
-        });
-        gridPane.add(hyperlink, column, row);
-    }
-    private void addHyperLinkStokBarangText(String text, String gudang, int column, int row){
+    private void addHyperLinkStokBarangText(String text, int column, int row){
         Hyperlink hyperlink = new Hyperlink(text);
         hyperlink.setStyle("-fx-font-size:12;"
                 + "-fx-border-color:transparent;");
@@ -481,7 +419,7 @@ public class LaporanNeracaController  {
             FXMLLoader loader = mainApp.showDialog(mainApp.MainStage, stage, "View/Report/NeracaStokBarang.fxml");
             NeracaStokBarangController x = loader.getController();
             x.setMainApp(mainApp, mainApp.MainStage, stage);
-            x.getBarang(tglAkhirPicker.getValue(), gudang);
+            x.getBarang(tglAkhirPicker.getValue());
         });
         gridPane.add(hyperlink, column, row);
     }
@@ -496,143 +434,6 @@ public class LaporanNeracaController  {
             controller.setTanggal(tglAwalPicker.getValue(), tglAkhirPicker.getValue());
         });
         gridPane.add(hyperlink, column, row);
-    }
-    @FXML
-    private void print(){
-        List<Neraca> listNeraca = new ArrayList<>();
-        
-        listNeraca.add(new Neraca("Kas/Bank", "", "", ""));
-        
-        double totalKasBank = 0;
-        for(String kk : kategoriKeuangan){
-            double jumlahRp = 0;
-            for(Keuangan k : keuangan){
-                if(k.getTipeKeuangan().equals(kk))
-                    jumlahRp = jumlahRp + k.getJumlahRp();
-            }
-            listNeraca.add(new Neraca(" "+kk, " "+df.format(jumlahRp), "", ""));
-            
-            totalKasBank = totalKasBank + jumlahRp;
-        }
-        listNeraca.add(new Neraca("Total Kas/Bank", df.format(totalKasBank), "", ""));
-        
-        listNeraca.add(new Neraca("", "", "", ""));
-        
-        listNeraca.add(new Neraca("Piutang", "", "", ""));
-        
-        double totalPiutang = 0;
-        for(String kk : kategoriPiutang){
-            double jumlahRp = 0;
-            for(Keuangan k : piutang){
-                if(k.getKategori().equals(kk))
-                    jumlahRp = jumlahRp + k.getJumlahRp();
-            }
-            listNeraca.add(new Neraca(" "+kk, " "+df.format(jumlahRp), "", ""));
-            
-            totalPiutang = totalPiutang + jumlahRp;
-        }
-        listNeraca.add(new Neraca("Total Piutang", df.format(totalPiutang), "", ""));
-        
-        listNeraca.add(new Neraca("", "", "", ""));
-        
-        listNeraca.add(new Neraca("Stok Persediaan", "", "", ""));
-        
-        double totalBahan = 0;
-        for(Keuangan k : stokBahan){
-            totalBahan = totalBahan + k.getJumlahRp();
-        }
-        listNeraca.add(new Neraca(" Stok Persediaan Bahan Baku", " "+df.format(totalBahan), "", ""));
-        
-        double totalBarang = 0;
-        for(Keuangan k : stokBarang){
-            totalBarang = totalBarang + k.getJumlahRp();
-        }
-        listNeraca.add(new Neraca(" Stok Persediaan Barang", " "+df.format(totalBarang), "", ""));
-        
-        listNeraca.add(new Neraca("Total Stok Persediaan", df.format(totalBahan + totalBarang), "", ""));
-        
-        listNeraca.add(new Neraca("", "", "", ""));
-        
-        listNeraca.add(new Neraca("Aset Tetap", "", "", ""));
-        
-        double totalAset = 0;
-        for(String kk : kategoriAsetTetap){
-            double jumlahRp = 0;
-            for(Keuangan k : asetTetap){
-                if(k.getKategori().equals(kk))
-                    jumlahRp = jumlahRp + k.getJumlahRp();
-            }
-            listNeraca.add(new Neraca(" "+kk, " "+df.format(jumlahRp), "", ""));
-            
-            totalAset = totalAset + jumlahRp;
-        }
-        listNeraca.add(new Neraca("Total Aset Tetap", df.format(totalAset), "", ""));
-        
-        int j = 0;
-        if(listNeraca.get(j)!=null)
-            listNeraca.get(j).setPassiva("Hutang");
-        else
-            listNeraca.add(new Neraca("", "", "Hutang", ""));
-        j++;
-        
-        double totalHutang = 0;
-        for(String kk : kategoriHutang){
-            double jumlahRp = 0;
-            for(Keuangan k : hutang){
-                if(k.getKategori().equals(kk))
-                    jumlahRp = jumlahRp + k.getJumlahRp();
-            }
-            
-            if(listNeraca.get(j)!=null){
-                listNeraca.get(j).setPassiva(" "+kk);
-                listNeraca.get(j).setJumlahPassiva(" "+df.format(jumlahRp));
-            }else
-                listNeraca.add(new Neraca("", "", " "+kk, ""+df.format(jumlahRp)));
-            
-            totalHutang = totalHutang + jumlahRp;
-            j++;
-        }
-        if(listNeraca.get(j)!=null){
-            listNeraca.get(j).setPassiva("Total Hutang");
-            listNeraca.get(j).setJumlahPassiva(df.format(totalHutang));
-        }else
-            listNeraca.add(new Neraca("", "", "Total Hutang", df.format(totalHutang)));
-        j = j + 2;
-        
-        double totalModal = 0;
-        for(Keuangan k : modal){
-            totalModal = totalModal + k.getJumlahRp();
-        }
-        if(listNeraca.get(j)!=null){
-            listNeraca.get(j).setPassiva("Modal");
-            listNeraca.get(j).setJumlahPassiva(df.format(totalModal));
-        }else
-            listNeraca.add(new Neraca("", "", "Modal", df.format(totalModal)));
-        j = j + 2;
-        
-        double totalUr = 0;
-        for(Keuangan k : untungRugi){
-            if(k.getTipeKeuangan().equals("HPP")||k.getTipeKeuangan().equals("Retur Penjualan"))
-                totalUr = totalUr - k.getJumlahRp();
-            else
-                totalUr = totalUr + k.getJumlahRp();
-        }
-        if(listNeraca.get(j)!=null){
-            listNeraca.get(j).setPassiva("Untung/Rugi");
-            listNeraca.get(j).setJumlahPassiva(df.format(totalUr));
-        }else
-            listNeraca.add(new Neraca("", "", "Untung/Rugi", df.format(totalUr)));
-        
-        
-        try{
-            Report report = new Report();
-            report.printLaporanNeraca(listNeraca, 
-                tglAwalPicker.getValue().toString(), tgl.format(tglBarang.parse(tglAkhirPicker.getValue().toString())),
-                totalAktivaLabel.getText(), totalPassivaLabel.getText()
-            );
-        }catch(Exception e){
-            mainApp.showMessage(Modality.NONE, "Error", e.toString());
-        }
     }
     
 }

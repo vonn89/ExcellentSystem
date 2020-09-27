@@ -12,12 +12,9 @@ import static com.excellentsystem.PasarBaja.Main.df;
 import static com.excellentsystem.PasarBaja.Main.tglLengkap;
 import static com.excellentsystem.PasarBaja.Main.tglSql;
 import com.excellentsystem.PasarBaja.Model.Keuangan;
-import com.excellentsystem.PasarBaja.PrintOut.Report;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -43,30 +40,41 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
  *
  * @author yunaz
  */
-public class UntungRugiPendapatanBebanController  {
-    @FXML private TreeTableView<Keuangan> keuanganTable;
-    @FXML private TreeTableColumn<Keuangan, String> noKeuanganColumn;
-    @FXML private TreeTableColumn<Keuangan, String> tglKeuanganColumn;
-    @FXML private TreeTableColumn<Keuangan, String> tipeKeuanganColumn;
-    @FXML private TreeTableColumn<Keuangan, String> kategoriColumn;
-    @FXML private TreeTableColumn<Keuangan, String> deskripsiColumn;
-    @FXML private TreeTableColumn<Keuangan, Number> jumlahRpColumn;
-    @FXML private TreeTableColumn<Keuangan, String> kodeUserColumn;
-    @FXML private Label saldoAkhirLabel;
+public class UntungRugiPendapatanBebanController {
+
+    @FXML
+    private TreeTableView<Keuangan> keuanganTable;
+    @FXML
+    private TreeTableColumn<Keuangan, String> noKeuanganColumn;
+    @FXML
+    private TreeTableColumn<Keuangan, String> tglKeuanganColumn;
+    @FXML
+    private TreeTableColumn<Keuangan, String> tipeKeuanganColumn;
+    @FXML
+    private TreeTableColumn<Keuangan, String> kategoriColumn;
+    @FXML
+    private TreeTableColumn<Keuangan, String> deskripsiColumn;
+    @FXML
+    private TreeTableColumn<Keuangan, Number> jumlahRpColumn;
+    @FXML
+    private TreeTableColumn<Keuangan, String> kodeUserColumn;
+    @FXML
+    private Label saldoAkhirLabel;
     private LocalDate tglAwal;
     private LocalDate tglAkhir;
     private ObservableList<Keuangan> allKeuangan = FXCollections.observableArrayList();
-    private Main mainApp;   
+    private Main mainApp;
     private Stage owner;
     private Stage stage;
     final TreeItem<Keuangan> root = new TreeItem<>();
+
     public void initialize() {
         noKeuanganColumn.setCellValueFactory(param -> param.getValue().getValue().noKeuanganProperty());
         tipeKeuanganColumn.setCellValueFactory(param -> param.getValue().getValue().tipeKeuanganProperty());
         kategoriColumn.setCellValueFactory(param -> param.getValue().getValue().kategoriProperty());
         deskripsiColumn.setCellValueFactory(param -> param.getValue().getValue().deskripsiProperty());
         kodeUserColumn.setCellValueFactory(param -> param.getValue().getValue().kodeUserProperty());
-        tglKeuanganColumn.setCellValueFactory(cellData -> { 
+        tglKeuanganColumn.setCellValueFactory(cellData -> {
             try {
                 return new SimpleStringProperty(tglLengkap.format(tglSql.parse(cellData.getValue().getValue().getTglKeuangan())));
             } catch (Exception ex) {
@@ -76,82 +84,66 @@ public class UntungRugiPendapatanBebanController  {
         tglKeuanganColumn.setComparator(Function.sortDate(tglLengkap));
         jumlahRpColumn.setCellValueFactory(param -> param.getValue().getValue().jumlahRpProperty());
         jumlahRpColumn.setCellFactory(col -> Function.getTreeTableCell());
-        
+
         final ContextMenu rm = new ContextMenu();
-        MenuItem print = new MenuItem("Print Laporan");
-        print.setOnAction((ActionEvent event) -> {
-            print("Detail");
-        });
         MenuItem export = new MenuItem("Export Excel");
-        export.setOnAction((ActionEvent e)->{
+        export.setOnAction((ActionEvent e) -> {
             exportExcel();
         });
         MenuItem refresh = new MenuItem("Refresh");
         refresh.setOnAction((ActionEvent event) -> {
             setTable();
         });
-        rm.getItems().addAll(print, export, refresh);
+        rm.getItems().addAll(export, refresh);
         keuanganTable.setContextMenu(rm);
-    }    
-    public void setMainApp(Main mainApp, Stage owner,Stage stage){
+    }
+
+    public void setMainApp(Main mainApp, Stage owner, Stage stage) {
         this.mainApp = mainApp;
         this.owner = owner;
         this.stage = stage;
         stage.setOnCloseRequest((event) -> {
             mainApp.closeDialog(owner, stage);
         });
-        stage.setHeight(mainApp.screenSize.getHeight()*0.9);
-        stage.setWidth(mainApp.screenSize.getWidth()*0.9);
+        stage.setHeight(mainApp.screenSize.getHeight() * 0.9);
+        stage.setWidth(mainApp.screenSize.getWidth() * 0.9);
         stage.setX((mainApp.screenSize.getWidth() - stage.getWidth()) / 2);
         stage.setY((mainApp.screenSize.getHeight() - stage.getHeight()) / 2);
     }
-    public void setKeuangan(List<Keuangan> temp, LocalDate tglAwal, LocalDate tglAkhir){
+
+    public void setKeuangan(List<Keuangan> temp, LocalDate tglAwal, LocalDate tglAkhir) {
         allKeuangan.clear();
         allKeuangan.addAll(temp);
         this.tglAwal = tglAwal;
         this.tglAkhir = tglAkhir;
         setTable();
     }
-    private void setTable(){
-        if(keuanganTable.getRoot()!=null)
+
+    private void setTable() {
+        if (keuanganTable.getRoot() != null) {
             keuanganTable.getRoot().getChildren().clear();
+        }
         double saldoAkhir = 0;
-        for(Keuangan keu : allKeuangan){
+        for (Keuangan keu : allKeuangan) {
             saldoAkhir = saldoAkhir + keu.getJumlahRp();
-            if(LocalDate.parse(keu.getTglKeuangan().substring(0,10)).isAfter(tglAwal.minusDays(1))&&
-                    LocalDate.parse(keu.getTglKeuangan().substring(0,10)).isBefore(tglAkhir.plusDays(1))){
+            if (LocalDate.parse(keu.getTglKeuangan().substring(0, 10)).isAfter(tglAwal.minusDays(1))
+                    && LocalDate.parse(keu.getTglKeuangan().substring(0, 10)).isBefore(tglAkhir.plusDays(1))) {
                 TreeItem<Keuangan> parent = new TreeItem<>(keu);
                 root.getChildren().add(parent);
             }
         }
         saldoAkhirLabel.setText(df.format(saldoAkhir));
         keuanganTable.setRoot(root);
-    } 
-    @FXML
-    private void print(String jenisLaporan){
-        try{
-            allKeuangan.sort(Comparator.comparing(Keuangan::getKategori));
-            List<Keuangan> keuangan = new ArrayList<>();
-            for(Keuangan keu : allKeuangan){
-                if(LocalDate.parse(keu.getTglKeuangan().substring(0,10)).isAfter(tglAwal.minusDays(1))&&
-                    LocalDate.parse(keu.getTglKeuangan().substring(0,10)).isBefore(tglAkhir.plusDays(1))){
-                    keuangan.add(keu);
-                }
-            }
-            Report report = new Report();
-            report.printLaporanKeuangan(keuangan, tglAwal.toString(), tglAkhir.toString(),
-                    jenisLaporan, "0", saldoAkhirLabel.getText());
-        }catch(Exception e){
-            e.printStackTrace();
-            mainApp.showMessage(Modality.NONE, "Error", e.toString());
-        }
     }
-    @FXML 
-    private void close(){
+
+
+    @FXML
+    private void close() {
         mainApp.closeDialog(owner, stage);
     }
-    private void exportExcel(){
-        try{
+
+    private void exportExcel() {
+        try {
             FileChooser fileChooser = new FileChooser();
             fileChooser.setTitle("Select location to export");
             fileChooser.getExtensionFilters().addAll(
@@ -172,15 +164,15 @@ public class UntungRugiPendapatanBebanController  {
                 int rc = 0;
                 int c = 4;
                 createRow(workbook, sheet, rc, c, "Header");
-                sheet.getRow(rc).getCell(0).setCellValue("No Keuangan"); 
-                sheet.getRow(rc).getCell(1).setCellValue("Tgl Keuangan");  
-                sheet.getRow(rc).getCell(2).setCellValue("Keterangan"); 
-                sheet.getRow(rc).getCell(3).setCellValue("Jumlah Rp"); 
+                sheet.getRow(rc).getCell(0).setCellValue("No Keuangan");
+                sheet.getRow(rc).getCell(1).setCellValue("Tgl Keuangan");
+                sheet.getRow(rc).getCell(2).setCellValue("Keterangan");
+                sheet.getRow(rc).getCell(3).setCellValue("Jumlah Rp");
                 rc++;
                 double total = 0;
-                for(Keuangan keu : allKeuangan){
-                    if(LocalDate.parse(keu.getTglKeuangan().substring(0,10)).isAfter(tglAwal.minusDays(1))&&
-                            LocalDate.parse(keu.getTglKeuangan().substring(0,10)).isBefore(tglAkhir.plusDays(1))){
+                for (Keuangan keu : allKeuangan) {
+                    if (LocalDate.parse(keu.getTglKeuangan().substring(0, 10)).isAfter(tglAwal.minusDays(1))
+                            && LocalDate.parse(keu.getTglKeuangan().substring(0, 10)).isBefore(tglAkhir.plusDays(1))) {
                         createRow(workbook, sheet, rc, c, "Detail");
                         sheet.getRow(rc).getCell(0).setCellValue(keu.getNoKeuangan());
                         sheet.getRow(rc).getCell(1).setCellValue(tglLengkap.format(tglSql.parse(keu.getTglKeuangan())));
@@ -194,12 +186,14 @@ public class UntungRugiPendapatanBebanController  {
                 sheet.getRow(rc).getCell(0).setCellValue("Total");
                 sheet.getRow(rc).getCell(3).setCellValue(total);
                 rc++;
-                for(int i=0 ; i<c ; i++){ sheet.autoSizeColumn(i);}
+                for (int i = 0; i < c; i++) {
+                    sheet.autoSizeColumn(i);
+                }
                 try (FileOutputStream outputStream = new FileOutputStream(file)) {
                     workbook.write(outputStream);
                 }
             }
-        }catch(Exception e){
+        } catch (Exception e) {
             mainApp.showMessage(Modality.NONE, "Error", e.toString());
             e.printStackTrace();
         }

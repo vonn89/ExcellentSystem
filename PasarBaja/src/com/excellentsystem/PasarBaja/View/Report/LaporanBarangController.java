@@ -22,6 +22,7 @@ import com.excellentsystem.PasarBaja.Model.Otoritas;
 import com.excellentsystem.PasarBaja.Model.PenyesuaianStokBarang;
 import com.excellentsystem.PasarBaja.Model.StokBarang;
 import com.excellentsystem.PasarBaja.Services.Service;
+import com.excellentsystem.PasarBaja.View.Dialog.PenyesuaianStokController;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.sql.Connection;

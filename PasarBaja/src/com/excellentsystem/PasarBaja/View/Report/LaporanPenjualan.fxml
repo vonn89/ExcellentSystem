@@ -64,9 +64,7 @@
               <columns>
                 <TreeTableColumn fx:id="noPenjualanColumn" prefWidth="75.0" text="No Penjualan" />
                 <TreeTableColumn fx:id="tglPenjualanColumn" prefWidth="75.0" text="Tgl Penjualan" />
-                  <TreeTableColumn fx:id="gudangColumn" prefWidth="75.0" text="Gudang" />
                   <TreeTableColumn fx:id="namaCustomerColumn" prefWidth="75.0" text="Customer" />
-                  <TreeTableColumn fx:id="namaSalesColumn" prefWidth="75.0" text="Sales" />
                   <TreeTableColumn fx:id="totalPenjualanColumn" prefWidth="75.0" text="Total Penjualan" />
                   <TreeTableColumn fx:id="pembayaranColumn" prefWidth="75.0" text="Pembayaran" />
                   <TreeTableColumn fx:id="sisaPembayaranColumn" prefWidth="75.0" text="Sisa Pembayaran" />

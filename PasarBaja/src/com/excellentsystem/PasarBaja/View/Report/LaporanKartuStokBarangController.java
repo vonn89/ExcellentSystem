@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package com.excellentsystem.PasarBaja.View.Report;
 
 import com.excellentsystem.PasarBaja.DAO.StokBarangDAO;
@@ -16,12 +15,10 @@ import static com.excellentsystem.PasarBaja.Main.tgl;
 import static com.excellentsystem.PasarBaja.Main.tglBarang;
 import com.excellentsystem.PasarBaja.Model.Otoritas;
 import com.excellentsystem.PasarBaja.Model.StokBarang;
-import com.excellentsystem.PasarBaja.PrintOut.Report;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.sql.Connection;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import javafx.beans.property.SimpleStringProperty;
@@ -50,33 +47,46 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
  *
  * @author Xtreme
  */
-public class LaporanKartuStokBarangController  {
+public class LaporanKartuStokBarangController {
 
-    @FXML private TableView<StokBarang> barangTable;
-    @FXML private TableColumn<StokBarang, String> kodeBarangColumn;
-    @FXML private TableColumn<StokBarang, String> namaBarangColumn;
-    @FXML private TableColumn<StokBarang, String> satuanColumn;
-    
-    @FXML private TableColumn<StokBarang, String> tanggalColumn;
-    @FXML private TableColumn<StokBarang, Number> mutasiAwalColumn;
-    @FXML private TableColumn<StokBarang, Number> mutasiInColumn;
-    @FXML private TableColumn<StokBarang, Number> mutasiOutColumn;
-    @FXML private TableColumn<StokBarang, Number> mutasiAkhirColumn;
-    
-    @FXML private Label kodeBarangLabel;
-    @FXML private DatePicker tglAwalPicker;
-    @FXML private DatePicker tglAkhirPicker;
-    
+    @FXML
+    private TableView<StokBarang> barangTable;
+    @FXML
+    private TableColumn<StokBarang, String> kodeBarangColumn;
+    @FXML
+    private TableColumn<StokBarang, String> namaBarangColumn;
+    @FXML
+    private TableColumn<StokBarang, String> satuanColumn;
+
+    @FXML
+    private TableColumn<StokBarang, String> tanggalColumn;
+    @FXML
+    private TableColumn<StokBarang, Number> mutasiAwalColumn;
+    @FXML
+    private TableColumn<StokBarang, Number> mutasiInColumn;
+    @FXML
+    private TableColumn<StokBarang, Number> mutasiOutColumn;
+    @FXML
+    private TableColumn<StokBarang, Number> mutasiAkhirColumn;
+
+    @FXML
+    private Label kodeBarangLabel;
+    @FXML
+    private DatePicker tglAwalPicker;
+    @FXML
+    private DatePicker tglAkhirPicker;
+
     private ObservableList<StokBarang> allBarang = FXCollections.observableArrayList();
     private StokBarang stokBarang;
-    private Main mainApp;  
+    private Main mainApp;
     private Stage stage;
     private Stage owner;
+
     public void initialize() {
         kodeBarangColumn.setCellValueFactory(cellData -> cellData.getValue().getBarang().kodeBarangProperty());
         namaBarangColumn.setCellValueFactory(cellData -> cellData.getValue().getBarang().namaBarangProperty());
         satuanColumn.setCellValueFactory(cellData -> cellData.getValue().getBarang().satuanProperty());
-        tanggalColumn.setCellValueFactory(cellData -> { 
+        tanggalColumn.setCellValueFactory(cellData -> {
             try {
                 return new SimpleStringProperty(tgl.format(tglBarang.parse(cellData.getValue().getTanggal())));
             } catch (Exception ex) {
@@ -84,45 +94,41 @@ public class LaporanKartuStokBarangController  {
             }
         });
         tanggalColumn.setComparator(Function.sortDate(tgl));
-        mutasiAwalColumn.setCellValueFactory( cellData -> cellData.getValue().stokAwalProperty());
+        mutasiAwalColumn.setCellValueFactory(cellData -> cellData.getValue().stokAwalProperty());
         mutasiAwalColumn.setCellFactory(col -> Function.getTableCell());
-        mutasiInColumn.setCellValueFactory( cellData -> cellData.getValue().stokMasukProperty());
+        mutasiInColumn.setCellValueFactory(cellData -> cellData.getValue().stokMasukProperty());
         mutasiInColumn.setCellFactory(col -> Function.getTableCell());
-        mutasiOutColumn.setCellValueFactory( cellData -> cellData.getValue().stokKeluarProperty());
+        mutasiOutColumn.setCellValueFactory(cellData -> cellData.getValue().stokKeluarProperty());
         mutasiOutColumn.setCellFactory(col -> Function.getTableCell());
-        mutasiAkhirColumn.setCellValueFactory( cellData -> cellData.getValue().stokAkhirProperty());
+        mutasiAkhirColumn.setCellValueFactory(cellData -> cellData.getValue().stokAkhirProperty());
         mutasiAkhirColumn.setCellFactory(col -> Function.getTableCell());
-        
+
         tglAwalPicker.setConverter(Function.getTglConverter());
         tglAwalPicker.setValue(LocalDate.now().minusMonths(1));
         tglAwalPicker.setDayCellFactory((final DatePicker datePicker) -> Function.getDateCellMulai(tglAkhirPicker));
         tglAkhirPicker.setConverter(Function.getTglConverter());
         tglAkhirPicker.setValue(LocalDate.now());
         tglAkhirPicker.setDayCellFactory((final DatePicker datePicker) -> Function.getDateCellAkhir(tglAwalPicker));
-        
+
         final ContextMenu rm = new ContextMenu();
-        MenuItem print = new MenuItem("Print Laporan");
-        print.setOnAction((ActionEvent e)->{
-            print();
-        });
         MenuItem export = new MenuItem("Export Excel");
-        export.setOnAction((ActionEvent e)->{
+        export.setOnAction((ActionEvent e) -> {
             exportExcel();
         });
         MenuItem refresh = new MenuItem("Refresh");
-        refresh.setOnAction((ActionEvent e)->{
+        refresh.setOnAction((ActionEvent e) -> {
             getBarang();
         });
-        for(Otoritas o : sistem.getUser().getOtoritas()){
-            if(o.getJenis().equals("Print Laporan")&&o.isStatus())
-                rm.getItems().addAll(print);
-            if(o.getJenis().equals("Export Excel")&&o.isStatus())
+        for (Otoritas o : sistem.getUser().getOtoritas()) {
+            if (o.getJenis().equals("Export Excel") && o.isStatus()) {
                 rm.getItems().addAll(export);
+            }
         }
         rm.getItems().addAll(refresh);
         barangTable.setContextMenu(rm);
     }
-    public void setMainApp(Main mainApp,Stage owner,Stage stage) {
+
+    public void setMainApp(Main mainApp, Stage owner, Stage stage) {
         this.mainApp = mainApp;
         this.owner = owner;
         this.stage = stage;
@@ -130,26 +136,28 @@ public class LaporanKartuStokBarangController  {
         stage.setOnCloseRequest((event) -> {
             mainApp.closeDialog(owner, stage);
         });
-        stage.setHeight(mainApp.screenSize.getHeight()*0.9);
-        stage.setWidth(mainApp.screenSize.getWidth()*0.9);
+        stage.setHeight(mainApp.screenSize.getHeight() * 0.9);
+        stage.setWidth(mainApp.screenSize.getWidth() * 0.9);
         stage.setX((mainApp.screenSize.getWidth() - stage.getWidth()) / 2);
         stage.setY((mainApp.screenSize.getHeight() - stage.getHeight()) / 2);
     }
-    public void setBarang(StokBarang s){
+
+    public void setBarang(StokBarang s) {
         stokBarang = s;
         kodeBarangLabel.setText(s.getKodeBarang());
         getBarang();
     }
+
     @FXML
-    private void getBarang(){
+    private void getBarang() {
         Task<List<StokBarang>> task = new Task<List<StokBarang>>() {
-            @Override 
-            public List<StokBarang> call() throws Exception{
-                try(Connection con = Koneksi.getConnection()){
-                    List<StokBarang> temp = StokBarangDAO.getAllByTanggalAndBarangAndGudang(con, 
-                        tglAwalPicker.getValue().toString(), tglAkhirPicker.getValue().toString(),
-                        stokBarang.getKodeBarang(), stokBarang.getKodeGudang());
-                    for(StokBarang stok : temp){
+            @Override
+            public List<StokBarang> call() throws Exception {
+                try (Connection con = Koneksi.getConnection()) {
+                    List<StokBarang> temp = StokBarangDAO.getAllByTanggalAndBarang(con,
+                            tglAwalPicker.getValue().toString(), tglAkhirPicker.getValue().toString(),
+                            stokBarang.getKodeBarang());
+                    for (StokBarang stok : temp) {
                         stok.setBarang(stokBarang.getBarang());
                     }
                     return temp;
@@ -171,25 +179,14 @@ public class LaporanKartuStokBarangController  {
         });
         new Thread(task).start();
     }
+
     @FXML
-    private void close(){
+    private void close() {
         mainApp.closeDialog(owner, stage);
     }
-    private void print(){
-        try{
-            List<StokBarang> listStokBarang = new ArrayList<>();
-            for(StokBarang d : allBarang){
-                listStokBarang.add(d);
-            }
-            Report report = new Report();
-            report.printLaporanKartuStokBarang(listStokBarang);
-        }catch(Exception e){
-            e.printStackTrace();
-            mainApp.showMessage(Modality.NONE, "Error", e.toString());
-        }
-    }
-    private void exportExcel(){
-        try{
+
+    private void exportExcel() {
+        try {
             FileChooser fileChooser = new FileChooser();
             fileChooser.setTitle("Select location to export");
             fileChooser.getExtensionFilters().addAll(
@@ -221,16 +218,16 @@ public class LaporanKartuStokBarangController  {
                 sheet.getRow(rc).getCell(0).setCellValue("Satuan");
                 sheet.getRow(rc).getCell(1).setCellValue(stokBarang.getBarang().getSatuan());
                 rc++;
-                
+
                 createRow(workbook, sheet, rc, c, "Header");
-                sheet.getRow(rc).getCell(0).setCellValue("Tanggal"); 
-                sheet.getRow(rc).getCell(1).setCellValue("Stok Awal");  
-                sheet.getRow(rc).getCell(2).setCellValue("Stok Masuk");  
-                sheet.getRow(rc).getCell(3).setCellValue("Stok Keluar");  
-                sheet.getRow(rc).getCell(4).setCellValue("Stok Akhir");  
+                sheet.getRow(rc).getCell(0).setCellValue("Tanggal");
+                sheet.getRow(rc).getCell(1).setCellValue("Stok Awal");
+                sheet.getRow(rc).getCell(2).setCellValue("Stok Masuk");
+                sheet.getRow(rc).getCell(3).setCellValue("Stok Keluar");
+                sheet.getRow(rc).getCell(4).setCellValue("Stok Akhir");
                 rc++;
-                
-                for(StokBarang s: allBarang){
+
+                for (StokBarang s : allBarang) {
                     createRow(workbook, sheet, rc, c, "Detail");
                     sheet.getRow(rc).getCell(0).setCellValue(tgl.format(tglBarang.parse(s.getTanggal())));
                     sheet.getRow(rc).getCell(1).setCellValue(s.getStokAwal());
@@ -239,12 +236,14 @@ public class LaporanKartuStokBarangController  {
                     sheet.getRow(rc).getCell(4).setCellValue(s.getStokAkhir());
                     rc++;
                 }
-                for(int i=0 ; i<c ; i++){ sheet.autoSizeColumn(i);}
+                for (int i = 0; i < c; i++) {
+                    sheet.autoSizeColumn(i);
+                }
                 try (FileOutputStream outputStream = new FileOutputStream(file)) {
                     workbook.write(outputStream);
                 }
             }
-        }catch(Exception e){
+        } catch (Exception e) {
             mainApp.showMessage(Modality.NONE, "Error", e.toString());
             e.printStackTrace();
         }
