@@ -375,7 +375,8 @@ and open the template in the editor.
     -fx-fill: blackcolor;
 }
 .tree-cell > .tree-disclosure-node,.tree-table-row-cell > .tree-disclosure-node {
-    -fx-padding: 15 4 4 10;
+    /*-fx-padding: 15 4 4 10;*/
+    -fx-padding: 10 4 4 8;
     -fx-background-color: transparent;
 }
 .tree-table-row-cell > .tree-disclosure-node > .arrow {

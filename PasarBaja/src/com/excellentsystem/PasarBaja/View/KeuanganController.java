@@ -220,7 +220,6 @@ public class KeuanganController {
                         });
                         Boolean status = false;
                         Boolean statusBebanPenjualan = false;
-                        Boolean statusBebanProduksi = false;
                         if (item.getNoKeuangan().startsWith("KK")) {
                             for (KategoriTransaksi k : sistem.getListKategoriTransaksi()) {
                                 if (item.getKategori().equals(k.getKodeKategori())) {
@@ -397,10 +396,7 @@ public class KeuanganController {
                             Double jumlahRp = Double.parseDouble(x.jumlahRpField.getText().replaceAll(",", ""));
                             for (KategoriTransaksi k : sistem.getListKategoriTransaksi()) {
                                 if (k.getKodeKategori().equals(x.kategoriCombo.getSelectionModel().getSelectedItem())) {
-                                    if (k.getJenisTransaksi().equals("Sales expenses")
-                                            || k.getJenisTransaksi().equals("General and Administration expenses")
-                                            || k.getJenisTransaksi().equals("Other charges")
-                                            || k.getJenisTransaksi().equals("Income tax")) {
+                                    if (k.getJenisTransaksi().equals("Beban")) {
                                         jumlahRp = jumlahRp * -1;
                                     }
                                 }

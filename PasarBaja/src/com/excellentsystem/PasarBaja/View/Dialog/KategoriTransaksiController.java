@@ -117,16 +117,14 @@ public class KategoriTransaksiController {
         this.owner = owner;
         kategoriTable.setItems(allKategoriTransaksi);
         ObservableList<String> allJenis = FXCollections.observableArrayList();
-        allJenis.add("Sales expenses");
-        allJenis.add("General and Administration expenses");
-        allJenis.add("Other income");
-        allJenis.add("Other charges");
-        allJenis.add("Income tax");
+        allJenis.add("Pendapatan");
+        allJenis.add("Beban");
         jenisKategoriTransaksiCombo.setItems(allJenis);
         getKategoriTransaksi();
         stage.setOnCloseRequest((event) -> {
             mainApp.closeDialog(owner, stage);
         });
+        newKategoriTransaksi();
     }
 
     private void getKategoriTransaksi() {
