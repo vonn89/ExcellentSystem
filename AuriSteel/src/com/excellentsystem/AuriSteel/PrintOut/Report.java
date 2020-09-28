@@ -119,6 +119,7 @@ public class Report {
         JRViewerFx jrViewerFx = new JRViewerFx(jasperPrint);
     }
     public void printInvoiceSoftcopy(List<PenjualanDetail> penjualan, double jumlahRp)throws Exception{
+        System.out.println(penjualan.get(0).getPenjualanHead().getStatus());
         JasperDesign jasperDesign = JRXmlLoader.load(getClass().getResourceAsStream("InvoiceSoftcopy.jrxml"));
         JRBeanCollectionDataSource beanColDataSource = new JRBeanCollectionDataSource(penjualan);
         Map hash = new HashMap();

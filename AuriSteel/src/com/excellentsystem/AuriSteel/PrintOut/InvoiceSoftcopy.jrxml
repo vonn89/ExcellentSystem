@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="invoice" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="595" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="fa420e91-8c3a-47fe-86d0-e47a81980af2">
-	<property name="ireport.zoom" value="0.6198347107438019"/>
+	<property name="ireport.zoom" value="0.9982500000000007"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="339"/>
+	<property name="ireport.y" value="0"/>
 	<style name="detail">
 		<box topPadding="2" leftPadding="5" bottomPadding="2" rightPadding="5">
 			<topPen lineWidth="0.0" lineColor="#0099FF"/>
@@ -161,9 +161,11 @@
 				<textElement verticalAlignment="Middle">
 					<font fontName="Times New Roman" size="10" pdfFontName="Times-Roman"/>
 				</textElement>
-				<textFieldExpression><![CDATA[( $F{status}=="true" ? 
-new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").parse($F{tglPenjualan}) : 
-new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").parse($F{tglPengiriman}) )]]></textFieldExpression>
+				<textFieldExpression><![CDATA[
+new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").parse(
+(
+ $F{status}=="true" ? $F{tglPenjualan} : $F{tglPengiriman}
+))]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement style="detail_1" x="449" y="41" width="125" height="19" uuid="5347bf9d-4d6c-4591-a95e-51c2753a880a"/>
