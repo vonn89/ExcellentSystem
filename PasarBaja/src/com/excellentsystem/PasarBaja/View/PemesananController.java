@@ -23,6 +23,7 @@ import com.excellentsystem.PasarBaja.Model.Hutang;
 import com.excellentsystem.PasarBaja.Model.Otoritas;
 import com.excellentsystem.PasarBaja.Model.PemesananDetail;
 import com.excellentsystem.PasarBaja.Model.PemesananHead;
+import com.excellentsystem.PasarBaja.PrintOut.PrintOut;
 import com.excellentsystem.PasarBaja.Services.Service;
 import com.excellentsystem.PasarBaja.View.Dialog.DetailPembayaranDownPaymentController;
 import com.excellentsystem.PasarBaja.View.Dialog.MessageController;
@@ -246,10 +247,6 @@ public class PemesananController {
                         invoice.setOnAction((ActionEvent e) -> {
                             printProformaInvoice(item);
                         });
-                        MenuItem invoiceSoftcopy = new MenuItem("Print Order Confirmation Softcopy");
-                        invoiceSoftcopy.setOnAction((ActionEvent e) -> {
-                            printProformaInvoiceSoftcopy(item);
-                        });
                         MenuItem export = new MenuItem("Export Excel");
                         export.setOnAction((ActionEvent e) -> {
                             exportExcel();
@@ -285,7 +282,7 @@ public class PemesananController {
                             }
                             if (o.getJenis().equals("Print Order Confirmation") && o.isStatus()
                                     && item.getStatus().equals("open")) {
-                                rm.getItems().addAll(invoice, invoiceSoftcopy);
+                                rm.getItems().addAll(invoice);
                             }
                             if (o.getJenis().equals("Export Excel") && o.isStatus()) {
                                 rm.getItems().add(export);
@@ -757,29 +754,17 @@ public class PemesananController {
     }
 
     private void printProformaInvoice(PemesananHead p) {
-//        try{
-//            List<PemesananDetail> listPemesanan = p.getListPemesananDetail();
-//            for(PemesananDetail d : listPemesanan){
-//                d.setPemesananHead(p);
-//            }
-//            Report report = new Report();
-//            report.printProformaInvoice(listPemesanan,p.getTotalPemesanan());
-//        }catch (Exception e){
-//            mainApp.showMessage(Modality.NONE, "Error", e.toString());
-//        }
-    }
-
-    private void printProformaInvoiceSoftcopy(PemesananHead p) {
-//        try{
-//            List<PemesananDetail> listPemesanan = p.getListPemesananDetail();
-//            for(PemesananDetail d : listPemesanan){
-//                d.setPemesananHead(p);
-//            }
-//            Report report = new Report();
-//            report.printProformaInvoiceSoftcopy(listPemesanan,p.getTotalPemesanan());
-//        }catch (Exception e){
-//            mainApp.showMessage(Modality.NONE, "Error", e.toString());
-//        }
+        try(Connection con = Koneksi.getConnection()){
+            List<PemesananDetail> listDetail = PemesananDetailDAO.getAllByNoPemesanan(con, p.getNoPemesanan());
+            for(PemesananDetail d : listDetail){
+                d.setPemesananHead(p);
+            }
+            PrintOut po = new PrintOut();
+            po.printSuratPemesanan(listDetail);
+        }catch(Exception e){
+            e.printStackTrace();
+            mainApp.showMessage(Modality.NONE, "Error", e.toString());
+        }
     }
 
     private void exportExcel() {
