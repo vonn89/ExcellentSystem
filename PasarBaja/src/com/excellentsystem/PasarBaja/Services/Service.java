@@ -943,9 +943,14 @@ public class Service {
             p.setNoPenjualan(noPenjualan);
             p.setTglPenjualan(tglSql.format(date));
             PenjualanHeadDAO.insert(con, p);
+            
+            int noUrut = 1;
             for (PenjualanDetail d : p.getListPenjualanDetail()) {
                 d.setNoPenjualan(noPenjualan);
+                d.setNoUrut(noUrut);
                 PenjualanDetailDAO.insert(con, d);
+                
+                noUrut++;
             }
 
             
@@ -1278,9 +1283,13 @@ public class Service {
             p.setTglPembelian(tglSql.format(date));
             PembelianHeadDAO.insert(con, p);
             
+            int noUrut = 1;
             for (BebanPembelian beban : p.getListBebanPembelian()) {
                 beban.setNoPembelian(noPembelian);
+                beban.setNoUrut(noUrut);
                 BebanPembelianDAO.insert(con, beban);
+                
+                noUrut++;
             }
             
             Hutang hutang = new Hutang();
@@ -1306,9 +1315,11 @@ public class Service {
             double bebanPerItem = p.getTotalBebanPembelian() / totalQty;
 
             double totalNilai = 0;
+            int noUrutPembelian = 1;
             List<PembelianDetail> groupByBarang = new ArrayList<>();
             for (PembelianDetail detail : p.getListPembelianDetail()) {
                 detail.setNoPembelian(noPembelian);
+                detail.setNoUrut(noUrutPembelian);
                 detail.setNilai(detail.getHargaBeli() + bebanPerItem);
                 PembelianDetailDAO.insert(con, detail);
 
@@ -1326,6 +1337,7 @@ public class Service {
                 }
 
                 totalNilai = totalNilai + (detail.getNilai() * detail.getQty());
+                noUrutPembelian++;
             }
 
             insertKeuangan(con, noKeuangan, tglSql.format(date), "Stok Barang", "Stok Barang",
@@ -2121,7 +2133,7 @@ public class Service {
             String status = "true";
 
             LogBarang logBarang = LogBarangDAO.getLastByBarang(con, p.getKodeBarang());
-            logBarang.setStokAkhir(Math.round(logBarang.getStokAkhir() * 100) / 100);
+//            logBarang.setStokAkhir(Math.round(logBarang.getStokAkhir() * 100) / 100);
             if (logBarang.getStokAkhir() + p.getQty() < 0) {
                 status = "Stok barang " + p.getKodeBarang() + " tidak mencukupi";
             } else {

@@ -6,6 +6,7 @@
 package com.excellentsystem.PasarBaja.View;
 
 import com.excellentsystem.PasarBaja.DAO.CustomerDAO;
+import com.excellentsystem.PasarBaja.DAO.PenjualanDetailDAO;
 import com.excellentsystem.PasarBaja.DAO.PenjualanHeadDAO;
 import com.excellentsystem.PasarBaja.DAO.PiutangDAO;
 import com.excellentsystem.PasarBaja.Function;
@@ -20,9 +21,11 @@ import static com.excellentsystem.PasarBaja.Main.tglLengkap;
 import static com.excellentsystem.PasarBaja.Main.tglSql;
 import com.excellentsystem.PasarBaja.Model.Customer;
 import com.excellentsystem.PasarBaja.Model.Otoritas;
+import com.excellentsystem.PasarBaja.Model.PenjualanDetail;
 import com.excellentsystem.PasarBaja.Model.PenjualanHead;
 import com.excellentsystem.PasarBaja.Model.Piutang;
 import com.excellentsystem.PasarBaja.Model.TerimaPembayaran;
+import com.excellentsystem.PasarBaja.PrintOut.PrintOut;
 import com.excellentsystem.PasarBaja.Services.Service;
 import com.excellentsystem.PasarBaja.View.Dialog.DetailBebanPenjualanController;
 import com.excellentsystem.PasarBaja.View.Dialog.DetailPiutangController;
@@ -203,10 +206,6 @@ public class PenjualanController {
                         invoice.setOnAction((ActionEvent e) -> {
                             printInvoice(item);
                         });
-                        MenuItem invoiceSoftcopy = new MenuItem("Print Invoice Softcopy");
-                        invoiceSoftcopy.setOnAction((ActionEvent e) -> {
-                            printInvoiceSoftCopy(item);
-                        });
                         MenuItem bayar = new MenuItem("Terima Pembayaran");
                         bayar.setOnAction((ActionEvent e) -> {
                             showPembayaran(item);
@@ -237,7 +236,7 @@ public class PenjualanController {
                                 rm.getItems().add(bayar);
                             }
                             if (o.getJenis().equals("Print Invoice") && o.isStatus()) {
-                                rm.getItems().addAll(invoice, invoiceSoftcopy);
+                                rm.getItems().addAll(invoice);
                             }
                             if (o.getJenis().equals("Export Excel") && o.isStatus()) {
                                 rm.getItems().add(export);
@@ -524,32 +523,19 @@ public class PenjualanController {
     }
 
     private void printInvoice(PenjualanHead p) {
-//        try (Connection con = Koneksi.getConnection()) {
-//            List<PenjualanDetail> listPenjualan = PenjualanDetailDAO.getAllPenjualanDetail(con, p.getNoPenjualan());
-//            for (PenjualanDetail d : listPenjualan) {
-//                d.setPenjualanHead(p);
-//            }
-//            Report report = new Report();
-//            report.printInvoice(listPenjualan, p.getTotalPenjualan());
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//            mainApp.showMessage(Modality.NONE, "Error", e.toString());
-//        }
+        try (Connection con = Koneksi.getConnection()) {
+            List<PenjualanDetail> listPenjualan = PenjualanDetailDAO.getAllPenjualanDetail(con, p.getNoPenjualan());
+            for (PenjualanDetail d : listPenjualan) {
+                d.setPenjualanHead(p);
+            }
+            PrintOut printOut = new PrintOut();
+            printOut.printInvoice(listPenjualan);
+        } catch (Exception e) {
+            e.printStackTrace();
+            mainApp.showMessage(Modality.NONE, "Error", e.toString());
+        }
     }
 
-    private void printInvoiceSoftCopy(PenjualanHead p) {
-//        try (Connection con = Koneksi.getConnection()) {
-//            List<PenjualanDetail> listPenjualan = PenjualanDetailDAO.getAllPenjualanDetail(con, p.getNoPenjualan());
-//            for (PenjualanDetail d : listPenjualan) {
-//                d.setPenjualanHead(p);
-//            }
-//            Report report = new Report();
-//            report.printInvoiceSoftcopy(listPenjualan, p.getTotalPenjualan());
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//            mainApp.showMessage(Modality.NONE, "Error", e.toString());
-//        }
-    }
 
     private void exportExcel() {
         try {

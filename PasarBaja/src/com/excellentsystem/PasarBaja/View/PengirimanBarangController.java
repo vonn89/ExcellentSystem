@@ -23,6 +23,7 @@ import com.excellentsystem.PasarBaja.Model.Customer;
 import com.excellentsystem.PasarBaja.Model.Otoritas;
 import com.excellentsystem.PasarBaja.Model.PenjualanDetail;
 import com.excellentsystem.PasarBaja.Model.PenjualanHead;
+import com.excellentsystem.PasarBaja.PrintOut.PrintOut;
 import com.excellentsystem.PasarBaja.Services.Service;
 import com.excellentsystem.PasarBaja.View.Dialog.MessageController;
 import com.excellentsystem.PasarBaja.View.Dialog.NewPengirimanController;
@@ -447,17 +448,17 @@ public class PengirimanBarangController {
     }
 
     private void printSuratJalan(PenjualanHead p) {
-//        try(Connection con = Koneksi.getConnection()){
-//            List<PenjualanDetail> listPenjualan = PenjualanDetailDAO.getAllPenjualanDetail(con, p.getNoPenjualan());
-//            for(PenjualanDetail d : listPenjualan){
-//                d.setPenjualanHead(p);
-//                d.setBarang(BarangDAO.get(con, d.getKodeBarang()));
-//            }
-//            Report report = new Report();
-//            report.printSuratJalan(listPenjualan);
-//        }catch (Exception e){
-//            mainApp.showMessage(Modality.NONE, "Error", e.toString());
-//        }
+        try(Connection con = Koneksi.getConnection()){
+            List<PenjualanDetail> listPenjualan = PenjualanDetailDAO.getAllPenjualanDetail(con, p.getNoPenjualan());
+            for(PenjualanDetail d : listPenjualan){
+                d.setPenjualanHead(p);
+                d.setBarang(BarangDAO.get(con, d.getKodeBarang()));
+            }
+            PrintOut printOut = new PrintOut();
+            printOut.printSuratJalan(listPenjualan);
+        }catch (Exception e){
+            mainApp.showMessage(Modality.NONE, "Error", e.toString());
+        }
     }
 
     private void exportExcel() {

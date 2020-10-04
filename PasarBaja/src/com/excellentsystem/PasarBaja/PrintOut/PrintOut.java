@@ -6,6 +6,7 @@
 package com.excellentsystem.PasarBaja.PrintOut;
 
 import com.excellentsystem.PasarBaja.Model.PemesananDetail;
+import com.excellentsystem.PasarBaja.Model.PenjualanDetail;
 import java.util.List;
 import net.sf.jasperreports.engine.JasperCompileManager;
 import net.sf.jasperreports.engine.JasperFillManager;
@@ -47,6 +48,20 @@ public class PrintOut {
     }
     public void printSuratPemesanan(List<PemesananDetail> detail)throws Exception{
         JasperDesign jasperDesign = JRXmlLoader.load(getClass().getResourceAsStream("SuratPemesanan.jrxml"));
+        JRBeanCollectionDataSource beanColDataSource = new JRBeanCollectionDataSource(detail);
+        JasperReport jasperReport = JasperCompileManager.compileReport(jasperDesign);
+        JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport,null, beanColDataSource);
+        JRViewerFx jrViewerFx = new JRViewerFx(jasperPrint);
+    }
+    public void printSuratJalan(List<PenjualanDetail> detail)throws Exception{
+        JasperDesign jasperDesign = JRXmlLoader.load(getClass().getResourceAsStream("SuratJalan.jrxml"));
+        JRBeanCollectionDataSource beanColDataSource = new JRBeanCollectionDataSource(detail);
+        JasperReport jasperReport = JasperCompileManager.compileReport(jasperDesign);
+        JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport,null, beanColDataSource);
+        JRViewerFx jrViewerFx = new JRViewerFx(jasperPrint);
+    }
+    public void printInvoice(List<PenjualanDetail> detail)throws Exception{
+        JasperDesign jasperDesign = JRXmlLoader.load(getClass().getResourceAsStream("Invoice.jrxml"));
         JRBeanCollectionDataSource beanColDataSource = new JRBeanCollectionDataSource(detail);
         JasperReport jasperReport = JasperCompileManager.compileReport(jasperDesign);
         JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport,null, beanColDataSource);

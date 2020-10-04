@@ -285,7 +285,7 @@ public class Function {
                     setCredentials(GoogleCredentials.fromStream(Main.class.getResourceAsStream("Resource/credentials.json"))).build();
             Storage storage = storageOptions.getService();
             
-            Blob blob = storage.get(BlobId.of("auristeel", filename));
+            Blob blob = storage.get(BlobId.of("pasarbaja", filename));
             blob.downloadTo(Paths.get(filename));
             status = "Update Success - please restart application";
         }catch(Exception e){e.printStackTrace();
