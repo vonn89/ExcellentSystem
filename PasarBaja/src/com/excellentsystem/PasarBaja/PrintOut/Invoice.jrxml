@@ -23,53 +23,50 @@
 	<queryString>
 		<![CDATA[]]>
 	</queryString>
-	<field name="keterangan" class="java.lang.String">
-		<fieldDescription><![CDATA[keterangan]]></fieldDescription>
-	</field>
-	<field name="hargaJual" class="java.lang.Double">
-		<fieldDescription><![CDATA[hargaJual]]></fieldDescription>
-	</field>
-	<field name="namaBarang" class="java.lang.String">
-		<fieldDescription><![CDATA[namaBarang]]></fieldDescription>
-	</field>
-	<field name="noPemesanan" class="java.lang.String">
-		<fieldDescription><![CDATA[noPemesanan]]></fieldDescription>
-	</field>
-	<field name="noUrut" class="java.lang.Integer">
-		<fieldDescription><![CDATA[noUrut]]></fieldDescription>
-	</field>
-	<field name="qty" class="java.lang.Double">
-		<fieldDescription><![CDATA[qty]]></fieldDescription>
-	</field>
 	<field name="satuan" class="java.lang.String">
 		<fieldDescription><![CDATA[satuan]]></fieldDescription>
 	</field>
 	<field name="total" class="java.lang.Double">
 		<fieldDescription><![CDATA[total]]></fieldDescription>
 	</field>
-	<field name="downPayment" class="java.lang.Double">
-		<fieldDescription><![CDATA[pemesananHead.downPayment]]></fieldDescription>
+	<field name="qty" class="java.lang.Double">
+		<fieldDescription><![CDATA[qty]]></fieldDescription>
 	</field>
-	<field name="tglPemesanan" class="java.lang.String">
-		<fieldDescription><![CDATA[pemesananHead.tglPemesanan]]></fieldDescription>
+	<field name="noUrut" class="java.lang.Integer">
+		<fieldDescription><![CDATA[noUrut]]></fieldDescription>
 	</field>
-	<field name="totalPemesanan" class="java.lang.Double">
-		<fieldDescription><![CDATA[pemesananHead.totalPemesanan]]></fieldDescription>
+	<field name="noPenjualan" class="java.lang.String">
+		<fieldDescription><![CDATA[noPenjualan]]></fieldDescription>
 	</field>
-	<field name="nama" class="java.lang.String">
-		<fieldDescription><![CDATA[pemesananHead.customer.nama]]></fieldDescription>
+	<field name="namaBarang" class="java.lang.String">
+		<fieldDescription><![CDATA[namaBarang]]></fieldDescription>
+	</field>
+	<field name="hargaJual" class="java.lang.Double">
+		<fieldDescription><![CDATA[hargaJual]]></fieldDescription>
+	</field>
+	<field name="keterangan" class="java.lang.String">
+		<fieldDescription><![CDATA[keterangan]]></fieldDescription>
+	</field>
+	<field name="catatan" class="java.lang.String">
+		<fieldDescription><![CDATA[penjualanHead.catatan]]></fieldDescription>
+	</field>
+	<field name="pembayaran" class="java.lang.Double">
+		<fieldDescription><![CDATA[penjualanHead.pembayaran]]></fieldDescription>
+	</field>
+	<field name="tglPenjualan" class="java.lang.String">
+		<fieldDescription><![CDATA[penjualanHead.tglPenjualan]]></fieldDescription>
+	</field>
+	<field name="totalPenjualan" class="java.lang.Double">
+		<fieldDescription><![CDATA[penjualanHead.totalPenjualan]]></fieldDescription>
 	</field>
 	<field name="alamat" class="java.lang.String">
-		<fieldDescription><![CDATA[pemesananHead.customer.alamat]]></fieldDescription>
+		<fieldDescription><![CDATA[penjualanHead.customer.alamat]]></fieldDescription>
 	</field>
-	<field name="kota" class="java.lang.String">
-		<fieldDescription><![CDATA[pemesananHead.customer.kota]]></fieldDescription>
+	<field name="nama" class="java.lang.String">
+		<fieldDescription><![CDATA[penjualanHead.customer.nama]]></fieldDescription>
 	</field>
 	<field name="noTelp" class="java.lang.String">
-		<fieldDescription><![CDATA[pemesananHead.customer.noTelp]]></fieldDescription>
-	</field>
-	<field name="noHandphone" class="java.lang.String">
-		<fieldDescription><![CDATA[pemesananHead.customer.noHandphone]]></fieldDescription>
+		<fieldDescription><![CDATA[penjualanHead.customer.noTelp]]></fieldDescription>
 	</field>
 	<background>
 		<band splitType="Stretch"/>
@@ -81,21 +78,21 @@
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="Serif" size="16" isBold="true" isUnderline="false"/>
 				</textElement>
-				<text><![CDATA[SURAT PEMESANAN]]></text>
+				<text><![CDATA[Invoice]]></text>
 			</staticText>
 			<textField isBlankWhenNull="true">
 				<reportElement x="0" y="20" width="552" height="17" uuid="37a10146-f1bd-4a01-b26e-ba5000ecfe98"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="Serif" size="12" isBold="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{noPemesanan}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{noPenjualan}]]></textFieldExpression>
 			</textField>
 			<textField pattern="dd MMMMM yyyy HH:mm" isBlankWhenNull="true">
 				<reportElement x="0" y="36" width="552" height="13" uuid="91ca920d-3560-4919-a3e8-e0ed43977dcb"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="Serif" size="10" isBold="false"/>
 				</textElement>
-				<textFieldExpression><![CDATA[new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").parse($F{tglPemesanan})]]></textFieldExpression>
+				<textFieldExpression><![CDATA[new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").parse($F{tglPenjualan})]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement x="0" y="56" width="552" height="13" uuid="653645ef-d168-49df-9f0d-057988025fb8"/>
@@ -284,8 +281,7 @@
 					<paragraph lineSpacing="Fixed" lineSpacingSize="7.5"/>
 				</textElement>
 				<text><![CDATA[Keterangan  :
-1. Surat pemesanan ini merupakan bukti pemesanan barang
-2. Surat pemesanan ini bukan bukti penjualan ( Faktur / Invoice )]]></text>
+1. Barang yang sudah dibeli tidak dapat ditukar / dikembalikan]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="21" y="103" width="150" height="13" uuid="fa36f87b-52d9-4298-904f-1620955c7005"/>
@@ -295,45 +291,38 @@
 				<text><![CDATA[(                                           )]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="231" y="103" width="150" height="13" uuid="7b0c8713-7cd1-4fb4-990d-2579217f8bff"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Serif"/>
-				</textElement>
-				<text><![CDATA[(                                               )]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="0" y="44" width="152" height="13" uuid="79814ce9-a337-46a3-9db3-90b1d030d0d4"/>
+				<reportElement x="20" y="52" width="151" height="13" uuid="79814ce9-a337-46a3-9db3-90b1d030d0d4"/>
 				<textElement verticalAlignment="Middle">
 					<font fontName="Serif"/>
 				</textElement>
-				<text><![CDATA[Di setujui oleh,]]></text>
+				<text><![CDATA[Hormat kami,]]></text>
 			</staticText>
 			<textField pattern="#,##0" isBlankWhenNull="true">
 				<reportElement style="style1" mode="Transparent" x="471" y="10" width="80" height="15" uuid="744ea83d-4254-4573-b985-88664e743ee6"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font fontName="Serif" isBold="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{totalPemesanan}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{totalPenjualan}]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0" isBlankWhenNull="true">
 				<reportElement style="style1" mode="Transparent" x="471" y="25" width="80" height="15" uuid="69e05236-aead-4ae8-9b75-e82c4a93b320">
-					<printWhenExpression><![CDATA[$F{downPayment}!=0]]></printWhenExpression>
+					<printWhenExpression><![CDATA[$F{pembayaran}!=0]]></printWhenExpression>
 				</reportElement>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font fontName="Serif" isBold="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{downPayment}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{pembayaran}]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement style="style1" mode="Transparent" x="331" y="10" width="140" height="15" uuid="c099b6eb-b4f5-445b-923e-3ea795699067"/>
 				<textElement verticalAlignment="Middle">
 					<font fontName="Serif" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Total Pemesanan]]></text>
+				<text><![CDATA[Total Penjualan]]></text>
 			</staticText>
 			<staticText>
 				<reportElement style="style1" mode="Transparent" x="331" y="25" width="140" height="15" uuid="4b222ed2-6d9b-47d6-b636-cc6f62667dd4">
-					<printWhenExpression><![CDATA[$F{downPayment}!=0]]></printWhenExpression>
+					<printWhenExpression><![CDATA[$F{pembayaran}!=0]]></printWhenExpression>
 				</reportElement>
 				<textElement verticalAlignment="Middle">
 					<font fontName="Serif" isBold="true"/>
