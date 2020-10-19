@@ -518,13 +518,27 @@ public class LaporanPenjualanController {
 
     private void printPenjualan(PenjualanDetail pj) {
         try (Connection con = Koneksi.getConnection()) {
-            PenjualanHead p = PenjualanHeadDAO.get(con, pj.getNoPenjualan());
-            p.setListPenjualanDetail(PenjualanDetailDAO.getAllByNoPenjualan(con, pj.getNoPenjualan()));
-            for (PenjualanDetail d : p.getListPenjualanDetail()) {
-                d.setBarang(BarangDAO.get(con, d.getKodeBarcode()));
+            List<PenjualanDetail> listDetail = PenjualanDetailDAO.getAllByNoPenjualan(con, pj.getNoPenjualan());
+            PenjualanHead head = PenjualanHeadDAO.get(con, pj.getNoPenjualan());
+            System.out.println(head.getGrandtotal());
+            int i = 0;
+            for (PenjualanDetail d : listDetail) {
+                d.setPenjualanHead(head);
+                i++;
+            }
+            while(i<5){
+                PenjualanDetail detail = new PenjualanDetail();
+                detail.setPenjualanHead(head);
+                detail.setNamaBarang("");
+                detail.setQty(0);
+                detail.setKodeBarcode("");
+                detail.setBeratPembulatan(0);
+                detail.setHargaJual(0);
+                listDetail.add(detail);
+                i++;
             }
             PrintOut printout = new PrintOut();
-            printout.printSuratPenjualan(p);
+            printout.printSuratPenjualan(listDetail);
         } catch (Exception e) {
             mainApp.showMessage(Modality.NONE, "Error", e.toString());
         }

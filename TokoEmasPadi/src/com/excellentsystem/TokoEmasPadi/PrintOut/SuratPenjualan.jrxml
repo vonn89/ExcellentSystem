@@ -1,70 +1,52 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" pageWidth="595" pageHeight="421" orientation="Landscape" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="c3089fcd-300f-4356-9c72-e3222e86800b">
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="c3089fcd-300f-4356-9c72-e3222e86800b">
 	<property name="ireport.zoom" value="1.1000000000000003"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<queryString>
 		<![CDATA[]]>
 	</queryString>
-	<field name="qty" class="java.lang.Integer">
-		<fieldDescription><![CDATA[qty]]></fieldDescription>
-	</field>
-	<field name="nilaiPokok" class="java.lang.Double">
-		<fieldDescription><![CDATA[nilaiPokok]]></fieldDescription>
-	</field>
-	<field name="noPenjualan" class="java.lang.String">
-		<fieldDescription><![CDATA[noPenjualan]]></fieldDescription>
-	</field>
-	<field name="kodeJenis" class="java.lang.String">
-		<fieldDescription><![CDATA[kodeJenis]]></fieldDescription>
-	</field>
-	<field name="namaBarang" class="java.lang.String">
-		<fieldDescription><![CDATA[namaBarang]]></fieldDescription>
-	</field>
-	<field name="hargaKomp" class="java.lang.Double">
-		<fieldDescription><![CDATA[hargaKomp]]></fieldDescription>
-	</field>
-	<field name="total" class="java.lang.Double">
-		<fieldDescription><![CDATA[total]]></fieldDescription>
-	</field>
-	<field name="noUrut" class="java.lang.Integer">
-		<fieldDescription><![CDATA[noUrut]]></fieldDescription>
-	</field>
 	<field name="beratPembulatan" class="java.lang.Double">
 		<fieldDescription><![CDATA[beratPembulatan]]></fieldDescription>
-	</field>
-	<field name="berat" class="java.lang.Double">
-		<fieldDescription><![CDATA[berat]]></fieldDescription>
-	</field>
-	<field name="kodeKategori" class="java.lang.String">
-		<fieldDescription><![CDATA[kodeKategori]]></fieldDescription>
 	</field>
 	<field name="hargaJual" class="java.lang.Double">
 		<fieldDescription><![CDATA[hargaJual]]></fieldDescription>
 	</field>
-	<field name="noPembelian" class="java.lang.String">
-		<fieldDescription><![CDATA[noPembelian]]></fieldDescription>
-	</field>
 	<field name="kodeBarcode" class="java.lang.String">
 		<fieldDescription><![CDATA[kodeBarcode]]></fieldDescription>
 	</field>
-	<field name="nama" class="java.lang.String">
-		<fieldDescription><![CDATA[penjualanHead.nama]]></fieldDescription>
+	<field name="namaBarang" class="java.lang.String">
+		<fieldDescription><![CDATA[namaBarang]]></fieldDescription>
+	</field>
+	<field name="noPenjualan" class="java.lang.String">
+		<fieldDescription><![CDATA[noPenjualan]]></fieldDescription>
+	</field>
+	<field name="noUrut" class="java.lang.Integer">
+		<fieldDescription><![CDATA[noUrut]]></fieldDescription>
+	</field>
+	<field name="qty" class="java.lang.Integer">
+		<fieldDescription><![CDATA[qty]]></fieldDescription>
+	</field>
+	<field name="total" class="java.lang.Double">
+		<fieldDescription><![CDATA[total]]></fieldDescription>
 	</field>
 	<field name="alamat" class="java.lang.String">
 		<fieldDescription><![CDATA[penjualanHead.alamat]]></fieldDescription>
 	</field>
-	<field name="grandtotal" class="java.lang.Double">
-		<fieldDescription><![CDATA[penjualanHead.grandtotal]]></fieldDescription>
+	<field name="tglPenjualan" class="java.lang.String">
+		<fieldDescription><![CDATA[penjualanHead.tglPenjualan]]></fieldDescription>
 	</field>
 	<field name="catatan" class="java.lang.String">
 		<fieldDescription><![CDATA[penjualanHead.catatan]]></fieldDescription>
 	</field>
+	<field name="nama" class="java.lang.String">
+		<fieldDescription><![CDATA[penjualanHead.nama]]></fieldDescription>
+	</field>
+	<field name="grandtotal" class="java.lang.Double">
+		<fieldDescription><![CDATA[penjualanHead.grandtotal]]></fieldDescription>
+	</field>
 	<field name="kodeSales" class="java.lang.String">
 		<fieldDescription><![CDATA[penjualanHead.kodeSales]]></fieldDescription>
-	</field>
-	<field name="tglPenjualan" class="java.lang.String">
-		<fieldDescription><![CDATA[penjualanHead.tglPenjualan]]></fieldDescription>
 	</field>
 	<background>
 		<band splitType="Stretch"/>
@@ -72,35 +54,35 @@
 	<title>
 		<band height="136" splitType="Stretch">
 			<textField>
-				<reportElement x="405" y="38" width="150" height="20" uuid="65c80628-e494-4356-8071-6fa6ba559a70"/>
+				<reportElement x="427" y="22" width="128" height="20" uuid="65c80628-e494-4356-8071-6fa6ba559a70"/>
 				<textElement verticalAlignment="Middle">
 					<font fontName="Serif"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{nama}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="405" y="58" width="150" height="20" uuid="0c11922e-d005-47e2-a0f4-ac3ebbec44c1"/>
+				<reportElement x="427" y="45" width="128" height="20" uuid="0c11922e-d005-47e2-a0f4-ac3ebbec44c1"/>
 				<textElement verticalAlignment="Middle">
 					<font fontName="Serif"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{alamat}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="305" y="116" width="100" height="20" uuid="e7e8ca27-d23f-46b3-8380-eb1320f70430"/>
+				<reportElement x="332" y="95" width="100" height="20" uuid="e7e8ca27-d23f-46b3-8380-eb1320f70430"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="Serif"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{kodeSales}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="455" y="96" width="100" height="20" uuid="55fa2630-efa0-4616-98f6-fc9edf437d9b"/>
+				<reportElement x="455" y="75" width="89" height="20" uuid="55fa2630-efa0-4616-98f6-fc9edf437d9b"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font fontName="Serif"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{noPenjualan}]]></textFieldExpression>
 			</textField>
 			<textField pattern="dd MMM yyyy HH:mm">
-				<reportElement x="455" y="116" width="100" height="20" uuid="48493df1-387f-4e6c-9cc3-d11074ae5bc5"/>
+				<reportElement x="455" y="95" width="89" height="20" uuid="48493df1-387f-4e6c-9cc3-d11074ae5bc5"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font fontName="Serif"/>
 				</textElement>
@@ -111,35 +93,41 @@
 	<detail>
 		<band height="20" splitType="Stretch">
 			<textField>
-				<reportElement x="0" y="0" width="100" height="20" uuid="43ae63aa-743b-4b00-acfd-8d106a1d2cd0"/>
-				<textElement verticalAlignment="Middle">
+				<reportElement x="0" y="0" width="101" height="20" uuid="43ae63aa-743b-4b00-acfd-8d106a1d2cd0"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="Serif"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{kodeBarcode}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="100" y="0" width="56" height="20" uuid="01d80b53-30d8-4b37-8e17-e41e9cef72f2"/>
+				<reportElement x="91" y="0" width="56" height="20" uuid="01d80b53-30d8-4b37-8e17-e41e9cef72f2">
+					<printWhenExpression><![CDATA[$F{qty}!=0]]></printWhenExpression>
+				</reportElement>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="Serif"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{qty}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="156" y="0" width="199" height="20" uuid="32572e4c-40a1-40e3-9408-035f435117f8"/>
+				<reportElement x="154" y="0" width="207" height="20" uuid="32572e4c-40a1-40e3-9408-035f435117f8"/>
 				<textElement verticalAlignment="Middle">
 					<font fontName="Serif"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{namaBarang}]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0">
-				<reportElement x="455" y="0" width="100" height="20" uuid="7199e0ed-e600-4e2d-a366-cda1769e3d61"/>
+				<reportElement x="443" y="0" width="101" height="20" uuid="7199e0ed-e600-4e2d-a366-cda1769e3d61">
+					<printWhenExpression><![CDATA[$F{hargaJual}!=0]]></printWhenExpression>
+				</reportElement>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font fontName="Serif"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{hargaJual}]]></textFieldExpression>
 			</textField>
-			<textField pattern="#,##0.##">
-				<reportElement x="355" y="0" width="100" height="20" uuid="73117f1a-d77c-4863-a75b-49ae1369beac"/>
+			<textField pattern="#,##0.## gr">
+				<reportElement x="361" y="0" width="82" height="20" uuid="73117f1a-d77c-4863-a75b-49ae1369beac">
+					<printWhenExpression><![CDATA[$F{beratPembulatan}!=0]]></printWhenExpression>
+				</reportElement>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font fontName="Serif"/>
 				</textElement>
@@ -147,25 +135,14 @@
 			</textField>
 		</band>
 	</detail>
-	<columnFooter>
-		<band height="20" splitType="Stretch">
+	<summary>
+		<band height="59" splitType="Stretch">
 			<textField pattern="#,##0">
-				<reportElement x="455" y="0" width="100" height="20" uuid="a895016a-22d0-49d7-9fad-996357a51aab"/>
+				<reportElement x="455" y="27" width="89" height="20" uuid="a895016a-22d0-49d7-9fad-996357a51aab"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font fontName="Serif"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{grandtotal}]]></textFieldExpression>
-			</textField>
-		</band>
-	</columnFooter>
-	<summary>
-		<band height="42" splitType="Stretch">
-			<textField>
-				<reportElement x="0" y="0" width="256" height="42" uuid="466717ba-7a85-4040-8616-6cfbbd99b874"/>
-				<textElement verticalAlignment="Middle">
-					<font fontName="Serif"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{catatan}]]></textFieldExpression>
 			</textField>
 		</band>
 	</summary>

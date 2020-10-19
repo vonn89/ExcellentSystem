@@ -9,24 +9,17 @@ import com.excellentsystem.TokoEmasPadi.Koneksi;
 import com.excellentsystem.TokoEmasPadi.Main;
 import static com.excellentsystem.TokoEmasPadi.Main.printerBarcode;
 import static com.excellentsystem.TokoEmasPadi.Main.printerGadai;
-import static com.excellentsystem.TokoEmasPadi.Main.sistem;
 import static com.excellentsystem.TokoEmasPadi.Main.tglBarang;
 import static com.excellentsystem.TokoEmasPadi.Main.tglNormal;
-import static com.excellentsystem.TokoEmasPadi.Main.tglSql;
 import com.excellentsystem.TokoEmasPadi.Model.Barang;
 import com.excellentsystem.TokoEmasPadi.Model.GadaiDetail;
 import com.excellentsystem.TokoEmasPadi.Model.PembelianDetail;
 import com.excellentsystem.TokoEmasPadi.Model.PenjualanDetail;
-import com.excellentsystem.TokoEmasPadi.Model.PenjualanHead;
 import java.awt.print.PrinterJob;
 import java.sql.Connection;
-import java.text.DateFormat;
 import java.text.DecimalFormat;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import javax.print.Doc;
 import javax.print.DocFlavor;
 import javax.print.DocPrintJob;
@@ -50,8 +43,6 @@ import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.export.JRPrintServiceExporter;
 import net.sf.jasperreports.engine.export.JRPrintServiceExporterParameter;
 import net.sf.jasperreports.engine.xml.JRXmlLoader;
-import simple.escp.SimpleEscp;
-import simple.escp.json.JsonTemplate;
 
 /**
  *
@@ -82,63 +73,63 @@ public class PrintOut {
            hasil="Angka terlalu besar, harus kurang dari 1 milyar!"; 
           return hasil; 
     }
-    public void printSuratPenjualan(PenjualanHead p) throws Exception{
-        DecimalFormat rp = new DecimalFormat("###,##0");
-        DecimalFormat gr = new DecimalFormat("#,##0.00");
-        DateFormat jam = new SimpleDateFormat("HH:mm");
-        Map<String, Object> map = new HashMap<>();
-        map.put("noPenjualan", p.getNoPenjualan());        
-        map.put("tglPenjualan", tglNormal.format(tglSql.parse(p.getTglPenjualan())));     
-        map.put("alamatToko", sistem.getAlamat()+", "+sistem.getKota());   
-        map.put("noTelpToko", sistem.getNoTelp());  
-        map.put("npwpToko", sistem.getWebsite());     
-        map.put("jam", jam.format(tglSql.parse(p.getTglPenjualan())));       
-        map.put("nama", p.getNama());     
-        map.put("alamat", p.getAlamat());     
-        map.put("noTelp", "");     
-        map.put("sales", p.getKodeSales());    
-        int total = Integer.parseInt(new DecimalFormat("##0").format(p.getGrandtotal()));
-        map.put("terbilang", angka(total));      
-        map.put("total", rp.format(p.getGrandtotal()));                       
-        List<Map<String, Object>> tables = new ArrayList<>();
-        for (PenjualanDetail d : p.getListPenjualanDetail()) {
-//            d.getBarang().getNamaBarcode();
-            Map<String, Object> line = new HashMap<>();
-            line.put("qty", d.getQty());
-            line.put("namaBarang", d.getNamaBarang());
-            line.put("berat", gr.format(d.getBerat())+" Gr");
-            line.put("kadar", d.getBarang().getMerk());
-            line.put("harga", rp.format(d.getHargaJual()));
-            tables.add(line);
-            Map<String, Object> line2 = new HashMap<>();
-            line2.put("qty", "");
-            line2.put("namaBarang", "");
-            line2.put("berat", "");
-            line2.put("kadar", "");
-            line2.put("harga", "");
-            tables.add(line2);
-        }
-        while(tables.size()<6){
-            Map<String, Object> line = new HashMap<>();
-            line.put("qty", "");
-            line.put("namaBarang", "");
-            line.put("berat", "");
-            line.put("kadar", "");
-            line.put("harga", "");
-            tables.add(line);
-            Map<String, Object> line2 = new HashMap<>();
-            line2.put("qty", "");
-            line2.put("namaBarang", "");
-            line2.put("berat", "");
-            line2.put("kadar", "");
-            line2.put("harga", "");
-            tables.add(line2);
-        }
-        map.put("table", tables);   
-        SimpleEscp simpleEscp = new SimpleEscp();      
-        JsonTemplate template = new JsonTemplate(getClass().getResourceAsStream("template.json"));
-        simpleEscp.print(template, map);
-    }
+//    public void printSuratPenjualan(PenjualanHead p) throws Exception{
+//        DecimalFormat rp = new DecimalFormat("###,##0");
+//        DecimalFormat gr = new DecimalFormat("#,##0.00");
+//        DateFormat jam = new SimpleDateFormat("HH:mm");
+//        Map<String, Object> map = new HashMap<>();
+//        map.put("noPenjualan", p.getNoPenjualan());        
+//        map.put("tglPenjualan", tglNormal.format(tglSql.parse(p.getTglPenjualan())));     
+//        map.put("alamatToko", sistem.getAlamat()+", "+sistem.getKota());   
+//        map.put("noTelpToko", sistem.getNoTelp());  
+//        map.put("npwpToko", sistem.getWebsite());     
+//        map.put("jam", jam.format(tglSql.parse(p.getTglPenjualan())));       
+//        map.put("nama", p.getNama());     
+//        map.put("alamat", p.getAlamat());     
+//        map.put("noTelp", "");     
+//        map.put("sales", p.getKodeSales());    
+//        int total = Integer.parseInt(new DecimalFormat("##0").format(p.getGrandtotal()));
+//        map.put("terbilang", angka(total));      
+//        map.put("total", rp.format(p.getGrandtotal()));                       
+//        List<Map<String, Object>> tables = new ArrayList<>();
+//        for (PenjualanDetail d : p.getListPenjualanDetail()) {
+////            d.getBarang().getNamaBarcode();
+//            Map<String, Object> line = new HashMap<>();
+//            line.put("qty", d.getQty());
+//            line.put("namaBarang", d.getNamaBarang());
+//            line.put("berat", gr.format(d.getBerat())+" Gr");
+//            line.put("kadar", d.getBarang().getMerk());
+//            line.put("harga", rp.format(d.getHargaJual()));
+//            tables.add(line);
+//            Map<String, Object> line2 = new HashMap<>();
+//            line2.put("qty", "");
+//            line2.put("namaBarang", "");
+//            line2.put("berat", "");
+//            line2.put("kadar", "");
+//            line2.put("harga", "");
+//            tables.add(line2);
+//        }
+//        while(tables.size()<6){
+//            Map<String, Object> line = new HashMap<>();
+//            line.put("qty", "");
+//            line.put("namaBarang", "");
+//            line.put("berat", "");
+//            line.put("kadar", "");
+//            line.put("harga", "");
+//            tables.add(line);
+//            Map<String, Object> line2 = new HashMap<>();
+//            line2.put("qty", "");
+//            line2.put("namaBarang", "");
+//            line2.put("berat", "");
+//            line2.put("kadar", "");
+//            line2.put("harga", "");
+//            tables.add(line2);
+//        }
+//        map.put("table", tables);   
+//        SimpleEscp simpleEscp = new SimpleEscp();      
+//        JsonTemplate template = new JsonTemplate(getClass().getResourceAsStream("template.json"));
+//        simpleEscp.print(template, map);
+//    }
     public void printSuratPenjualan(List<PenjualanDetail> allDetail) throws Exception{
         JasperDesign jasperDesign = JRXmlLoader.load(getClass().getResourceAsStream("SuratPenjualan.jrxml"));
         JRBeanCollectionDataSource beanColDataSource = new JRBeanCollectionDataSource(allDetail);

@@ -5,7 +5,6 @@
  */
 package com.excellentsystem.TokoEmasPadi.View;
 
-import com.excellentsystem.TokoEmasPadi.View.Dialog.*;
 import com.excellentsystem.TokoEmasPadi.DAO.BarangDAO;
 import com.excellentsystem.TokoEmasPadi.Function;
 import static com.excellentsystem.TokoEmasPadi.Function.getTableCell;
@@ -19,6 +18,7 @@ import com.excellentsystem.TokoEmasPadi.Model.PenjualanHead;
 import com.excellentsystem.TokoEmasPadi.Model.User;
 import com.excellentsystem.TokoEmasPadi.PrintOut.PrintOut;
 import com.excellentsystem.TokoEmasPadi.Service.Service;
+import com.excellentsystem.TokoEmasPadi.View.Dialog.*;
 import java.sql.Connection;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -469,8 +469,21 @@ public class PenjualanController {
                             String status = Service.savePenjualan(con, p);
                             if (status.equals("true")) {
                                 if (printCheckBox.isSelected()) {
+                                    int i = 0;
                                     for (PenjualanDetail d : allDetail) {
                                         d.setPenjualanHead(p);
+                                        i++;
+                                    }
+                                    while(i<5){
+                                        PenjualanDetail detail = new PenjualanDetail();
+                                        detail.setPenjualanHead(p);
+                                        detail.setNamaBarang("");
+                                        detail.setQty(0);
+                                        detail.setKodeBarcode("");
+                                        detail.setBeratPembulatan(0);
+                                        detail.setHargaJual(0);
+                                        allDetail.add(detail);
+                                        i++;
                                     }
                                     PrintOut printOut = new PrintOut();
                                     printOut.printSuratPenjualan(allDetail);
