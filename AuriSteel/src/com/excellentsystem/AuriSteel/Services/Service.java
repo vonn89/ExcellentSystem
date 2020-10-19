@@ -56,6 +56,7 @@ import com.excellentsystem.AuriSteel.DAO.SupplierDAO;
 import com.excellentsystem.AuriSteel.DAO.TerimaPembayaranDAO;
 import com.excellentsystem.AuriSteel.DAO.UserDAO;
 import com.excellentsystem.AuriSteel.Function;
+import static com.excellentsystem.AuriSteel.Function.pembulatan;
 import static com.excellentsystem.AuriSteel.Main.sistem;
 import static com.excellentsystem.AuriSteel.Main.tglBarang;
 import static com.excellentsystem.AuriSteel.Main.tglSql;
@@ -3769,7 +3770,7 @@ public class Service {
             String status = "true";
 
             LogBahan logBahan = LogBahanDAO.getLastByBahanAndGudang(con, p.getKodeBahan(), p.getKodeGudang());
-            logBahan.setStokAkhir(Math.round(logBahan.getStokAkhir() * 100) / 100);
+            logBahan.setStokAkhir(pembulatan(logBahan.getStokAkhir()));
             if (logBahan.getStokAkhir() + p.getQty() < 0) {
                 status = "Stok bahan " + p.getKodeBahan() + " tidak mencukupi";
             } else {
@@ -3848,7 +3849,7 @@ public class Service {
             String status = "true";
 
             LogBarang logBarang = LogBarangDAO.getLastByBarangAndGudang(con, p.getKodeBarang(), p.getKodeGudang());
-            logBarang.setStokAkhir(Math.round(logBarang.getStokAkhir() * 100) / 100);
+            logBarang.setStokAkhir(pembulatan(logBarang.getStokAkhir()));
             if (logBarang.getStokAkhir() + p.getQty() < 0) {
                 status = "Stok barang " + p.getKodeBarang() + " tidak mencukupi";
             } else {
@@ -4013,7 +4014,7 @@ public class Service {
                 logBahan.setStokAkhir(qtyIn - qtyOut);
                 logBahan.setNilaiAkhir(nilaiIn - nilaiOut);
                 LogBahanDAO.insert(con, logBahan);
-            } else if (qtyOut>0 && stokBahan.getStokAkhir() < qtyOut) {
+            } else if (qtyOut>0 && pembulatan(stokBahan.getStokAkhir()) < qtyOut) {
                 status = "Stok bahan " + kodeBahan + " tidak mencukupi";
             } else {
                 if (stokBahan.getTanggal().equals(tglBarang.format(date))) {

@@ -69,6 +69,9 @@ import org.apache.poi.ss.usermodel.Workbook;
  * @author yunaz
  */
 public class Function {
+    public static double pembulatan(double angka){
+        return (double) Math.round(angka*100)/100;
+    }
     public static Date getServerDate(Connection con)throws Exception{
         Date date = null;
         ResultSet rs = con.prepareStatement("SELECT SYSDATE() + INTERVAL 7 HOUR").executeQuery();
