@@ -564,15 +564,19 @@ public class LaporanPenjualanController {
                         stage.close();
                         User user = Function.verifikasi(controller.password.getText(), "Batal Penjualan");
                         if (user != null) {
-                            p.setTglBatal(Function.getSystemDate());
-                            p.setUserBatal(user.getUsername());
-                            p.setStatus("false");
-                            String status = Service.batalPenjualan(con, p);
-                            getPenjualanHead();
-                            if (status.equals("true")) {
-                                mainApp.showMessage(Modality.NONE, "Success", "Data penjualan berhasil dibatal");
-                            } else {
-                                mainApp.showMessage(Modality.NONE, "Error", status);
+                            try(Connection con1 = Koneksi.getConnection()){
+                                p.setTglBatal(Function.getSystemDate());
+                                p.setUserBatal(user.getUsername());
+                                p.setStatus("false");
+                                String status = Service.batalPenjualan(con1, p);
+                                getPenjualanHead();
+                                if (status.equals("true")) {
+                                    mainApp.showMessage(Modality.NONE, "Success", "Data penjualan berhasil dibatal");
+                                } else {
+                                    mainApp.showMessage(Modality.NONE, "Error", status);
+                                }
+                            }catch(Exception e){
+                            
                             }
                         } else {
                             mainApp.showMessage(Modality.NONE, "Warning", "Verifikasi Salah");
