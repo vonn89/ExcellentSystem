@@ -88,7 +88,7 @@ public class PenjualanController {
         namaBarangColumn.setCellValueFactory(cellData -> cellData.getValue().namaBarangProperty());
         jumlahColumn.setCellValueFactory(cellData -> cellData.getValue().qtyProperty());
         jumlahColumn.setCellFactory(col -> getTableCell(rp, ""));
-        beratColumn.setCellValueFactory(cellData -> cellData.getValue().beratProperty());
+        beratColumn.setCellValueFactory(cellData -> cellData.getValue().beratPembulatanProperty());
         beratColumn.setCellFactory(col -> getTableCell(gr, "gr"));
         hargaColumn.setCellValueFactory(cellData -> cellData.getValue().hargaJualProperty());
         hargaColumn.setCellFactory(col -> getTableCell(rp, "Rp"));
@@ -431,77 +431,97 @@ public class PenjualanController {
         if (allDetail.isEmpty()) {
             mainApp.showMessage(Modality.NONE, "Warning", "Detail penjualan masih kosong");
         } else {
-            Stage child = new Stage();
-            FXMLLoader loader = mainApp.showDialog(mainApp.MainStage, child, "View/Dialog/Verifikasi.fxml");
-            VerifikasiController controller = loader.getController();
-            controller.setMainApp(mainApp, child);
-            controller.keteranganLabel.setText("Verifikasi Sales : ");
-            controller.password.setOnKeyPressed((KeyEvent keyEvent) -> {
-                if (keyEvent.getCode() == KeyCode.ENTER) {
-                    child.close();
-                    String sales = Function.cekSales(controller.password.getText());
-                    if (sales != null) {
-                        try (Connection con = Koneksi.getConnection()) {
-                            PenjualanHead p = new PenjualanHead();
-                            p.setTglPenjualan(Function.getSystemDate());
-                            p.setKodeSales(sales);
-                            p.setNama(namaField.getText());
-                            p.setAlamat(alamatField.getText());
-                            int totalQty = 0;
-                            double totalBerat = 0;
-                            double totalBeratPembulatan = 0;
-                            double totalHarga = 0;
-                            for (PenjualanDetail d : allDetail) {
-                                totalQty = totalQty + d.getQty();
-                                totalBerat = totalBerat + d.getBerat();
-                                totalBeratPembulatan = totalBeratPembulatan + d.getBeratPembulatan();
-                                totalHarga = totalHarga + d.getTotal();
-                            }
-                            p.setTotalQty(totalQty);
-                            p.setTotalBerat(totalBerat);
-                            p.setTotalBeratPembulatan(totalBeratPembulatan);
-                            p.setGrandtotal(totalHarga);
-                            p.setCatatan("");
-                            p.setStatus("true");
-                            p.setTglBatal("2000-01-01 00:00:00");
-                            p.setUserBatal("");
-                            p.setListPenjualanDetail(allDetail);
-                            String status = Service.savePenjualan(con, p);
-                            if (status.equals("true")) {
-                                if (printCheckBox.isSelected()) {
-                                    int i = 0;
-                                    for (PenjualanDetail d : allDetail) {
-                                        d.setPenjualanHead(p);
-                                        i++;
-                                    }
-                                    while(i<5){
-                                        PenjualanDetail detail = new PenjualanDetail();
-                                        detail.setPenjualanHead(p);
-                                        detail.setNamaBarang("");
-                                        detail.setQty(0);
-                                        detail.setKodeBarcode("");
-                                        detail.setBeratPembulatan(0);
-                                        detail.setHargaJual(0);
-                                        allDetail.add(detail);
-                                        i++;
-                                    }
-                                    PrintOut printOut = new PrintOut();
-                                    printOut.printSuratPenjualan(allDetail);
-                                }
-                                mainApp.showMessage(Modality.NONE, "Success", "Penjualan berhasil disimpan");
-                                reset();
-                            } else {
-                                mainApp.showMessage(Modality.NONE, "Error", status);
-                            }
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                            mainApp.showMessage(Modality.NONE, "Error", e.toString());
-                        }
-                    } else {
-                        mainApp.showMessage(Modality.NONE, "Warning", "Verifikasi salah");
-                    }
-                }
+            Stage diskonStage = new Stage();
+            FXMLLoader loader = mainApp.showDialog(mainApp.MainStage, diskonStage, "View/Dialog/Diskon.fxml");
+            DiskonController diskonController = loader.getController();
+            diskonController.setMainApp(mainApp, diskonStage);
+            diskonController.sepuluhRibuButton.setOnAction((event) -> {
+                diskonStage.close();
+                save(10000);
             });
+            diskonController.limaRibuButton.setOnAction((event) -> {
+                diskonStage.close();
+                save(5000);
+            });
+            diskonController.nolButton.setOnAction((event) -> {
+                diskonStage.close();
+                save(0);
+            });
+            
         }
+    }
+    private void save(double diskon){
+        Stage child = new Stage();
+        FXMLLoader loader = mainApp.showDialog(mainApp.MainStage, child, "View/Dialog/Verifikasi.fxml");
+        VerifikasiController controller = loader.getController();
+        controller.setMainApp(mainApp, child);
+        controller.keteranganLabel.setText("Verifikasi Sales : ");
+        controller.password.setOnKeyPressed((KeyEvent keyEvent) -> {
+            if (keyEvent.getCode() == KeyCode.ENTER) {
+                child.close();
+                String sales = Function.cekSales(controller.password.getText());
+                if (sales != null) {
+                    try (Connection con = Koneksi.getConnection()) {
+                        PenjualanHead p = new PenjualanHead();
+                        p.setTglPenjualan(Function.getSystemDate());
+                        p.setKodeSales(sales);
+                        p.setNama(namaField.getText());
+                        p.setAlamat(alamatField.getText());
+                        int totalQty = 0;
+                        double totalBerat = 0;
+                        double totalBeratPembulatan = 0;
+                        double totalHarga = 0;
+                        for (PenjualanDetail d : allDetail) {
+                            totalQty = totalQty + d.getQty();
+                            totalBerat = totalBerat + d.getBerat();
+                            totalBeratPembulatan = totalBeratPembulatan + d.getBeratPembulatan();
+                            totalHarga = totalHarga + d.getTotal();
+                        }
+                        p.setTotalQty(totalQty);
+                        p.setTotalBerat(totalBerat);
+                        p.setTotalBeratPembulatan(totalBeratPembulatan);
+                        p.setGrandtotal(totalHarga);
+                        p.setDiskon(diskon);
+                        p.setCatatan("");
+                        p.setStatus("true");
+                        p.setTglBatal("2000-01-01 00:00:00");
+                        p.setUserBatal("");
+                        p.setListPenjualanDetail(allDetail);
+                        String status = Service.savePenjualan(con, p);
+                        if (status.equals("true")) {
+                            if (printCheckBox.isSelected()) {
+                                int i = 0;
+                                for (PenjualanDetail d : allDetail) {
+                                    d.setPenjualanHead(p);
+                                    i++;
+                                }
+                                while(i<5){
+                                    PenjualanDetail detail = new PenjualanDetail();
+                                    detail.setPenjualanHead(p);
+                                    detail.setNamaBarang("");
+                                    detail.setQty(0);
+                                    detail.setKodeBarcode("");
+                                    detail.setBeratPembulatan(0);
+                                    detail.setHargaJual(0);
+                                    allDetail.add(detail);
+                                    i++;
+                                }
+                                PrintOut printOut = new PrintOut();
+                                printOut.printSuratPenjualan(allDetail);
+                            }
+                            mainApp.showMessage(Modality.NONE, "Success", "Penjualan berhasil disimpan");
+                            reset();
+                        } else {
+                            mainApp.showMessage(Modality.NONE, "Error", status);
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        mainApp.showMessage(Modality.NONE, "Error", e.toString());
+                    }
+                } else {
+                    mainApp.showMessage(Modality.NONE, "Warning", "Verifikasi salah");
+                }
+            }
+        });
     }
 }

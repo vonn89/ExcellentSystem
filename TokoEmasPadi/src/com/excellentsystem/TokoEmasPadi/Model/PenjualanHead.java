@@ -27,11 +27,24 @@ public class PenjualanHead {
     private final DoubleProperty totalBerat = new SimpleDoubleProperty();
     private final DoubleProperty totalBeratPembulatan = new SimpleDoubleProperty();
     private final DoubleProperty grandtotal = new SimpleDoubleProperty();
+    private final DoubleProperty diskon = new SimpleDoubleProperty();
     private final StringProperty catatan = new SimpleStringProperty();
     private final StringProperty status = new SimpleStringProperty();
     private final StringProperty tglBatal = new SimpleStringProperty();
     private final StringProperty userBatal = new SimpleStringProperty();
     private List<PenjualanDetail> listPenjualanDetail;
+
+    public double getDiskon() {
+        return diskon.get();
+    }
+
+    public void setDiskon(double value) {
+        diskon.set(value);
+    }
+
+    public DoubleProperty diskonProperty() {
+        return diskon;
+    }
 
     public List<PenjualanDetail> getListPenjualanDetail() {
         return listPenjualanDetail;

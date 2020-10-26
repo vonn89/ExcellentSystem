@@ -42,10 +42,11 @@ public class PenjualanHeadDAO {
             p.setTotalBerat(rs.getDouble(7));
             p.setTotalBeratPembulatan(rs.getDouble(8));
             p.setGrandtotal(rs.getDouble(9));
-            p.setCatatan(rs.getString(10));
-            p.setStatus(rs.getString(11));
-            p.setTglBatal(rs.getString(12));
-            p.setUserBatal(rs.getString(13));
+            p.setDiskon(rs.getDouble(10));
+            p.setCatatan(rs.getString(11));
+            p.setStatus(rs.getString(12));
+            p.setTglBatal(rs.getString(13));
+            p.setUserBatal(rs.getString(14));
             allPenjualan.add(p);
         }
         return allPenjualan;
@@ -68,10 +69,11 @@ public class PenjualanHeadDAO {
             p.setTotalBerat(rs.getDouble(7));
             p.setTotalBeratPembulatan(rs.getDouble(8));
             p.setGrandtotal(rs.getDouble(9));
-            p.setCatatan(rs.getString(10));
-            p.setStatus(rs.getString(11));
-            p.setTglBatal(rs.getString(12));
-            p.setUserBatal(rs.getString(13));
+            p.setDiskon(rs.getDouble(10));
+            p.setCatatan(rs.getString(11));
+            p.setStatus(rs.getString(12));
+            p.setTglBatal(rs.getString(13));
+            p.setUserBatal(rs.getString(14));
             allPenjualan.add(p);
         }
         return allPenjualan;
@@ -93,10 +95,11 @@ public class PenjualanHeadDAO {
             p.setTotalBerat(rs.getDouble(7));
             p.setTotalBeratPembulatan(rs.getDouble(8));
             p.setGrandtotal(rs.getDouble(9));
-            p.setCatatan(rs.getString(10));
-            p.setStatus(rs.getString(11));
-            p.setTglBatal(rs.getString(12));
-            p.setUserBatal(rs.getString(13));
+            p.setDiskon(rs.getDouble(10));
+            p.setCatatan(rs.getString(11));
+            p.setStatus(rs.getString(12));
+            p.setTglBatal(rs.getString(13));
+            p.setUserBatal(rs.getString(14));
         }
         return p;
     }
@@ -111,7 +114,7 @@ public class PenjualanHeadDAO {
             return "PJ-"+tglKode.format(tglBarang.parse(sistem.getTglSystem()))+"-"+new DecimalFormat("0000").format(1);
     }
     public static void insert(Connection con, PenjualanHead p)throws Exception{
-        PreparedStatement ps = con.prepareStatement("insert into tt_penjualan_head values (?,?,?,?,?,?,?,?,?,?,?,?,?)");
+        PreparedStatement ps = con.prepareStatement("insert into tt_penjualan_head values (?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
         ps.setString(1, p.getNoPenjualan());
         ps.setString(2, p.getTglPenjualan());
         ps.setString(3, p.getKodeSales());
@@ -121,16 +124,17 @@ public class PenjualanHeadDAO {
         ps.setDouble(7, p.getTotalBerat());
         ps.setDouble(8, p.getTotalBeratPembulatan());
         ps.setDouble(9, p.getGrandtotal());
-        ps.setString(10, p.getCatatan());
-        ps.setString(11, p.getStatus());
-        ps.setString(12, p.getTglBatal());
-        ps.setString(13, p.getUserBatal());
+        ps.setDouble(10, p.getDiskon());
+        ps.setString(11, p.getCatatan());
+        ps.setString(12, p.getStatus());
+        ps.setString(13, p.getTglBatal());
+        ps.setString(14, p.getUserBatal());
         ps.executeUpdate();
     }
     public static void update(Connection con, PenjualanHead p)throws Exception{
         PreparedStatement ps = con.prepareStatement("update tt_penjualan_head set "
                 + " tgl_penjualan=?, kode_sales=?, nama=?, alamat=?, total_qty=?, total_berat=?, "
-                + " total_berat_pembulatan=?, grandtotal=?, catatan=?, status=?, tgl_batal=?, user_batal=? "
+                + " total_berat_pembulatan=?, grandtotal=?, diskon=?, catatan=?, status=?, tgl_batal=?, user_batal=? "
                 + " where no_penjualan=? ");
         ps.setString(1, p.getTglPenjualan());
         ps.setString(2, p.getKodeSales());
@@ -140,11 +144,12 @@ public class PenjualanHeadDAO {
         ps.setDouble(6, p.getTotalBerat());
         ps.setDouble(7, p.getTotalBeratPembulatan());
         ps.setDouble(8, p.getGrandtotal());
-        ps.setString(9, p.getCatatan());
-        ps.setString(10, p.getStatus());
-        ps.setString(11, p.getTglBatal());
-        ps.setString(12, p.getUserBatal());
-        ps.setString(13, p.getNoPenjualan());
+        ps.setDouble(9, p.getDiskon());
+        ps.setString(10, p.getCatatan());
+        ps.setString(11, p.getStatus());
+        ps.setString(12, p.getTglBatal());
+        ps.setString(13, p.getUserBatal());
+        ps.setString(14, p.getNoPenjualan());
         ps.executeUpdate();
     }
 }

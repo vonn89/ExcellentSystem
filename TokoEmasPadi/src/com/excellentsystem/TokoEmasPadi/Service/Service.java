@@ -369,6 +369,8 @@ public class Service {
             PenjualanHeadDAO.insert(con, p);
             
             insertKeuangan(con, "Penjualan", p.getNoPenjualan(), p.getGrandtotal(), p.getKodeSales());
+            if(p.getDiskon()!=0)
+                insertKeuangan(con, "Diskon", p.getNoPenjualan(), -p.getDiskon(), p.getKodeSales());
             int i = 1;
             for(PenjualanDetail d : p.getListPenjualanDetail()){
                 d.setNoPenjualan(p.getNoPenjualan());
@@ -427,7 +429,8 @@ public class Service {
             PenjualanHeadDAO.update(con, p);
             
             insertKeuangan(con, "Batal Penjualan", p.getNoPenjualan(), -p.getGrandtotal(), p.getKodeSales());
-            
+            if(p.getDiskon()!=0)
+                insertKeuangan(con, "Diskon", p.getNoPenjualan(), p.getDiskon(), p.getKodeSales());
             for(PenjualanDetail d : p.getListPenjualanDetail()){
                 Barang barang = BarangDAO.get(con, d.getKodeBarcode());
                 if(barang==null){

@@ -55,7 +55,7 @@ public class DetailPenjualanController  {
         namaBarangColumn.setCellValueFactory(cellData -> cellData.getValue().namaBarangProperty());
         jumlahColumn.setCellValueFactory(cellData -> cellData.getValue().qtyProperty());
         jumlahColumn.setCellFactory(col -> getTableCell(rp, ""));
-        beratColumn.setCellValueFactory(cellData -> cellData.getValue().beratProperty());
+        beratColumn.setCellValueFactory(cellData -> cellData.getValue().beratPembulatanProperty());
         beratColumn.setCellFactory(col -> getTableCell(gr, "gr"));
         hargaColumn.setCellValueFactory(cellData -> cellData.getValue().hargaJualProperty());
         hargaColumn.setCellFactory(col -> getTableCell(rp, "Rp"));
