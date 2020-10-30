@@ -5,9 +5,13 @@
  */
 package com.excellentsystem.PasarBaja.PrintOut;
 
+import static com.excellentsystem.PasarBaja.Main.sistem;
 import com.excellentsystem.PasarBaja.Model.PemesananDetail;
 import com.excellentsystem.PasarBaja.Model.PenjualanDetail;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import javax.imageio.ImageIO;
 import net.sf.jasperreports.engine.JasperCompileManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
@@ -48,9 +52,14 @@ public class PrintOut {
     }
     public void printSuratPemesanan(List<PemesananDetail> detail)throws Exception{
         JasperDesign jasperDesign = JRXmlLoader.load(getClass().getResourceAsStream("SuratPemesanan.jrxml"));
+        Map parameters = new HashMap<>();
+        parameters.put("logo", ImageIO.read(getClass().getResource("logo.jpg")));
+        parameters.put("nama", sistem.getNama());
+        parameters.put("alamat", sistem.getAlamat());
+        parameters.put("noTelp", sistem.getNoTelp());
         JRBeanCollectionDataSource beanColDataSource = new JRBeanCollectionDataSource(detail);
         JasperReport jasperReport = JasperCompileManager.compileReport(jasperDesign);
-        JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport,null, beanColDataSource);
+        JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport,parameters, beanColDataSource);
         JRViewerFx jrViewerFx = new JRViewerFx(jasperPrint);
     }
     public void printSuratJalan(List<PenjualanDetail> detail)throws Exception{
@@ -62,9 +71,14 @@ public class PrintOut {
     }
     public void printInvoice(List<PenjualanDetail> detail)throws Exception{
         JasperDesign jasperDesign = JRXmlLoader.load(getClass().getResourceAsStream("Invoice.jrxml"));
+        Map parameters = new HashMap<>();
+        parameters.put("logo", ImageIO.read(getClass().getResource("logo.jpg")));
+        parameters.put("nama", sistem.getNama());
+        parameters.put("alamat", sistem.getAlamat());
+        parameters.put("noTelp", sistem.getNoTelp());
         JRBeanCollectionDataSource beanColDataSource = new JRBeanCollectionDataSource(detail);
         JasperReport jasperReport = JasperCompileManager.compileReport(jasperDesign);
-        JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport,null, beanColDataSource);
+        JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport,parameters, beanColDataSource);
         JRViewerFx jrViewerFx = new JRViewerFx(jasperPrint);
     }
 }
