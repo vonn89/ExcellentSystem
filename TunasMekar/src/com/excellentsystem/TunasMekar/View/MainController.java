@@ -68,6 +68,7 @@ public class MainController  {
     @FXML private VBox laporanVbox;
     @FXML private MenuButton menuLaporanBarang;
     @FXML private MenuButton menuLaporanPenjualan;
+    @FXML private MenuButton menuLaporanPembelian;
     @FXML private MenuButton menuLaporanKeuangan;
     @FXML private MenuButton menuLaporanManagerial;
     
@@ -307,5 +308,13 @@ public class MainController  {
     @FXML
     private void showLaporanBarangTidakLaku(){
         mainApp.showLaporanBarangTidakLaku();
+    }
+    @FXML
+    private void showLaporanPembelian(){
+        mainApp.showLaporanPembelian();
+    }
+    @FXML
+    private void showLaporanBarangDibeli(){
+        mainApp.showLaporanBarangDibeli();
     }
 }

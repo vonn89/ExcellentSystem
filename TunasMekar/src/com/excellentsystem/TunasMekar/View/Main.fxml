@@ -135,6 +135,15 @@
                                     <MenuItem disable="true" mnemonicParsing="false" text="Laporan Penjualan Rugi" />
                                  </items>
                               </MenuButton>
+                              <MenuButton fx:id="menuLaporanPembelian" layoutX="10.0" layoutY="40.0" maxWidth="1.7976931348623157E308" minHeight="30.0" mnemonicParsing="false" popupSide="RIGHT" prefHeight="30.0" text="Laporan Pembelian">
+                                 <padding>
+                                    <Insets left="50.0" />
+                                 </padding>
+                                 <items>
+                                    <MenuItem mnemonicParsing="false" onAction="#showLaporanPembelian" text="Laporan Pembelian" />
+                                    <MenuItem mnemonicParsing="false" onAction="#showLaporanBarangDibeli" text="Laporan Barang Dibeli" />
+                                 </items>
+                              </MenuButton>
                               <MenuButton fx:id="menuLaporanKeuangan" layoutX="10.0" layoutY="10.0" maxWidth="1.7976931348623157E308" minHeight="30.0" mnemonicParsing="false" popupSide="RIGHT" prefHeight="30.0" text="Laporan Keuangan">
                                  <padding>
                                     <Insets left="50.0" />

@@ -12,11 +12,13 @@ import com.excellentsystem.TunasMekar.Model.Otoritas;
 import com.excellentsystem.TunasMekar.Model.Sistem;
 import com.excellentsystem.TunasMekar.Model.User;
 import com.excellentsystem.TunasMekar.Report.LaporanBarangController;
+import com.excellentsystem.TunasMekar.Report.LaporanBarangDibeliController;
 import com.excellentsystem.TunasMekar.Report.LaporanBarangHampirHabisController;
 import com.excellentsystem.TunasMekar.Report.LaporanBarangTerjualController;
 import com.excellentsystem.TunasMekar.Report.LaporanBarangTidakLakuController;
 import com.excellentsystem.TunasMekar.Report.LaporanKartuStokBarangController;
 import com.excellentsystem.TunasMekar.Report.LaporanLogBarangController;
+import com.excellentsystem.TunasMekar.Report.LaporanPembelianController;
 import com.excellentsystem.TunasMekar.Report.LaporanPenjualanController;
 import com.excellentsystem.TunasMekar.Report.LaporanPenyesuaianStokBarangController;
 import com.excellentsystem.TunasMekar.Report.LaporanStokBarangController;
@@ -524,6 +526,28 @@ public class Main extends Application {
         Stage stage = new Stage();
         FXMLLoader loader = showLaporan(stage, "Report/LaporanBarangTidakLaku.fxml", "Laporan Barang Tidak Laku");
         LaporanBarangTidakLakuController controller = loader.getController();
+        stage.addEventFilter(KeyEvent.KEY_RELEASED, event->{
+            if (event.getCode() == KeyCode.LEFT) 
+                controller.prevPage();
+            if (event.getCode() == KeyCode.RIGHT) 
+                controller.nextPage();
+        });
+    }
+    public void showLaporanPembelian(){
+        Stage stage = new Stage();
+        FXMLLoader loader = showLaporan(stage, "Report/LaporanPembelian.fxml", "Laporan Pembelian");
+        LaporanPembelianController controller = loader.getController();
+        stage.addEventFilter(KeyEvent.KEY_RELEASED, event->{
+            if (event.getCode() == KeyCode.LEFT) 
+                controller.prevPage();
+            if (event.getCode() == KeyCode.RIGHT) 
+                controller.nextPage();
+        });
+    }
+    public void showLaporanBarangDibeli(){
+        Stage stage = new Stage();
+        FXMLLoader loader = showLaporan(stage, "Report/LaporanBarangDibeli.fxml", "Laporan Barang Dibeli");
+        LaporanBarangDibeliController controller = loader.getController();
         stage.addEventFilter(KeyEvent.KEY_RELEASED, event->{
             if (event.getCode() == KeyCode.LEFT) 
                 controller.prevPage();
