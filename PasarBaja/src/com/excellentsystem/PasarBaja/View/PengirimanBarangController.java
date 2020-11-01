@@ -448,15 +448,15 @@ public class PengirimanBarangController {
     }
 
     private void printSuratJalan(PenjualanHead p) {
-        try(Connection con = Koneksi.getConnection()){
+        try (Connection con = Koneksi.getConnection()) {
             List<PenjualanDetail> listPenjualan = PenjualanDetailDAO.getAllPenjualanDetail(con, p.getNoPenjualan());
-            for(PenjualanDetail d : listPenjualan){
+            for (PenjualanDetail d : listPenjualan) {
                 d.setPenjualanHead(p);
                 d.setBarang(BarangDAO.get(con, d.getKodeBarang()));
             }
             PrintOut printOut = new PrintOut();
             printOut.printSuratJalan(listPenjualan);
-        }catch (Exception e){
+        } catch (Exception e) {
             mainApp.showMessage(Modality.NONE, "Error", e.toString());
         }
     }

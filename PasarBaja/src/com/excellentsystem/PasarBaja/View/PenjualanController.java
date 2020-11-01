@@ -536,7 +536,6 @@ public class PenjualanController {
         }
     }
 
-
     private void exportExcel() {
         try {
             FileChooser fileChooser = new FileChooser();

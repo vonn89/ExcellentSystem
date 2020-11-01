@@ -754,14 +754,14 @@ public class PemesananController {
     }
 
     private void printProformaInvoice(PemesananHead p) {
-        try(Connection con = Koneksi.getConnection()){
+        try (Connection con = Koneksi.getConnection()) {
             List<PemesananDetail> listDetail = PemesananDetailDAO.getAllByNoPemesanan(con, p.getNoPemesanan());
-            for(PemesananDetail d : listDetail){
+            for (PemesananDetail d : listDetail) {
                 d.setPemesananHead(p);
             }
             PrintOut po = new PrintOut();
             po.printSuratPemesanan(listDetail);
-        }catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             mainApp.showMessage(Modality.NONE, "Error", e.toString());
         }
