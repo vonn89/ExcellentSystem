@@ -161,10 +161,9 @@
 				<textElement verticalAlignment="Middle">
 					<font fontName="Times New Roman" size="10" pdfFontName="Times-Roman"/>
 				</textElement>
-				<textFieldExpression><![CDATA[
-new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").parse(
+				<textFieldExpression><![CDATA[new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").parse(
 (
- $F{status}=="true" ? $F{tglPenjualan} : $F{tglPengiriman}
+ $F{status}.equals("true") ? $F{tglPenjualan} : $F{tglPengiriman}
 ))]]></textFieldExpression>
 			</textField>
 			<textField>
