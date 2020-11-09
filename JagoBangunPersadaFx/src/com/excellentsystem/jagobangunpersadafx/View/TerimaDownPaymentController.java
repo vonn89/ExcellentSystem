@@ -244,7 +244,6 @@ public class TerimaDownPaymentController  {
                     statusProperty.add("Available");
                     statusProperty.add("Reserved");
                     statusProperty.add("Sold");
-                    statusProperty.add("Sold - Full Paid");
                     List<Property> listProperty = PropertyDAO.getAllByStatus(con, statusProperty);
                     List<Karyawan> listKaryawan = KaryawanDAO.getAllByStatus(con, "true");
                     List<SDP> listSDP = SDPDAO.getAllByDateAndStatus(

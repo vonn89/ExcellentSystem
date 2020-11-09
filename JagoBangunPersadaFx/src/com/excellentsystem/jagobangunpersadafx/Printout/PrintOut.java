@@ -10,11 +10,10 @@ import com.excellentsystem.jagobangunpersadafx.Model.Neraca;
 import com.excellentsystem.jagobangunpersadafx.Model.RAPDetail;
 import com.excellentsystem.jagobangunpersadafx.Model.RAPHead;
 import com.excellentsystem.jagobangunpersadafx.Model.RAPRealisasi;
-import com.excellentsystem.jagobangunpersadafx.Model.SAP;
 import com.excellentsystem.jagobangunpersadafx.Model.SDP;
 import com.excellentsystem.jagobangunpersadafx.Model.SKLHead;
-import com.excellentsystem.jagobangunpersadafx.Model.SPPHead;
 import com.excellentsystem.jagobangunpersadafx.Model.STJHead;
+import com.excellentsystem.jagobangunpersadafx.Model.SerahTerima;
 import com.excellentsystem.jagobangunpersadafx.Model.UntungRugi;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -96,32 +95,15 @@ public class PrintOut {
         JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport,parameters, beanColDataSource);
         JRViewerFx jrViewerFx = new JRViewerFx(jasperPrint);
     }
-    public void printSuratAngsuranPembayaran(SAP sap)throws Exception{
-        JasperDesign jasperDesign = JRXmlLoader.load(getClass().getResourceAsStream("SAP.jrxml"));
-        Map parameters = new HashMap<>();
-        parameters.put("header", ImageIO.read(getClass().getResource("JBP Kop Surat.jpg")));
-        parameters.put("watermark", ImageIO.read(getClass().getResource("JBP watermark.jpg")));
-        DateFormat tgl = new SimpleDateFormat("dd MMMMM yyyy");
-        parameters.put("tglSAP",tgl.format(tglSql.parse(sap.getTglSAP())));
-        List<SAP> allsap = new ArrayList<>();
-        allsap.add(sap);
-        JRBeanCollectionDataSource beanColDataSource = new JRBeanCollectionDataSource(allsap);
-        JasperReport jasperReport = JasperCompileManager.compileReport(jasperDesign);
-        JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport,parameters, beanColDataSource);
-        JRViewerFx jrViewerFx = new JRViewerFx(jasperPrint);
-    }
-    public void printSuratPelunasanAngsuran(SPPHead spp)throws Exception{
-        JasperDesign jasperDesign = JRXmlLoader.load(getClass().getResourceAsStream("SPP.jrxml"));
+    public void printSuratSerahTerima(SerahTerima st)throws Exception{
+        JasperDesign jasperDesign = JRXmlLoader.load(getClass().getResourceAsStream("SerahTerima.jrxml"));
         Map parameters = new HashMap<>();
         DateFormat tgl = new SimpleDateFormat("dd MMMMM yyyy");
-        parameters.put("tglSPP", tgl.format(tglSql.parse(spp.getTglSPP())));
+        parameters.put("tglSerahTerima", tgl.format(tglSql.parse(st.getTglSerahTerima())));
         parameters.put("header", ImageIO.read(getClass().getResource("JBP Kop Surat.jpg")));
         parameters.put("watermark", ImageIO.read(getClass().getResource("JBP watermark.jpg")));
-        JasperDesign subreport = JRXmlLoader.load(getClass().getResourceAsStream("SPPDetail.jrxml"));
-        JasperReport jasperSubReport = JasperCompileManager.compileReport(subreport);
-        parameters.put("SubReportParam", jasperSubReport);
-        List<SPPHead> allspp = new ArrayList<>();
-        allspp.add(spp);
+        List<SerahTerima> allspp = new ArrayList<>();
+        allspp.add(st);
         JRBeanCollectionDataSource beanColDataSource = new JRBeanCollectionDataSource(allspp);
         JasperReport jasperReport = JasperCompileManager.compileReport(jasperDesign);
         JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport,parameters, beanColDataSource);

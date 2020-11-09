@@ -48,8 +48,7 @@ public class MainController {
     @FXML private MenuButton terimaDownPayment;
     @FXML private MenuButton pelunasanDownPayment;
     @FXML private MenuButton terimaPencairanKPR;
-    @FXML private MenuButton terimaAngsuran;
-    @FXML private MenuButton pelunasanAngsuran;
+    @FXML private MenuButton serahTerima;
     
     @FXML private MenuButton dataKeuangan;
     @FXML private MenuButton dataHutang;
@@ -110,49 +109,47 @@ public class MainController {
     }    
     public void setUser() {
         title.setText("JAGO BANGUN PERSADA");
-        if(sistem.getUser()==null){
-            loginButton.setText("Login");
-            logoutButton.setVisible(false);
-            ubahPasswordButton.setVisible(false);
-            mainApp.showLoginScene();
-            
-            dataProperty.setVisible(false);
-            dataCustomer.setVisible(false);
-            dataKaryawan.setVisible(false);
-            dataTukang.setVisible(false);
+        loginButton.setText("Login");
+        logoutButton.setVisible(false);
+        ubahPasswordButton.setVisible(false);
+        mainApp.showLoginScene();
 
-            pembelianTanah.setVisible(false);
-            pembangunan.setVisible(false);
-            
-            rencanaAnggaranProyek.setVisible(false);
-            realisasiAnggaranProyek.setVisible(false);
+        dataProperty.setVisible(false);
+        dataCustomer.setVisible(false);
+        dataKaryawan.setVisible(false);
+        dataTukang.setVisible(false);
 
-            terimaTandaJadi.setVisible(false);
-            terimaDownPayment.setVisible(false);
-            pelunasanDownPayment.setVisible(false);
-            terimaPencairanKPR.setVisible(false);
-            terimaAngsuran.setVisible(false);
-            pelunasanAngsuran.setVisible(false);
+        pembelianTanah.setVisible(false);
+        pembangunan.setVisible(false);
 
-            dataKeuangan.setVisible(false);
-            dataHutang.setVisible(false);
-            dataPiutang.setVisible(false);
-            dataModal.setVisible(false);
-            dataAsetTetap.setVisible(false);
+        rencanaAnggaranProyek.setVisible(false);
+        realisasiAnggaranProyek.setVisible(false);
 
-            dataUser.setVisible(false);
-            kategoriHutang.setVisible(false);
-            kateogriPiutang.setVisible(false);
-            kategoriTransaksi.setVisible(false);
-            kategoriProperty.setVisible(false);
-            kategoriKeuangan.setVisible(false);
-            
-            laporanProperty.setVisible(false);
-            laporanKategoriProperty.setVisible(false);
-            laporanUntungRugi.setVisible(false);
-            laporanUntungRugiPeriode.setVisible(false);
-            laporanNeraca.setVisible(false);
-        }else{
+        terimaTandaJadi.setVisible(false);
+        terimaDownPayment.setVisible(false);
+        pelunasanDownPayment.setVisible(false);
+        terimaPencairanKPR.setVisible(false);
+        serahTerima.setVisible(false);
+
+        dataKeuangan.setVisible(false);
+        dataHutang.setVisible(false);
+        dataPiutang.setVisible(false);
+        dataModal.setVisible(false);
+        dataAsetTetap.setVisible(false);
+
+        dataUser.setVisible(false);
+        kategoriHutang.setVisible(false);
+        kateogriPiutang.setVisible(false);
+        kategoriTransaksi.setVisible(false);
+        kategoriProperty.setVisible(false);
+        kategoriKeuangan.setVisible(false);
+
+        laporanProperty.setVisible(false);
+        laporanKategoriProperty.setVisible(false);
+        laporanUntungRugi.setVisible(false);
+        laporanUntungRugiPeriode.setVisible(false);
+        laporanNeraca.setVisible(false);
+        if(sistem.getUser()!=null){
             logoutButton.setVisible(true);
             ubahPasswordButton.setVisible(true);
             loginButton.setText(sistem.getUser().getUsername());
@@ -181,10 +178,8 @@ public class MainController {
                     pelunasanDownPayment.setVisible(o.isStatus());
                 }else if(o.getJenis().equals("Terima Pencairan KPR")){
                     terimaPencairanKPR.setVisible(o.isStatus());
-                }else if(o.getJenis().equals("Terima Angsuran Pembayaran")){
-                    terimaAngsuran.setVisible(o.isStatus());
-                }else if(o.getJenis().equals("Pelunasan Angsuran")){
-                    pelunasanAngsuran.setVisible(o.isStatus());
+                }else if(o.getJenis().equals("Serah Terima")){
+                    serahTerima.setVisible(o.isStatus());
                 }else if(o.getJenis().equals("Data Keuangan")){
                     dataKeuangan.setVisible(o.isStatus());
                 }else if(o.getJenis().equals("Data Hutang")){
@@ -209,11 +204,11 @@ public class MainController {
                     kategoriKeuangan.setVisible(o.isStatus());
                 }else if(o.getJenis().equals("Laporan Property")){
                     laporanProperty.setVisible(o.isStatus());
-                }else if(o.getJenis().equals("Laporan KategoriProperty")){
+                }else if(o.getJenis().equals("Laporan Kategori Property")){
                     laporanKategoriProperty.setVisible(o.isStatus());
-                }else if(o.getJenis().equals("Laporan Untung Rugi")){
+                }else if(o.getJenis().equals("Laporan Untung-Rugi")){
                     laporanUntungRugi.setVisible(o.isStatus());
-                }else if(o.getJenis().equals("Laporan Untung Rugi Periode")){
+                }else if(o.getJenis().equals("Laporan Untung-Rugi Periode")){
                     laporanUntungRugiPeriode.setVisible(o.isStatus());
                 }else if(o.getJenis().equals("Laporan Neraca")){
                     laporanNeraca.setVisible(o.isStatus());
@@ -355,12 +350,8 @@ public class MainController {
         mainApp.showPencairanKPR();
     }
     @FXML
-    private void showTerimaAngsuran(){
-        mainApp.showTerimaAngsuranPembayaran();
-    }
-    @FXML
-    private void showPelunasanAngsuran(){
-        mainApp.showPelunasanPembayaran();
+    private void showSerahTerima(){
+        mainApp.showSerahTerima();
     }
     @FXML
     private void showKeuangan(){

@@ -225,7 +225,7 @@ public class DataPropertyController  {
             totalNilaiPropertyLabel.setVisible(false);
         }
         ObservableList<String> status = FXCollections.observableArrayList();
-        status.addAll("Available","Reserved","Sold","Sold - Full Paid");
+        status.addAll("Available","Reserved","Sold");
         statusCombo.setItems(status);
         statusCombo.getSelectionModel().select("Available");
         getProperty();

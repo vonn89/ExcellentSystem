@@ -19,7 +19,6 @@ import com.excellentsystem.jagobangunpersadafx.View.Dialog.DetailPembangunanCont
 import com.excellentsystem.jagobangunpersadafx.View.Dialog.DetailPembelianTanahController;
 import com.excellentsystem.jagobangunpersadafx.View.Dialog.DetailPropertyController;
 import com.excellentsystem.jagobangunpersadafx.View.Dialog.DetailRealisasiProyekController;
-import com.excellentsystem.jagobangunpersadafx.View.Dialog.DetailTerimaAngsuranPembayaranController;
 import com.excellentsystem.jagobangunpersadafx.View.Dialog.DetailTerimaDownPaymentController;
 import com.excellentsystem.jagobangunpersadafx.View.Dialog.DetailTerimaPencairanKPRController;
 import com.excellentsystem.jagobangunpersadafx.View.Dialog.DetailTerimaTandaJadiController;
@@ -142,10 +141,6 @@ public class DetailKeuanganController  {
                             kpr.setOnAction((ActionEvent event) -> {
                                 detailTerimaPencairanKPR(item.getProperty());
                             });
-                            MenuItem sap = new MenuItem("Detail Terima Angsuran Pembayaran");
-                            sap.setOnAction((ActionEvent event) -> {
-                                detailTerimaAngsuranPembayaran(item.getDeskripsi().split(" - ")[1]);
-                            });
                             
                             if(item.getProperty()!=null)
                                 rowMenu.getItems().add(detailProperty);
@@ -162,8 +157,6 @@ public class DetailKeuanganController  {
                                 rowMenu.getItems().add(dp);
                             else if(item.getKategori().equals("Terima Pencairan KPR")||item.getKategori().equals("Batal Terima Pencairan KPR"))
                                 rowMenu.getItems().add(kpr);
-                            else if(item.getKategori().equals("Terima Angsuran")||item.getKategori().equals("Batal Terima Angsuran"))
-                                rowMenu.getItems().add(sap);
                             setContextMenu(rowMenu);
                         }
                     }
@@ -284,13 +277,6 @@ public class DetailKeuanganController  {
         DetailTerimaDownPaymentController x = loader.getController();
         x.setMainApp(mainApp, stage, child);
         x.getSDP(noSDP);
-    }
-    private void detailTerimaAngsuranPembayaran(String noSAP){
-        Stage child = new Stage();
-        FXMLLoader loader = mainApp.showDialog(stage, child, "View/Dialog/DetailTerimaAngsuranPembayaran.fxml");
-        DetailTerimaAngsuranPembayaranController x = loader.getController();
-        x.setMainApp(mainApp, stage, child);
-        x.getSAP(noSAP);
     }
     private void detailTerimaPencairanKPR(Property p){
         Stage child = new Stage();

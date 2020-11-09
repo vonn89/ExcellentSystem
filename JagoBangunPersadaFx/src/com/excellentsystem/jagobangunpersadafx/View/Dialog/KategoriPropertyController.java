@@ -21,22 +21,16 @@ import javafx.concurrent.Task;
 import javafx.concurrent.WorkerStateEvent;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
-import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
-import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafx.util.Callback;
 
 /**
  * FXML Controller class
@@ -140,7 +134,6 @@ public class KategoriPropertyController  {
                         statusProperty.add("Available");
                         statusProperty.add("Reserved");
                         statusProperty.add("Sold");
-                        statusProperty.add("Sold - Full Paid");
                         List<Property> allProperty = PropertyDAO.getAllByStatus(con,statusProperty);
                         for(Property p : allProperty){
                             if(p.getKodeKategori().equals(k.getKodeKategori()))

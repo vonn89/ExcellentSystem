@@ -184,7 +184,6 @@ public class DetailTransaksiKeuanganPropertyController  {
                         status.add("Available");
                         status.add("Reserved");
                         status.add("Sold");
-                        status.add("Sold - Full Paid");
                         return PropertyDAO.getAllByStatus(con,status);
                     }
                 }

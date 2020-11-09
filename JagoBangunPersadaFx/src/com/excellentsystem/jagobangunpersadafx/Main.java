@@ -28,7 +28,6 @@ import com.excellentsystem.jagobangunpersadafx.View.KeuanganController;
 import com.excellentsystem.jagobangunpersadafx.View.LoginController;
 import com.excellentsystem.jagobangunpersadafx.View.MainController;
 import com.excellentsystem.jagobangunpersadafx.View.ModalController;
-import com.excellentsystem.jagobangunpersadafx.View.PelunasanAngsuranPembayaranController;
 import com.excellentsystem.jagobangunpersadafx.View.PelunasanDownPaymentController;
 import com.excellentsystem.jagobangunpersadafx.View.PembangunanController;
 import com.excellentsystem.jagobangunpersadafx.View.PembelianTanahController;
@@ -41,7 +40,7 @@ import com.excellentsystem.jagobangunpersadafx.View.Report.LaporanPropertyContro
 import com.excellentsystem.jagobangunpersadafx.View.Report.LaporanUntungRugiController;
 import com.excellentsystem.jagobangunpersadafx.View.Report.LaporanUntungRugiPeriodeController;
 import com.excellentsystem.jagobangunpersadafx.View.Report.LaporanUntungRugiPropertyController;
-import com.excellentsystem.jagobangunpersadafx.View.TerimaAngsuranPembayaranController;
+import com.excellentsystem.jagobangunpersadafx.View.SerahTerimaController;
 import com.excellentsystem.jagobangunpersadafx.View.TerimaDownPaymentController;
 import com.excellentsystem.jagobangunpersadafx.View.TerimaTandaJadiController;
 import java.awt.Dimension;
@@ -132,12 +131,7 @@ public class Main extends Application {
                     if(!version.equals(sistem.getVersion())){
                         updateMessage("updating software...");
                         updateProgress(50, 100);
-                        String status = Function.downloadUpdateGoogleStorage("Jago Bangun Persada.exe");
-                        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                        alert.setTitle("Information");
-                        alert.setContentText(status);
-                        alert.showAndWait();
-                        System.exit(0);
+                        return Function.downloadUpdateGoogleStorage("Jago Bangun Persada.exe");
                     }
                     Service.setPenyusutanAset(con);
                     updateProgress(70, 100);
@@ -323,18 +317,11 @@ public class Main extends Application {
         setTitle("Terima Pencairan KPR");
         return controller;
     }
-    public TerimaAngsuranPembayaranController showTerimaAngsuranPembayaran(){
-        FXMLLoader loader = changeStage("View/TerimaAngsuranPembayaran.fxml");
-        TerimaAngsuranPembayaranController controller = loader.getController();
+    public SerahTerimaController showSerahTerima(){
+        FXMLLoader loader = changeStage("View/SerahTerima.fxml");
+        SerahTerimaController controller = loader.getController();
         controller.setMainApp(this);
-        setTitle("Terima Angsuran Pembayaran");
-        return controller;
-    }
-    public PelunasanAngsuranPembayaranController showPelunasanPembayaran(){
-        FXMLLoader loader = changeStage("View/PelunasanAngsuranPembayaran.fxml");
-        PelunasanAngsuranPembayaranController controller = loader.getController();
-        controller.setMainApp(this);
-        setTitle("Pelunasan Angsuran");
+        setTitle("Serah Terima");
         return controller;
     }
     public KeuanganController showKeuangan(){

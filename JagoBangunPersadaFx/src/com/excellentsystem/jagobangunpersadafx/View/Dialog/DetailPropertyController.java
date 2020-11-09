@@ -141,7 +141,7 @@ public class DetailPropertyController  {
             if(o.getJenis().equals("Update Property")&&o.isStatus())
                 status = false;
         }
-        if(p.getStatus().equals("Sold")||p.getStatus().equals("Sold - Full Paid")||status)
+        if(p.getStatus().equals("Sold")||status)
             viewOnly();
     }
     public void viewOnly(){

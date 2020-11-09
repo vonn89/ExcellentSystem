@@ -9,6 +9,7 @@ import com.excellentsystem.jagobangunpersadafx.DAO.CustomerDAO;
 import com.excellentsystem.jagobangunpersadafx.DAO.KaryawanDAO;
 import com.excellentsystem.jagobangunpersadafx.DAO.PropertyDAO;
 import com.excellentsystem.jagobangunpersadafx.DAO.SDPDAO;
+import com.excellentsystem.jagobangunpersadafx.DAO.SKLHeadDAO;
 import com.excellentsystem.jagobangunpersadafx.DAO.STJDetailDAO;
 import com.excellentsystem.jagobangunpersadafx.DAO.STJHeadDAO;
 import com.excellentsystem.jagobangunpersadafx.Function;
@@ -222,20 +223,24 @@ public class DetailTerimaDownPaymentController  {
             final TableRow<Property> row = new TableRow<>();
             row.setOnMouseClicked((MouseEvent mouseEvent) -> {
                 if(mouseEvent.getButton().equals(MouseButton.PRIMARY)&&mouseEvent.getClickCount() == 2){
-                    Task<Void> task = new Task<Void>() {
+                    Task<String> task = new Task<String>() {
                         @Override 
-                        public Void call() throws Exception{
+                        public String call() throws Exception{
                             try (Connection con = Koneksi.getConnection()) {
-                                STJHead stj = STJHeadDAO.getByKodeProperty(con, row.getItem().getKodeProperty(), "true");
-                                stj.setAllDetail(STJDetailDAO.getAllByNoSTJ(con, stj.getNoSTJ()));
-                                sdp.setStj(stj);
-                                sdp.setCustomer(CustomerDAO.get(con, stj.getKodeCustomer()));
-                                sdp.setSales(KaryawanDAO.get(con, stj.getKodeSales()));
-                                allSDP.clear();
-                                allSDP.addAll(SDPDAO.getAllByKodeProperty(con, row.getItem().getKodeProperty(), "true"));
-                                allSDP.sort(Comparator.comparing(SDP::getTahap));
+                                if(SKLHeadDAO.getByKodeProperty(con, row.getItem().getKodeProperty(), "true")==null){
+                                    STJHead stj = STJHeadDAO.getByKodeProperty(con, row.getItem().getKodeProperty(), "true");
+                                    stj.setAllDetail(STJDetailDAO.getAllByNoSTJ(con, stj.getNoSTJ()));
+                                    sdp.setStj(stj);
+                                    sdp.setCustomer(CustomerDAO.get(con, stj.getKodeCustomer()));
+                                    sdp.setSales(KaryawanDAO.get(con, stj.getKodeSales()));
+                                    allSDP.clear();
+                                    allSDP.addAll(SDPDAO.getAllByKodeProperty(con, row.getItem().getKodeProperty(), "true"));
+                                    allSDP.sort(Comparator.comparing(SDP::getTahap));
+                                    return "true";
+                                }else{
+                                    return "false";
+                                }
                             }
-                            return null;
                         }
                     };
                     task.setOnRunning((e) -> {
@@ -244,25 +249,30 @@ public class DetailTerimaDownPaymentController  {
                     task.setOnSucceeded((WorkerStateEvent e) -> {
                         try{
                             mainApp.closeLoading();
-                            Property p = row.getItem();
-                            namaPropertyField.setText(p.getNamaProperty());
-                            hargaField.setText(rp.format(p.getHargaJual()));
-                            diskonField.setText(rp.format(p.getDiskon()));
-                            sdp.setProperty(p);
-                            sdp.setKodeProperty(p.getKodeProperty());
-                            sdp.setNoSTJ(sdp.getStj().getNoSTJ());
-                            namaCustomerField.setText(sdp.getCustomer().getNama());
-                            sdp.setKodeCustomer(sdp.getCustomer().getKodeCustomer());
-                            sdp.setKodeSales(sdp.getSales().getKodeKaryawan());
-                            int tahap = 1;
-                            for(SDP s : allSDP){
-                                if(s.getTahap()>=tahap)
-                                    tahap = s.getTahap()+1;
+                            if(task.getValue().equals("true")){
+                                Property p = row.getItem();
+                                namaPropertyField.setText(p.getNamaProperty());
+                                hargaField.setText(rp.format(p.getHargaJual()));
+                                diskonField.setText(rp.format(p.getDiskon()));
+                                sdp.setProperty(p);
+                                sdp.setKodeProperty(p.getKodeProperty());
+                                sdp.setNoSTJ(sdp.getStj().getNoSTJ());
+                                namaCustomerField.setText(sdp.getCustomer().getNama());
+                                sdp.setKodeCustomer(sdp.getCustomer().getKodeCustomer());
+                                sdp.setKodeSales(sdp.getSales().getKodeKaryawan());
+                                int tahap = 1;
+                                for(SDP s : allSDP){
+                                    if(s.getTahap()>=tahap)
+                                        tahap = s.getTahap()+1;
+                                }
+                                tahapField.setText(String.valueOf(tahap));
+                                tahapNextLabel.setText("Tagihan Down Payment Tahap ke-"+String.valueOf(tahap+1));
+                                sdp.setTahap(tahap);
+                                mainApp.closeDialog(stage, child);
+                            }else{
+                                mainApp.showMessage(Modality.NONE, "Warning", "Tidak dapat menerima DP lagi, "
+                                        + "karena surat keterangan lunas sudah dibuat");
                             }
-                            tahapField.setText(String.valueOf(tahap));
-                            tahapNextLabel.setText("Tagihan Down Payment Tahap ke-"+String.valueOf(tahap+1));
-                            sdp.setTahap(tahap);
-                            mainApp.closeDialog(stage, child);
                         }catch(Exception ex){
                             mainApp.showMessage(Modality.NONE, "Error", ex.toString());
                         }

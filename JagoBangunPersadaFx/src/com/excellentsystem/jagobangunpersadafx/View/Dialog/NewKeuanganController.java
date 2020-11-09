@@ -181,7 +181,6 @@ public class NewKeuanganController  {
                     status.add("Available");
                     status.add("Reserved");
                     status.add("Sold");
-                    status.add("Sold - Full Paid");
                     List<Property> allProperty = PropertyDAO.getAllByStatus(con ,status);
                     for(Property p : allProperty){
                         Keuangan k = new Keuangan();

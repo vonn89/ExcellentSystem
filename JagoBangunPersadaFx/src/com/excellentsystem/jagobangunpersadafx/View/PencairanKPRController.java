@@ -234,7 +234,6 @@ public class PencairanKPRController  {
                     statusProperty.add("Available");
                     statusProperty.add("Reserved");
                     statusProperty.add("Sold");
-                    statusProperty.add("Sold - Full Paid");
                     List<Property> listProperty = PropertyDAO.getAllByStatus(con, statusProperty);
                     List<KPR> listKPR = KPRDAO.getAllByDate(con, tglAwalPicker.getValue().toString(), tglAkhirPicker.getValue().toString(), "true");
                     for(KPR kpr : listKPR){
@@ -307,7 +306,7 @@ public class PencairanKPRController  {
         x.setMainApp(mainApp, mainApp.MainStage, stage);
         x.setNewKPR();
         x.saveButton.setOnAction((ActionEvent ev)->{
-            if(x.namaPropertyCombo.getSelectionModel().getSelectedItem()==null){
+            if(x.namaPropertyField.getText().equals("")){
                 mainApp.showMessage(Modality.NONE, "Warning", "Property belum dipilih");
             }else if(x.jumlahDiterimaField.getText().equals("")){
                 mainApp.showMessage(Modality.NONE, "Warning", "Jumlah di terima masih kosong");

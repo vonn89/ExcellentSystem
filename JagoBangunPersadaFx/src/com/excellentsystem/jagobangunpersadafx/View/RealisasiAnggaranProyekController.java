@@ -503,7 +503,6 @@ public class RealisasiAnggaranProyekController  {
                             Property prop = PropertyDAO.get(con, detail.getKodeProperty());
                             if(prop.getStatus().equals("Mapped")||
                                     prop.getStatus().equals("Combined")||
-                                    prop.getStatus().equals("Sold - Full Paid")||
                                     prop.getStatus().equals("Sold"))
                                 statusTanah = false;
                         }

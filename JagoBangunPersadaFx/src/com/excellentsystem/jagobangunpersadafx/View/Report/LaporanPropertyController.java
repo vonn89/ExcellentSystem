@@ -15,7 +15,6 @@ import com.excellentsystem.jagobangunpersadafx.DAO.PropertyDAO;
 import com.excellentsystem.jagobangunpersadafx.DAO.RAPDetailPropertyDAO;
 import com.excellentsystem.jagobangunpersadafx.DAO.RAPHeadDAO;
 import com.excellentsystem.jagobangunpersadafx.DAO.RAPRealisasiDAO;
-import com.excellentsystem.jagobangunpersadafx.DAO.SAPDAO;
 import com.excellentsystem.jagobangunpersadafx.DAO.SDPDAO;
 import com.excellentsystem.jagobangunpersadafx.DAO.STJHeadDAO;
 import com.excellentsystem.jagobangunpersadafx.Function;
@@ -32,7 +31,6 @@ import com.excellentsystem.jagobangunpersadafx.Model.Property;
 import com.excellentsystem.jagobangunpersadafx.Model.RAPDetailProperty;
 import com.excellentsystem.jagobangunpersadafx.Model.RAPHead;
 import com.excellentsystem.jagobangunpersadafx.Model.RAPRealisasi;
-import com.excellentsystem.jagobangunpersadafx.Model.SAP;
 import com.excellentsystem.jagobangunpersadafx.Model.SDP;
 import com.excellentsystem.jagobangunpersadafx.Model.STJHead;
 import java.sql.Connection;
@@ -79,7 +77,6 @@ public class LaporanPropertyController {
     private List<STJHead> allSTJ;
     private List<SDP> allSDP;
     private List<KPR> allKPR;
-    private List<SAP> allSAP;
     private List<Property> listProperty;
     private int rows = 0;
     private int columns = 0;
@@ -171,7 +168,6 @@ public class LaporanPropertyController {
                     allSTJ = STJHeadDAO.getAllByDateAndStatus(con, "2000-01-01", "2100-01-01", "true");
                     allSDP = SDPDAO.getAllByDateAndStatus(con, "2000-01-01", "2100-01-01", "true");
                     allKPR = KPRDAO.getAllByDate(con, "2000-01-01", "2100-01-01", "true");
-                    allSAP = SAPDAO.getAllByDateAndStatus(con, "2000-01-01", "2100-01-01", "true");
                     rows = 20;
                     columns = 2;
                     for(Property p : listProperty){
@@ -301,8 +297,6 @@ public class LaporanPropertyController {
         i++;//19
         addText(gp, "PENCAIRAN KPR", 0, i, "seccolor3", "seccolor6");
         i++;//20
-        addText(gp, "TERIMA ANGSURAN", 0, i, "seccolor3", "seccolor6");
-        i++;//21
         gp.getRowConstraints().add(i, new RowConstraints(3,3,3));
         gridPane.getRowConstraints().add(i, new RowConstraints(3,3,3));
         addText(gp, "", 0, i, "seccolor3", "seccolor6");
@@ -537,12 +531,6 @@ public class LaporanPropertyController {
                 kpr = kpr + k.getJumlahRp();
             }
         }
-        double sap = 0;
-        for(SAP s : allSAP){
-            if(s.getKodeProperty().equals(p.getKodeProperty())){
-                sap = sap + s.getJumlahRp();
-            }
-        }
         addText(gridPane, rp.format(nilaiTanah), col, i, "seccolor5", "seccolor3");
         i++;//2
         addText(gridPane, "", col, i, "seccolor1", "seccolor6");
@@ -580,11 +568,9 @@ public class LaporanPropertyController {
         i++;//19
         addText(gridPane, rp.format(kpr), col, i, "seccolor5", "seccolor3");
         i++;//20
-        addText(gridPane, rp.format(sap), col, i, "seccolor5", "seccolor3");
-        i++;//21
         addText(gridPane, "", col, i, "seccolor1", "seccolor6");
         i++;//22
-        addText(gridPane, rp.format(stj+sdp+kpr+sap), col, i, "seccolor5", "seccolor3");
+        addText(gridPane, rp.format(stj+sdp+kpr), col, i, "seccolor5", "seccolor3");
 
     }
     private void setTotal(int col) throws ParseException{
@@ -774,12 +760,6 @@ public class LaporanPropertyController {
                 kpr = kpr + k.getJumlahRp();
             }
         }
-        double sap = 0;
-        for(SAP s : allSAP){for(Property p : listProperty)
-            if(s.getKodeProperty().equals(p.getKodeProperty())){
-                sap = sap + s.getJumlahRp();
-            }
-        }
         addText(gridPane, rp.format(pengurusanSertifikat), col, i, "seccolor3", "seccolor6");
         i++;
         addText(gridPane, rp.format(infrastruktur), col, i, "seccolor3", "seccolor6");
@@ -813,11 +793,9 @@ public class LaporanPropertyController {
         i++;//19
         addText(gridPane, rp.format(kpr), col, i, "seccolor3", "seccolor6");
         i++;//20
-        addText(gridPane, rp.format(sap), col, i, "seccolor3", "seccolor6");
-        i++;//21
         addText(gridPane, "", col, i, "seccolor1", "seccolor6");
         i++;//22
-        addText(gridPane, rp.format(stj+sdp+kpr+sap), col, i, "seccolor3", "seccolor6");
+        addText(gridPane, rp.format(stj+sdp+kpr), col, i, "seccolor3", "seccolor6");
 
     }
     private void addText(GridPane gridPane, String text, int column, int row, String backgroundColor, String textColor){

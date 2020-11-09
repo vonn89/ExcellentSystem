@@ -143,7 +143,6 @@ public class LaporanUntungRugiPeriodeController  {
                     statusProperty.add("Available");
                     statusProperty.add("Reserved");
                     statusProperty.add("Sold");
-                    statusProperty.add("Sold - Full Paid");
                     List<Property> listProperty = PropertyDAO.getAllByStatus(con, statusProperty);
                     allPenjualan.clear();
                     allNilaiTanahDanBangunan.clear();

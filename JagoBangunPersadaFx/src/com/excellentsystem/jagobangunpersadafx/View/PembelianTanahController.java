@@ -224,7 +224,6 @@ public class PembelianTanahController {
                     status.add("Mapped");
                     status.add("Reserved");
                     status.add("Sold");
-                    status.add("Sold - Full Paid");
                     List<Property> listProperty = PropertyDAO.getAllByStatus(con, status);
                     for(PembelianTanah beli : listPembelian){
                         for(Property p : listProperty){

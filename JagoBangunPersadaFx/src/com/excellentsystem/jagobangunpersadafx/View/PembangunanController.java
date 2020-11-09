@@ -349,7 +349,6 @@ public class PembangunanController  {
                             Property prop = PropertyDAO.get(con, detail.getKodeProperty());
                             if(prop.getStatus().equals("Mapped")||
                                     prop.getStatus().equals("Combined")||
-                                    prop.getStatus().equals("Sold - Full Paid")||
                                     prop.getStatus().equals("Sold"))
                                 statusTanah = false;
                         }
@@ -359,7 +358,7 @@ public class PembangunanController  {
                             p.setStatus("false");
                             return Service.batalPembangunan(con, p);
                         }else 
-                            return "Pembangunan tidak dapat dibatalkan, karena status tanah sudah lunas/sudah dipecah/sudah digabung";
+                            return "Pembangunan tidak dapat dibatalkan, karena status tanah sudah terjual/sudah dipecah/sudah digabung";
                     }
                 }
             };

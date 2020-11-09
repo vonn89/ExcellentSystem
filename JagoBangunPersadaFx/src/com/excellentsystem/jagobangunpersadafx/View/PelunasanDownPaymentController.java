@@ -9,9 +9,9 @@ import com.excellentsystem.jagobangunpersadafx.DAO.CustomerDAO;
 import com.excellentsystem.jagobangunpersadafx.DAO.KPRDAO;
 import com.excellentsystem.jagobangunpersadafx.DAO.KaryawanDAO;
 import com.excellentsystem.jagobangunpersadafx.DAO.PropertyDAO;
-import com.excellentsystem.jagobangunpersadafx.DAO.SAPDAO;
 import com.excellentsystem.jagobangunpersadafx.DAO.SKLDetailDAO;
 import com.excellentsystem.jagobangunpersadafx.DAO.SKLHeadDAO;
+import com.excellentsystem.jagobangunpersadafx.DAO.SerahTerimaDAO;
 import com.excellentsystem.jagobangunpersadafx.Function;
 import static com.excellentsystem.jagobangunpersadafx.Function.getDateCellAkhir;
 import static com.excellentsystem.jagobangunpersadafx.Function.getDateCellMulai;
@@ -257,7 +257,6 @@ public class PelunasanDownPaymentController  {
                     statusProperty.add("Available");
                     statusProperty.add("Reserved");
                     statusProperty.add("Sold");
-                    statusProperty.add("Sold - Full Paid");
                     List<Property> listProperty = PropertyDAO.getAllByStatus(con, statusProperty);
                     List<Karyawan> listKaryawan = KaryawanDAO.getAllByStatus(con, "true");
                     List<SKLDetail> listSKLDetail = SKLDetailDAO.getAllByDateAndStatus(con, 
@@ -397,8 +396,8 @@ public class PelunasanDownPaymentController  {
                 @Override 
                 public String call() throws Exception{
                     try (Connection con = Koneksi.getConnection()) {
-                        if(!SAPDAO.getAllByKodeProperty(con, skl.getKodeProperty(), "true").isEmpty())
-                            return "Pelunasan down payment tidak dapat dibatalkan, karena sudah ada pembayaran Angsuran";
+                        if(SerahTerimaDAO.getByKodeProperty(con, skl.getKodeProperty(), "true")!=null)
+                            return "Pelunasan down payment tidak dapat dibatalkan, karena sudah ada serah terima";
                         else if(KPRDAO.getByKodeProperty(con, skl.getKodeProperty())!=null)
                             return "Pelunasan down payment tidak dapat dibatalkan, karena sudah ada pencairan KPR";
                         else{

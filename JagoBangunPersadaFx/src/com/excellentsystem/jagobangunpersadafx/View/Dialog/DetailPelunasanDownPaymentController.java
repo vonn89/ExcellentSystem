@@ -171,10 +171,14 @@ public class DetailPelunasanDownPaymentController  {
                         @Override 
                         public List<SDP> call() throws Exception{
                             try (Connection con = Koneksi.getConnection()) {
-                                skl.setStj(STJHeadDAO.getByKodeProperty(con, row.getItem().getKodeProperty(), "true"));
-                                skl.setCustomer(CustomerDAO.get(con, skl.getStj().getKodeCustomer()));
-                                skl.setSales(KaryawanDAO.get(con, skl.getStj().getKodeSales()));
-                                return SDPDAO.getAllByKodeProperty(con, row.getItem().getKodeProperty(), "true");
+                                if(SKLHeadDAO.getByKodeProperty(con, row.getItem().getKodeProperty(), "true")==null){
+                                    skl.setStj(STJHeadDAO.getByKodeProperty(con, row.getItem().getKodeProperty(), "true"));
+                                    skl.setCustomer(CustomerDAO.get(con, skl.getStj().getKodeCustomer()));
+                                    skl.setSales(KaryawanDAO.get(con, skl.getStj().getKodeSales()));
+                                    return SDPDAO.getAllByKodeProperty(con, row.getItem().getKodeProperty(), "true");
+                                }else{
+                                    return null;
+                                }
                             }
                         }
                     };
@@ -184,42 +188,47 @@ public class DetailPelunasanDownPaymentController  {
                     task.setOnSucceeded((WorkerStateEvent e) -> {
                         try{
                             mainApp.closeLoading();
-                            Property p = row.getItem();
-                            namaPropertyField.setText(p.getNamaProperty());
-                            hargaField.setText(rp.format(p.getHargaJual()));
-                            diskonField.setText(rp.format(p.getDiskon()));
-                            skl.setProperty(p);
-                            skl.setKodeProperty(p.getKodeProperty());
-                            
-                            allDetail.clear();
-                            double totalPembayaran = 0;
-                            skl.setNoSTJ(skl.getStj().getNoSTJ());
-                            SKLDetail d = new SKLDetail();
-                            d.setTahap("Tanda Jadi (Booking Fee)");
-                            d.setTglBayar(tgl.format(tglSql.parse(skl.getStj().getTglSTJ())));
-                            d.setJumlahRp(skl.getStj().getJumlahRp());
-                            allDetail.add(d);
-                            totalPembayaran = totalPembayaran + skl.getStj().getJumlahRp();
+                            if(task.getValue()!=null){
+                                Property p = row.getItem();
+                                namaPropertyField.setText(p.getNamaProperty());
+                                hargaField.setText(rp.format(p.getHargaJual()));
+                                diskonField.setText(rp.format(p.getDiskon()));
+                                skl.setProperty(p);
+                                skl.setKodeProperty(p.getKodeProperty());
 
-                            List<SDP> allSDP = task.getValue();
-                            for(SDP sdp : allSDP){
-                                SKLDetail detail = new SKLDetail();
-                                detail.setTahap("Down Payment Tahap "+sdp.getTahap());
-                                if(allSDP.get(allSDP.size()-1).equals(sdp))
-                                    detail.setTahap("Pelunasan Down Payment");
-                                detail.setTglBayar(tgl.format(tglSql.parse(sdp.getTglSDP())));
-                                detail.setJumlahRp(sdp.getJumlahRp());
-                                allDetail.add(detail);
-                                totalPembayaran= totalPembayaran +sdp.getJumlahRp();
+                                allDetail.clear();
+                                double totalPembayaran = 0;
+                                skl.setNoSTJ(skl.getStj().getNoSTJ());
+                                SKLDetail d = new SKLDetail();
+                                d.setTahap("Tanda Jadi (Booking Fee)");
+                                d.setTglBayar(tgl.format(tglSql.parse(skl.getStj().getTglSTJ())));
+                                d.setJumlahRp(skl.getStj().getJumlahRp());
+                                allDetail.add(d);
+                                totalPembayaran = totalPembayaran + skl.getStj().getJumlahRp();
+
+                                List<SDP> allSDP = task.getValue();
+                                for(SDP sdp : allSDP){
+                                    SKLDetail detail = new SKLDetail();
+                                    detail.setTahap("Down Payment Tahap "+sdp.getTahap());
+                                    if(allSDP.get(allSDP.size()-1).equals(sdp))
+                                        detail.setTahap("Pelunasan Down Payment");
+                                    detail.setTglBayar(tgl.format(tglSql.parse(sdp.getTglSDP())));
+                                    detail.setJumlahRp(sdp.getJumlahRp());
+                                    allDetail.add(detail);
+                                    totalPembayaran= totalPembayaran +sdp.getJumlahRp();
+                                }
+                                skl.setTotalPembayaran(totalPembayaran);
+                                totalPembayaranField.setText(rp.format(totalPembayaran));
+                                skl.setSisaPelunasan(p.getHargaJual()-p.getDiskon()-totalPembayaran);
+                                sisaPelunasanField.setText(rp.format(skl.getSisaPelunasan()));
+                                namaCustomerField.setText(skl.getCustomer().getNama());
+                                skl.setKodeCustomer(skl.getCustomer().getKodeCustomer());
+                                skl.setKodeSales(skl.getSales().getKodeKaryawan());
+                                mainApp.closeDialog(stage, child);
+                            }else{
+                                mainApp.showMessage(Modality.NONE, "Warning", "Pelunasan down payment tidak dapat dibuat, "
+                                        + "karena surat keterangan lunas sudah dibuat");
                             }
-                            skl.setTotalPembayaran(totalPembayaran);
-                            totalPembayaranField.setText(rp.format(totalPembayaran));
-                            skl.setSisaPelunasan(p.getHargaJual()-p.getDiskon()-totalPembayaran);
-                            sisaPelunasanField.setText(rp.format(skl.getSisaPelunasan()));
-                            namaCustomerField.setText(skl.getCustomer().getNama());
-                            skl.setKodeCustomer(skl.getCustomer().getKodeCustomer());
-                            skl.setKodeSales(skl.getSales().getKodeKaryawan());
-                            mainApp.closeDialog(stage, child);
                         }catch(Exception ex){
                             mainApp.showMessage(Modality.NONE, "Error", ex.toString());
                         }

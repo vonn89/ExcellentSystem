@@ -128,7 +128,6 @@ public class LaporanUntungRugiPropertyController {
         status.add("Available");
         status.add("Reserved");
         status.add("Sold");
-        status.add("Sold - Full Paid");
         x.getProperty(status);
         x.propertyTable.setRowFactory((TableView<Property> tableView) -> {
             final TableRow<Property> row = new TableRow<>();

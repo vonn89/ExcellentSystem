@@ -373,20 +373,12 @@ public class DataUserController {
                     "Batal Terima Pencairan KPR"
                 )
             ));
-            root.getChildren().add(createTreeItem("Terima Angsuran Pembayaran",
+            root.getChildren().add(createTreeItem("Serah Terima",
                 Arrays.asList(                    
-                    "Add New Terima Angsuran Pembayaran",
-                    "Detail Terima Angsuran Pembayaran",
-                    "Batal Terima Angsuran Pembayaran",
-                    "Print Surat Angsuran Pembayaran"
-                )
-            ));
-            root.getChildren().add(createTreeItem("Pelunasan Angsuran",
-                Arrays.asList(                    
-                    "Add New Pelunasan Angsuran",
-                    "Detail Pelunasan Angsuran",
-                    "Batal Pelunasan Angsuran",
-                    "Print Surat Pelunasan Pembayaran"
+                    "Add New Serah Terima",
+                    "Detail Serah Terima",
+                    "Batal Serah Terima",
+                    "Print Surat Serah Terima"
                 )
             ));
             root.getChildren().add(createTreeItem("Data Keuangan",
@@ -428,6 +420,9 @@ public class DataUserController {
                 )
             ));
             root.getChildren().add(createTreeItem("Laporan Property",
+                new ArrayList<>()
+            ));
+            root.getChildren().add(createTreeItem("Laporan Kategori Property",
                 new ArrayList<>()
             ));
             root.getChildren().add(createTreeItem("Laporan Untung-Rugi",

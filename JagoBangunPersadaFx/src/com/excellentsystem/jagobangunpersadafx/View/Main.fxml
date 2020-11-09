@@ -179,21 +179,10 @@
                                     <Insets right="-1.0" />
                                  </VBox.margin>
                               </MenuButton>
-                              <MenuButton fx:id="terimaAngsuran" layoutX="11.0" layoutY="220.0" mnemonicParsing="false" onMouseClicked="#showTerimaAngsuran" prefHeight="30.0" prefWidth="230.0" text="Terima Angsuran">
+                              <MenuButton fx:id="serahTerima" layoutX="11.0" layoutY="160.0" mnemonicParsing="false" onMouseClicked="#showSerahTerima" prefHeight="30.0" prefWidth="230.0" text="Serah Terima">
                                  <padding>
                                     <Insets left="30.0" />
                                  </padding>
-                                 <VBox.margin>
-                                    <Insets right="-1.0" />
-                                 </VBox.margin>
-                              </MenuButton>
-                              <MenuButton fx:id="pelunasanAngsuran" layoutX="11.0" layoutY="250.0" mnemonicParsing="false" onMouseClicked="#showPelunasanAngsuran" prefHeight="30.0" prefWidth="230.0" text="Pelunasan Angsuran">
-                                 <padding>
-                                    <Insets left="30.0" />
-                                 </padding>
-                                 <VBox.margin>
-                                    <Insets right="-1.0" />
-                                 </VBox.margin>
                               </MenuButton>
                            </children>
                            <padding>

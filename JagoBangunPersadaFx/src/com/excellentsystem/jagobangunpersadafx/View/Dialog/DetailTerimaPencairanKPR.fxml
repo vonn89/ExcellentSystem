@@ -76,7 +76,6 @@
                </children>
             </HBox>
             <TextField fx:id="keteranganField" prefHeight="30.0" GridPane.columnIndex="1" GridPane.rowIndex="13" />
-            <ComboBox fx:id="namaPropertyCombo" onAction="#setProperty" prefHeight="30.0" prefWidth="500.0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
             <Label style="-fx-font-size: 14; -fx-font-weight: bold;" text="Pembayaran Down Payment" GridPane.columnSpan="2147483647" GridPane.halignment="LEFT" GridPane.rowIndex="9" />
             <Button mnemonicParsing="false" onAction="#close" prefHeight="30.0" prefWidth="30.0" GridPane.columnIndex="1" GridPane.halignment="RIGHT">
                <graphic>
@@ -95,6 +94,8 @@
                   <Button fx:id="cancelButton" mnemonicParsing="false" onAction="#close" prefHeight="30.0" prefWidth="100.0" text="Cancel" />
                </children>
             </HBox>
+            <TextField fx:id="namaPropertyField" disable="true" prefHeight="30.0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+            <Button fx:id="propertyButton" mnemonicParsing="false" onAction="#setProperty" prefHeight="30.0" prefWidth="30.0" text="..." GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="4" />
          </children>
          <padding>
             <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />

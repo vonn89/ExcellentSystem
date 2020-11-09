@@ -29,7 +29,6 @@ import com.excellentsystem.jagobangunpersadafx.View.Dialog.DetailPembangunanCont
 import com.excellentsystem.jagobangunpersadafx.View.Dialog.DetailPembelianTanahController;
 import com.excellentsystem.jagobangunpersadafx.View.Dialog.DetailPropertyController;
 import com.excellentsystem.jagobangunpersadafx.View.Dialog.DetailRealisasiProyekController;
-import com.excellentsystem.jagobangunpersadafx.View.Dialog.DetailTerimaAngsuranPembayaranController;
 import com.excellentsystem.jagobangunpersadafx.View.Dialog.DetailTerimaDownPaymentController;
 import com.excellentsystem.jagobangunpersadafx.View.Dialog.DetailTerimaPencairanKPRController;
 import com.excellentsystem.jagobangunpersadafx.View.Dialog.DetailTerimaTandaJadiController;
@@ -237,10 +236,6 @@ public class KeuanganController {
                             kpr.setOnAction((ActionEvent event) -> {
                                 detailTerimaPencairanKPR(item.getProperty());
                             });
-                            MenuItem sap = new MenuItem("Detail Terima Angsuran Pembayaran");
-                            sap.setOnAction((ActionEvent event) -> {
-                                detailTerimaAngsuranPembayaran(item.getDeskripsi().split(" - ")[1]);
-                            });
                             MenuItem refresh = new MenuItem("Refresh");
                             refresh.setOnAction(e -> {
                                 getKeuangan();
@@ -257,8 +252,6 @@ public class KeuanganController {
                                 rowMenu.getItems().add(dp);
                             } else if (item.getKategori().equals("Terima Pencairan KPR")) {
                                 rowMenu.getItems().add(kpr);
-                            } else if (item.getKategori().equals("Terima Pembayaran Angsuran")) {
-                                rowMenu.getItems().add(sap);
                             }
                             Boolean status = false;
                             for (KategoriTransaksi k : allKategori) {
@@ -351,7 +344,6 @@ public class KeuanganController {
                         statusProperty.add("Available");
                         statusProperty.add("Reserved");
                         statusProperty.add("Sold");
-                        statusProperty.add("Sold - Full Paid");
                         List<Property> listProperty = PropertyDAO.getAllByStatus(con, statusProperty);
                         List<Keuangan> listKeuangan = KeuanganDAO.getAllByTipeKeuanganAndDate(con,
                                 TipeKeuanganCombo.getSelectionModel().getSelectedItem(), tglAwalPicker.getValue().toString(),
@@ -892,11 +884,4 @@ public class KeuanganController {
         x.getSDP(noSDP);
     }
 
-    private void detailTerimaAngsuranPembayaran(String noSAP) {
-        Stage stage = new Stage();
-        FXMLLoader loader = mainApp.showDialog(mainApp.MainStage, stage, "View/Dialog/DetailTerimaAngsuranPembayaran.fxml");
-        DetailTerimaAngsuranPembayaranController x = loader.getController();
-        x.setMainApp(mainApp, mainApp.MainStage, stage);
-        x.getSAP(noSAP);
-    }
 }
