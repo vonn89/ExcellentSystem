@@ -10,6 +10,7 @@ import com.excellentsystem.jagobangunpersadafx.Main;
 import static com.excellentsystem.jagobangunpersadafx.Main.rp;
 import static com.excellentsystem.jagobangunpersadafx.Main.sistem;
 import com.excellentsystem.jagobangunpersadafx.Model.Tukang;
+import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
@@ -20,16 +21,23 @@ import javafx.stage.Stage;
  *
  * @author Xtreme
  */
-public class DetailTukangController  {
+public class DetailTukangController {
+
+    @FXML
     public TextField namaField;
+    @FXML
     public TextArea alamatField;
+    @FXML
     public TextField noTelpField;
+    @FXML
     public TextField gajiPerHariField;
+    @FXML
     public Button saveButton;
     private Main mainApp;
     private Stage owner;
     private Stage stage;
-    public void setMainApp(Main mainApp,Stage owner, Stage stage){
+
+    public void setMainApp(Main mainApp, Stage owner, Stage stage) {
         this.mainApp = mainApp;
         this.owner = owner;
         this.stage = stage;
@@ -38,21 +46,24 @@ public class DetailTukangController  {
             mainApp.closeDialog(owner, stage);
         });
     }
-    public void setTukang(Tukang value){
+
+    public void setTukang(Tukang value) {
         namaField.setText("");
         alamatField.setText("");
         noTelpField.setText("");
         gajiPerHariField.setText("0");
-        if(value.getNama()!=null){
+        if (value.getNama() != null) {
             namaField.setText(value.getNama());
             alamatField.setText(value.getAlamat());
             noTelpField.setText(value.getNoTelp());
             gajiPerHariField.setText(rp.format(value.getGajiPerHari()));
-            if(!sistem.getUser().getLevel().equals("Manager"))
+            if (!sistem.getUser().getLevel().equals("Manager")) {
                 namaField.setDisable(true);
+            }
         }
     }
-    public void close(){
-        mainApp.closeDialog(owner,stage);
+
+    public void close() {
+        mainApp.closeDialog(owner, stage);
     }
 }

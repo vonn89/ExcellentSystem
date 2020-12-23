@@ -53,140 +53,167 @@ import javafx.stage.Stage;
  *
  * @author Xtreme
  */
-public class SKLManualController  {
+public class SKLManualController {
 
-   
-    @FXML private TableView<SKLManualDetail> SKLManualDetailtable;
-    @FXML private TableColumn<SKLManualDetail,String> tahapColumn;
-    @FXML private TableColumn<SKLManualDetail,String> tglPembayaranColumn;
-    @FXML private TableColumn<SKLManualDetail,Number> jumlahPembayaranColumn;
-    
-    @FXML private TextField noSKLField;
-    @FXML private DatePicker tglSKLPicker;
-    
-    @FXML private TextField kodeKategoriField;
-    @FXML private TextField namaPropertyField;
-    @FXML private TextField tipeUnitField;
-    @FXML private TextField luasTanahField;
-    @FXML private TextField hargaField;
-    @FXML private TextField namaCustomerField;
-    @FXML private ComboBox<String> jenisKelaminCombo;
-    
-    @FXML private TextField jumlahPembayaranField;
-    @FXML private DatePicker tglPembayaranPicker;
-    
-    @FXML private TextField totalPembayaranField;
-    @FXML private TextField sisaPelunasanField;
-    
+    @FXML
+    private TableView<SKLManualDetail> SKLManualDetailtable;
+    @FXML
+    private TableColumn<SKLManualDetail, String> tahapColumn;
+    @FXML
+    private TableColumn<SKLManualDetail, String> tglPembayaranColumn;
+    @FXML
+    private TableColumn<SKLManualDetail, Number> jumlahPembayaranColumn;
+
+    @FXML
+    private TextField noSKLField;
+    @FXML
+    private DatePicker tglSKLPicker;
+
+    @FXML
+    private TextField kodeKategoriField;
+    @FXML
+    private TextField namaPropertyField;
+    @FXML
+    private TextField tipeUnitField;
+    @FXML
+    private TextField luasTanahField;
+    @FXML
+    private TextField hargaField;
+    @FXML
+    private TextField namaCustomerField;
+    @FXML
+    private ComboBox<String> jenisKelaminCombo;
+
+    @FXML
+    private TextField jumlahPembayaranField;
+    @FXML
+    private DatePicker tglPembayaranPicker;
+
+    @FXML
+    private TextField totalPembayaranField;
+    @FXML
+    private TextField sisaPelunasanField;
+
     private Main mainApp;
     private Stage owner;
     private Stage stage;
     private SKLManualHead skl;
     private ObservableList<SKLManualDetail> allDetail = FXCollections.observableArrayList();
+
     public void initialize() {
         tahapColumn.setCellValueFactory(celldata -> celldata.getValue().tahapProperty());
         tahapColumn.setCellFactory(col -> Function.getWrapTableCell(tahapColumn));
-        
-        tglPembayaranColumn.setCellValueFactory(celldata -> celldata.getValue().tglBayarProperty()); 
+
+        tglPembayaranColumn.setCellValueFactory(celldata -> celldata.getValue().tglBayarProperty());
         tglPembayaranColumn.setCellFactory(col -> Function.getWrapTableCell(tglPembayaranColumn));
-        
+
         jumlahPembayaranColumn.setCellValueFactory(celldata -> celldata.getValue().jumlahRpProperty());
         jumlahPembayaranColumn.setCellFactory(col -> getTableCell(rp));
-        
+
         Function.setNumberField(luasTanahField);
         Function.setNumberField(hargaField);
         Function.setNumberField(jumlahPembayaranField);
-        
+
         tglSKLPicker.setConverter(Function.getTglConverter());
         tglSKLPicker.setDayCellFactory((final DatePicker datePicker) -> getDateCell());
-        
+
         tglPembayaranPicker.setConverter(Function.getTglConverter());
         tglPembayaranPicker.setDayCellFactory((final DatePicker datePicker) -> getDateCell());
-        
+
         SKLManualDetailtable.setRowFactory((TableView<SKLManualDetail> tableView) -> {
             final TableRow<SKLManualDetail> row = new TableRow<>();
             final ContextMenu rowMenu = new ContextMenu();
-            
+
             MenuItem batal = new MenuItem("Delete");
             batal.setOnAction((ActionEvent event) -> {
                 allDetail.remove(row.getItem());
-                Collections.sort(allDetail, (SKLManualDetail o1, SKLManualDetail o2) ->{
-                    if (o1.getTglBayar() == null || o2.getTglBayar()== null)
+                Collections.sort(allDetail, (SKLManualDetail o1, SKLManualDetail o2) -> {
+                    if (o1.getTglBayar() == null || o2.getTglBayar() == null) {
                         return 0;
+                    }
                     try {
                         return tgl.parse(o1.getTglBayar()).compareTo(tgl.parse(o2.getTglBayar()));
                     } catch (ParseException ex) {
                         return 0;
                     }
                 });
-                for(int i = 0 ; i< allDetail.size() ; i++){
+                for (int i = 0; i < allDetail.size(); i++) {
                     int tahap = i;
-                    if(tahap==0)
+                    if (tahap == 0) {
                         allDetail.get(i).setTahap("Tanda Jadi (Booking Fee)");
-                    else if(tahap==allDetail.size()-1)
+                    } else if (tahap == allDetail.size() - 1) {
                         allDetail.get(i).setTahap("Pelunasan Down Payment");
-                    else
-                        allDetail.get(i).setTahap("Down Payment Tahap "+String.valueOf(tahap));
+                    } else {
+                        allDetail.get(i).setTahap("Down Payment Tahap " + String.valueOf(tahap));
+                    }
                 }
                 skl.setAllDetail(allDetail);
                 SKLManualDetailtable.refresh();
                 hitungTotal();
             });
-            
+
             rowMenu.getItems().addAll(batal);
 
             // only display context menu for non-null items:
             row.contextMenuProperty().bind(
                     Bindings.when(Bindings.isNotNull(row.itemProperty()))
                             .then(rowMenu)
-                            .otherwise((ContextMenu)null));
+                            .otherwise((ContextMenu) null));
             return row;
         });
-    }   
+    }
+
     private class RemoveButtonCell extends TableCell<SKLManualDetail, Boolean> {
+
         final Button removeButton = new Button("");
-        RemoveButtonCell(){
-            Image imageDecline = new Image(Main.class.getResourceAsStream("Resource/delete.png"),20,20,false,true);
+
+        RemoveButtonCell() {
+            Image imageDecline = new Image(Main.class.getResourceAsStream("Resource/delete.png"), 20, 20, false, true);
             removeButton.setGraphic(new ImageView(imageDecline));
             removeButton.setPrefSize(30, 30);
             removeButton.setTooltip(new Tooltip("Delete"));
             removeButton.setOnAction((ActionEvent t) -> {
                 SKLManualDetail temp = (SKLManualDetail) RemoveButtonCell.this.getTableView().getItems().get(RemoveButtonCell.this.getIndex());
                 allDetail.remove(temp);
-                Collections.sort(allDetail, (SKLManualDetail o1, SKLManualDetail o2) ->{
-                    if (o1.getTglBayar() == null || o2.getTglBayar()== null)
+                Collections.sort(allDetail, (SKLManualDetail o1, SKLManualDetail o2) -> {
+                    if (o1.getTglBayar() == null || o2.getTglBayar() == null) {
                         return 0;
+                    }
                     try {
                         return tgl.parse(o1.getTglBayar()).compareTo(tgl.parse(o2.getTglBayar()));
                     } catch (ParseException ex) {
                         return 0;
                     }
                 });
-                for(int i = 0 ; i< allDetail.size() ; i++){
+                for (int i = 0; i < allDetail.size(); i++) {
                     int tahap = i;
-                    if(tahap==0)
+                    if (tahap == 0) {
                         allDetail.get(i).setTahap("Tanda Jadi (Booking Fee)");
-                    else if(tahap==allDetail.size()-1)
+                    } else if (tahap == allDetail.size() - 1) {
                         allDetail.get(i).setTahap("Pelunasan Down Payment");
-                    else
-                        allDetail.get(i).setTahap("Down Payment Tahap "+String.valueOf(tahap));
+                    } else {
+                        allDetail.get(i).setTahap("Down Payment Tahap " + String.valueOf(tahap));
+                    }
                 }
                 skl.setAllDetail(allDetail);
                 SKLManualDetailtable.refresh();
                 hitungTotal();
             });
         }
+
         @Override
         protected void updateItem(Boolean t, boolean empty) {
             super.updateItem(t, empty);
-            if(!empty)
+            if (!empty) {
                 setGraphic(removeButton);
-            else
+            } else {
                 setGraphic(null);
+            }
         }
-    } 
-    public void setMainApp(Main mainApp, Stage owner, Stage stage){
-        try{
+    }
+
+    public void setMainApp(Main mainApp, Stage owner, Stage stage) {
+        try {
             this.mainApp = mainApp;
             this.owner = owner;
             this.stage = stage;
@@ -203,15 +230,16 @@ public class SKLManualController  {
             alljenis.add("Perempuan");
             jenisKelaminCombo.setItems(alljenis);
             generateNoSKL();
-        }catch(Exception e){
+        } catch (Exception e) {
             mainApp.showMessage(Modality.NONE, "Error", e.toString());
         }
     }
+
     @FXML
-    private void generateNoSKL(){
+    private void generateNoSKL() {
         Task<String> task = new Task<String>() {
-            @Override 
-            public String call() throws Exception{
+            @Override
+            public String call() throws Exception {
                 try (Connection con = Koneksi.getConnection()) {
                     return SKLManualHeadDAO.getNoSKLManual(con, "JBP");
                 }
@@ -221,10 +249,10 @@ public class SKLManualController  {
             mainApp.showLoadingScreen();
         });
         task.setOnSucceeded((WorkerStateEvent e) -> {
-            try{
+            try {
                 mainApp.closeLoading();
                 noSKLField.setText(task.getValue());
-            }catch(Exception ex){
+            } catch (Exception ex) {
                 mainApp.showMessage(Modality.NONE, "Error", ex.toString());
             }
         });
@@ -234,37 +262,40 @@ public class SKLManualController  {
         });
         new Thread(task).start();
     }
+
     @FXML
-    private void addDetail(){
-        if(tglPembayaranPicker.getValue()==null){
+    private void addDetail() {
+        if (tglPembayaranPicker.getValue() == null) {
             mainApp.showMessage(Modality.NONE, "Warning", "Tgl Pembayaran masih kosong");
-        }else if("".equals(jumlahPembayaranField.getText())||"0".equals(jumlahPembayaranField.getText())){
+        } else if ("".equals(jumlahPembayaranField.getText()) || "0".equals(jumlahPembayaranField.getText())) {
             mainApp.showMessage(Modality.NONE, "Warning", "Jumlah Pembayaran masih kosong");
-        }else{
+        } else {
             try {
                 SKLManualDetail d = new SKLManualDetail();
                 d.setTahap("");
                 d.setTglBayar(tgl.format(tglBarang.parse(tglPembayaranPicker.getValue().toString())));
                 d.setJumlahRp(Double.parseDouble(jumlahPembayaranField.getText().replaceAll(",", "")));
                 allDetail.add(d);
-                Collections.sort(allDetail, (SKLManualDetail o1, SKLManualDetail o2) ->{
-                    if (o1.getTglBayar() == null || o2.getTglBayar()== null)
+                Collections.sort(allDetail, (SKLManualDetail o1, SKLManualDetail o2) -> {
+                    if (o1.getTglBayar() == null || o2.getTglBayar() == null) {
                         return 0;
+                    }
                     try {
                         return tgl.parse(o1.getTglBayar()).compareTo(tgl.parse(o2.getTglBayar()));
                     } catch (ParseException ex) {
                         return 0;
                     }
                 });
-                
-                for(int i = 0 ; i< allDetail.size() ; i++){
+
+                for (int i = 0; i < allDetail.size(); i++) {
                     int tahap = i;
-                    if(tahap==0)
+                    if (tahap == 0) {
                         allDetail.get(i).setTahap("Tanda Jadi (Booking Fee)");
-                    else if(tahap==allDetail.size()-1)
+                    } else if (tahap == allDetail.size() - 1) {
                         allDetail.get(i).setTahap("Pelunasan Down Payment");
-                    else
-                        allDetail.get(i).setTahap("Down Payment Tahap "+String.valueOf(tahap));
+                    } else {
+                        allDetail.get(i).setTahap("Down Payment Tahap " + String.valueOf(tahap));
+                    }
                 }
                 skl.setAllDetail(allDetail);
                 SKLManualDetailtable.refresh();
@@ -274,45 +305,48 @@ public class SKLManualController  {
             }
         }
     }
-    private void hitungTotal(){
+
+    private void hitungTotal() {
         double totalPembayaran = 0;
-        for(SKLManualDetail d : allDetail){
-            totalPembayaran= totalPembayaran + d.getJumlahRp();
+        for (SKLManualDetail d : allDetail) {
+            totalPembayaran = totalPembayaran + d.getJumlahRp();
         }
         totalPembayaranField.setText(rp.format(totalPembayaran));
         sisaPelunasanField.setText(rp.format(Double.parseDouble(
-            hargaField.getText().replaceAll(",", ""))-totalPembayaran));
+                hargaField.getText().replaceAll(",", "")) - totalPembayaran));
     }
-    @FXML 
-    private void close(){
+
+    @FXML
+    private void close() {
         mainApp.closeDialog(owner, stage);
     }
-    @FXML 
-    private void save(){
-        if("".equals(noSKLField.getText())){
+
+    @FXML
+    private void save() {
+        if ("".equals(noSKLField.getText())) {
             mainApp.showMessage(Modality.NONE, "Warning", "No SKl masih kosong");
-        }else if(tglSKLPicker.getValue()==null){
+        } else if (tglSKLPicker.getValue() == null) {
             mainApp.showMessage(Modality.NONE, "Warning", "tgl SKL belum dipilih");
-        }else if("".equals(kodeKategoriField.getText())){
+        } else if ("".equals(kodeKategoriField.getText())) {
             mainApp.showMessage(Modality.NONE, "Warning", "Kategori Property masih kosong");
-        }else if("".equals(namaPropertyField.getText())){
+        } else if ("".equals(namaPropertyField.getText())) {
             mainApp.showMessage(Modality.NONE, "Warning", "Nama Property masih kosong");
-        }else if("".equals(tipeUnitField.getText())){
+        } else if ("".equals(tipeUnitField.getText())) {
             mainApp.showMessage(Modality.NONE, "Warning", "Tipe Unit masih kosong");
-        }else if("".equals(luasTanahField.getText())||luasTanahField.getText().equals("0")){
+        } else if ("".equals(luasTanahField.getText()) || luasTanahField.getText().equals("0")) {
             mainApp.showMessage(Modality.NONE, "Warning", "Luas Tanah masih kosong");
-        }else if("".equals(hargaField.getText())||luasTanahField.getText().equals("0")){
+        } else if ("".equals(hargaField.getText()) || luasTanahField.getText().equals("0")) {
             mainApp.showMessage(Modality.NONE, "Warning", "Harga masih kosong");
-        }else if("".equals(namaCustomerField.getText())){
+        } else if ("".equals(namaCustomerField.getText())) {
             mainApp.showMessage(Modality.NONE, "Warning", "Nama Customer masih kosong");
-        }else if(jenisKelaminCombo.getSelectionModel().getSelectedItem()==null){
+        } else if (jenisKelaminCombo.getSelectionModel().getSelectedItem() == null) {
             mainApp.showMessage(Modality.NONE, "Warning", "Jenis Kelamin belum dipilih");
-        }else if(allDetail.isEmpty()){
+        } else if (allDetail.isEmpty()) {
             mainApp.showMessage(Modality.NONE, "Warning", "Pembayaran down payment masih kosong");
-        }else {
+        } else {
             Task<String> task = new Task<String>() {
-                @Override 
-                public String call() throws Exception{
+                @Override
+                public String call() throws Exception {
                     try (Connection con = Koneksi.getConnection()) {
                         skl.setNoSKL(noSKLField.getText());
                         skl.setTglSKL(tglSKLPicker.getValue().toString());
@@ -336,15 +370,15 @@ public class SKLManualController  {
                 mainApp.showLoadingScreen();
             });
             task.setOnSucceeded((WorkerStateEvent e) -> {
-                try{
+                try {
                     mainApp.closeLoading();
                     mainApp.showPelunasanDownPayment();
-                    if(task.getValue().equals("true")){
+                    if (task.getValue().equals("true")) {
                         mainApp.showMessage(Modality.NONE, "Success", "SKL Manual berhasil dibuat");
-                    }else{
+                    } else {
                         mainApp.showMessage(Modality.NONE, "Failed", task.getValue());
                     }
-                }catch(Exception ex){
+                } catch (Exception ex) {
                     mainApp.showMessage(Modality.NONE, "Error", ex.toString());
                 }
             });
@@ -354,6 +388,6 @@ public class SKLManualController  {
             });
             new Thread(task).start();
         }
-    } 
-    
+    }
+
 }

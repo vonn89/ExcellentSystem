@@ -31,64 +31,79 @@ import javafx.stage.Stage;
  * @author Xtreme
  */
 public class AddSalesController {
-    @FXML public TableView<Karyawan> karyawanTable;
-    @FXML private TableColumn<Karyawan, String> kodeKaryawanColumn;
-    @FXML private TableColumn<Karyawan, String> namaColumn;
-    @FXML private TableColumn<Karyawan, String> jabatanColumn;
-    @FXML private TableColumn<Karyawan, String> alamatColumn;
-    @FXML private TableColumn<Karyawan, String> noTelpColumn;
-    @FXML private TableColumn<Karyawan, String> noHandphoneColumn;
-    @FXML private TableColumn<Karyawan, String> statusNikahColumn;
-    @FXML private TableColumn<Karyawan, String> agamaColumn;
-    @FXML private TableColumn<Karyawan, String> identitasColumn;
-    @FXML private TableColumn<Karyawan, String> noIdentitasColumn;
-    @FXML private TextField searchField;
-    private Main mainApp;   
+
+    @FXML
+    public TableView<Karyawan> karyawanTable;
+    @FXML
+    private TableColumn<Karyawan, String> kodeKaryawanColumn;
+    @FXML
+    private TableColumn<Karyawan, String> namaColumn;
+    @FXML
+    private TableColumn<Karyawan, String> jabatanColumn;
+    @FXML
+    private TableColumn<Karyawan, String> alamatColumn;
+    @FXML
+    private TableColumn<Karyawan, String> noTelpColumn;
+    @FXML
+    private TableColumn<Karyawan, String> noHandphoneColumn;
+    @FXML
+    private TableColumn<Karyawan, String> statusNikahColumn;
+    @FXML
+    private TableColumn<Karyawan, String> agamaColumn;
+    @FXML
+    private TableColumn<Karyawan, String> identitasColumn;
+    @FXML
+    private TableColumn<Karyawan, String> noIdentitasColumn;
+    @FXML
+    private TextField searchField;
+    private Main mainApp;
     private Stage owner;
     private Stage stage;
     private ObservableList<Karyawan> allKaryawan = FXCollections.observableArrayList();
     private ObservableList<Karyawan> filterData = FXCollections.observableArrayList();
+
     public void initialize() {
         kodeKaryawanColumn.setCellValueFactory(cellData -> cellData.getValue().kodeKaryawanProperty());
         kodeKaryawanColumn.setCellFactory(col -> Function.getWrapTableCell(kodeKaryawanColumn));
-        
-        namaColumn.setCellValueFactory(cellData ->cellData.getValue().namaProperty());
+
+        namaColumn.setCellValueFactory(cellData -> cellData.getValue().namaProperty());
         namaColumn.setCellFactory(col -> Function.getWrapTableCell(namaColumn));
-        
+
         jabatanColumn.setCellValueFactory(cellData -> cellData.getValue().jabatanProperty());
         jabatanColumn.setCellFactory(col -> Function.getWrapTableCell(jabatanColumn));
-        
+
         alamatColumn.setCellValueFactory(cellData -> cellData.getValue().alamatProperty());
         alamatColumn.setCellFactory(col -> Function.getWrapTableCell(alamatColumn));
-        
-        noTelpColumn.setCellValueFactory(cellData ->cellData.getValue().noTelpProperty());
+
+        noTelpColumn.setCellValueFactory(cellData -> cellData.getValue().noTelpProperty());
         noTelpColumn.setCellFactory(col -> Function.getWrapTableCell(noTelpColumn));
-        
-        noHandphoneColumn.setCellValueFactory(cellData ->cellData.getValue().noHandphoneProperty());
+
+        noHandphoneColumn.setCellValueFactory(cellData -> cellData.getValue().noHandphoneProperty());
         noHandphoneColumn.setCellFactory(col -> Function.getWrapTableCell(noHandphoneColumn));
-        
-        statusNikahColumn.setCellValueFactory(cellData ->cellData.getValue().statusNikahProperty());
+
+        statusNikahColumn.setCellValueFactory(cellData -> cellData.getValue().statusNikahProperty());
         statusNikahColumn.setCellFactory(col -> Function.getWrapTableCell(statusNikahColumn));
-        
-        agamaColumn.setCellValueFactory(cellData ->cellData.getValue().agamaProperty());
+
+        agamaColumn.setCellValueFactory(cellData -> cellData.getValue().agamaProperty());
         agamaColumn.setCellFactory(col -> Function.getWrapTableCell(agamaColumn));
-        
-        identitasColumn.setCellValueFactory(cellData ->cellData.getValue().identitasProperty());
+
+        identitasColumn.setCellValueFactory(cellData -> cellData.getValue().identitasProperty());
         identitasColumn.setCellFactory(col -> Function.getWrapTableCell(identitasColumn));
-        
-        noIdentitasColumn.setCellValueFactory(cellData ->cellData.getValue().noIdentitasProperty());
+
+        noIdentitasColumn.setCellValueFactory(cellData -> cellData.getValue().noIdentitasProperty());
         noIdentitasColumn.setCellFactory(col -> Function.getWrapTableCell(noIdentitasColumn));
-        
+
         allKaryawan.addListener((ListChangeListener.Change<? extends Karyawan> change) -> {
             searchKaryawan();
         });
         searchField.textProperty().addListener(
-            (ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
-            searchKaryawan();
-        });
+                (ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
+                    searchKaryawan();
+                });
         filterData.addAll(allKaryawan);
     }
-    public void setMainApp(Main mainApp,Stage owner, Stage stage){
+
+    public void setMainApp(Main mainApp, Stage owner, Stage stage) {
         this.mainApp = mainApp;
         this.owner = owner;
         this.stage = stage;
@@ -97,17 +112,18 @@ public class AddSalesController {
         stage.setOnCloseRequest((event) -> {
             mainApp.closeDialog(owner, stage);
         });
-        stage.setHeight(mainApp.screenSize.getHeight()*80/100);
-        stage.setWidth(mainApp.screenSize.getWidth()*80/100);
+        stage.setHeight(mainApp.screenSize.getHeight() * 80 / 100);
+        stage.setWidth(mainApp.screenSize.getWidth() * 80 / 100);
         stage.setX((mainApp.screenSize.getWidth() - stage.getWidth()) / 2);
         stage.setY((mainApp.screenSize.getHeight() - stage.getHeight()) / 2);
     }
-    public void getKaryawan(){
+
+    public void getKaryawan() {
         Task<List<Karyawan>> task = new Task<List<Karyawan>>() {
-            @Override 
-            public List<Karyawan> call() throws Exception{
+            @Override
+            public List<Karyawan> call() throws Exception {
                 try (Connection con = Koneksi.getConnection()) {
-                    return KaryawanDAO.getAllByStatus(con,"true");
+                    return KaryawanDAO.getAllByStatus(con, "true");
                 }
             }
         };
@@ -115,11 +131,11 @@ public class AddSalesController {
             mainApp.showLoadingScreen();
         });
         task.setOnSucceeded((WorkerStateEvent e) -> {
-            try{
+            try {
                 mainApp.closeLoading();
                 allKaryawan.clear();
                 allKaryawan.addAll(task.getValue());
-            }catch(Exception ex){
+            } catch (Exception ex) {
                 mainApp.showMessage(Modality.NONE, "Error", ex.toString());
             }
         });
@@ -129,36 +145,41 @@ public class AddSalesController {
         });
         new Thread(task).start();
     }
-    private Boolean checkColumn(String column){
-        if(column!=null){
-            if(column.toLowerCase().contains(searchField.getText().toLowerCase()))
+
+    private Boolean checkColumn(String column) {
+        if (column != null) {
+            if (column.toLowerCase().contains(searchField.getText().toLowerCase())) {
                 return true;
+            }
         }
         return false;
     }
+
     private void searchKaryawan() {
         filterData.clear();
         for (Karyawan temp : allKaryawan) {
-            if (searchField.getText() == null || searchField.getText().equals(""))
+            if (searchField.getText() == null || searchField.getText().equals("")) {
                 filterData.add(temp);
-            else{
-                if(checkColumn(temp.getKodeKaryawan())||
-                    checkColumn(temp.getNama())||
-                    checkColumn(temp.getJabatan())||
-                    checkColumn(temp.getAlamat())||
-                    checkColumn(temp.getNoTelp())||
-                    checkColumn(temp.getNoHandphone())||
-                    checkColumn(temp.getStatusNikah())||
-                    checkColumn(temp.getAgama())||
-                    checkColumn(temp.getIdentitas())||
-                    checkColumn(temp.getNoIdentitas()))
+            } else {
+                if (checkColumn(temp.getKodeKaryawan())
+                        || checkColumn(temp.getNama())
+                        || checkColumn(temp.getJabatan())
+                        || checkColumn(temp.getAlamat())
+                        || checkColumn(temp.getNoTelp())
+                        || checkColumn(temp.getNoHandphone())
+                        || checkColumn(temp.getStatusNikah())
+                        || checkColumn(temp.getAgama())
+                        || checkColumn(temp.getIdentitas())
+                        || checkColumn(temp.getNoIdentitas())) {
                     filterData.add(temp);
+                }
             }
         }
     }
-    @FXML 
-    private void close(){
+
+    @FXML
+    private void close() {
         mainApp.closeDialog(owner, stage);
-    }   
-    
+    }
+
 }

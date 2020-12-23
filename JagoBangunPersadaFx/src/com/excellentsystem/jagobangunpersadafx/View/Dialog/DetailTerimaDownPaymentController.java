@@ -57,40 +57,63 @@ import javafx.stage.Stage;
  *
  * @author Xtreme
  */
-public class DetailTerimaDownPaymentController  {
+public class DetailTerimaDownPaymentController {
 
-    @FXML private TableView<SDP> SDPtable;
-    @FXML private TableColumn<SDP,Number> tahapColumn;
-    @FXML private TableColumn<SDP,String> tglPembayaranColumn;
-    @FXML private TableColumn<SDP,Number> jumlahPembayaranColumn;
-    
-    @FXML private TextField noSDPField;
-    @FXML private TextField tglSDPField;
-    @FXML private TextField namaPropertyField;
-    @FXML private TextField hargaField;
-    @FXML private TextField diskonField;
-    @FXML private TextField namaCustomerField;
-    @FXML private TextField tahapField;
-    @FXML public TextField jumlahDPField;
-    @FXML public ComboBox<String> tipeKeuanganCombo;
-    @FXML private Label tahapNextLabel;
-    @FXML public TextField jumlahTagihanField;
-    @FXML public DatePicker tglJatuhTempo;
-    
-    @FXML private Button propertyButton;
-    @FXML public Button saveButton;
-    @FXML private Button cancelButton;
-    @FXML private Label abaikanLabel;
-    
+    @FXML
+    private TableView<SDP> SDPtable;
+    @FXML
+    private TableColumn<SDP, Number> tahapColumn;
+    @FXML
+    private TableColumn<SDP, String> tglPembayaranColumn;
+    @FXML
+    private TableColumn<SDP, Number> jumlahPembayaranColumn;
+
+    @FXML
+    private TextField noSDPField;
+    @FXML
+    private TextField tglSDPField;
+    @FXML
+    private TextField namaPropertyField;
+    @FXML
+    private TextField hargaField;
+    @FXML
+    private TextField diskonField;
+    @FXML
+    private TextField addendumField;
+    @FXML
+    private TextField namaCustomerField;
+    @FXML
+    private TextField tahapField;
+    @FXML
+    public TextField jumlahDPField;
+    @FXML
+    public ComboBox<String> tipeKeuanganCombo;
+    @FXML
+    private Label tahapNextLabel;
+    @FXML
+    public TextField jumlahTagihanField;
+    @FXML
+    public DatePicker tglJatuhTempo;
+
+    @FXML
+    private Button propertyButton;
+    @FXML
+    public Button saveButton;
+    @FXML
+    private Button cancelButton;
+    @FXML
+    private Label abaikanLabel;
+
     private Main mainApp;
     private Stage owner;
     private Stage stage;
     public SDP sdp;
     private ObservableList<SDP> allSDP = FXCollections.observableArrayList();
+
     public void initialize() {
         tahapColumn.setCellValueFactory(celldata -> celldata.getValue().tahapProperty());
-        
-        tglPembayaranColumn.setCellValueFactory(cellData ->{
+
+        tglPembayaranColumn.setCellValueFactory(cellData -> {
             try {
                 return new SimpleStringProperty(tgl.format(tglSql.parse(cellData.getValue().getTglSDP())));
             } catch (Exception ex) {
@@ -99,18 +122,19 @@ public class DetailTerimaDownPaymentController  {
         });
         tglPembayaranColumn.setCellFactory(col -> Function.getWrapTableCell(tglPembayaranColumn));
         tglPembayaranColumn.setComparator(Function.sortDate(tgl));
-        
+
         jumlahPembayaranColumn.setCellValueFactory(celldata -> celldata.getValue().jumlahRpProperty());
         jumlahPembayaranColumn.setCellFactory(col -> getTableCell(rp));
-        
+
         Function.setNumberField(jumlahDPField);
         Function.setNumberField(jumlahTagihanField);
-        
+
         tglJatuhTempo.setConverter(Function.getTglConverter());
         tglJatuhTempo.setValue(LocalDate.now());
         tglJatuhTempo.setDayCellFactory((final DatePicker datePicker) -> Function.getDateCellDisableBefore(LocalDate.now()));
-    }   
-    public void setMainApp(Main mainApp,Stage owner, Stage stage){
+    }
+
+    public void setMainApp(Main mainApp, Stage owner, Stage stage) {
         this.mainApp = mainApp;
         this.owner = owner;
         this.stage = stage;
@@ -121,20 +145,22 @@ public class DetailTerimaDownPaymentController  {
         stage.setY((mainApp.screenSize.getHeight() - stage.getHeight()) / 2);
         SDPtable.setItems(allSDP);
         ObservableList<String> listKeuangan = FXCollections.observableArrayList();
-        for(OtoritasKeuangan k : sistem.getUser().getOtoritasKeuangan()){
+        for (OtoritasKeuangan k : sistem.getUser().getOtoritasKeuangan()) {
             listKeuangan.add(k.getKodeKeuangan());
         }
         tipeKeuanganCombo.setItems(listKeuangan);
     }
-    public void setNewSDP(){
+
+    public void setNewSDP() {
         sdp = new SDP();
         noSDPField.setText("-");
         tglSDPField.setText(tglSql.format(new Date()));
     }
-    public void getSDP(String noSDP){
+
+    public void getSDP(String noSDP) {
         Task<SDP> task = new Task<SDP>() {
-            @Override 
-            public SDP call() throws Exception{
+            @Override
+            public SDP call() throws Exception {
                 try (Connection con = Koneksi.getConnection()) {
                     SDP sdp = SDPDAO.get(con, noSDP);
                     sdp.setProperty(PropertyDAO.get(con, sdp.getKodeProperty()));
@@ -147,10 +173,10 @@ public class DetailTerimaDownPaymentController  {
             mainApp.showLoadingScreen();
         });
         task.setOnSucceeded((WorkerStateEvent e) -> {
-            try{
+            try {
                 mainApp.closeLoading();
                 setSDP(task.getValue());
-            }catch(Exception ex){
+            } catch (Exception ex) {
                 mainApp.showMessage(Modality.NONE, "Error", ex.toString());
             }
         });
@@ -160,10 +186,11 @@ public class DetailTerimaDownPaymentController  {
         });
         new Thread(task).start();
     }
-    public void setSDP(SDP temp){
+
+    public void setSDP(SDP temp) {
         Task<List<SDP>> task = new Task<List<SDP>>() {
-            @Override 
-            public List<SDP> call() throws Exception{
+            @Override
+            public List<SDP> call() throws Exception {
                 try (Connection con = Koneksi.getConnection()) {
                     return SDPDAO.getAllByKodeProperty(con, temp.getKodeProperty(), "true");
                 }
@@ -173,7 +200,7 @@ public class DetailTerimaDownPaymentController  {
             mainApp.showLoadingScreen();
         });
         task.setOnSucceeded((WorkerStateEvent e) -> {
-            try{
+            try {
                 mainApp.closeLoading();
                 sdp = temp;
                 allSDP.addAll(task.getValue());
@@ -184,23 +211,24 @@ public class DetailTerimaDownPaymentController  {
                 namaCustomerField.setText(sdp.getCustomer().getNama());
                 hargaField.setText(rp.format(sdp.getProperty().getHargaJual()));
                 diskonField.setText(rp.format(sdp.getProperty().getDiskon()));
+                addendumField.setText(rp.format(sdp.getProperty().getAddendum()));
                 propertyButton.setVisible(false);
                 tahapField.setText(String.valueOf(sdp.getTahap()));
-                tahapNextLabel.setText("Tagihan Down Payment Tahap ke-"+String.valueOf(sdp.getTahap()+1));
+                tahapNextLabel.setText("Tagihan Down Payment Tahap ke-" + String.valueOf(sdp.getTahap() + 1));
                 jumlahDPField.setText(rp.format(sdp.getJumlahRp()));
                 jumlahDPField.setDisable(true);
                 tipeKeuanganCombo.setItems(FXCollections.observableArrayList(sdp.getTipeKeuangan()));
                 tipeKeuanganCombo.getSelectionModel().selectFirst();
                 tipeKeuanganCombo.setDisable(true);
-                tglJatuhTempo.setValue(LocalDate.parse(sdp.getJatuhTempo(),DateTimeFormatter.ofPattern("dd MMM yyyy")));
+                tglJatuhTempo.setValue(LocalDate.parse(sdp.getJatuhTempo(), DateTimeFormatter.ofPattern("dd MMM yyyy")));
                 tglJatuhTempo.setDisable(true);
                 jumlahTagihanField.setText(rp.format(sdp.getJumlahTagihan()));
                 jumlahTagihanField.setDisable(true);
                 saveButton.setVisible(false);
                 cancelButton.setVisible(false);
                 abaikanLabel.setVisible(false);
-                stage.setHeight(stage.getHeight()-50);
-            }catch(Exception ex){
+                stage.setHeight(stage.getHeight() - 50);
+            } catch (Exception ex) {
                 mainApp.showMessage(Modality.NONE, "Error", ex.toString());
             }
         });
@@ -210,8 +238,9 @@ public class DetailTerimaDownPaymentController  {
         });
         new Thread(task).start();
     }
+
     @FXML
-    private void setProperty(){
+    private void setProperty() {
         Stage child = new Stage();
         FXMLLoader loader = mainApp.showDialog(stage, child, "View/Dialog/AddProperty.fxml");
         AddPropertyController x = loader.getController();
@@ -222,12 +251,12 @@ public class DetailTerimaDownPaymentController  {
         x.propertyTable.setRowFactory((TableView<Property> tableView) -> {
             final TableRow<Property> row = new TableRow<>();
             row.setOnMouseClicked((MouseEvent mouseEvent) -> {
-                if(mouseEvent.getButton().equals(MouseButton.PRIMARY)&&mouseEvent.getClickCount() == 2){
+                if (mouseEvent.getButton().equals(MouseButton.PRIMARY) && mouseEvent.getClickCount() == 2) {
                     Task<String> task = new Task<String>() {
-                        @Override 
-                        public String call() throws Exception{
+                        @Override
+                        public String call() throws Exception {
                             try (Connection con = Koneksi.getConnection()) {
-                                if(SKLHeadDAO.getByKodeProperty(con, row.getItem().getKodeProperty(), "true")==null){
+                                if (SKLHeadDAO.getByKodeProperty(con, row.getItem().getKodeProperty(), "true") == null) {
                                     STJHead stj = STJHeadDAO.getByKodeProperty(con, row.getItem().getKodeProperty(), "true");
                                     stj.setAllDetail(STJDetailDAO.getAllByNoSTJ(con, stj.getNoSTJ()));
                                     sdp.setStj(stj);
@@ -237,7 +266,7 @@ public class DetailTerimaDownPaymentController  {
                                     allSDP.addAll(SDPDAO.getAllByKodeProperty(con, row.getItem().getKodeProperty(), "true"));
                                     allSDP.sort(Comparator.comparing(SDP::getTahap));
                                     return "true";
-                                }else{
+                                } else {
                                     return "false";
                                 }
                             }
@@ -247,13 +276,14 @@ public class DetailTerimaDownPaymentController  {
                         mainApp.showLoadingScreen();
                     });
                     task.setOnSucceeded((WorkerStateEvent e) -> {
-                        try{
+                        try {
                             mainApp.closeLoading();
-                            if(task.getValue().equals("true")){
+                            if (task.getValue().equals("true")) {
                                 Property p = row.getItem();
                                 namaPropertyField.setText(p.getNamaProperty());
                                 hargaField.setText(rp.format(p.getHargaJual()));
                                 diskonField.setText(rp.format(p.getDiskon()));
+                                addendumField.setText(rp.format(p.getAddendum()));
                                 sdp.setProperty(p);
                                 sdp.setKodeProperty(p.getKodeProperty());
                                 sdp.setNoSTJ(sdp.getStj().getNoSTJ());
@@ -261,19 +291,20 @@ public class DetailTerimaDownPaymentController  {
                                 sdp.setKodeCustomer(sdp.getCustomer().getKodeCustomer());
                                 sdp.setKodeSales(sdp.getSales().getKodeKaryawan());
                                 int tahap = 1;
-                                for(SDP s : allSDP){
-                                    if(s.getTahap()>=tahap)
-                                        tahap = s.getTahap()+1;
+                                for (SDP s : allSDP) {
+                                    if (s.getTahap() >= tahap) {
+                                        tahap = s.getTahap() + 1;
+                                    }
                                 }
                                 tahapField.setText(String.valueOf(tahap));
-                                tahapNextLabel.setText("Tagihan Down Payment Tahap ke-"+String.valueOf(tahap+1));
+                                tahapNextLabel.setText("Tagihan Down Payment Tahap ke-" + String.valueOf(tahap + 1));
                                 sdp.setTahap(tahap);
                                 mainApp.closeDialog(stage, child);
-                            }else{
+                            } else {
                                 mainApp.showMessage(Modality.NONE, "Warning", "Tidak dapat menerima DP lagi, "
                                         + "karena surat keterangan lunas sudah dibuat");
                             }
-                        }catch(Exception ex){
+                        } catch (Exception ex) {
                             mainApp.showMessage(Modality.NONE, "Error", ex.toString());
                         }
                     });
@@ -287,8 +318,9 @@ public class DetailTerimaDownPaymentController  {
             return row;
         });
     }
-    @FXML 
-    private void close(){
+
+    @FXML
+    private void close() {
         mainApp.closeDialog(owner, stage);
     }
 }

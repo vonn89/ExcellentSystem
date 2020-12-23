@@ -25,88 +25,138 @@ import javafx.util.Duration;
  */
 public class MainController {
 
-    @FXML public VBox menuPane;
-    @FXML private Label title;
-    
-    @FXML private VBox userVbox;
-    @FXML private TitledPane loginButton;
-    @FXML private MenuButton logoutButton;
-    @FXML private MenuButton ubahPasswordButton;
-    
-    @FXML private MenuButton dataProperty;
-    @FXML private MenuButton dataCustomer;
-    @FXML private MenuButton dataKaryawan;
-    @FXML private MenuButton dataTukang;
-    
-    @FXML private MenuButton pembelianTanah;
-    @FXML private MenuButton pembangunan;
-    
-    @FXML private MenuButton rencanaAnggaranProyek;
-    @FXML private MenuButton realisasiAnggaranProyek;
-    
-    @FXML private MenuButton terimaTandaJadi;
-    @FXML private MenuButton terimaDownPayment;
-    @FXML private MenuButton pelunasanDownPayment;
-    @FXML private MenuButton terimaPencairanKPR;
-    @FXML private MenuButton serahTerima;
-    
-    @FXML private MenuButton dataKeuangan;
-    @FXML private MenuButton dataHutang;
-    @FXML private MenuButton dataPiutang;
-    @FXML private MenuButton dataModal;
-    @FXML private MenuButton dataAsetTetap;
-    
-    @FXML private MenuButton dataUser;
-    @FXML private MenuButton kategoriHutang;
-    @FXML private MenuButton kateogriPiutang;
-    @FXML private MenuButton kategoriTransaksi;
-    @FXML private MenuButton kategoriProperty;
-    @FXML private MenuButton kategoriKeuangan;
-    
-    @FXML private MenuButton laporanProperty;
-    @FXML private MenuButton laporanKategoriProperty;
-    @FXML private MenuButton laporanUntungRugi;
-    @FXML private MenuButton laporanUntungRugiPeriode;
-    @FXML private MenuButton laporanNeraca;
-    
-    @FXML private VBox masterVbox;
-    @FXML private VBox pembelianVbox;
-    @FXML private VBox proyekVbox;
-    @FXML private VBox penjualanVbox;
-    @FXML private VBox keuanganVbox;
-    @FXML private VBox laporanVbox;
-    @FXML private VBox settingsVbox;
-    
+    @FXML
+    public VBox menuPane;
+    @FXML
+    private Label title;
+
+    @FXML
+    private VBox userVbox;
+    @FXML
+    private TitledPane loginButton;
+    @FXML
+    private MenuButton logoutButton;
+    @FXML
+    private MenuButton ubahPasswordButton;
+
+    @FXML
+    private MenuButton dataProperty;
+    @FXML
+    private MenuButton dataCustomer;
+    @FXML
+    private MenuButton dataKontraktor;
+    @FXML
+    private MenuButton dataKaryawan;
+    @FXML
+    private MenuButton dataTukang;
+
+    @FXML
+    private MenuButton pembelianTanah;
+    @FXML
+    private MenuButton pembangunan;
+    @FXML
+    private MenuButton pembangunanKontraktor;
+
+    @FXML
+    private MenuButton rencanaAnggaranProyek;
+    @FXML
+    private MenuButton realisasiAnggaranProyek;
+
+    @FXML
+    private MenuButton terimaTandaJadi;
+    @FXML
+    private MenuButton terimaDownPayment;
+    @FXML
+    private MenuButton pelunasanDownPayment;
+    @FXML
+    private MenuButton terimaPencairanKPR;
+    @FXML
+    private MenuButton addendum;
+    @FXML
+    private MenuButton serahTerima;
+
+    @FXML
+    private MenuButton dataKeuangan;
+    @FXML
+    private MenuButton dataHutang;
+    @FXML
+    private MenuButton dataPiutang;
+    @FXML
+    private MenuButton dataModal;
+    @FXML
+    private MenuButton dataAsetTetap;
+
+    @FXML
+    private MenuButton dataUser;
+    @FXML
+    private MenuButton kategoriHutang;
+    @FXML
+    private MenuButton kateogriPiutang;
+    @FXML
+    private MenuButton kategoriTransaksi;
+    @FXML
+    private MenuButton kategoriProperty;
+    @FXML
+    private MenuButton kategoriKeuangan;
+
+    @FXML
+    private MenuButton laporanProperty;
+    @FXML
+    private MenuButton laporanKategoriProperty;
+    @FXML
+    private MenuButton laporanUntungRugi;
+    @FXML
+    private MenuButton laporanUntungRugiPeriode;
+    @FXML
+    private MenuButton laporanNeraca;
+
+    @FXML
+    private VBox masterVbox;
+    @FXML
+    private VBox pembelianVbox;
+    @FXML
+    private VBox proyekVbox;
+    @FXML
+    private VBox penjualanVbox;
+    @FXML
+    private VBox keuanganVbox;
+    @FXML
+    private VBox laporanVbox;
+    @FXML
+    private VBox settingsVbox;
+
     private Main mainApp;
+
     public void setMainApp(Main mainApp) {
         this.mainApp = mainApp;
         menuPane.setPrefWidth(0);
-        for(Node n : masterVbox.getChildren()){
+        for (Node n : masterVbox.getChildren()) {
             n.managedProperty().bind(n.visibleProperty());
         }
-        for(Node n : pembelianVbox.getChildren()){
+        for (Node n : pembelianVbox.getChildren()) {
             n.managedProperty().bind(n.visibleProperty());
         }
-        for(Node n : proyekVbox.getChildren()){
+        for (Node n : proyekVbox.getChildren()) {
             n.managedProperty().bind(n.visibleProperty());
         }
-        for(Node n : penjualanVbox.getChildren()){
+        for (Node n : penjualanVbox.getChildren()) {
             n.managedProperty().bind(n.visibleProperty());
         }
-        for(Node n : keuanganVbox.getChildren()){
+        for (Node n : keuanganVbox.getChildren()) {
             n.managedProperty().bind(n.visibleProperty());
         }
-        for(Node n : laporanVbox.getChildren()){
+        for (Node n : laporanVbox.getChildren()) {
             n.managedProperty().bind(n.visibleProperty());
         }
-        for(Node n : settingsVbox.getChildren()){
+        for (Node n : settingsVbox.getChildren()) {
             n.managedProperty().bind(n.visibleProperty());
         }
-        for(Node n : userVbox.getChildren()){
+        for (Node n : userVbox.getChildren()) {
             n.managedProperty().bind(n.visibleProperty());
         }
         setUser();
-    }    
+    }
+
     public void setUser() {
         title.setText("JAGO BANGUN PERSADA");
         loginButton.setText("Login");
@@ -116,11 +166,13 @@ public class MainController {
 
         dataProperty.setVisible(false);
         dataCustomer.setVisible(false);
+        dataKontraktor.setVisible(false);
         dataKaryawan.setVisible(false);
         dataTukang.setVisible(false);
 
         pembelianTanah.setVisible(false);
         pembangunan.setVisible(false);
+        pembangunanKontraktor.setVisible(false);
 
         rencanaAnggaranProyek.setVisible(false);
         realisasiAnggaranProyek.setVisible(false);
@@ -129,6 +181,7 @@ public class MainController {
         terimaDownPayment.setVisible(false);
         pelunasanDownPayment.setVisible(false);
         terimaPencairanKPR.setVisible(false);
+        addendum.setVisible(false);
         serahTerima.setVisible(false);
 
         dataKeuangan.setVisible(false);
@@ -149,81 +202,91 @@ public class MainController {
         laporanUntungRugi.setVisible(false);
         laporanUntungRugiPeriode.setVisible(false);
         laporanNeraca.setVisible(false);
-        if(sistem.getUser()!=null){
+        if (sistem.getUser() != null) {
             logoutButton.setVisible(true);
             ubahPasswordButton.setVisible(true);
             loginButton.setText(sistem.getUser().getUsername());
-            for(Otoritas o : sistem.getUser().getOtoritas()){
-                if(o.getJenis().equals("Data Property")){
+            for (Otoritas o : sistem.getUser().getOtoritas()) {
+                if (o.getJenis().equals("Data Property")) {
                     dataProperty.setVisible(o.isStatus());
-                }else if(o.getJenis().equals("Data Customer")){
+                } else if (o.getJenis().equals("Data Customer")) {
                     dataCustomer.setVisible(o.isStatus());
-                }else if(o.getJenis().equals("Data Karyawan")){
+                } else if (o.getJenis().equals("Data Kontraktor")) {
+                    dataKontraktor.setVisible(o.isStatus());
+                } else if (o.getJenis().equals("Data Karyawan")) {
                     dataKaryawan.setVisible(o.isStatus());
-                }else if(o.getJenis().equals("Data Tukang")){
+                } else if (o.getJenis().equals("Data Tukang")) {
                     dataTukang.setVisible(o.isStatus());
-                }else if(o.getJenis().equals("Pembelian Tanah")){
+                } else if (o.getJenis().equals("Pembelian Tanah")) {
                     pembelianTanah.setVisible(o.isStatus());
-                }else if(o.getJenis().equals("Pembangunan")){
+                } else if (o.getJenis().equals("Pembangunan")) {
                     pembangunan.setVisible(o.isStatus());
-                }else if(o.getJenis().equals("Rencana Anggaran Proyek")){
+                } else if (o.getJenis().equals("Pembangunan Kontraktor")) {
+                    pembangunanKontraktor.setVisible(o.isStatus());
+                } else if (o.getJenis().equals("Rencana Anggaran Proyek")) {
                     rencanaAnggaranProyek.setVisible(o.isStatus());
-                }else if(o.getJenis().equals("Realisasi Anggaran Proyek")){
+                } else if (o.getJenis().equals("Realisasi Anggaran Proyek")) {
                     realisasiAnggaranProyek.setVisible(o.isStatus());
-                }else if(o.getJenis().equals("Terima Tanda Jadi")){
+                } else if (o.getJenis().equals("Terima Tanda Jadi")) {
                     terimaTandaJadi.setVisible(o.isStatus());
-                }else if(o.getJenis().equals("Terima Down Payment")){
+                } else if (o.getJenis().equals("Terima Down Payment")) {
                     terimaDownPayment.setVisible(o.isStatus());
-                }else if(o.getJenis().equals("Pelunasan Down Payment")){
+                } else if (o.getJenis().equals("Pelunasan Down Payment")) {
                     pelunasanDownPayment.setVisible(o.isStatus());
-                }else if(o.getJenis().equals("Terima Pencairan KPR")){
+                } else if (o.getJenis().equals("Terima Pencairan KPR")) {
                     terimaPencairanKPR.setVisible(o.isStatus());
-                }else if(o.getJenis().equals("Serah Terima")){
+                } else if (o.getJenis().equals("Addendum")) {
+                    addendum.setVisible(o.isStatus());
+                } else if (o.getJenis().equals("Serah Terima")) {
                     serahTerima.setVisible(o.isStatus());
-                }else if(o.getJenis().equals("Data Keuangan")){
+                } else if (o.getJenis().equals("Data Keuangan")) {
                     dataKeuangan.setVisible(o.isStatus());
-                }else if(o.getJenis().equals("Data Hutang")){
+                } else if (o.getJenis().equals("Data Hutang")) {
                     dataHutang.setVisible(o.isStatus());
-                }else if(o.getJenis().equals("Data Piutang")){
+                } else if (o.getJenis().equals("Data Piutang")) {
                     dataPiutang.setVisible(o.isStatus());
-                }else if(o.getJenis().equals("Data Modal")){
+                } else if (o.getJenis().equals("Data Modal")) {
                     dataModal.setVisible(o.isStatus());
-                }else if(o.getJenis().equals("Data Aset Tetap")){
+                } else if (o.getJenis().equals("Data Aset Tetap")) {
                     dataAsetTetap.setVisible(o.isStatus());
-                }else if(o.getJenis().equals("Data User")){
+                } else if (o.getJenis().equals("Data User")) {
                     dataUser.setVisible(o.isStatus());
-                }else if(o.getJenis().equals("Kategori Hutang")){
+                } else if (o.getJenis().equals("Kategori Hutang")) {
                     kategoriHutang.setVisible(o.isStatus());
-                }else if(o.getJenis().equals("Kategori Piutang")){
+                } else if (o.getJenis().equals("Kategori Piutang")) {
                     kateogriPiutang.setVisible(o.isStatus());
-                }else if(o.getJenis().equals("Kategori Transaksi")){
+                } else if (o.getJenis().equals("Kategori Transaksi")) {
                     kategoriTransaksi.setVisible(o.isStatus());
-                }else if(o.getJenis().equals("Kategori Property")){
+                } else if (o.getJenis().equals("Kategori Property")) {
                     kategoriProperty.setVisible(o.isStatus());
-                }else if(o.getJenis().equals("Kategori Keuangan")){
+                } else if (o.getJenis().equals("Kategori Keuangan")) {
                     kategoriKeuangan.setVisible(o.isStatus());
-                }else if(o.getJenis().equals("Laporan Property")){
+                } else if (o.getJenis().equals("Laporan Property")) {
                     laporanProperty.setVisible(o.isStatus());
-                }else if(o.getJenis().equals("Laporan Kategori Property")){
+                } else if (o.getJenis().equals("Laporan Kategori Property")) {
                     laporanKategoriProperty.setVisible(o.isStatus());
-                }else if(o.getJenis().equals("Laporan Untung-Rugi")){
+                } else if (o.getJenis().equals("Laporan Untung-Rugi")) {
                     laporanUntungRugi.setVisible(o.isStatus());
-                }else if(o.getJenis().equals("Laporan Untung-Rugi Periode")){
+                } else if (o.getJenis().equals("Laporan Untung-Rugi Periode")) {
                     laporanUntungRugiPeriode.setVisible(o.isStatus());
-                }else if(o.getJenis().equals("Laporan Neraca")){
+                } else if (o.getJenis().equals("Laporan Neraca")) {
                     laporanNeraca.setVisible(o.isStatus());
                 }
             }
         }
-        
+
     }
+
     @FXML
-    public void showHideMenu(){
-        final Animation hideSidebar = new Transition() { 
-            { setCycleDuration(Duration.millis(250)); }
+    public void showHideMenu() {
+        final Animation hideSidebar = new Transition() {
+            {
+                setCycleDuration(Duration.millis(250));
+            }
+
             @Override
             protected void interpolate(double frac) {
-                final double curWidth = 220 * (1.0 - frac) ;
+                final double curWidth = 220 * (1.0 - frac);
                 menuPane.setPrefWidth(curWidth);
 //                dashboardPane.setExpanded(false);
 //                pusatPane.setExpanded(false);
@@ -237,18 +300,22 @@ public class MainController {
             }
         };
         final Animation showSidebar = new Transition() {
-            { setCycleDuration(Duration.millis(250)); }
+            {
+                setCycleDuration(Duration.millis(250));
+            }
+
             @Override
             protected void interpolate(double frac) {
-              final double curWidth = 220 * frac ;
-              menuPane.setPrefWidth(curWidth);
+                final double curWidth = 220 * frac;
+                menuPane.setPrefWidth(curWidth);
             }
         };
         if (showSidebar.statusProperty().get() == Animation.Status.STOPPED && hideSidebar.statusProperty().get() == Animation.Status.STOPPED) {
-            if (menuPane.getPrefWidth()!=0) 
+            if (menuPane.getPrefWidth() != 0) {
                 hideSidebar.play();
-            else 
+            } else {
                 showSidebar.play();
+            }
         }
     }
 //    @FXML
@@ -286,135 +353,182 @@ public class MainController {
 //            }
 //          }
 //    }
-    public void setTitle(String x){
+
+    public void setTitle(String x) {
         title.setText(x);
     }
+
     @FXML
-    private void logout(){
+    private void logout() {
         mainApp.showLoginScene();
     }
+
     @FXML
-    private void exit(){
+    private void exit() {
         System.exit(0);
     }
+
     @FXML
-    private void showUbahPassword(){
+    private void showUbahPassword() {
         mainApp.showUbahPassword();
-    }  
+    }
+
     @FXML
-    private void showDataCustomer(){
+    private void showDataCustomer() {
         mainApp.showDataCustomer();
     }
+
     @FXML
-    private void showDataKaryawan(){
+    private void showDataKontraktor() {
+        mainApp.showDataKontraktor();
+    }
+
+    @FXML
+    private void showDataKaryawan() {
         mainApp.showDataKaryawan();
-    } 
+    }
+
     @FXML
-    private void showDataTukang(){
+    private void showDataTukang() {
         mainApp.showDataTukang();
-    }  
+    }
+
     @FXML
-    private void showDataProperty(){
+    private void showDataProperty() {
         mainApp.showDataProperty();
     }
+
     @FXML
-    private void showPembelianTanah(){
+    private void showPembelianTanah() {
         mainApp.showPembelianTanah();
     }
+
     @FXML
-    private void showPembangunan(){
+    private void showPembangunan() {
         mainApp.showPembangunan();
     }
+
     @FXML
-    private void showRencanaAnggaranProyek(){
+    private void showPembangunanKontraktor() {
+        mainApp.showPembangunanKontraktor();
+    }
+
+    @FXML
+    private void showRencanaAnggaranProyek() {
         mainApp.showRencanaAnggaranProyek();
     }
+
     @FXML
-    private void showRealisasiAnggaranProyek(){
+    private void showRealisasiAnggaranProyek() {
         mainApp.showRealisasiAnggaranProyek();
     }
+
     @FXML
-    private void showTerimaTandaJadi(){
+    private void showTerimaTandaJadi() {
         mainApp.showTerimaTandaJadi();
     }
+
     @FXML
-    private void showTerimaDownPayment(){
+    private void showTerimaDownPayment() {
         mainApp.showTerimaDownPayment();
     }
+
     @FXML
-    private void showPelunasanDownPayment(){
+    private void showPelunasanDownPayment() {
         mainApp.showPelunasanDownPayment();
     }
+
     @FXML
-    private void showPencairanKPR(){
+    private void showPencairanKPR() {
         mainApp.showPencairanKPR();
     }
+
     @FXML
-    private void showSerahTerima(){
+    private void showAddendum() {
+        mainApp.showAddendum();
+    }
+    @FXML
+    private void showSerahTerima() {
         mainApp.showSerahTerima();
     }
+
     @FXML
-    private void showKeuangan(){
+    private void showKeuangan() {
         mainApp.showKeuangan();
     }
+
     @FXML
-    private void showHutang(){
+    private void showHutang() {
         mainApp.showHutang();
     }
+
     @FXML
-    private void showPiutang(){
+    private void showPiutang() {
         mainApp.showPiutang();
     }
+
     @FXML
-    private void showModal(){
+    private void showModal() {
         mainApp.showModal();
     }
+
     @FXML
-    private void showAsetTetap(){
+    private void showAsetTetap() {
         mainApp.showAsetTetap();
     }
+
     @FXML
-    private void showLaporanUntungRugi(){
+    private void showLaporanUntungRugi() {
         mainApp.showLaporanUntungRugi();
     }
+
     @FXML
-    private void showLaporanUntungRugiPeriode(){
+    private void showLaporanUntungRugiPeriode() {
         mainApp.showLaporanUntungRugiPeriode();
     }
+
     @FXML
-    private void showLaporanUntungRugiProperty(){
+    private void showLaporanUntungRugiProperty() {
         mainApp.showLaporanUntungRugiProperty();
     }
+
     @FXML
-    private void showLaporanProperty(){
+    private void showLaporanProperty() {
         mainApp.showLaporanProperty();
     }
+
     @FXML
-    private void showLaporanNeraca(){
+    private void showLaporanNeraca() {
         mainApp.showLaporanNeraca();
     }
+
     @FXML
-    private void showDataUser(){
+    private void showDataUser() {
         mainApp.showDataUser();
     }
+
     @FXML
-    private void showKategoriHutang(){
+    private void showKategoriHutang() {
         mainApp.showKategoriHutang();
     }
+
     @FXML
-    private void showKategoriPiutang(){
+    private void showKategoriPiutang() {
         mainApp.showKategoriPiutang();
     }
+
     @FXML
-    private void showKategoriProperty(){
+    private void showKategoriProperty() {
         mainApp.showKategoriProperty();
     }
+
     @FXML
-    private void showTipeKeuangan(){
+    private void showTipeKeuangan() {
         mainApp.showTipeKeuangan();
     }
+
     @FXML
-    private void showKategoriTransaksi(){
+    private void showKategoriTransaksi() {
         mainApp.showKategoriTransaksi();
     }
 }

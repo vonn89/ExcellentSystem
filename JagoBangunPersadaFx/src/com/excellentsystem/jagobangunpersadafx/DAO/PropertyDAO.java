@@ -38,8 +38,9 @@ public class PropertyDAO {
             p.setNilaiProperty(rs.getDouble(9));
             p.setHargaJual(rs.getDouble(10));
             p.setDiskon(rs.getDouble(11));
-            p.setKeterangan(rs.getString(12));
-            p.setStatus(rs.getString(13));
+            p.setAddendum(rs.getDouble(12));
+            p.setKeterangan(rs.getString(13));
+            p.setStatus(rs.getString(14));
             allProperty.add(p);
         }
         return allProperty;
@@ -69,8 +70,9 @@ public class PropertyDAO {
             p.setNilaiProperty(rs.getDouble(9));
             p.setHargaJual(rs.getDouble(10));
             p.setDiskon(rs.getDouble(11));
-            p.setKeterangan(rs.getString(12));
-            p.setStatus(rs.getString(13));
+            p.setAddendum(rs.getDouble(12));
+            p.setKeterangan(rs.getString(13));
+            p.setStatus(rs.getString(14));
             allProperty.add(p);
         }
         return allProperty;
@@ -93,14 +95,15 @@ public class PropertyDAO {
             p.setNilaiProperty(rs.getDouble(9));
             p.setHargaJual(rs.getDouble(10));
             p.setDiskon(rs.getDouble(11));
-            p.setKeterangan(rs.getString(12));
-            p.setStatus(rs.getString(13));
+            p.setAddendum(rs.getDouble(12));
+            p.setKeterangan(rs.getString(13));
+            p.setStatus(rs.getString(14));
         }
         return p;
     }
     public static void update(Connection con, Property p)throws Exception{
         PreparedStatement ps = con.prepareStatement("update tm_property set kode_kategori=?, nama_property=?, alamat=?,"
-            + " tipe=?, spesifikasi=?, luas_tanah=?, luas_bangunan=?, nilai_property=?, harga_jual=?, diskon=?, keterangan=?, status=? "
+            + " tipe=?, spesifikasi=?, luas_tanah=?, luas_bangunan=?, nilai_property=?, harga_jual=?, diskon=?, addendum=?, keterangan=?, status=? "
             + " where kode_property=?");
         ps.setString(1, p.getKodeKategori());
         ps.setString(2, p.getNamaProperty());
@@ -112,13 +115,14 @@ public class PropertyDAO {
         ps.setDouble(8, p.getNilaiProperty());
         ps.setDouble(9, p.getHargaJual());
         ps.setDouble(10, p.getDiskon());
-        ps.setString(11, p.getKeterangan());
-        ps.setString(12, p.getStatus());
-        ps.setString(13, p.getKodeProperty());
+        ps.setDouble(11, p.getAddendum());
+        ps.setString(12, p.getKeterangan());
+        ps.setString(13, p.getStatus());
+        ps.setString(14, p.getKodeProperty());
         ps.executeUpdate();
     }
     public static void insert(Connection con, Property p)throws Exception{
-        PreparedStatement ps = con.prepareStatement("insert into tm_property values(?,?,?,?,?,?,?,?,?,?,?,?,?)");
+        PreparedStatement ps = con.prepareStatement("insert into tm_property values(?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
         ps.setString(1, p.getKodeProperty());
         ps.setString(2, p.getKodeKategori());
         ps.setString(3, p.getNamaProperty());
@@ -129,9 +133,10 @@ public class PropertyDAO {
         ps.setDouble(8, p.getLuasBangunan());
         ps.setDouble(9, p.getNilaiProperty());
         ps.setDouble(10, p.getHargaJual());
-        ps.setDouble(11, p.getHargaJual());
-        ps.setString(12, p.getKeterangan());
-        ps.setString(13, p.getStatus());
+        ps.setDouble(11, p.getDiskon());
+        ps.setDouble(12, p.getAddendum());
+        ps.setString(13, p.getKeterangan());
+        ps.setString(14, p.getStatus());
         ps.executeUpdate();
     }
     public static String getId(Connection con)throws Exception{

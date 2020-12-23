@@ -67,31 +67,49 @@ import javafx.stage.Stage;
  *
  * @author Xtreme
  */
-public class TerimaDownPaymentController  {
+public class TerimaDownPaymentController {
 
-    @FXML private TableView<SDP> SDPTable;
-    @FXML private TableColumn<SDP, String> noSDPColumn;
-    @FXML private TableColumn<SDP, String> tglSDPColumn;
-    @FXML private TableColumn<SDP, Number> TahapDPColumn;
-    @FXML private TableColumn<SDP, Number> jumlahDPColumn;
-    @FXML private TableColumn<SDP, String> tipeKeuanganDPColumn;
-    @FXML private TableColumn<SDP, String> kodeKategoriColumn;
-    @FXML private TableColumn<SDP, String> namaPropertyColumn;
-    @FXML private TableColumn<SDP, Number> hargaJualColumn;
-    @FXML private TableColumn<SDP, Number> diskonColumn;
-    @FXML private TableColumn<SDP, String> namaCustomerColumn;
-    @FXML private TableColumn<SDP, String> namaSalesColumn;
-    @FXML private TextField searchField;
-    @FXML private DatePicker tglAwalPicker;
-    @FXML private DatePicker tglAkhirPicker;
-    private Main mainApp;   
+    @FXML
+    private TableView<SDP> SDPTable;
+    @FXML
+    private TableColumn<SDP, String> noSDPColumn;
+    @FXML
+    private TableColumn<SDP, String> tglSDPColumn;
+    @FXML
+    private TableColumn<SDP, Number> TahapDPColumn;
+    @FXML
+    private TableColumn<SDP, Number> jumlahDPColumn;
+    @FXML
+    private TableColumn<SDP, String> tipeKeuanganDPColumn;
+    @FXML
+    private TableColumn<SDP, String> kodeKategoriColumn;
+    @FXML
+    private TableColumn<SDP, String> namaPropertyColumn;
+    @FXML
+    private TableColumn<SDP, Number> hargaJualColumn;
+    @FXML
+    private TableColumn<SDP, Number> diskonColumn;
+    @FXML
+    private TableColumn<SDP, Number> addendumColumn;
+    @FXML
+    private TableColumn<SDP, String> namaCustomerColumn;
+    @FXML
+    private TableColumn<SDP, String> namaSalesColumn;
+    @FXML
+    private TextField searchField;
+    @FXML
+    private DatePicker tglAwalPicker;
+    @FXML
+    private DatePicker tglAkhirPicker;
+    private Main mainApp;
     private ObservableList<SDP> allSDP = FXCollections.observableArrayList();
     private ObservableList<SDP> filterData = FXCollections.observableArrayList();
+
     public void initialize() {
         noSDPColumn.setCellValueFactory(cellData -> cellData.getValue().noSDPProperty());
         noSDPColumn.setCellFactory(col -> Function.getWrapTableCell(noSDPColumn));
-        
-        tglSDPColumn.setCellValueFactory(cellData -> { 
+
+        tglSDPColumn.setCellValueFactory(cellData -> {
             try {
                 return new SimpleStringProperty(tglLengkap.format(tglSql.parse(cellData.getValue().getTglSDP())));
             } catch (Exception ex) {
@@ -100,33 +118,36 @@ public class TerimaDownPaymentController  {
         });
         tglSDPColumn.setCellFactory(col -> Function.getWrapTableCell(tglSDPColumn));
         tglSDPColumn.setComparator(Function.sortDate(tglLengkap));
-        
-        jumlahDPColumn.setCellValueFactory(cellData ->cellData.getValue().jumlahRpProperty());
+
+        jumlahDPColumn.setCellValueFactory(cellData -> cellData.getValue().jumlahRpProperty());
         jumlahDPColumn.setCellFactory(col -> getTableCell(rp));
-        
-        TahapDPColumn.setCellValueFactory(cellData ->cellData.getValue().tahapProperty());
-        
-        tipeKeuanganDPColumn.setCellValueFactory(cellData ->cellData.getValue().tipeKeuanganProperty());
+
+        TahapDPColumn.setCellValueFactory(cellData -> cellData.getValue().tahapProperty());
+
+        tipeKeuanganDPColumn.setCellValueFactory(cellData -> cellData.getValue().tipeKeuanganProperty());
         tipeKeuanganDPColumn.setCellFactory(col -> Function.getWrapTableCell(tipeKeuanganDPColumn));
-        
-        kodeKategoriColumn.setCellValueFactory(cellData ->cellData.getValue().getProperty().kodeKategoriProperty());
+
+        kodeKategoriColumn.setCellValueFactory(cellData -> cellData.getValue().getProperty().kodeKategoriProperty());
         kodeKategoriColumn.setCellFactory(col -> Function.getWrapTableCell(kodeKategoriColumn));
-        
-        namaPropertyColumn.setCellValueFactory(cellData ->cellData.getValue().getProperty().namaPropertyProperty());
+
+        namaPropertyColumn.setCellValueFactory(cellData -> cellData.getValue().getProperty().namaPropertyProperty());
         namaPropertyColumn.setCellFactory(col -> Function.getWrapTableCell(namaPropertyColumn));
-        
-        hargaJualColumn.setCellValueFactory(cellData ->cellData.getValue().getProperty().hargaJualProperty());
+
+        hargaJualColumn.setCellValueFactory(cellData -> cellData.getValue().getProperty().hargaJualProperty());
         hargaJualColumn.setCellFactory(col -> getTableCell(rp));
-        
-        diskonColumn.setCellValueFactory(cellData ->cellData.getValue().getProperty().diskonProperty());
+
+        diskonColumn.setCellValueFactory(cellData -> cellData.getValue().getProperty().diskonProperty());
         diskonColumn.setCellFactory(col -> getTableCell(rp));
-        
-        namaCustomerColumn.setCellValueFactory(cellData ->cellData.getValue().getCustomer().namaProperty());
+
+        addendumColumn.setCellValueFactory(cellData -> cellData.getValue().getProperty().addendumProperty());
+        addendumColumn.setCellFactory(col -> getTableCell(rp));
+
+        namaCustomerColumn.setCellValueFactory(cellData -> cellData.getValue().getCustomer().namaProperty());
         namaCustomerColumn.setCellFactory(col -> Function.getWrapTableCell(namaCustomerColumn));
-        
-        namaSalesColumn.setCellValueFactory(cellData ->cellData.getValue().getSales().namaProperty());
+
+        namaSalesColumn.setCellValueFactory(cellData -> cellData.getValue().getSales().namaProperty());
         namaSalesColumn.setCellFactory(col -> Function.getWrapTableCell(namaSalesColumn));
-        
+
         tglAwalPicker.setConverter(Function.getTglConverter());
         tglAwalPicker.setValue(LocalDate.now().minusMonths(1));
         tglAwalPicker.setDayCellFactory((final DatePicker datePicker) -> getDateCellMulai(tglAkhirPicker));
@@ -135,16 +156,17 @@ public class TerimaDownPaymentController  {
         tglAkhirPicker.setDayCellFactory((final DatePicker datePicker) -> getDateCellAkhir(tglAwalPicker));
         ContextMenu rowMenu = new ContextMenu();
         MenuItem addNew = new MenuItem("Add New Terima Down Payment");
-        addNew.setOnAction((ActionEvent e)->{
+        addNew.setOnAction((ActionEvent e) -> {
             addNewTerimaDownPayment();
         });
         MenuItem refresh = new MenuItem("Refresh");
-        refresh.setOnAction((ActionEvent e)->{
+        refresh.setOnAction((ActionEvent e) -> {
             getSDP();
         });
-        for(Otoritas o : sistem.getUser().getOtoritas()){
-            if(o.getJenis().equals("Add New Terima Down Payment")&&o.isStatus())
+        for (Otoritas o : sistem.getUser().getOtoritas()) {
+            if (o.getJenis().equals("Add New Terima Down Payment") && o.isStatus()) {
                 rowMenu.getItems().add(addNew);
+            }
         }
         rowMenu.getItems().addAll(refresh);
         SDPTable.setContextMenu(rowMenu);
@@ -155,14 +177,14 @@ public class TerimaDownPaymentController  {
                     super.updateItem(item, empty);
                     if (empty) {
                         setContextMenu(rowMenu);
-                    }else{ 
+                    } else {
                         ContextMenu rowMenu = new ContextMenu();
                         MenuItem addNew = new MenuItem("Add New Terima Down Payment");
-                        addNew.setOnAction((ActionEvent e)->{
+                        addNew.setOnAction((ActionEvent e) -> {
                             addNewTerimaDownPayment();
                         });
                         MenuItem print = new MenuItem("Print Surat Down Payment");
-                        print.setOnAction((ActionEvent e)->{
+                        print.setOnAction((ActionEvent e) -> {
                             printSDP(item);
                         });
                         MenuItem batal = new MenuItem("Batal Terima Down Payment");
@@ -186,24 +208,31 @@ public class TerimaDownPaymentController  {
                             detailTerimaDownPayment(item);
                         });
                         MenuItem refresh = new MenuItem("Refresh");
-                        refresh.setOnAction((ActionEvent e)->{
+                        refresh.setOnAction((ActionEvent e) -> {
                             getSDP();
                         });
-                        for(Otoritas o : sistem.getUser().getOtoritas()){
-                            if(o.getJenis().equals("Add New Terima Down Payment")&&o.isStatus())
+                        for (Otoritas o : sistem.getUser().getOtoritas()) {
+                            if (o.getJenis().equals("Add New Terima Down Payment") && o.isStatus()) {
                                 rowMenu.getItems().add(addNew);
-                            if(o.getJenis().equals("Detail Terima Down Payment")&&o.isStatus())
+                            }
+                            if (o.getJenis().equals("Detail Terima Down Payment") && o.isStatus()) {
                                 rowMenu.getItems().add(detailTerimaDP);
-                            if(o.getJenis().equals("Detail Customer")&&o.isStatus())
+                            }
+                            if (o.getJenis().equals("Detail Customer") && o.isStatus()) {
                                 rowMenu.getItems().add(detailCustomer);
-                            if(o.getJenis().equals("Detail Karyawan")&&o.isStatus())
+                            }
+                            if (o.getJenis().equals("Detail Karyawan") && o.isStatus()) {
                                 rowMenu.getItems().add(detailSales);
-                            if(o.getJenis().equals("Detail Property")&&o.isStatus())
+                            }
+                            if (o.getJenis().equals("Detail Property") && o.isStatus()) {
                                 rowMenu.getItems().add(detailProperty);
-                            if(o.getJenis().equals("Batal Terima Down Payment")&&o.isStatus())
+                            }
+                            if (o.getJenis().equals("Batal Terima Down Payment") && o.isStatus()) {
                                 rowMenu.getItems().add(batal);
-                            if(o.getJenis().equals("Print Surat Down Payment")&&o.isStatus())
+                            }
+                            if (o.getJenis().equals("Print Surat Down Payment") && o.isStatus()) {
                                 rowMenu.getItems().add(print);
+                            }
                         }
                         rowMenu.getItems().addAll(refresh);
                         setContextMenu(rowMenu);
@@ -211,11 +240,13 @@ public class TerimaDownPaymentController  {
                 }
             };
             row.setOnMouseClicked((MouseEvent mouseEvent) -> {
-                if(mouseEvent.getButton().equals(MouseButton.PRIMARY) && mouseEvent.getClickCount() == 2)
-                    for(Otoritas o : sistem.getUser().getOtoritas()){
-                        if(o.getJenis().equals("Detail Terima Down Payment")&&o.isStatus())
+                if (mouseEvent.getButton().equals(MouseButton.PRIMARY) && mouseEvent.getClickCount() == 2) {
+                    for (Otoritas o : sistem.getUser().getOtoritas()) {
+                        if (o.getJenis().equals("Detail Terima Down Payment") && o.isStatus()) {
                             detailTerimaDownPayment(row.getItem());
+                        }
                     }
+                }
             });
             return row;
         });
@@ -223,21 +254,23 @@ public class TerimaDownPaymentController  {
             searchSDP();
         });
         searchField.textProperty().addListener(
-            (ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
-            searchSDP();
-        });
+                (ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
+                    searchSDP();
+                });
         filterData.addAll(allSDP);
-    }    
-    public void setMainApp(Main mainApp){
+    }
+
+    public void setMainApp(Main mainApp) {
         this.mainApp = mainApp;
         getSDP();
         SDPTable.setItems(filterData);
     }
+
     @FXML
-    private void getSDP(){
+    private void getSDP() {
         Task<List<SDP>> task = new Task<List<SDP>>() {
-            @Override 
-            public List<SDP> call() throws Exception{
+            @Override
+            public List<SDP> call() throws Exception {
                 try (Connection con = Koneksi.getConnection()) {
                     List<Customer> listCustomer = CustomerDAO.getAllByStatus(con, "true");
                     List<String> statusProperty = new ArrayList<>();
@@ -248,18 +281,21 @@ public class TerimaDownPaymentController  {
                     List<Karyawan> listKaryawan = KaryawanDAO.getAllByStatus(con, "true");
                     List<SDP> listSDP = SDPDAO.getAllByDateAndStatus(
                             con, tglAwalPicker.getValue().toString(), tglAkhirPicker.getValue().toString(), "true");
-                    for(SDP sdp : listSDP){
-                        for(Customer c : listCustomer){
-                            if(sdp.getKodeCustomer().equals(c.getKodeCustomer()))
+                    for (SDP sdp : listSDP) {
+                        for (Customer c : listCustomer) {
+                            if (sdp.getKodeCustomer().equals(c.getKodeCustomer())) {
                                 sdp.setCustomer(c);
+                            }
                         }
-                        for(Property p : listProperty){
-                            if(sdp.getKodeProperty().equals(p.getKodeProperty()))
+                        for (Property p : listProperty) {
+                            if (sdp.getKodeProperty().equals(p.getKodeProperty())) {
                                 sdp.setProperty(p);
+                            }
                         }
-                        for(Karyawan k : listKaryawan){
-                            if(sdp.getKodeSales().equals(k.getKodeKaryawan()))
+                        for (Karyawan k : listKaryawan) {
+                            if (sdp.getKodeSales().equals(k.getKodeKaryawan())) {
                                 sdp.setSales(k);
+                            }
                         }
                     }
                     return listSDP;
@@ -270,11 +306,11 @@ public class TerimaDownPaymentController  {
             mainApp.showLoadingScreen();
         });
         task.setOnSucceeded((WorkerStateEvent e) -> {
-            try{
+            try {
                 mainApp.closeLoading();
                 allSDP.clear();
                 allSDP.addAll(task.getValue());
-            }catch(Exception ex){
+            } catch (Exception ex) {
                 mainApp.showMessage(Modality.NONE, "Error", ex.toString());
             }
         });
@@ -284,77 +320,79 @@ public class TerimaDownPaymentController  {
         });
         new Thread(task).start();
     }
-    private Boolean checkColumn(String column){
-        if(column!=null){
-            if(column.toLowerCase().contains(searchField.getText().toLowerCase()))
+
+    private Boolean checkColumn(String column) {
+        if (column != null) {
+            if (column.toLowerCase().contains(searchField.getText().toLowerCase())) {
                 return true;
+            }
         }
         return false;
     }
+
     private void searchSDP() {
         filterData.clear();
         for (SDP temp : allSDP) {
-            if (searchField.getText() == null || searchField.getText().equals(""))
+            if (searchField.getText() == null || searchField.getText().equals("")) {
                 filterData.add(temp);
-            else{
-                if(checkColumn(temp.getNoSDP())||
-                    checkColumn(temp.getTglSDP())||
-                    checkColumn(temp.getTipeKeuangan())||
-                    checkColumn(qty.format(temp.getTahap()))||
-                    checkColumn(rp.format(temp.getJumlahRp()))||
-                        
-                    checkColumn(temp.getCustomer().getKodeCustomer())||
-                    checkColumn(temp.getCustomer().getNama())||
-                    checkColumn(temp.getCustomer().getJenisKelamin())||
-                    checkColumn(temp.getCustomer().getAlamat())||
-                    checkColumn(temp.getCustomer().getNoTelp())||
-                    checkColumn(temp.getCustomer().getNoHandphone())||
-                    checkColumn(temp.getCustomer().getEmail())||
-                    checkColumn(temp.getCustomer().getStatusNikah())||
-                    checkColumn(temp.getCustomer().getAgama())||
-                    checkColumn(temp.getCustomer().getPekerjaan())||
-                    checkColumn(temp.getCustomer().getNoKTP())||
-                    checkColumn(temp.getCustomer().getNoNPWP())||
-                    checkColumn(temp.getCustomer().getNoSPTPPH())||
-                        
-                    checkColumn(temp.getProperty().getKodeProperty())||
-                    checkColumn(temp.getProperty().getKodeKategori())||
-                    checkColumn(temp.getProperty().getNamaProperty())||
-                    checkColumn(temp.getProperty().getTipe())||
-                    checkColumn(temp.getProperty().getAlamat())||
-                    checkColumn(temp.getProperty().getSpesifikasi())||
-                    checkColumn(qty.format(temp.getProperty().getLuasTanah()))||
-                    checkColumn(qty.format(temp.getProperty().getLuasBangunan()))||
-                    checkColumn(rp.format(temp.getProperty().getHargaJual()))||
-                    checkColumn(rp.format(temp.getProperty().getDiskon()))||
-                    checkColumn(temp.getProperty().getKeterangan())||
-                        
-                    checkColumn(temp.getSales().getKodeKaryawan())||
-                    checkColumn(temp.getSales().getNama())||
-                        
-                    checkColumn(temp.getKodeUser()))
-                        filterData.add(temp);
+            } else {
+                if (checkColumn(temp.getNoSDP())
+                        || checkColumn(temp.getTglSDP())
+                        || checkColumn(temp.getTipeKeuangan())
+                        || checkColumn(qty.format(temp.getTahap()))
+                        || checkColumn(rp.format(temp.getJumlahRp()))
+                        || checkColumn(temp.getCustomer().getKodeCustomer())
+                        || checkColumn(temp.getCustomer().getNama())
+                        || checkColumn(temp.getCustomer().getJenisKelamin())
+                        || checkColumn(temp.getCustomer().getAlamat())
+                        || checkColumn(temp.getCustomer().getNoTelp())
+                        || checkColumn(temp.getCustomer().getNoHandphone())
+                        || checkColumn(temp.getCustomer().getEmail())
+                        || checkColumn(temp.getCustomer().getStatusNikah())
+                        || checkColumn(temp.getCustomer().getAgama())
+                        || checkColumn(temp.getCustomer().getPekerjaan())
+                        || checkColumn(temp.getCustomer().getNoKTP())
+                        || checkColumn(temp.getCustomer().getNoNPWP())
+                        || checkColumn(temp.getCustomer().getNoSPTPPH())
+                        || checkColumn(temp.getProperty().getKodeProperty())
+                        || checkColumn(temp.getProperty().getKodeKategori())
+                        || checkColumn(temp.getProperty().getNamaProperty())
+                        || checkColumn(temp.getProperty().getTipe())
+                        || checkColumn(temp.getProperty().getAlamat())
+                        || checkColumn(temp.getProperty().getSpesifikasi())
+                        || checkColumn(qty.format(temp.getProperty().getLuasTanah()))
+                        || checkColumn(qty.format(temp.getProperty().getLuasBangunan()))
+                        || checkColumn(rp.format(temp.getProperty().getHargaJual()))
+                        || checkColumn(rp.format(temp.getProperty().getDiskon()))
+                        || checkColumn(rp.format(temp.getProperty().getAddendum()))
+                        || checkColumn(temp.getProperty().getKeterangan())
+                        || checkColumn(temp.getSales().getKodeKaryawan())
+                        || checkColumn(temp.getSales().getNama())
+                        || checkColumn(temp.getKodeUser())) {
+                    filterData.add(temp);
+                }
             }
         }
     }
-    private void addNewTerimaDownPayment(){
+
+    private void addNewTerimaDownPayment() {
         Stage stage = new Stage();
         FXMLLoader loader = mainApp.showDialog(mainApp.MainStage, stage, "View/Dialog/DetailTerimaDownPayment.fxml");
         DetailTerimaDownPaymentController x = loader.getController();
         x.setMainApp(mainApp, mainApp.MainStage, stage);
         x.setNewSDP();
         x.saveButton.setOnAction((event) -> {
-            if(x.sdp.getProperty()==null){
+            if (x.sdp.getProperty() == null) {
                 mainApp.showMessage(Modality.NONE, "Warning", "Property belum dipilih");
-            }else if("".equals(x.jumlahDPField.getText())||"0".equals(x.jumlahDPField.getText())){
+            } else if ("".equals(x.jumlahDPField.getText()) || "0".equals(x.jumlahDPField.getText())) {
                 mainApp.showMessage(Modality.NONE, "Warnign", "Jumlah Pembayaran masih kosong");
-            }else if(x.tipeKeuanganCombo.getSelectionModel().getSelectedItem()==null||
-                    "".equals(x.tipeKeuanganCombo.getSelectionModel().getSelectedItem())){
+            } else if (x.tipeKeuanganCombo.getSelectionModel().getSelectedItem() == null
+                    || "".equals(x.tipeKeuanganCombo.getSelectionModel().getSelectedItem())) {
                 mainApp.showMessage(Modality.NONE, "Warning", "Tipe keuangan belum dipilih");
-            }else{
+            } else {
                 Task<String> task = new Task<String>() {
-                    @Override 
-                    public String call() throws Exception{
+                    @Override
+                    public String call() throws Exception {
                         try (Connection con = Koneksi.getConnection()) {
                             x.sdp.setJumlahRp(Double.parseDouble(x.jumlahDPField.getText().replaceAll(",", "")));
                             x.sdp.setJatuhTempo(tgl.format(tglBarang.parse(x.tglJatuhTempo.getValue().toString())));
@@ -372,16 +410,16 @@ public class TerimaDownPaymentController  {
                     mainApp.showLoadingScreen();
                 });
                 task.setOnSucceeded((WorkerStateEvent e) -> {
-                    try{
+                    try {
                         mainApp.closeLoading();
-                        if(task.getValue().equals("true")){
+                        if (task.getValue().equals("true")) {
                             mainApp.showMessage(Modality.NONE, "Success", "Terima down payment berhasil disimpan");
                             mainApp.closeDialog(mainApp.MainStage, stage);
                             getSDP();
-                        }else{
+                        } else {
                             mainApp.showMessage(Modality.NONE, "Failed", task.getValue());
                         }
-                    }catch(Exception ex){
+                    } catch (Exception ex) {
                         mainApp.showMessage(Modality.NONE, "Error", ex.toString());
                     }
                 });
@@ -393,44 +431,49 @@ public class TerimaDownPaymentController  {
             }
         });
     }
-    private void detailTerimaDownPayment(SDP sdp){
+
+    private void detailTerimaDownPayment(SDP sdp) {
         Stage stage = new Stage();
         FXMLLoader loader = mainApp.showDialog(mainApp.MainStage, stage, "View/Dialog/DetailTerimaDownPayment.fxml");
         DetailTerimaDownPaymentController x = loader.getController();
         x.setMainApp(mainApp, mainApp.MainStage, stage);
         x.setSDP(sdp);
     }
-    private void printSDP(SDP sdp){
-        try{
+
+    private void printSDP(SDP sdp) {
+        try {
             PrintOut print = new PrintOut();
             print.printSuratDownPayment(sdp);
-        }catch(Exception e){
-            mainApp.showMessage(Modality.NONE, "Error",e.toString());
+        } catch (Exception e) {
+            mainApp.showMessage(Modality.NONE, "Error", e.toString());
         }
     }
-    private void batalTerimaDownPayment(SDP sdp){
+
+    private void batalTerimaDownPayment(SDP sdp) {
         MessageController controller = mainApp.showMessage(Modality.WINDOW_MODAL, "Confirmation",
                 "Batal terima down payment " + sdp.getNoSDP() + ", anda yakin ?");
         controller.OK.setOnAction((ActionEvent ev) -> {
             Task<String> task = new Task<String>() {
-                @Override 
-                public String call() throws Exception{
+                @Override
+                public String call() throws Exception {
                     try (Connection con = Koneksi.getConnection()) {
                         List<SDP> all = SDPDAO.getAllByKodeProperty(con, sdp.getKodeProperty(), "true");
                         boolean statusTahap = true;
-                        for(SDP s : all){
-                            if(s.getTahap()>sdp.getTahap())
+                        for (SDP s : all) {
+                            if (s.getTahap() > sdp.getTahap()) {
                                 statusTahap = false;
+                            }
                         }
-                        if(SKLHeadDAO.getByKodeProperty(con, sdp.getKodeProperty(), "true")!=null){
+                        if (SKLHeadDAO.getByKodeProperty(con, sdp.getKodeProperty(), "true") != null) {
                             return "Terima down payment tidak dapat dibatalkan, karena sudah ada pelunasan DP";
-                        }else if(statusTahap){
+                        } else if (statusTahap) {
                             sdp.setTglBatal(tglSql.format(new Date()));
                             sdp.setUserBatal(sistem.getUser().getUsername());
                             sdp.setStatus("false");
                             return Service.batalTerimaDownPayment(con, sdp);
-                        }else 
+                        } else {
                             return "Terima down payment tidak dapat dibatalkan, karena sudah ada pembayaran DP tahap selanjutnya";
+                        }
                     }
                 }
             };
@@ -438,14 +481,15 @@ public class TerimaDownPaymentController  {
                 mainApp.showLoadingScreen();
             });
             task.setOnSucceeded((WorkerStateEvent e) -> {
-                try{
+                try {
                     mainApp.closeLoading();
                     getSDP();
-                    if (task.getValue().equals("true"))
+                    if (task.getValue().equals("true")) {
                         mainApp.showMessage(Modality.NONE, "Success", "Data terima down payment berhasil dibatal");
-                    else 
+                    } else {
                         mainApp.showMessage(Modality.NONE, "Failed", task.getValue());
-                }catch(Exception ex){
+                    }
+                } catch (Exception ex) {
                     mainApp.showMessage(Modality.NONE, "Error", ex.toString());
                 }
             });
@@ -456,7 +500,8 @@ public class TerimaDownPaymentController  {
             new Thread(task).start();
         });
     }
-    private void detailCustomer(Customer c){
+
+    private void detailCustomer(Customer c) {
         Stage stage = new Stage();
         FXMLLoader loader = mainApp.showDialog(mainApp.MainStage, stage, "View/Dialog/DetailCustomer.fxml");
         DetailCustomerController x = loader.getController();
@@ -464,7 +509,8 @@ public class TerimaDownPaymentController  {
         x.setCustomer(c);
         x.setViewOnly();
     }
-    private void detailSales(Karyawan s){
+
+    private void detailSales(Karyawan s) {
         Stage stage = new Stage();
         FXMLLoader loader = mainApp.showDialog(mainApp.MainStage, stage, "View/Dialog/DetailKaryawan.fxml");
         DetailKaryawanController x = loader.getController();
@@ -472,7 +518,8 @@ public class TerimaDownPaymentController  {
         x.setKaryawan(s);
         x.setViewOnly();
     }
-    private void detailProperty(Property p){
+
+    private void detailProperty(Property p) {
         Stage stage = new Stage();
         FXMLLoader loader = mainApp.showDialog(mainApp.MainStage, stage, "View/Dialog/DetailProperty.fxml");
         DetailPropertyController x = loader.getController();

@@ -23,57 +23,71 @@ import javafx.stage.Stage;
  *
  * @author ASUS
  */
-public class AddPekerjaanController  {
+public class AddPekerjaanController {
 
-    @FXML public ComboBox<String> kategoriCombo;
-    @FXML public TextField pekerjaanField;
-    @FXML public TextField keteranganField;
-    @FXML public TextField satuanField;
-    @FXML public TextField volumeField;
-    @FXML public TextField hargaSatuanField;
-    @FXML public TextField totalField;
-    @FXML public Button saveButton;
-    
+    @FXML
+    public ComboBox<String> kategoriCombo;
+    @FXML
+    public TextField pekerjaanField;
+    @FXML
+    public TextField keteranganField;
+    @FXML
+    public TextField satuanField;
+    @FXML
+    public TextField volumeField;
+    @FXML
+    public TextField hargaSatuanField;
+    @FXML
+    public TextField totalField;
+    @FXML
+    public Button saveButton;
+
     private Main mainApp;
     private Stage owner;
     private Stage stage;
+
     public void initialize() {
         volumeField.setOnKeyReleased((event) -> {
-            try{
+            try {
                 String string = volumeField.getText();
-                if(string.indexOf(".")>0){
-                    String string2 = string.substring(string.indexOf(".")+1, string.length());
-                    if(string2.contains("."))
+                if (string.indexOf(".") > 0) {
+                    String string2 = string.substring(string.indexOf(".") + 1, string.length());
+                    if (string2.contains(".")) {
                         volumeField.undo();
-                    else if(!string2.equals("") && Double.parseDouble(string2)!=0)
+                    } else if (!string2.equals("") && Double.parseDouble(string2) != 0) {
                         volumeField.setText(qty.format(Double.parseDouble(string.replaceAll(",", ""))));
-                }else
+                    }
+                } else {
                     volumeField.setText(qty.format(Double.parseDouble(string.replaceAll(",", ""))));
+                }
                 volumeField.end();
-            }catch(Exception e){
+            } catch (Exception e) {
                 volumeField.undo();
             }
             hitungTotal();
         });
         hargaSatuanField.setOnKeyReleased((event) -> {
-            try{
+            try {
                 String string = hargaSatuanField.getText();
-                if(string.indexOf(".")>0){
-                    String string2 = string.substring(string.indexOf(".")+1, string.length());
-                    if(string2.contains("."))
+                if (string.indexOf(".") > 0) {
+                    String string2 = string.substring(string.indexOf(".") + 1, string.length());
+                    if (string2.contains(".")) {
                         hargaSatuanField.undo();
-                    else if(!string2.equals("") && Double.parseDouble(string2)!=0)
+                    } else if (!string2.equals("") && Double.parseDouble(string2) != 0) {
                         hargaSatuanField.setText(qty.format(Double.parseDouble(string.replaceAll(",", ""))));
-                }else
+                    }
+                } else {
                     hargaSatuanField.setText(qty.format(Double.parseDouble(string.replaceAll(",", ""))));
+                }
                 hargaSatuanField.end();
-            }catch(Exception e){
+            } catch (Exception e) {
                 hargaSatuanField.undo();
             }
             hitungTotal();
         });
-    }    
-    public void setMainApp(Main mainApp,Stage owner, Stage stage){
+    }
+
+    public void setMainApp(Main mainApp, Stage owner, Stage stage) {
         this.mainApp = mainApp;
         this.owner = owner;
         this.stage = stage;
@@ -83,14 +97,16 @@ public class AddPekerjaanController  {
         stage.setX((mainApp.screenSize.getWidth() - stage.getWidth()) / 2);
         stage.setY((mainApp.screenSize.getHeight() - stage.getHeight()) / 2);
     }
-    public void setKategori(List<String> listKategori){
+
+    public void setKategori(List<String> listKategori) {
         ObservableList<String> allKategori = FXCollections.observableArrayList();
-        for(String s : listKategori){
+        for (String s : listKategori) {
             allKategori.add(s);
         }
         kategoriCombo.setItems(allKategori);
     }
-    public void setPekerjaan(RAPDetail d){
+
+    public void setPekerjaan(RAPDetail d) {
         kategoriCombo.getSelectionModel().select(d.getKategori());
         pekerjaanField.setText(d.getPekerjaan());
         keteranganField.setText(d.getKeterangan());
@@ -99,17 +115,19 @@ public class AddPekerjaanController  {
         hargaSatuanField.setText(rp.format(d.getHargaSatuan()));
         totalField.setText(rp.format(d.getTotal()));
     }
-    private void hitungTotal(){
-        try{
+
+    private void hitungTotal() {
+        try {
             double volume = Double.parseDouble(volumeField.getText().replaceAll(",", ""));
             double harga = Double.parseDouble(hargaSatuanField.getText().replaceAll(",", ""));
-            totalField.setText(rp.format(volume*harga));
-        }catch(Exception e){
+            totalField.setText(rp.format(volume * harga));
+        } catch (Exception e) {
             totalField.setText("0");
         }
     }
-    @FXML 
-    private void close(){
+
+    @FXML
+    private void close() {
         mainApp.closeDialog(owner, stage);
     }
 }

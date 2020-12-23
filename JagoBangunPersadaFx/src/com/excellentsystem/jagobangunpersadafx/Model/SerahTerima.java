@@ -22,6 +22,7 @@ public class SerahTerima {
     private final StringProperty kodeCustomer = new SimpleStringProperty();
     private final DoubleProperty harga = new SimpleDoubleProperty();
     private final DoubleProperty diskon = new SimpleDoubleProperty();
+    private final DoubleProperty addendum = new SimpleDoubleProperty();
     private final DoubleProperty totalDP = new SimpleDoubleProperty();
     private final DoubleProperty totalKPR = new SimpleDoubleProperty();
     private final StringProperty noHGB = new SimpleStringProperty();
@@ -36,6 +37,18 @@ public class SerahTerima {
     private Customer customer;
     private Property property;
     private Karyawan sales;
+
+    public double getAddendum() {
+        return addendum.get();
+    }
+
+    public void setAddendum(double value) {
+        addendum.set(value);
+    }
+
+    public DoubleProperty addendumProperty() {
+        return addendum;
+    }
 
     public double getTotalKPR() {
         return totalKPR.get();

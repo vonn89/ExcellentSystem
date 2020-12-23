@@ -59,32 +59,50 @@ import javafx.stage.Stage;
  *
  * @author Xtreme
  */
-public class RencanaAnggaranProyekController  {
-    @FXML private TableView<RAPHead> proyekTable;
-    @FXML private TableColumn<RAPHead, String> noRAPColumn;
-    @FXML private TableColumn<RAPHead, String> tglRAPColumn;
-    @FXML private TableColumn<RAPHead, String> kategoriColumn;
-    @FXML private TableColumn<RAPHead, String> keteranganColumn;
-    @FXML private TableColumn<RAPHead, String> metodeColumn;
-    @FXML private TableColumn<RAPHead, String> perkiraanWaktuColumn;
-    @FXML private TableColumn<RAPHead, Number> totalPropertyColumn;
-    @FXML private TableColumn<RAPHead, Number> totalAnggaranColumn;
-    @FXML private TableColumn<RAPHead, String> kodeUserColumn;
-    @FXML private TableColumn<RAPHead, String> statusApprovalColumn;
-    
-    @FXML private TextField searchField;
-    @FXML private DatePicker tglAwalPicker;
-    @FXML private DatePicker tglAkhirPicker;
-    @FXML private Label totalAnggaranLabel;
-    @FXML private ComboBox<String> statusApprovalCombo;
+public class RencanaAnggaranProyekController {
+
+    @FXML
+    private TableView<RAPHead> proyekTable;
+    @FXML
+    private TableColumn<RAPHead, String> noRAPColumn;
+    @FXML
+    private TableColumn<RAPHead, String> tglRAPColumn;
+    @FXML
+    private TableColumn<RAPHead, String> kategoriColumn;
+    @FXML
+    private TableColumn<RAPHead, String> keteranganColumn;
+    @FXML
+    private TableColumn<RAPHead, String> metodeColumn;
+    @FXML
+    private TableColumn<RAPHead, String> perkiraanWaktuColumn;
+    @FXML
+    private TableColumn<RAPHead, Number> totalPropertyColumn;
+    @FXML
+    private TableColumn<RAPHead, Number> totalAnggaranColumn;
+    @FXML
+    private TableColumn<RAPHead, String> kodeUserColumn;
+    @FXML
+    private TableColumn<RAPHead, String> statusApprovalColumn;
+
+    @FXML
+    private TextField searchField;
+    @FXML
+    private DatePicker tglAwalPicker;
+    @FXML
+    private DatePicker tglAkhirPicker;
+    @FXML
+    private Label totalAnggaranLabel;
+    @FXML
+    private ComboBox<String> statusApprovalCombo;
     private ObservableList<RAPHead> allRAP = FXCollections.observableArrayList();
     private ObservableList<RAPHead> filterData = FXCollections.observableArrayList();
-    private Main mainApp;   
+    private Main mainApp;
+
     public void initialize() {
         noRAPColumn.setCellValueFactory(cellData -> cellData.getValue().noRapProperty());
         noRAPColumn.setCellFactory(col -> Function.getWrapTableCell(noRAPColumn));
-        
-        tglRAPColumn.setCellValueFactory(cellData -> { 
+
+        tglRAPColumn.setCellValueFactory(cellData -> {
             try {
                 return new SimpleStringProperty(tglLengkap.format(tglSql.parse(cellData.getValue().getTglRap())));
             } catch (Exception ex) {
@@ -93,61 +111,62 @@ public class RencanaAnggaranProyekController  {
         });
         tglRAPColumn.setCellFactory(col -> Function.getWrapTableCell(tglRAPColumn));
         tglRAPColumn.setComparator(Function.sortDate(tglLengkap));
-        
-        kategoriColumn.setCellValueFactory(cellData ->cellData.getValue().kategoriPembangunanProperty());
+
+        kategoriColumn.setCellValueFactory(cellData -> cellData.getValue().kategoriPembangunanProperty());
         kategoriColumn.setCellFactory(col -> Function.getWrapTableCell(kategoriColumn));
-        
-        keteranganColumn.setCellValueFactory(cellData ->cellData.getValue().keteranganProperty());
+
+        keteranganColumn.setCellValueFactory(cellData -> cellData.getValue().keteranganProperty());
         keteranganColumn.setCellFactory(col -> Function.getWrapTableCell(keteranganColumn));
-        
-        metodeColumn.setCellValueFactory(cellData ->cellData.getValue().metodePembagianProperty());
+
+        metodeColumn.setCellValueFactory(cellData -> cellData.getValue().metodePembagianProperty());
         metodeColumn.setCellFactory(col -> Function.getWrapTableCell(metodeColumn));
-        
-        perkiraanWaktuColumn.setCellValueFactory(cellData ->{
-            return new SimpleStringProperty(cellData.getValue().getPerkiraanWaktu()+" hari");
+
+        perkiraanWaktuColumn.setCellValueFactory(cellData -> {
+            return new SimpleStringProperty(cellData.getValue().getPerkiraanWaktu() + " hari");
         });
         perkiraanWaktuColumn.setCellFactory(col -> Function.getWrapTableCell(perkiraanWaktuColumn));
-        
-        totalPropertyColumn.setCellValueFactory(cellData ->cellData.getValue().totalPropertyProperty());
+
+        totalPropertyColumn.setCellValueFactory(cellData -> cellData.getValue().totalPropertyProperty());
         totalPropertyColumn.setCellFactory(col -> getTableCell(qty));
-        
-        totalAnggaranColumn.setCellValueFactory(cellData ->cellData.getValue().totalAnggaranProperty());
+
+        totalAnggaranColumn.setCellValueFactory(cellData -> cellData.getValue().totalAnggaranProperty());
         totalAnggaranColumn.setCellFactory(col -> getTableCell(rp));
-        
-        statusApprovalColumn.setCellValueFactory(cellData ->cellData.getValue().statusApprovalProperty());
+
+        statusApprovalColumn.setCellValueFactory(cellData -> cellData.getValue().statusApprovalProperty());
         statusApprovalColumn.setCellFactory(col -> Function.getWrapTableCell(statusApprovalColumn));
-        
-        kodeUserColumn.setCellValueFactory(cellData ->cellData.getValue().kodeUserProperty());
+
+        kodeUserColumn.setCellValueFactory(cellData -> cellData.getValue().kodeUserProperty());
         kodeUserColumn.setCellFactory(col -> Function.getWrapTableCell(kodeUserColumn));
-        
+
         tglAwalPicker.setConverter(Function.getTglConverter());
         tglAwalPicker.setValue(LocalDate.now().minusMonths(1));
         tglAwalPicker.setDayCellFactory((final DatePicker datePicker) -> getDateCellMulai(tglAkhirPicker));
-        
+
         tglAkhirPicker.setConverter(Function.getTglConverter());
         tglAkhirPicker.setValue(LocalDate.now());
         tglAkhirPicker.setDayCellFactory((final DatePicker datePicker) -> getDateCellAkhir(tglAwalPicker));
-        
+
         allRAP.addListener((ListChangeListener.Change<? extends RAPHead> change) -> {
             searchRAP();
         });
         searchField.textProperty().addListener(
-            (ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
-            searchRAP();
-        });
+                (ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
+                    searchRAP();
+                });
         filterData.addAll(allRAP);
         ContextMenu rowMenu = new ContextMenu();
         MenuItem addNew = new MenuItem("Add New Rencana Anggaran Proyek");
-        addNew.setOnAction((ActionEvent e)->{
+        addNew.setOnAction((ActionEvent e) -> {
             addNewRAP();
         });
         MenuItem refresh = new MenuItem("Refresh");
-        refresh.setOnAction((ActionEvent e)->{
+        refresh.setOnAction((ActionEvent e) -> {
             getRAP();
         });
-        for(Otoritas o : sistem.getUser().getOtoritas()){
-            if(o.getJenis().equals("Add New Rencana Anggaran Proyek")&&o.isStatus())
+        for (Otoritas o : sistem.getUser().getOtoritas()) {
+            if (o.getJenis().equals("Add New Rencana Anggaran Proyek") && o.isStatus()) {
                 rowMenu.getItems().add(addNew);
+            }
         }
         rowMenu.getItems().addAll(refresh);
         proyekTable.setContextMenu(rowMenu);
@@ -158,10 +177,10 @@ public class RencanaAnggaranProyekController  {
                     super.updateItem(item, empty);
                     if (empty) {
                         setContextMenu(rowMenu);
-                    }else{ 
+                    } else {
                         ContextMenu rowMenu = new ContextMenu();
                         MenuItem addNew = new MenuItem("Add New Rencana Anggaran Proyek");
-                        addNew.setOnAction((ActionEvent e)->{
+                        addNew.setOnAction((ActionEvent e) -> {
                             addNewRAP();
                         });
                         MenuItem detail = new MenuItem("Detail Rencana Anggaran Proyek");
@@ -181,20 +200,25 @@ public class RencanaAnggaranProyekController  {
                             printRAP(item);
                         });
                         MenuItem refresh = new MenuItem("Refresh");
-                        refresh.setOnAction((ActionEvent e)->{
+                        refresh.setOnAction((ActionEvent e) -> {
                             getRAP();
                         });
-                        for(Otoritas o : sistem.getUser().getOtoritas()){
-                            if(o.getJenis().equals("Add New Rencana Anggaran Proyek")&&o.isStatus())
+                        for (Otoritas o : sistem.getUser().getOtoritas()) {
+                            if (o.getJenis().equals("Add New Rencana Anggaran Proyek") && o.isStatus()) {
                                 rowMenu.getItems().add(addNew);
-                            if(o.getJenis().equals("Detail Rencana Anggaran Proyek")&&o.isStatus())
+                            }
+                            if (o.getJenis().equals("Detail Rencana Anggaran Proyek") && o.isStatus()) {
                                 rowMenu.getItems().add(detail);
-                            if(o.getJenis().equals("Edit Rencana Anggaran Proyek")&&o.isStatus()&&item.getStatusApproval().equals("On Review"))
+                            }
+                            if (o.getJenis().equals("Edit Rencana Anggaran Proyek") && o.isStatus() && item.getStatusApproval().equals("On Review")) {
                                 rowMenu.getItems().add(edit);
-                            if(o.getJenis().equals("Hapus Rencana Anggaran Proyek")&&o.isStatus()&&item.getStatusApproval().equals("On Review"))
+                            }
+                            if (o.getJenis().equals("Hapus Rencana Anggaran Proyek") && o.isStatus() && item.getStatusApproval().equals("On Review")) {
                                 rowMenu.getItems().add(batal);
-                            if(o.getJenis().equals("Print Rencana Anggaran Proyek")&&o.isStatus())
+                            }
+                            if (o.getJenis().equals("Print Rencana Anggaran Proyek") && o.isStatus()) {
                                 rowMenu.getItems().add(print);
+                            }
                         }
                         rowMenu.getItems().addAll(refresh);
                         setContextMenu(rowMenu);
@@ -202,16 +226,19 @@ public class RencanaAnggaranProyekController  {
                 }
             };
             row.setOnMouseClicked((MouseEvent mouseEvent) -> {
-                if(mouseEvent.getButton().equals(MouseButton.PRIMARY) && mouseEvent.getClickCount() == 2)
-                    for(Otoritas o : sistem.getUser().getOtoritas()){
-                        if(o.getJenis().equals("Detail Rencana Anggaran Proyek")&&o.isStatus())
+                if (mouseEvent.getButton().equals(MouseButton.PRIMARY) && mouseEvent.getClickCount() == 2) {
+                    for (Otoritas o : sistem.getUser().getOtoritas()) {
+                        if (o.getJenis().equals("Detail Rencana Anggaran Proyek") && o.isStatus()) {
                             detailRAP(row.getItem());
+                        }
                     }
+                }
             });
             return row;
         });
     }
-    public void setMainApp(Main mainApp){
+
+    public void setMainApp(Main mainApp) {
         this.mainApp = mainApp;
         getRAP();
         proyekTable.setItems(filterData);
@@ -223,17 +250,19 @@ public class RencanaAnggaranProyekController  {
         statusApprovalCombo.setItems(approval);
         statusApprovalCombo.getSelectionModel().select("Semua");
     }
+
     @FXML
-    private void getRAP(){
+    private void getRAP() {
         Task<List<RAPHead>> task = new Task<List<RAPHead>>() {
-            @Override 
-            public List<RAPHead> call() throws Exception{
+            @Override
+            public List<RAPHead> call() throws Exception {
                 try (Connection con = Koneksi.getConnection()) {
                     String statusApproval = "%";
-                    if(!statusApprovalCombo.getSelectionModel().getSelectedItem().equals("Semua"))
+                    if (!statusApprovalCombo.getSelectionModel().getSelectedItem().equals("Semua")) {
                         statusApproval = statusApprovalCombo.getSelectionModel().getSelectedItem();
-                    List<RAPHead> listRAP = RAPHeadDAO.getAllByDateAndStatusApprovalAndStatusSelesaiAndStatusBatal(con, 
-                            tglAwalPicker.getValue().toString(), tglAkhirPicker.getValue().toString(), 
+                    }
+                    List<RAPHead> listRAP = RAPHeadDAO.getAllByDateAndStatusApprovalAndStatusSelesaiAndStatusBatal(con,
+                            tglAwalPicker.getValue().toString(), tglAkhirPicker.getValue().toString(),
                             statusApproval, "%", "false");
                     return listRAP;
                 }
@@ -253,66 +282,72 @@ public class RencanaAnggaranProyekController  {
         });
         new Thread(task).start();
     }
-    private Boolean checkColumn(String column){
-        if(column!=null){
-            if(column.toLowerCase().contains(searchField.getText().toLowerCase()))
+
+    private Boolean checkColumn(String column) {
+        if (column != null) {
+            if (column.toLowerCase().contains(searchField.getText().toLowerCase())) {
                 return true;
+            }
         }
         return false;
     }
+
     private void searchRAP() {
-        try{
+        try {
             filterData.clear();
             for (RAPHead temp : allRAP) {
-                if (searchField.getText() == null || searchField.getText().equals(""))
+                if (searchField.getText() == null || searchField.getText().equals("")) {
                     filterData.add(temp);
-                else{
-                    if(checkColumn(temp.getNoRap())||
-                        checkColumn(temp.getTglRap())||
-                        checkColumn(temp.getKategoriPembangunan())||
-                        checkColumn(qty.format(temp.getPerkiraanWaktu()))||
-                        checkColumn(tgl.format(tglBarang.parse(temp.getTglMulai())))||
-                        checkColumn(tglLengkap.format(tglSql.parse(temp.getTglRap())))||
-                        checkColumn(tglLengkap.format(tglSql.parse(temp.getTglSelesai())))||
-                        checkColumn(temp.getMetodePembagian())||
-                        checkColumn(temp.getKeterangan())||
-                        checkColumn(qty.format(temp.getTotalProperty()))||
-                        checkColumn(rp.format(temp.getTotalAnggaran()))||
-                        checkColumn(temp.getKodeUser()))
-                            filterData.add(temp);
+                } else {
+                    if (checkColumn(temp.getNoRap())
+                            || checkColumn(temp.getTglRap())
+                            || checkColumn(temp.getKategoriPembangunan())
+                            || checkColumn(qty.format(temp.getPerkiraanWaktu()))
+                            || checkColumn(tgl.format(tglBarang.parse(temp.getTglMulai())))
+                            || checkColumn(tglLengkap.format(tglSql.parse(temp.getTglRap())))
+                            || checkColumn(tglLengkap.format(tglSql.parse(temp.getTglSelesai())))
+                            || checkColumn(temp.getMetodePembagian())
+                            || checkColumn(temp.getKeterangan())
+                            || checkColumn(qty.format(temp.getTotalProperty()))
+                            || checkColumn(rp.format(temp.getTotalAnggaran()))
+                            || checkColumn(temp.getKodeUser())) {
+                        filterData.add(temp);
+                    }
                 }
             }
             hitungTotal();
-        }catch(Exception e){
+        } catch (Exception e) {
             mainApp.showMessage(Modality.NONE, "Error", e.toString());
         }
     }
-    private void hitungTotal(){
+
+    private void hitungTotal() {
         double total = 0;
-        for(RAPHead pt : filterData){
+        for (RAPHead pt : filterData) {
             total = total + pt.getTotalAnggaran();
         }
         totalAnggaranLabel.setText(rp.format(total));
     }
+
     @FXML
-    private void addNewRAP(){
+    private void addNewRAP() {
         Stage stage = new Stage();
         FXMLLoader loader = mainApp.showDialog(mainApp.MainStage, stage, "View/Dialog/DetailRencanaAnggaranProyek.fxml");
         DetailRencanaAnggaranProyekController x = loader.getController();
         x.setMainApp(mainApp, mainApp.MainStage, stage);
         x.setNewRAP();
-        x.saveButton.setOnAction((ActionEvent ev)->{
-            if("".equals(x.totalAnggaranField.getText())||"0".equals(x.totalAnggaranField.getText())){
+        x.saveButton.setOnAction((ActionEvent ev) -> {
+            if ("".equals(x.totalAnggaranField.getText()) || "0".equals(x.totalAnggaranField.getText())) {
                 mainApp.showMessage(Modality.NONE, "Warning", "Total anggaran masih kosong");
-            }else if("".equals(x.totalPropertyField.getText())||"0".equals(x.totalPropertyField.getText())){
+            } else if ("".equals(x.totalPropertyField.getText()) || "0".equals(x.totalPropertyField.getText())) {
                 mainApp.showMessage(Modality.NONE, "Warning", "Total property masih kosong");
-            }else if(x.kategoriCombo.getSelectionModel().getSelectedItem()==null||
-                    "".equals(x.kategoriCombo.getSelectionModel().getSelectedItem())){
+            } else if (x.kategoriCombo.getSelectionModel().getSelectedItem() == null
+                    || "".equals(x.kategoriCombo.getSelectionModel().getSelectedItem())) {
                 mainApp.showMessage(Modality.NONE, "Warning", "Kategori proyek belum dipilih");
-            }else{
+            } else {
                 Task<String> task = new Task<String>() {
-                    @Override 
-                    public String call() throws Exception{
+                    @Override
+                    public String call() throws Exception {
                         try (Connection con = Koneksi.getConnection()) {
                             x.rapHead.setNoRap(RAPHeadDAO.getId(con));
                             x.rapHead.setTglRap(tglSql.format(new Date()));
@@ -342,10 +377,10 @@ public class RencanaAnggaranProyekController  {
                 task.setOnSucceeded((e) -> {
                     mainApp.closeLoading();
                     getRAP();
-                    if(task.getValue().equals("true")){
+                    if (task.getValue().equals("true")) {
                         mainApp.closeDialog(mainApp.MainStage, stage);
-                        mainApp.showMessage(Modality.NONE, "Success","Rencana anggaran proyek berhasil disimpan");
-                    }else{
+                        mainApp.showMessage(Modality.NONE, "Success", "Rencana anggaran proyek berhasil disimpan");
+                    } else {
                         mainApp.showMessage(Modality.NONE, "Failed", task.getValue());
                     }
                 });
@@ -360,26 +395,27 @@ public class RencanaAnggaranProyekController  {
             mainApp.closeDialog(mainApp.MainStage, stage);
         });
     }
-    private void detailRAP(RAPHead r){
+
+    private void detailRAP(RAPHead r) {
         Stage stage = new Stage();
         FXMLLoader loader = mainApp.showDialog(mainApp.MainStage, stage, "View/Dialog/DetailRencanaAnggaranProyek.fxml");
         DetailRencanaAnggaranProyekController x = loader.getController();
         x.setMainApp(mainApp, mainApp.MainStage, stage);
         x.setRAP(r);
         x.saveButton.setOnAction((event) -> {
-            if(r.getStatusApproval().equals("Approved")){
+            if (r.getStatusApproval().equals("Approved")) {
                 mainApp.showMessage(Modality.NONE, "Warning", "Rencana anggaran proyek sudah di setujui");
-            }else if(r.getStatusApproval().equals("Rejected")){
+            } else if (r.getStatusApproval().equals("Rejected")) {
                 mainApp.showMessage(Modality.NONE, "Warning", "Rencana anggaran proyek sudah di tolak");
-            }else if(r.getStatusBatal().equals("true")){
+            } else if (r.getStatusBatal().equals("true")) {
                 mainApp.showMessage(Modality.NONE, "Warning", "Rencana anggaran proyek sudah pernah dihapus");
-            }else{
+            } else {
                 MessageController controller = mainApp.showMessage(Modality.WINDOW_MODAL, "Confirmation",
-                        "Setujui rencana anggaran proyek " + r.getNoRap()+ ", anda yakin ?");
+                        "Setujui rencana anggaran proyek " + r.getNoRap() + ", anda yakin ?");
                 controller.OK.setOnAction((ActionEvent ev) -> {
                     Task<String> task = new Task<String>() {
-                        @Override 
-                        public String call() throws Exception{
+                        @Override
+                        public String call() throws Exception {
                             try (Connection con = Koneksi.getConnection()) {
                                 r.setStatusApproval("Approved");
                                 r.setTglApproval(tglSql.format(new Date()));
@@ -397,8 +433,9 @@ public class RencanaAnggaranProyekController  {
                         if (task.getValue().equals("true")) {
                             mainApp.closeDialog(mainApp.MainStage, stage);
                             mainApp.showMessage(Modality.NONE, "Success", "Rencana anggaran proyek berhasil disetujui");
-                        }else 
+                        } else {
                             mainApp.showMessage(Modality.NONE, "Failed", task.getValue());
+                        }
                     });
                     task.setOnFailed((e) -> {
                         mainApp.showMessage(Modality.NONE, "Error", task.getException().toString());
@@ -409,19 +446,19 @@ public class RencanaAnggaranProyekController  {
             }
         });
         x.cancelButton.setOnAction((event) -> {
-            if(r.getStatusApproval().equals("Approved")){
+            if (r.getStatusApproval().equals("Approved")) {
                 mainApp.showMessage(Modality.NONE, "Warning", "Rencana anggaran proyek sudah di setujui");
-            }else if(r.getStatusApproval().equals("Rejected")){
+            } else if (r.getStatusApproval().equals("Rejected")) {
                 mainApp.showMessage(Modality.NONE, "Warning", "Rencana anggaran proyek sudah di tolak");
-            }else if(r.getStatusBatal().equals("true")){
+            } else if (r.getStatusBatal().equals("true")) {
                 mainApp.showMessage(Modality.NONE, "Warning", "Rencana anggaran proyek sudah pernah dihapus");
-            }else{
+            } else {
                 MessageController controller = mainApp.showMessage(Modality.WINDOW_MODAL, "Confirmation",
-                        "Tolak rencana anggaran proyek " + r.getNoRap()+ ", anda yakin ?");
+                        "Tolak rencana anggaran proyek " + r.getNoRap() + ", anda yakin ?");
                 controller.OK.setOnAction((ActionEvent ev) -> {
                     Task<String> task = new Task<String>() {
-                        @Override 
-                        public String call() throws Exception{
+                        @Override
+                        public String call() throws Exception {
                             try (Connection con = Koneksi.getConnection()) {
                                 r.setStatusApproval("Rejected");
                                 return Service.saveUpdateRap(con, r);
@@ -437,8 +474,9 @@ public class RencanaAnggaranProyekController  {
                         if (task.getValue().equals("true")) {
                             mainApp.closeDialog(mainApp.MainStage, stage);
                             mainApp.showMessage(Modality.NONE, "Success", "Rencana anggaran proyek berhasil ditolak");
-                        }else 
+                        } else {
                             mainApp.showMessage(Modality.NONE, "Failed", task.getValue());
+                        }
                     });
                     task.setOnFailed((e) -> {
                         mainApp.showMessage(Modality.NONE, "Error", task.getException().toString());
@@ -449,28 +487,29 @@ public class RencanaAnggaranProyekController  {
             }
         });
     }
-    private void editRAP(RAPHead r){
+
+    private void editRAP(RAPHead r) {
         Stage stage = new Stage();
         FXMLLoader loader = mainApp.showDialog(mainApp.MainStage, stage, "View/Dialog/DetailRencanaAnggaranProyek.fxml");
         DetailRencanaAnggaranProyekController x = loader.getController();
         x.setMainApp(mainApp, mainApp.MainStage, stage);
         x.setEditRAP(r);
         x.saveButton.setOnAction((event) -> {
-            if(r.getStatusApproval().equals("Approved")){
+            if (r.getStatusApproval().equals("Approved")) {
                 mainApp.showMessage(Modality.NONE, "Warning", "Rencana anggaran proyek sudah di setujui");
-            }else if(r.getStatusBatal().equals("true")){
+            } else if (r.getStatusBatal().equals("true")) {
                 mainApp.showMessage(Modality.NONE, "Warning", "Rencana anggaran proyek sudah pernah dihapus");
-            }else if("".equals(x.totalAnggaranField.getText())||"0".equals(x.totalAnggaranField.getText())){
+            } else if ("".equals(x.totalAnggaranField.getText()) || "0".equals(x.totalAnggaranField.getText())) {
                 mainApp.showMessage(Modality.NONE, "Warning", "Total anggaran masih kosong");
-            }else if("".equals(x.totalPropertyField.getText())||"0".equals(x.totalPropertyField.getText())){
+            } else if ("".equals(x.totalPropertyField.getText()) || "0".equals(x.totalPropertyField.getText())) {
                 mainApp.showMessage(Modality.NONE, "Warning", "Total property masih kosong");
-            }else if(x.kategoriCombo.getSelectionModel().getSelectedItem()==null||
-                    "".equals(x.kategoriCombo.getSelectionModel().getSelectedItem())){
+            } else if (x.kategoriCombo.getSelectionModel().getSelectedItem() == null
+                    || "".equals(x.kategoriCombo.getSelectionModel().getSelectedItem())) {
                 mainApp.showMessage(Modality.NONE, "Warning", "Kategori proyek belum dipilih");
-            }else{
+            } else {
                 Task<String> task = new Task<String>() {
-                    @Override 
-                    public String call() throws Exception{
+                    @Override
+                    public String call() throws Exception {
                         try (Connection con = Koneksi.getConnection()) {
                             x.rapHead.setKategoriPembangunan(x.kategoriCombo.getSelectionModel().getSelectedItem());
                             x.rapHead.setKeterangan(x.keteranganField.getText());
@@ -498,10 +537,10 @@ public class RencanaAnggaranProyekController  {
                 task.setOnSucceeded((e) -> {
                     mainApp.closeLoading();
                     getRAP();
-                    if(task.getValue().equals("true")){
+                    if (task.getValue().equals("true")) {
                         mainApp.closeDialog(mainApp.MainStage, stage);
-                        mainApp.showMessage(Modality.NONE, "Success","Rencana anggaran proyek berhasil disimpan");
-                    }else{
+                        mainApp.showMessage(Modality.NONE, "Success", "Rencana anggaran proyek berhasil disimpan");
+                    } else {
                         mainApp.showMessage(Modality.NONE, "Failed", task.getValue());
                     }
                 });
@@ -516,18 +555,19 @@ public class RencanaAnggaranProyekController  {
             mainApp.closeDialog(mainApp.MainStage, stage);
         });
     }
-    private void hapusRAP(RAPHead r){
-        if(r.getStatusApproval().equals("Approved")){
+
+    private void hapusRAP(RAPHead r) {
+        if (r.getStatusApproval().equals("Approved")) {
             mainApp.showMessage(Modality.NONE, "Warning", "Rencana anggaran proyek sudah di setujui");
-        }else if(r.getStatusBatal().equals("true")){
+        } else if (r.getStatusBatal().equals("true")) {
             mainApp.showMessage(Modality.NONE, "Warning", "Rencana anggaran proyek sudah pernah dihapus");
-        }else{
+        } else {
             MessageController controller = mainApp.showMessage(Modality.WINDOW_MODAL, "Confirmation",
-                    "Hapus rencana anggaran proyek " + r.getNoRap()+ ", anda yakin ?");
+                    "Hapus rencana anggaran proyek " + r.getNoRap() + ", anda yakin ?");
             controller.OK.setOnAction((ActionEvent ev) -> {
                 Task<String> task = new Task<String>() {
-                    @Override 
-                    public String call() throws Exception{
+                    @Override
+                    public String call() throws Exception {
                         try (Connection con = Koneksi.getConnection()) {
                             r.setStatusBatal("true");
                             r.setTglBatal(tglSql.format(new Date()));
@@ -542,10 +582,11 @@ public class RencanaAnggaranProyekController  {
                 task.setOnSucceeded((WorkerStateEvent e) -> {
                     mainApp.closeLoading();
                     getRAP();
-                    if (task.getValue().equals("true")) 
+                    if (task.getValue().equals("true")) {
                         mainApp.showMessage(Modality.NONE, "Success", "Data rencana anggaran proyek berhasil dihapus");
-                    else 
+                    } else {
                         mainApp.showMessage(Modality.NONE, "Failed", task.getValue());
+                    }
                 });
                 task.setOnFailed((e) -> {
                     mainApp.showMessage(Modality.NONE, "Error", task.getException().toString());
@@ -555,14 +596,15 @@ public class RencanaAnggaranProyekController  {
             });
         }
     }
-    private void printRAP(RAPHead rap){
-        try(Connection con = Koneksi.getConnection()){
+
+    private void printRAP(RAPHead rap) {
+        try (Connection con = Koneksi.getConnection()) {
             rap.setListRapDetail(RAPDetailDAO.getAllByNoRap(con, rap.getNoRap()));
             PrintOut print = new PrintOut();
             print.printRencanaAnggaranProyek(rap);
-        }catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
-            mainApp.showMessage(Modality.NONE, "Error",e.toString());
+            mainApp.showMessage(Modality.NONE, "Error", e.toString());
         }
     }
 }

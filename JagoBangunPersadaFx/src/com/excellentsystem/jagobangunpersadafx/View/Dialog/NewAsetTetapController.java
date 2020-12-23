@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package com.excellentsystem.jagobangunpersadafx.View.Dialog;
 
 import com.excellentsystem.jagobangunpersadafx.Function;
@@ -24,44 +23,59 @@ import javafx.stage.Stage;
  * @author Xtreme
  */
 public class NewAsetTetapController {
-    @FXML private GridPane penyusutanPane;
-    @FXML private Label title;
-    @FXML private Label harga;
-    @FXML private Label kekurangan;
+
+    @FXML
+    private GridPane penyusutanPane;
+    @FXML
+    private Label title;
+    @FXML
+    private Label harga;
+    @FXML
+    private Label kekurangan;
+    @FXML
     public TextField namaField;
+    @FXML
     public ComboBox<String> kategoriCombo;
+    @FXML
     public TextField keteranganField;
+    @FXML
     public TextField bulanField;
+    @FXML
     public TextField tahunField;
+    @FXML
     public TextField hargaField;
+    @FXML
     public TextField jumlahBayarField;
+    @FXML
     public TextField kekuranganField;
+    @FXML
     public ComboBox<String> tipeKeuanganCombo;
     public Button saveButton;
-    private Main mainApp;   
+    private Main mainApp;
     private Stage owner;
     private Stage stage;
-    public void setMainApp(Main mainApp,Stage owner,Stage stage) {
+
+    public void setMainApp(Main mainApp, Stage owner, Stage stage) {
         this.mainApp = mainApp;
         this.owner = owner;
         this.stage = stage;
         tipeKeuanganCombo.setItems(Function.getTipeKeuangan());
         kategoriCombo.setItems(Function.getKategoriAset());
         hargaField.setOnKeyReleased((event) -> {
-            try{
+            try {
                 hargaField.setText(rp.format(Double.parseDouble(hargaField.getText().replaceAll(",", ""))));
                 hargaField.end();
-            }catch(Exception e){
+            } catch (Exception e) {
                 hargaField.undo();
             }
             jumlahBayarField.setText(hargaField.getText());
             hitungsisa();
         });
         jumlahBayarField.setOnKeyReleased((event) -> {
-            try{
+            try {
                 jumlahBayarField.setText(rp.format(Double.parseDouble(jumlahBayarField.getText().replaceAll(",", ""))));
                 jumlahBayarField.end();
-            }catch(Exception e){
+            } catch (Exception e) {
                 jumlahBayarField.undo();
             }
             hitungsisa();
@@ -71,8 +85,9 @@ public class NewAsetTetapController {
         stage.setOnCloseRequest((event) -> {
             mainApp.closeDialog(owner, stage);
         });
-    }   
-    public void setPenjualanAset(AsetTetap aset){
+    }
+
+    public void setPenjualanAset(AsetTetap aset) {
         title.setText("Penjualan Aset");
         harga.setText("Harga Jual");
         kekurangan.setText("Piutang Aset");
@@ -85,11 +100,13 @@ public class NewAsetTetapController {
         stage.setHeight(370);
         penyusutanPane.setVisible(false);
     }
-    private void hitungsisa(){
-        kekuranganField.setText(rp.format(Double.parseDouble(hargaField.getText().replaceAll(",", ""))-
-            Double.parseDouble(jumlahBayarField.getText().replaceAll(",", ""))));
+
+    private void hitungsisa() {
+        kekuranganField.setText(rp.format(Double.parseDouble(hargaField.getText().replaceAll(",", ""))
+                - Double.parseDouble(jumlahBayarField.getText().replaceAll(",", ""))));
     }
-    public void close(){
+
+    public void close() {
         mainApp.closeDialog(owner, stage);
-    }  
+    }
 }

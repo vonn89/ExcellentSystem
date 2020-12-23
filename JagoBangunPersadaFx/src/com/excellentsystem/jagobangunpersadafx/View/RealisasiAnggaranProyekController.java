@@ -64,42 +64,68 @@ import javafx.stage.Stage;
  *
  * @author Xtreme
  */
-public class RealisasiAnggaranProyekController  {
-    @FXML private TableView<RAPHead> proyekTable;
-    @FXML private TableColumn<RAPHead, String> noRAPColumn;
-    @FXML private TableColumn<RAPHead, String> tglRAPColumn;
-    @FXML private TableColumn<RAPHead, String> kategoriColumn;
-    @FXML private TableColumn<RAPHead, String> keteranganColumn;
-    @FXML private TableColumn<RAPHead, String> metodeColumn;
-    @FXML private TableColumn<RAPHead, String> perkiraanWaktuColumn;
-    @FXML private TableColumn<RAPHead, Number> totalPropertyColumn;
-    @FXML private TableColumn<RAPHead, Number> totalAnggaranColumn;
-    @FXML private TableColumn<RAPHead, String> kodeUserColumn;
-    @FXML private TableColumn<RAPHead, String> statusApprovalColumn;
-    
-    @FXML private TableView<RAPRealisasi> realisasiTable;
-    @FXML private TableColumn<RAPRealisasi, String> tglRealisasiColumn;
-    @FXML private TableColumn<RAPRealisasi, String> keteranganRealisasiColumn;
-    @FXML private TableColumn<RAPRealisasi, String> satuanColumn;
-    @FXML private TableColumn<RAPRealisasi, Number> qtyColumn;
-    @FXML private TableColumn<RAPRealisasi, Number> jumlahRpColumn;
-    @FXML private TableColumn<RAPRealisasi, String> tipeKeuanganColumn;
-    @FXML private TableColumn<RAPRealisasi, Number> totalImageColumn;
-    @FXML private TableColumn<RAPRealisasi, String> kodeUserRealisasiColumn;
-    
-    @FXML private TextField searchField;
-    @FXML private DatePicker tglAwalPicker;
-    @FXML private DatePicker tglAkhirPicker;
-    @FXML private Label totalRealisasiLabel;
+public class RealisasiAnggaranProyekController {
+
+    @FXML
+    private TableView<RAPHead> proyekTable;
+    @FXML
+    private TableColumn<RAPHead, String> noRAPColumn;
+    @FXML
+    private TableColumn<RAPHead, String> tglRAPColumn;
+    @FXML
+    private TableColumn<RAPHead, String> kategoriColumn;
+    @FXML
+    private TableColumn<RAPHead, String> keteranganColumn;
+    @FXML
+    private TableColumn<RAPHead, String> metodeColumn;
+    @FXML
+    private TableColumn<RAPHead, String> perkiraanWaktuColumn;
+    @FXML
+    private TableColumn<RAPHead, Number> totalPropertyColumn;
+    @FXML
+    private TableColumn<RAPHead, Number> totalAnggaranColumn;
+    @FXML
+    private TableColumn<RAPHead, String> kodeUserColumn;
+    @FXML
+    private TableColumn<RAPHead, String> statusApprovalColumn;
+
+    @FXML
+    private TableView<RAPRealisasi> realisasiTable;
+    @FXML
+    private TableColumn<RAPRealisasi, String> tglRealisasiColumn;
+    @FXML
+    private TableColumn<RAPRealisasi, String> keteranganRealisasiColumn;
+    @FXML
+    private TableColumn<RAPRealisasi, String> satuanColumn;
+    @FXML
+    private TableColumn<RAPRealisasi, Number> qtyColumn;
+    @FXML
+    private TableColumn<RAPRealisasi, Number> jumlahRpColumn;
+    @FXML
+    private TableColumn<RAPRealisasi, String> tipeKeuanganColumn;
+    @FXML
+    private TableColumn<RAPRealisasi, Number> totalImageColumn;
+    @FXML
+    private TableColumn<RAPRealisasi, String> kodeUserRealisasiColumn;
+
+    @FXML
+    private TextField searchField;
+    @FXML
+    private DatePicker tglAwalPicker;
+    @FXML
+    private DatePicker tglAkhirPicker;
+    @FXML
+    private Label totalRealisasiLabel;
     private ObservableList<RAPHead> allRAP = FXCollections.observableArrayList();
     private ObservableList<RAPHead> filterData = FXCollections.observableArrayList();
     private ObservableList<RAPRealisasi> allDetailRealisasi = FXCollections.observableArrayList();
-    private Main mainApp;   
+    private Main mainApp;
+
     public void initialize() {
         noRAPColumn.setCellValueFactory(cellData -> cellData.getValue().noRapProperty());
         noRAPColumn.setCellFactory(col -> Function.getWrapTableCell(noRAPColumn));
-        
-        tglRAPColumn.setCellValueFactory(cellData -> { 
+
+        tglRAPColumn.setCellValueFactory(cellData -> {
             try {
                 return new SimpleStringProperty(tglLengkap.format(tglSql.parse(cellData.getValue().getTglRap())));
             } catch (Exception ex) {
@@ -108,34 +134,34 @@ public class RealisasiAnggaranProyekController  {
         });
         tglRAPColumn.setCellFactory(col -> Function.getWrapTableCell(tglRAPColumn));
         tglRAPColumn.setComparator(Function.sortDate(tglLengkap));
-        
-        kategoriColumn.setCellValueFactory(cellData ->cellData.getValue().kategoriPembangunanProperty());
+
+        kategoriColumn.setCellValueFactory(cellData -> cellData.getValue().kategoriPembangunanProperty());
         kategoriColumn.setCellFactory(col -> Function.getWrapTableCell(kategoriColumn));
-        
-        keteranganColumn.setCellValueFactory(cellData ->cellData.getValue().keteranganProperty());
+
+        keteranganColumn.setCellValueFactory(cellData -> cellData.getValue().keteranganProperty());
         keteranganColumn.setCellFactory(col -> Function.getWrapTableCell(keteranganColumn));
-        
-        metodeColumn.setCellValueFactory(cellData ->cellData.getValue().metodePembagianProperty());
+
+        metodeColumn.setCellValueFactory(cellData -> cellData.getValue().metodePembagianProperty());
         metodeColumn.setCellFactory(col -> Function.getWrapTableCell(metodeColumn));
-        
-        perkiraanWaktuColumn.setCellValueFactory(cellData ->{
-            return new SimpleStringProperty(cellData.getValue().getPerkiraanWaktu()+" hari");
+
+        perkiraanWaktuColumn.setCellValueFactory(cellData -> {
+            return new SimpleStringProperty(cellData.getValue().getPerkiraanWaktu() + " hari");
         });
         perkiraanWaktuColumn.setCellFactory(col -> Function.getWrapTableCell(perkiraanWaktuColumn));
-        
-        totalPropertyColumn.setCellValueFactory(cellData ->cellData.getValue().totalPropertyProperty());
+
+        totalPropertyColumn.setCellValueFactory(cellData -> cellData.getValue().totalPropertyProperty());
         totalPropertyColumn.setCellFactory(col -> getTableCell(qty));
-        
-        totalAnggaranColumn.setCellValueFactory(cellData ->cellData.getValue().totalAnggaranProperty());
+
+        totalAnggaranColumn.setCellValueFactory(cellData -> cellData.getValue().totalAnggaranProperty());
         totalAnggaranColumn.setCellFactory(col -> getTableCell(rp));
-        
-        statusApprovalColumn.setCellValueFactory(cellData ->cellData.getValue().statusApprovalProperty());
+
+        statusApprovalColumn.setCellValueFactory(cellData -> cellData.getValue().statusApprovalProperty());
         statusApprovalColumn.setCellFactory(col -> Function.getWrapTableCell(statusApprovalColumn));
-        
-        kodeUserColumn.setCellValueFactory(cellData ->cellData.getValue().kodeUserProperty());
+
+        kodeUserColumn.setCellValueFactory(cellData -> cellData.getValue().kodeUserProperty());
         kodeUserColumn.setCellFactory(col -> Function.getWrapTableCell(kodeUserColumn));
-        
-        tglRealisasiColumn.setCellValueFactory(cellData -> { 
+
+        tglRealisasiColumn.setCellValueFactory(cellData -> {
             try {
                 return new SimpleStringProperty(tglLengkap.format(tglSql.parse(cellData.getValue().getTglRealisasi())));
             } catch (Exception ex) {
@@ -144,48 +170,48 @@ public class RealisasiAnggaranProyekController  {
         });
         tglRealisasiColumn.setCellFactory(col -> Function.getWrapTableCell(tglRealisasiColumn));
         tglRealisasiColumn.setComparator(Function.sortDate(tglLengkap));
-        
-        keteranganRealisasiColumn.setCellValueFactory(cellData ->cellData.getValue().keteranganProperty());
+
+        keteranganRealisasiColumn.setCellValueFactory(cellData -> cellData.getValue().keteranganProperty());
         keteranganRealisasiColumn.setCellFactory(col -> Function.getWrapTableCell(keteranganRealisasiColumn));
-        
-        satuanColumn.setCellValueFactory(cellData ->cellData.getValue().satuanProperty());
+
+        satuanColumn.setCellValueFactory(cellData -> cellData.getValue().satuanProperty());
         satuanColumn.setCellFactory(col -> Function.getWrapTableCell(satuanColumn));
-        
-        qtyColumn.setCellValueFactory(cellData ->cellData.getValue().qtyProperty());
+
+        qtyColumn.setCellValueFactory(cellData -> cellData.getValue().qtyProperty());
         qtyColumn.setCellFactory(col -> getTableCell(qty));
-        
-        jumlahRpColumn.setCellValueFactory(cellData ->cellData.getValue().jumlahRpProperty());
+
+        jumlahRpColumn.setCellValueFactory(cellData -> cellData.getValue().jumlahRpProperty());
         jumlahRpColumn.setCellFactory(col -> getTableCell(rp));
-        
-        tipeKeuanganColumn.setCellValueFactory(cellData ->cellData.getValue().tipeKeuanganProperty());
+
+        tipeKeuanganColumn.setCellValueFactory(cellData -> cellData.getValue().tipeKeuanganProperty());
         tipeKeuanganColumn.setCellFactory(col -> Function.getWrapTableCell(tipeKeuanganColumn));
-        
-        totalImageColumn.setCellValueFactory(cellData ->cellData.getValue().totalImageProperty());
+
+        totalImageColumn.setCellValueFactory(cellData -> cellData.getValue().totalImageProperty());
         totalImageColumn.setCellFactory(col -> getTableCell(rp));
-        
-        kodeUserRealisasiColumn.setCellValueFactory(cellData ->cellData.getValue().kodeUserProperty());
+
+        kodeUserRealisasiColumn.setCellValueFactory(cellData -> cellData.getValue().kodeUserProperty());
         kodeUserRealisasiColumn.setCellFactory(col -> Function.getWrapTableCell(kodeUserRealisasiColumn));
-        
+
         tglAwalPicker.setConverter(Function.getTglConverter());
         tglAwalPicker.setValue(LocalDate.now().minusMonths(3));
         tglAwalPicker.setDayCellFactory((final DatePicker datePicker) -> getDateCellMulai(tglAkhirPicker));
-        
+
         tglAkhirPicker.setConverter(Function.getTglConverter());
         tglAkhirPicker.setValue(LocalDate.now());
         tglAkhirPicker.setDayCellFactory((final DatePicker datePicker) -> getDateCellAkhir(tglAwalPicker));
-        
+
         allRAP.addListener((ListChangeListener.Change<? extends RAPHead> change) -> {
             searchRAP();
         });
         searchField.textProperty().addListener(
-            (ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
-            searchRAP();
-        });
+                (ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
+                    searchRAP();
+                });
         filterData.addAll(allRAP);
-        
+
         ContextMenu rowMenu = new ContextMenu();
         MenuItem refresh = new MenuItem("Refresh");
-        refresh.setOnAction((ActionEvent e)->{
+        refresh.setOnAction((ActionEvent e) -> {
             getRAP();
         });
         rowMenu.getItems().addAll(refresh);
@@ -197,7 +223,7 @@ public class RealisasiAnggaranProyekController  {
                     super.updateItem(item, empty);
                     if (empty) {
                         setContextMenu(rowMenu);
-                    }else{ 
+                    } else {
                         ContextMenu rowMenu = new ContextMenu();
                         MenuItem detail = new MenuItem("Detail Rencana Anggaran Proyek");
                         detail.setOnAction((ActionEvent event) -> {
@@ -208,14 +234,16 @@ public class RealisasiAnggaranProyekController  {
                             printRAP(item);
                         });
                         MenuItem refresh = new MenuItem("Refresh");
-                        refresh.setOnAction((ActionEvent e)->{
+                        refresh.setOnAction((ActionEvent e) -> {
                             getRAP();
                         });
-                        for(Otoritas o : sistem.getUser().getOtoritas()){
-                            if(o.getJenis().equals("Detail Rencana Anggaran Proyek")&&o.isStatus())
+                        for (Otoritas o : sistem.getUser().getOtoritas()) {
+                            if (o.getJenis().equals("Detail Rencana Anggaran Proyek") && o.isStatus()) {
                                 rowMenu.getItems().add(detail);
-                            if(o.getJenis().equals("Print Realisasi Anggaran Proyek")&&o.isStatus())
+                            }
+                            if (o.getJenis().equals("Print Realisasi Anggaran Proyek") && o.isStatus()) {
                                 rowMenu.getItems().add(print);
+                            }
                         }
                         rowMenu.getItems().addAll(refresh);
                         setContextMenu(rowMenu);
@@ -223,29 +251,32 @@ public class RealisasiAnggaranProyekController  {
                 }
             };
             row.setOnMouseClicked((MouseEvent mouseEvent) -> {
-                if(mouseEvent.getButton().equals(MouseButton.PRIMARY) && mouseEvent.getClickCount() == 2)
-                    for(Otoritas o : sistem.getUser().getOtoritas()){
-                        if(o.getJenis().equals("Detail Rencana Anggaran Proyek")&&o.isStatus())
+                if (mouseEvent.getButton().equals(MouseButton.PRIMARY) && mouseEvent.getClickCount() == 2) {
+                    for (Otoritas o : sistem.getUser().getOtoritas()) {
+                        if (o.getJenis().equals("Detail Rencana Anggaran Proyek") && o.isStatus()) {
                             detailRAP(row.getItem());
+                        }
                     }
+                }
             });
             return row;
         });
         proyekTable.getSelectionModel().selectedItemProperty().addListener(
-            (observable, oldValue, newValue) -> getRealisasi());
-        
+                (observable, oldValue, newValue) -> getRealisasi());
+
         ContextMenu realisasiRowMenu = new ContextMenu();
         MenuItem addNew = new MenuItem("Add New Realisasi");
         addNew.setOnAction((ActionEvent event) -> {
             addNewRealisasi();
         });
         MenuItem refreshRealisasi = new MenuItem("Refresh");
-        refreshRealisasi.setOnAction((ActionEvent e)->{
+        refreshRealisasi.setOnAction((ActionEvent e) -> {
             getRealisasi();
         });
-        for(Otoritas o : sistem.getUser().getOtoritas()){
-            if(o.getJenis().equals("Add New Realisasi")&&o.isStatus())
+        for (Otoritas o : sistem.getUser().getOtoritas()) {
+            if (o.getJenis().equals("Add New Realisasi") && o.isStatus()) {
                 realisasiRowMenu.getItems().add(addNew);
+            }
         }
         realisasiRowMenu.getItems().addAll(refreshRealisasi);
         realisasiTable.setContextMenu(realisasiRowMenu);
@@ -256,7 +287,7 @@ public class RealisasiAnggaranProyekController  {
                     super.updateItem(item, empty);
                     if (empty) {
                         setContextMenu(realisasiRowMenu);
-                    }else{ 
+                    } else {
                         ContextMenu rowMenu = new ContextMenu();
                         MenuItem addNew = new MenuItem("Add New Realisasi");
                         addNew.setOnAction((ActionEvent event) -> {
@@ -271,20 +302,23 @@ public class RealisasiAnggaranProyekController  {
                             batalRealisasi(item);
                         });
                         MenuItem refresh = new MenuItem("Refresh");
-                        refresh.setOnAction((ActionEvent e)->{
+                        refresh.setOnAction((ActionEvent e) -> {
                             getRealisasi();
                         });
-                        for(Otoritas o : sistem.getUser().getOtoritas()){
-                            if(o.getJenis().equals("Add New Realisasi")&&o.isStatus())
+                        for (Otoritas o : sistem.getUser().getOtoritas()) {
+                            if (o.getJenis().equals("Add New Realisasi") && o.isStatus()) {
                                 rowMenu.getItems().add(addNew);
+                            }
                         }
-                        for(Otoritas o : sistem.getUser().getOtoritas()){
-                            if(o.getJenis().equals("Detail Realisasi")&&o.isStatus())
+                        for (Otoritas o : sistem.getUser().getOtoritas()) {
+                            if (o.getJenis().equals("Detail Realisasi") && o.isStatus()) {
                                 rowMenu.getItems().add(detail);
+                            }
                         }
-                        for(Otoritas o : sistem.getUser().getOtoritas()){
-                            if(o.getJenis().equals("Batal Realisasi")&&o.isStatus())
+                        for (Otoritas o : sistem.getUser().getOtoritas()) {
+                            if (o.getJenis().equals("Batal Realisasi") && o.isStatus()) {
                                 rowMenu.getItems().add(hapus);
+                            }
                         }
                         rowMenu.getItems().addAll(refresh);
                         setContextMenu(rowMenu);
@@ -292,29 +326,33 @@ public class RealisasiAnggaranProyekController  {
                 }
             };
             row.setOnMouseClicked((MouseEvent mouseEvent) -> {
-                if(mouseEvent.getButton().equals(MouseButton.PRIMARY) && mouseEvent.getClickCount() == 2)
-                    for(Otoritas o : sistem.getUser().getOtoritas()){
-                        if(o.getJenis().equals("Detail Realisasi")&&o.isStatus())
+                if (mouseEvent.getButton().equals(MouseButton.PRIMARY) && mouseEvent.getClickCount() == 2) {
+                    for (Otoritas o : sistem.getUser().getOtoritas()) {
+                        if (o.getJenis().equals("Detail Realisasi") && o.isStatus()) {
                             detailRealisasi(row.getItem());
+                        }
                     }
+                }
             });
             return row;
         });
     }
-    public void setMainApp(Main mainApp){
+
+    public void setMainApp(Main mainApp) {
         this.mainApp = mainApp;
         getRAP();
         proyekTable.setItems(filterData);
         realisasiTable.setItems(allDetailRealisasi);
     }
+
     @FXML
-    private void getRAP(){
+    private void getRAP() {
         Task<List<RAPHead>> task = new Task<List<RAPHead>>() {
-            @Override 
-            public List<RAPHead> call() throws Exception{
+            @Override
+            public List<RAPHead> call() throws Exception {
                 try (Connection con = Koneksi.getConnection()) {
-                    List<RAPHead> listRAP = RAPHeadDAO.getAllByDateAndStatusApprovalAndStatusSelesaiAndStatusBatal(con, 
-                            tglAwalPicker.getValue().toString(), tglAkhirPicker.getValue().toString(), 
+                    List<RAPHead> listRAP = RAPHeadDAO.getAllByDateAndStatusApprovalAndStatusSelesaiAndStatusBatal(con,
+                            tglAwalPicker.getValue().toString(), tglAkhirPicker.getValue().toString(),
                             "Approved", "%", "false");
                     return listRAP;
                 }
@@ -335,49 +373,54 @@ public class RealisasiAnggaranProyekController  {
         });
         new Thread(task).start();
     }
-    private Boolean checkColumn(String column){
-        if(column!=null){
-            if(column.toLowerCase().contains(searchField.getText().toLowerCase()))
+
+    private Boolean checkColumn(String column) {
+        if (column != null) {
+            if (column.toLowerCase().contains(searchField.getText().toLowerCase())) {
                 return true;
+            }
         }
         return false;
     }
+
     private void searchRAP() {
-        try{
+        try {
             filterData.clear();
             for (RAPHead temp : allRAP) {
-                if (searchField.getText() == null || searchField.getText().equals(""))
+                if (searchField.getText() == null || searchField.getText().equals("")) {
                     filterData.add(temp);
-                else{
-                    if(checkColumn(temp.getNoRap())||
-                        checkColumn(temp.getTglRap())||
-                        checkColumn(temp.getKategoriPembangunan())||
-                        checkColumn(qty.format(temp.getPerkiraanWaktu()))||
-                        checkColumn(tgl.format(tglBarang.parse(temp.getTglMulai())))||
-                        checkColumn(tglLengkap.format(tglSql.parse(temp.getTglRap())))||
-                        checkColumn(tglLengkap.format(tglSql.parse(temp.getTglSelesai())))||
-                        checkColumn(temp.getMetodePembagian())||
-                        checkColumn(temp.getKeterangan())||
-                        checkColumn(qty.format(temp.getTotalProperty()))||
-                        checkColumn(rp.format(temp.getTotalAnggaran()))||
-                        checkColumn(temp.getKodeUser()))
-                            filterData.add(temp);
+                } else {
+                    if (checkColumn(temp.getNoRap())
+                            || checkColumn(temp.getTglRap())
+                            || checkColumn(temp.getKategoriPembangunan())
+                            || checkColumn(qty.format(temp.getPerkiraanWaktu()))
+                            || checkColumn(tgl.format(tglBarang.parse(temp.getTglMulai())))
+                            || checkColumn(tglLengkap.format(tglSql.parse(temp.getTglRap())))
+                            || checkColumn(tglLengkap.format(tglSql.parse(temp.getTglSelesai())))
+                            || checkColumn(temp.getMetodePembagian())
+                            || checkColumn(temp.getKeterangan())
+                            || checkColumn(qty.format(temp.getTotalProperty()))
+                            || checkColumn(rp.format(temp.getTotalAnggaran()))
+                            || checkColumn(temp.getKodeUser())) {
+                        filterData.add(temp);
+                    }
                 }
             }
             hitungTotal();
-        }catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             mainApp.showMessage(Modality.NONE, "Error", e.toString());
         }
     }
+
     @FXML
-    private void getRealisasi(){
+    private void getRealisasi() {
         allDetailRealisasi.clear();
-        if(proyekTable.getSelectionModel().getSelectedItem()!=null){
+        if (proyekTable.getSelectionModel().getSelectedItem() != null) {
             Task<List<RAPRealisasi>> task = new Task<List<RAPRealisasi>>() {
-                @Override 
-                public List<RAPRealisasi> call() throws Exception{
-                    try(Connection con = Koneksi.getConnection()){
+                @Override
+                public List<RAPRealisasi> call() throws Exception {
+                    try (Connection con = Koneksi.getConnection()) {
                         return RAPRealisasiDAO.getAllByNoRapAndStatus(con, proyekTable.getSelectionModel().getSelectedItem().getNoRap(), "true");
                     }
                 }
@@ -398,47 +441,50 @@ public class RealisasiAnggaranProyekController  {
             new Thread(task).start();
         }
     }
-    private void hitungTotal(){
+
+    private void hitungTotal() {
         double total = 0;
-        for(RAPRealisasi r : allDetailRealisasi){
+        for (RAPRealisasi r : allDetailRealisasi) {
             total = total + r.getJumlahRp();
         }
         totalRealisasiLabel.setText(rp.format(total));
     }
-    private void detailRAP(RAPHead r){
+
+    private void detailRAP(RAPHead r) {
         Stage stage = new Stage();
         FXMLLoader loader = mainApp.showDialog(mainApp.MainStage, stage, "View/Dialog/DetailRencanaAnggaranProyek.fxml");
         DetailRencanaAnggaranProyekController x = loader.getController();
         x.setMainApp(mainApp, mainApp.MainStage, stage);
         x.setRAP(r);
     }
-    private void addNewRealisasi(){
-        if(proyekTable.getSelectionModel().getSelectedItem()==null){
+
+    private void addNewRealisasi() {
+        if (proyekTable.getSelectionModel().getSelectedItem() == null) {
             mainApp.showMessage(Modality.NONE, "Warning", "Rencana anggaran proyek belum dipilih");
-        }else{
+        } else {
             Stage stage = new Stage();
             FXMLLoader loader = mainApp.showDialog(mainApp.MainStage, stage, "View/Dialog/DetailRealisasiProyek.fxml");
             DetailRealisasiProyekController x = loader.getController();
             x.setMainApp(mainApp, mainApp.MainStage, stage);
             x.saveButton.setOnAction((event) -> {
-                if("".equals(x.keteranganField.getText())){
+                if ("".equals(x.keteranganField.getText())) {
                     mainApp.showMessage(Modality.NONE, "Warning", "Keterangan masih kosong");
-                }else if("".equals(x.satuanField.getText())){
+                } else if ("".equals(x.satuanField.getText())) {
                     mainApp.showMessage(Modality.NONE, "Warning", "Satuan masih kosong");
-                }else if("".equals(x.qtyField.getText())||"0".equals(x.qtyField.getText())){
+                } else if ("".equals(x.qtyField.getText()) || "0".equals(x.qtyField.getText())) {
                     mainApp.showMessage(Modality.NONE, "Warning", "Qty masih kosong");
-                }else if("".equals(x.hargaSatuanField.getText())||"0".equals(x.hargaSatuanField.getText())){
+                } else if ("".equals(x.hargaSatuanField.getText()) || "0".equals(x.hargaSatuanField.getText())) {
                     mainApp.showMessage(Modality.NONE, "Warning", "Harga satuan masih kosong");
-                }else if("".equals(x.totalField.getText())||"0".equals(x.totalField.getText())){
+                } else if ("".equals(x.totalField.getText()) || "0".equals(x.totalField.getText())) {
                     mainApp.showMessage(Modality.NONE, "Warning", "Total masih kosong");
-                }else if(x.tipeKeuanganCombo.getSelectionModel().getSelectedItem()==null||
-                        "".equals(x.tipeKeuanganCombo.getSelectionModel().getSelectedItem())){
+                } else if (x.tipeKeuanganCombo.getSelectionModel().getSelectedItem() == null
+                        || "".equals(x.tipeKeuanganCombo.getSelectionModel().getSelectedItem())) {
                     mainApp.showMessage(Modality.NONE, "Warning", "Tipe keuangan belum dipilih");
-                }else{
-                    if(proyekTable.getSelectionModel().getSelectedItem()!=null){
+                } else {
+                    if (proyekTable.getSelectionModel().getSelectedItem() != null) {
                         Task<String> task = new Task<String>() {
-                            @Override 
-                            public String call() throws Exception{
+                            @Override
+                            public String call() throws Exception {
                                 try (Connection con = Koneksi.getConnection()) {
                                     RAPRealisasi r = new RAPRealisasi();
                                     r.setNoRap(proyekTable.getSelectionModel().getSelectedItem().getNoRap());
@@ -464,10 +510,10 @@ public class RealisasiAnggaranProyekController  {
                         task.setOnSucceeded((e) -> {
                             mainApp.closeLoading();
                             getRealisasi();
-                            if(task.getValue().equals("true")){
+                            if (task.getValue().equals("true")) {
                                 mainApp.closeDialog(mainApp.MainStage, stage);
-                                mainApp.showMessage(Modality.NONE, "Success","Realisasi proyek berhasil disimpan");
-                            }else{
+                                mainApp.showMessage(Modality.NONE, "Success", "Realisasi proyek berhasil disimpan");
+                            } else {
                                 mainApp.showMessage(Modality.NONE, "Failed", task.getValue());
                             }
                         });
@@ -481,38 +527,42 @@ public class RealisasiAnggaranProyekController  {
             });
         }
     }
-    private void detailRealisasi(RAPRealisasi r){
+
+    private void detailRealisasi(RAPRealisasi r) {
         Stage stage = new Stage();
         FXMLLoader loader = mainApp.showDialog(mainApp.MainStage, stage, "View/Dialog/DetailRealisasiProyek.fxml");
         DetailRealisasiProyekController x = loader.getController();
         x.setMainApp(mainApp, mainApp.MainStage, stage);
         x.setDetailRealisasi(r);
     }
-    private void batalRealisasi(RAPRealisasi r){
+
+    private void batalRealisasi(RAPRealisasi r) {
         MessageController controller = mainApp.showMessage(Modality.WINDOW_MODAL, "Confirmation",
-                "Batal realisasi proyek " + r.getNoRap()+ " - "+r.getNoUrut()+", anda yakin ?");
+                "Batal realisasi proyek " + r.getNoRap() + " - " + r.getNoUrut() + ", anda yakin ?");
         controller.OK.setOnAction((ActionEvent ev) -> {
             Task<String> task = new Task<String>() {
-                @Override 
-                public String call() throws Exception{
+                @Override
+                public String call() throws Exception {
                     try (Connection con = Koneksi.getConnection()) {
                         RAPHead rapHead = RAPHeadDAO.get(con, r.getNoRap());
                         rapHead.setListRapPropertyDetail(RAPDetailPropertyDAO.getAllByNoRap(con, r.getNoRap()));
                         Boolean statusTanah = true;
-                        for(RAPDetailProperty detail : rapHead.getListRapPropertyDetail()){
+                        for (RAPDetailProperty detail : rapHead.getListRapPropertyDetail()) {
                             Property prop = PropertyDAO.get(con, detail.getKodeProperty());
-                            if(prop.getStatus().equals("Mapped")||
-                                    prop.getStatus().equals("Combined")||
-                                    prop.getStatus().equals("Sold"))
+                            if (prop.getStatus().equals("Mapped")
+                                    || prop.getStatus().equals("Combined")
+                                    || prop.getStatus().equals("Sold")) {
                                 statusTanah = false;
+                            }
                         }
-                        if(statusTanah){
+                        if (statusTanah) {
                             r.setTglBatal(tglSql.format(new Date()));
                             r.setUserBatal(sistem.getUser().getUsername());
                             r.setStatus("false");
                             return Service.batalRealisasi(con, r);
-                        }else 
+                        } else {
                             return "Realisasi proyek tidak dapat dibatalkan, karena status tanah sudah lunas/sudah dipecah/sudah digabung";
+                        }
                     }
                 }
             };
@@ -522,10 +572,11 @@ public class RealisasiAnggaranProyekController  {
             task.setOnSucceeded((WorkerStateEvent e) -> {
                 mainApp.closeLoading();
                 getRealisasi();
-                if (task.getValue().equals("true")) 
+                if (task.getValue().equals("true")) {
                     mainApp.showMessage(Modality.NONE, "Success", "Data realisasi proyek berhasil dibatal");
-                else 
+                } else {
                     mainApp.showMessage(Modality.NONE, "Failed", task.getValue());
+                }
             });
             task.setOnFailed((e) -> {
                 mainApp.showMessage(Modality.NONE, "Error", task.getException().toString());
@@ -534,14 +585,15 @@ public class RealisasiAnggaranProyekController  {
             new Thread(task).start();
         });
     }
-    private void printRAP(RAPHead rap){
-        try(Connection con = Koneksi.getConnection()){
+
+    private void printRAP(RAPHead rap) {
+        try (Connection con = Koneksi.getConnection()) {
             rap.setListRapRealisasi(RAPRealisasiDAO.getAllByNoRapAndStatus(con, rap.getNoRap(), "true"));
             PrintOut print = new PrintOut();
             print.printRealisasiAnggaranProyek(rap);
-        }catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
-            mainApp.showMessage(Modality.NONE, "Error",e.toString());
+            mainApp.showMessage(Modality.NONE, "Error", e.toString());
         }
     }
 }

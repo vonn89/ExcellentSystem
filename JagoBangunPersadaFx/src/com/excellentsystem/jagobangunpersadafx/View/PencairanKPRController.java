@@ -61,35 +61,53 @@ import javafx.stage.Stage;
  *
  * @author Xtreme
  */
-public class PencairanKPRController  {
+public class PencairanKPRController {
 
-    @FXML private TableView<KPR> KPRTable;
-    @FXML private TableColumn<KPR, String> noKPRColumn;
-    @FXML private TableColumn<KPR, String> tglKPRColumn;
-    @FXML private TableColumn<KPR, Number> jumlahRpColumn;
-    @FXML private TableColumn<KPR, String> keteranganColumn;
-    @FXML private TableColumn<KPR, String> tipeKeuanganColumn;
-    
-    @FXML private TableColumn<KPR, Number> totalPembayaranColumn;
-    
-    @FXML private TableColumn<KPR, String> kodeKategoriColumn;
-    @FXML private TableColumn<KPR, String> namaPropertyColumn;
-    @FXML private TableColumn<KPR, Number> hargaJualColumn;
-    @FXML private TableColumn<KPR, Number> diskonColumn;
-    
-    @FXML private TableColumn<KPR, String> namaCustomerColumn;
-    
-    @FXML private TextField searchField;
-    @FXML private DatePicker tglAwalPicker;
-    @FXML private DatePicker tglAkhirPicker;
-    private Main mainApp;   
+    @FXML
+    private TableView<KPR> KPRTable;
+    @FXML
+    private TableColumn<KPR, String> noKPRColumn;
+    @FXML
+    private TableColumn<KPR, String> tglKPRColumn;
+    @FXML
+    private TableColumn<KPR, Number> jumlahRpColumn;
+    @FXML
+    private TableColumn<KPR, String> keteranganColumn;
+    @FXML
+    private TableColumn<KPR, String> tipeKeuanganColumn;
+
+    @FXML
+    private TableColumn<KPR, Number> totalPembayaranColumn;
+
+    @FXML
+    private TableColumn<KPR, String> kodeKategoriColumn;
+    @FXML
+    private TableColumn<KPR, String> namaPropertyColumn;
+    @FXML
+    private TableColumn<KPR, Number> hargaJualColumn;
+    @FXML
+    private TableColumn<KPR, Number> diskonColumn;
+    @FXML
+    private TableColumn<KPR, Number> addendumColumn;
+
+    @FXML
+    private TableColumn<KPR, String> namaCustomerColumn;
+
+    @FXML
+    private TextField searchField;
+    @FXML
+    private DatePicker tglAwalPicker;
+    @FXML
+    private DatePicker tglAkhirPicker;
+    private Main mainApp;
     private ObservableList<KPR> allKPR = FXCollections.observableArrayList();
     private ObservableList<KPR> filterData = FXCollections.observableArrayList();
+
     public void initialize() {
         noKPRColumn.setCellValueFactory(cellData -> cellData.getValue().noKPRProperty());
         noKPRColumn.setCellFactory(col -> Function.getWrapTableCell(noKPRColumn));
-        
-        tglKPRColumn.setCellValueFactory(cellData -> { 
+
+        tglKPRColumn.setCellValueFactory(cellData -> {
             try {
                 return new SimpleStringProperty(tglLengkap.format(tglSql.parse(cellData.getValue().getTglKPR())));
             } catch (Exception ex) {
@@ -98,57 +116,61 @@ public class PencairanKPRController  {
         });
         tglKPRColumn.setCellFactory(col -> Function.getWrapTableCell(tglKPRColumn));
         tglKPRColumn.setComparator(Function.sortDate(tglLengkap));
-        
-        jumlahRpColumn.setCellValueFactory(cellData ->cellData.getValue().jumlahRpProperty());
+
+        jumlahRpColumn.setCellValueFactory(cellData -> cellData.getValue().jumlahRpProperty());
         jumlahRpColumn.setCellFactory(col -> getTableCell(rp));
-        
-        totalPembayaranColumn.setCellValueFactory(cellData ->cellData.getValue().getSkl().totalPembayaranProperty());
+
+        totalPembayaranColumn.setCellValueFactory(cellData -> cellData.getValue().getSkl().totalPembayaranProperty());
         totalPembayaranColumn.setCellFactory(col -> getTableCell(rp));
-        
-        keteranganColumn.setCellValueFactory(cellData ->cellData.getValue().keteranganProperty());
+
+        keteranganColumn.setCellValueFactory(cellData -> cellData.getValue().keteranganProperty());
         keteranganColumn.setCellFactory(col -> Function.getWrapTableCell(keteranganColumn));
-        
-        tipeKeuanganColumn.setCellValueFactory(cellData ->cellData.getValue().tipeKeuanganProperty());
+
+        tipeKeuanganColumn.setCellValueFactory(cellData -> cellData.getValue().tipeKeuanganProperty());
         tipeKeuanganColumn.setCellFactory(col -> Function.getWrapTableCell(tipeKeuanganColumn));
-        
-        kodeKategoriColumn.setCellValueFactory(cellData ->cellData.getValue().getProperty().kodeKategoriProperty());
+
+        kodeKategoriColumn.setCellValueFactory(cellData -> cellData.getValue().getProperty().kodeKategoriProperty());
         kodeKategoriColumn.setCellFactory(col -> Function.getWrapTableCell(kodeKategoriColumn));
-        
-        namaPropertyColumn.setCellValueFactory(cellData ->cellData.getValue().getProperty().namaPropertyProperty());
+
+        namaPropertyColumn.setCellValueFactory(cellData -> cellData.getValue().getProperty().namaPropertyProperty());
         namaPropertyColumn.setCellFactory(col -> Function.getWrapTableCell(namaPropertyColumn));
-        
-        hargaJualColumn.setCellValueFactory(cellData ->cellData.getValue().getProperty().hargaJualProperty());
+
+        hargaJualColumn.setCellValueFactory(cellData -> cellData.getValue().getProperty().hargaJualProperty());
         hargaJualColumn.setCellFactory(col -> getTableCell(rp));
-        
-        diskonColumn.setCellValueFactory(cellData ->cellData.getValue().getProperty().diskonProperty());
+
+        diskonColumn.setCellValueFactory(cellData -> cellData.getValue().getProperty().diskonProperty());
         diskonColumn.setCellFactory(col -> getTableCell(rp));
-        
-        namaCustomerColumn.setCellValueFactory(cellData ->cellData.getValue().getCustomer().namaProperty());
+
+        addendumColumn.setCellValueFactory(cellData -> cellData.getValue().getProperty().addendumProperty());
+        addendumColumn.setCellFactory(col -> getTableCell(rp));
+
+        namaCustomerColumn.setCellValueFactory(cellData -> cellData.getValue().getCustomer().namaProperty());
         namaCustomerColumn.setCellFactory(col -> Function.getWrapTableCell(namaCustomerColumn));
-        
+
         allKPR.addListener((ListChangeListener.Change<? extends KPR> change) -> {
             searchKPR();
         });
-        
+
         tglAwalPicker.setConverter(Function.getTglConverter());
         tglAwalPicker.setValue(LocalDate.now().minusMonths(1));
         tglAwalPicker.setDayCellFactory((final DatePicker datePicker) -> getDateCellMulai(tglAkhirPicker));
-        
+
         tglAkhirPicker.setConverter(Function.getTglConverter());
         tglAkhirPicker.setValue(LocalDate.now());
         tglAkhirPicker.setDayCellFactory((final DatePicker datePicker) -> getDateCellAkhir(tglAwalPicker));
         ContextMenu rowMenu = new ContextMenu();
         MenuItem addNew = new MenuItem("Add New Terima Pencairan KPR");
-        addNew.setOnAction((ActionEvent e)->{
+        addNew.setOnAction((ActionEvent e) -> {
             addNewTerimaPencairanKPR();
         });
         MenuItem refresh = new MenuItem("Refresh");
-        refresh.setOnAction((ActionEvent e)->{
+        refresh.setOnAction((ActionEvent e) -> {
             getKPR();
         });
-        for(Otoritas o : sistem.getUser().getOtoritas()){
-            if(o.getJenis().equals("Add New Terima Pencairan KPR")&&o.isStatus())
+        for (Otoritas o : sistem.getUser().getOtoritas()) {
+            if (o.getJenis().equals("Add New Terima Pencairan KPR") && o.isStatus()) {
                 rowMenu.getItems().add(addNew);
+            }
         }
         rowMenu.getItems().addAll(refresh);
         KPRTable.setContextMenu(rowMenu);
@@ -159,10 +181,10 @@ public class PencairanKPRController  {
                     super.updateItem(item, empty);
                     if (empty) {
                         setContextMenu(rowMenu);
-                    }else{ 
+                    } else {
                         ContextMenu rowMenu = new ContextMenu();
                         MenuItem addNew = new MenuItem("Add New Terima Pencairan KPR");
-                        addNew.setOnAction((ActionEvent e)->{
+                        addNew.setOnAction((ActionEvent e) -> {
                             addNewTerimaPencairanKPR();
                         });
                         MenuItem batal = new MenuItem("Batal Terima Pencairan KPR");
@@ -182,20 +204,25 @@ public class PencairanKPRController  {
                             detailTerimaPencairanKPR(item);
                         });
                         MenuItem refresh = new MenuItem("Refresh");
-                        refresh.setOnAction((ActionEvent e)->{
+                        refresh.setOnAction((ActionEvent e) -> {
                             getKPR();
                         });
-                        for(Otoritas o : sistem.getUser().getOtoritas()){
-                            if(o.getJenis().equals("Add New Terima Pencairan KPR")&&o.isStatus())
+                        for (Otoritas o : sistem.getUser().getOtoritas()) {
+                            if (o.getJenis().equals("Add New Terima Pencairan KPR") && o.isStatus()) {
                                 rowMenu.getItems().add(addNew);
-                            if(o.getJenis().equals("Detail Terima Pencairan KPR")&&o.isStatus())
+                            }
+                            if (o.getJenis().equals("Detail Terima Pencairan KPR") && o.isStatus()) {
                                 rowMenu.getItems().add(detailKPR);
-                            if(o.getJenis().equals("Detail Customer")&&o.isStatus())
+                            }
+                            if (o.getJenis().equals("Detail Customer") && o.isStatus()) {
                                 rowMenu.getItems().add(detailCustomer);
-                            if(o.getJenis().equals("Detail Property")&&o.isStatus())
+                            }
+                            if (o.getJenis().equals("Detail Property") && o.isStatus()) {
                                 rowMenu.getItems().add(detailProperty);
-                            if(o.getJenis().equals("Batal Terima Pencairan KPR")&&o.isStatus())
+                            }
+                            if (o.getJenis().equals("Batal Terima Pencairan KPR") && o.isStatus()) {
                                 rowMenu.getItems().add(batal);
+                            }
                         }
                         rowMenu.getItems().addAll(refresh);
                         setContextMenu(rowMenu);
@@ -203,31 +230,34 @@ public class PencairanKPRController  {
                 }
             };
             row.setOnMouseClicked((MouseEvent mouseEvent) -> {
-                if(mouseEvent.getButton().equals(MouseButton.PRIMARY) && mouseEvent.getClickCount() == 2)
-                    for(Otoritas o : sistem.getUser().getOtoritas()){
-                        if(o.getJenis().equals("Detail Terima Pencairan KPR")&&o.isStatus())
+                if (mouseEvent.getButton().equals(MouseButton.PRIMARY) && mouseEvent.getClickCount() == 2) {
+                    for (Otoritas o : sistem.getUser().getOtoritas()) {
+                        if (o.getJenis().equals("Detail Terima Pencairan KPR") && o.isStatus()) {
                             detailTerimaPencairanKPR(row.getItem());
+                        }
                     }
+                }
             });
             return row;
         });
         searchField.textProperty().addListener(
-            (ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
-            searchKPR();
-        });
+                (ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
+                    searchKPR();
+                });
         filterData.addAll(allKPR);
-    }    
-    
-    public void setMainApp(Main mainApp){
+    }
+
+    public void setMainApp(Main mainApp) {
         this.mainApp = mainApp;
         getKPR();
         KPRTable.setItems(filterData);
     }
+
     @FXML
-    private void getKPR(){
+    private void getKPR() {
         Task<List<KPR>> task = new Task<List<KPR>>() {
-            @Override 
-            public List<KPR> call() throws Exception{
+            @Override
+            public List<KPR> call() throws Exception {
                 try (Connection con = Koneksi.getConnection()) {
                     List<Customer> listCustomer = CustomerDAO.getAllByStatus(con, "true");
                     List<String> statusProperty = new ArrayList<>();
@@ -236,17 +266,19 @@ public class PencairanKPRController  {
                     statusProperty.add("Sold");
                     List<Property> listProperty = PropertyDAO.getAllByStatus(con, statusProperty);
                     List<KPR> listKPR = KPRDAO.getAllByDate(con, tglAwalPicker.getValue().toString(), tglAkhirPicker.getValue().toString(), "true");
-                    for(KPR kpr : listKPR){
+                    for (KPR kpr : listKPR) {
                         kpr.setSkl(SKLHeadDAO.get(con, kpr.getNoSKL()));
                         kpr.getSkl().setAllDetail(SKLDetailDAO.getAllByNoSkl(con, kpr.getNoSKL()));
-                        for(Customer c : listCustomer){
-                            if(kpr.getKodeCustomer().equals(c.getKodeCustomer()))
+                        for (Customer c : listCustomer) {
+                            if (kpr.getKodeCustomer().equals(c.getKodeCustomer())) {
                                 kpr.setCustomer(c);
+                            }
                         }
-                        for(Property p : listProperty){
-                            if(kpr.getKodeProperty().equals(p.getKodeProperty()))
+                        for (Property p : listProperty) {
+                            if (kpr.getKodeProperty().equals(p.getKodeProperty())) {
                                 kpr.setProperty(p);
-                        }                        
+                            }
+                        }
                     }
                     return listKPR;
                 }
@@ -256,11 +288,11 @@ public class PencairanKPRController  {
             mainApp.showLoadingScreen();
         });
         task.setOnSucceeded((WorkerStateEvent e) -> {
-            try{
+            try {
                 mainApp.closeLoading();
                 allKPR.clear();
                 allKPR.addAll(task.getValue());
-            }catch(Exception ex){
+            } catch (Exception ex) {
                 mainApp.showMessage(Modality.NONE, "Error", ex.toString());
             }
         });
@@ -270,53 +302,58 @@ public class PencairanKPRController  {
         });
         new Thread(task).start();
     }
-    private Boolean checkColumn(String column){
-        if(column!=null){
-            if(column.toLowerCase().contains(searchField.getText().toLowerCase()))
+
+    private Boolean checkColumn(String column) {
+        if (column != null) {
+            if (column.toLowerCase().contains(searchField.getText().toLowerCase())) {
                 return true;
+            }
         }
         return false;
     }
+
     private void searchKPR() {
         filterData.clear();
         for (KPR temp : allKPR) {
-            if (searchField.getText() == null || searchField.getText().equals(""))
+            if (searchField.getText() == null || searchField.getText().equals("")) {
                 filterData.add(temp);
-            else{
-                if(checkColumn(temp.getNoKPR())||
-                    checkColumn(temp.getTglKPR())||
-                    checkColumn(temp.getTipeKeuangan())||
-                    checkColumn(rp.format(temp.getJumlahRp()))||
-                    checkColumn(temp.getKeterangan())||
-                    checkColumn(rp.format(temp.getSkl().getTotalPembayaran()))||
-                    checkColumn(temp.getCustomer().getNama())||
-                    checkColumn(temp.getProperty().getKodeKategori())||
-                    checkColumn(temp.getProperty().getNamaProperty())||
-                    checkColumn(rp.format(temp.getProperty().getHargaJual()))||
-                    checkColumn(rp.format(temp.getProperty().getDiskon()))
-                )
+            } else {
+                if (checkColumn(temp.getNoKPR())
+                        || checkColumn(temp.getTglKPR())
+                        || checkColumn(temp.getTipeKeuangan())
+                        || checkColumn(rp.format(temp.getJumlahRp()))
+                        || checkColumn(temp.getKeterangan())
+                        || checkColumn(rp.format(temp.getSkl().getTotalPembayaran()))
+                        || checkColumn(temp.getCustomer().getNama())
+                        || checkColumn(temp.getProperty().getKodeKategori())
+                        || checkColumn(temp.getProperty().getNamaProperty())
+                        || checkColumn(rp.format(temp.getProperty().getHargaJual()))
+                        || checkColumn(rp.format(temp.getProperty().getAddendum()))
+                        || checkColumn(rp.format(temp.getProperty().getDiskon()))) {
                     filterData.add(temp);
+                }
             }
         }
     }
-    private void addNewTerimaPencairanKPR(){
+
+    private void addNewTerimaPencairanKPR() {
         Stage stage = new Stage();
         FXMLLoader loader = mainApp.showDialog(mainApp.MainStage, stage, "View/Dialog/DetailTerimaPencairanKPR.fxml");
         DetailTerimaPencairanKPRController x = loader.getController();
         x.setMainApp(mainApp, mainApp.MainStage, stage);
         x.setNewKPR();
-        x.saveButton.setOnAction((ActionEvent ev)->{
-            if(x.namaPropertyField.getText().equals("")){
+        x.saveButton.setOnAction((ActionEvent ev) -> {
+            if (x.namaPropertyField.getText().equals("")) {
                 mainApp.showMessage(Modality.NONE, "Warning", "Property belum dipilih");
-            }else if(x.jumlahDiterimaField.getText().equals("")){
+            } else if (x.jumlahDiterimaField.getText().equals("")) {
                 mainApp.showMessage(Modality.NONE, "Warning", "Jumlah di terima masih kosong");
-            }else if(x.tipeKeuanganCombo.getSelectionModel().getSelectedItem()==null||
-                    "".equals(x.tipeKeuanganCombo.getSelectionModel().getSelectedItem())){
+            } else if (x.tipeKeuanganCombo.getSelectionModel().getSelectedItem() == null
+                    || "".equals(x.tipeKeuanganCombo.getSelectionModel().getSelectedItem())) {
                 mainApp.showMessage(Modality.NONE, "Warning", "Tipe keuangan belum dipilih");
-            }else{
+            } else {
                 Task<String> task = new Task<String>() {
-                    @Override 
-                    public String call() throws Exception{
+                    @Override
+                    public String call() throws Exception {
                         try (Connection con = Koneksi.getConnection()) {
                             KPR kpr = new KPR();
                             kpr.setNoKPR(KPRDAO.getId(con));
@@ -342,16 +379,16 @@ public class PencairanKPRController  {
                     mainApp.showLoadingScreen();
                 });
                 task.setOnSucceeded((WorkerStateEvent e) -> {
-                    try{
+                    try {
                         mainApp.closeLoading();
                         getKPR();
-                        if(task.getValue().equals("true")){
+                        if (task.getValue().equals("true")) {
                             mainApp.showMessage(Modality.NONE, "Success", "Terima Pencairan KPR berhasil disimpan");
                             mainApp.closeDialog(mainApp.MainStage, stage);
-                        }else{
+                        } else {
                             mainApp.showMessage(Modality.NONE, "Failed", task.getValue());
                         }
-                    }catch(Exception ex){
+                    } catch (Exception ex) {
                         mainApp.showMessage(Modality.NONE, "Error", ex.toString());
                     }
                 });
@@ -362,22 +399,24 @@ public class PencairanKPRController  {
                 new Thread(task).start();
             }
         });
-        
+
     }
-    private void detailTerimaPencairanKPR(KPR kpr){
+
+    private void detailTerimaPencairanKPR(KPR kpr) {
         Stage stage = new Stage();
         FXMLLoader loader = mainApp.showDialog(mainApp.MainStage, stage, "View/Dialog/DetailTerimaPencairanKPR.fxml");
         DetailTerimaPencairanKPRController x = loader.getController();
         x.setMainApp(mainApp, mainApp.MainStage, stage);
         x.setKPR(kpr);
     }
-    private void batalTerimaPencairanKPR(KPR kpr){
+
+    private void batalTerimaPencairanKPR(KPR kpr) {
         MessageController controller = mainApp.showMessage(Modality.WINDOW_MODAL, "Confirmation",
-                "Batal terima pencairan KPR " + kpr.getNoKPR()+ ", anda yakin ?");
+                "Batal terima pencairan KPR " + kpr.getNoKPR() + ", anda yakin ?");
         controller.OK.setOnAction((ActionEvent ev) -> {
             Task<String> task = new Task<String>() {
-                @Override 
-                public String call() throws Exception{
+                @Override
+                public String call() throws Exception {
                     try (Connection con = Koneksi.getConnection()) {
                         kpr.setTglBatal(tglSql.format(new Date()));
                         kpr.setUserBatal(sistem.getUser().getUsername());
@@ -390,14 +429,15 @@ public class PencairanKPRController  {
                 mainApp.showLoadingScreen();
             });
             task.setOnSucceeded((WorkerStateEvent e) -> {
-                try{
+                try {
                     mainApp.closeLoading();
                     getKPR();
-                    if (task.getValue().equals("true")) 
+                    if (task.getValue().equals("true")) {
                         mainApp.showMessage(Modality.NONE, "Success", "Data terima pencairan KPR berhasil dibatal");
-                    else 
+                    } else {
                         mainApp.showMessage(Modality.NONE, "Failed", task.getValue());
-                }catch(Exception ex){
+                    }
+                } catch (Exception ex) {
                     mainApp.showMessage(Modality.NONE, "Error", ex.toString());
                 }
             });
@@ -408,7 +448,8 @@ public class PencairanKPRController  {
             new Thread(task).start();
         });
     }
-    private void detailCustomer(Customer c){
+
+    private void detailCustomer(Customer c) {
         Stage stage = new Stage();
         FXMLLoader loader = mainApp.showDialog(mainApp.MainStage, stage, "View/Dialog/DetailCustomer.fxml");
         DetailCustomerController x = loader.getController();
@@ -416,7 +457,8 @@ public class PencairanKPRController  {
         x.setCustomer(c);
         x.setViewOnly();
     }
-    private void detailProperty(Property p){
+
+    private void detailProperty(Property p) {
         Stage stage = new Stage();
         FXMLLoader loader = mainApp.showDialog(mainApp.MainStage, stage, "View/Dialog/DetailProperty.fxml");
         DetailPropertyController x = loader.getController();

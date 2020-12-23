@@ -35,12 +35,11 @@ public class SKLHeadDAO {
             skl.setKodeProperty(rs.getString(4));
             skl.setKodeCustomer(rs.getString(5));
             skl.setTotalPembayaran(rs.getDouble(6));
-            skl.setSisaPelunasan(rs.getDouble(7));
-            skl.setKodeSales(rs.getString(8));
-            skl.setKodeUser(rs.getString(9));
-            skl.setStatus(rs.getString(10));
-            skl.setTglBatal(rs.getString(11));
-            skl.setUserBatal(rs.getString(12));
+            skl.setKodeSales(rs.getString(7));
+            skl.setKodeUser(rs.getString(8));
+            skl.setStatus(rs.getString(9));
+            skl.setTglBatal(rs.getString(10));
+            skl.setUserBatal(rs.getString(11));
         }
         return skl;
     }
@@ -61,12 +60,11 @@ public class SKLHeadDAO {
             skl.setKodeProperty(rs.getString(4));
             skl.setKodeCustomer(rs.getString(5));
             skl.setTotalPembayaran(rs.getDouble(6));
-            skl.setSisaPelunasan(rs.getDouble(7));
-            skl.setKodeSales(rs.getString(8));
-            skl.setKodeUser(rs.getString(9));
-            skl.setStatus(rs.getString(10));
-            skl.setTglBatal(rs.getString(11));
-            skl.setUserBatal(rs.getString(12));
+            skl.setKodeSales(rs.getString(7));
+            skl.setKodeUser(rs.getString(8));
+            skl.setStatus(rs.getString(9));
+            skl.setTglBatal(rs.getString(10));
+            skl.setUserBatal(rs.getString(11));
             allSKL.add(skl);
         }
         return allSKL;
@@ -84,12 +82,11 @@ public class SKLHeadDAO {
             skl.setKodeProperty(rs.getString(4));
             skl.setKodeCustomer(rs.getString(5));
             skl.setTotalPembayaran(rs.getDouble(6));
-            skl.setSisaPelunasan(rs.getDouble(7));
-            skl.setKodeSales(rs.getString(8));
-            skl.setKodeUser(rs.getString(9));
-            skl.setStatus(rs.getString(10));
-            skl.setTglBatal(rs.getString(11));
-            skl.setUserBatal(rs.getString(12));
+            skl.setKodeSales(rs.getString(7));
+            skl.setKodeUser(rs.getString(8));
+            skl.setStatus(rs.getString(9));
+            skl.setTglBatal(rs.getString(10));
+            skl.setUserBatal(rs.getString(11));
         }
         return skl;
     }
@@ -103,37 +100,35 @@ public class SKLHeadDAO {
             return new DecimalFormat("000").format(1)+"/SKL/"+new SimpleDateFormat("MM").format(new Date())+"/"+kodeProperty+"/"+new SimpleDateFormat("yyyy").format(new Date());
     }
     public static void insert(Connection con, SKLHead skl)throws Exception{
-        PreparedStatement ps = con.prepareStatement("insert into tt_skl_head values(?,?,?,?,?,?,?,?,?,?,?,?)");
+        PreparedStatement ps = con.prepareStatement("insert into tt_skl_head values(?,?,?,?,?,?,?,?,?,?,?)");
         ps.setString(1, skl.getNoSKL());
         ps.setString(2, skl.getTglSKL());
         ps.setString(3, skl.getNoSTJ());
         ps.setString(4, skl.getKodeProperty());
         ps.setString(5, skl.getKodeCustomer());
         ps.setDouble(6, skl.getTotalPembayaran());
-        ps.setDouble(7, skl.getSisaPelunasan());
-        ps.setString(8, skl.getKodeSales());
-        ps.setString(9, skl.getKodeUser());
-        ps.setString(10, skl.getStatus());
-        ps.setString(11, skl.getTglBatal());
-        ps.setString(12, skl.getUserBatal());
+        ps.setString(7, skl.getKodeSales());
+        ps.setString(8, skl.getKodeUser());
+        ps.setString(9, skl.getStatus());
+        ps.setString(10, skl.getTglBatal());
+        ps.setString(11, skl.getUserBatal());
         ps.executeUpdate();
     }
     public static void update(Connection con,SKLHead skl)throws Exception{
         PreparedStatement ps = con.prepareStatement("update tt_skl_head set "
-                + " tgl_skl=?, no_stj=?, kode_property=?, kode_customer=?, total_pembayaran=?, sisa_pelunasan=?, "
+                + " tgl_skl=?, no_stj=?, kode_property=?, kode_customer=?, total_pembayaran=?,  "
                 + " kode_sales=?, kode_user=?, status=?, tgl_batal=?, user_batal=? where no_skl=?");
         ps.setString(1, skl.getTglSKL());
         ps.setString(2, skl.getNoSTJ());
         ps.setString(3, skl.getKodeProperty());
         ps.setString(4, skl.getKodeCustomer());
         ps.setDouble(5, skl.getTotalPembayaran());
-        ps.setDouble(6, skl.getSisaPelunasan());
-        ps.setString(7, skl.getKodeSales());
-        ps.setString(8, skl.getKodeUser());
-        ps.setString(9, skl.getStatus());
-        ps.setString(10, skl.getTglBatal());
-        ps.setString(11, skl.getUserBatal());
-        ps.setString(12, skl.getNoSKL());
+        ps.setString(6, skl.getKodeSales());
+        ps.setString(7, skl.getKodeUser());
+        ps.setString(8, skl.getStatus());
+        ps.setString(9, skl.getTglBatal());
+        ps.setString(10, skl.getUserBatal());
+        ps.setString(11, skl.getNoSKL());
         ps.executeUpdate();
     }
 }

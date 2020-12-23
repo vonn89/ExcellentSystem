@@ -39,78 +39,91 @@ import javafx.stage.Stage;
  */
 public class PenggabunganPropertyController {
 
-    
-    @FXML private TableView<PenggabunganPropertyDetail> propertyTable;
-    @FXML private TableColumn<PenggabunganPropertyDetail, String> kodeKategoriColumn;
-    @FXML private TableColumn<PenggabunganPropertyDetail, String> namaPropertyColumn;
-    @FXML private TableColumn<PenggabunganPropertyDetail, Number> luasTanahColumn;
-    @FXML private TableColumn<PenggabunganPropertyDetail, Number> nilaiPropertyColumn;
-    @FXML private TableColumn<PenggabunganPropertyDetail, Number> nilaiPropertyPerMeterColumn;
-    @FXML private TableColumn<PenggabunganPropertyDetail, Number> hargaJualColumn;
-    
-    @FXML public Label totalPropertyLabel;
-    @FXML public Label totalLuasTanahLabel;
-    @FXML public Label totalNilaiPropertyLabel;
-    @FXML private Label nilaiPropertyPerMeterLabel;
-    @FXML public Label totalJualLabel;
-    @FXML public Button saveButton;
-    
+    @FXML
+    private TableView<PenggabunganPropertyDetail> propertyTable;
+    @FXML
+    private TableColumn<PenggabunganPropertyDetail, String> kodeKategoriColumn;
+    @FXML
+    private TableColumn<PenggabunganPropertyDetail, String> namaPropertyColumn;
+    @FXML
+    private TableColumn<PenggabunganPropertyDetail, Number> luasTanahColumn;
+    @FXML
+    private TableColumn<PenggabunganPropertyDetail, Number> nilaiPropertyColumn;
+    @FXML
+    private TableColumn<PenggabunganPropertyDetail, Number> nilaiPropertyPerMeterColumn;
+    @FXML
+    private TableColumn<PenggabunganPropertyDetail, Number> hargaJualColumn;
+
+    @FXML
+    public Label totalPropertyLabel;
+    @FXML
+    public Label totalLuasTanahLabel;
+    @FXML
+    public Label totalNilaiPropertyLabel;
+    @FXML
+    private Label nilaiPropertyPerMeterLabel;
+    @FXML
+    public Label totalJualLabel;
+    @FXML
+    public Button saveButton;
+
     private Main mainApp;
     private Stage owner;
     private Stage stage;
     public ObservableList<PenggabunganPropertyDetail> allDetail = FXCollections.observableArrayList();
-    public void initialize(){
+
+    public void initialize() {
         kodeKategoriColumn.setCellValueFactory(cellData -> cellData.getValue().getProperty().kodeKategoriProperty());
         kodeKategoriColumn.setCellFactory(col -> Function.getWrapTableCell(kodeKategoriColumn));
-        
-        namaPropertyColumn.setCellValueFactory(cellData ->cellData.getValue().getProperty().namaPropertyProperty());
+
+        namaPropertyColumn.setCellValueFactory(cellData -> cellData.getValue().getProperty().namaPropertyProperty());
         namaPropertyColumn.setCellFactory(col -> Function.getWrapTableCell(namaPropertyColumn));
-        
-        luasTanahColumn.setCellValueFactory(cellData ->cellData.getValue().getProperty().luasTanahProperty());
+
+        luasTanahColumn.setCellValueFactory(cellData -> cellData.getValue().getProperty().luasTanahProperty());
         luasTanahColumn.setCellFactory(col -> getTableCell(qty));
-        
-        nilaiPropertyColumn.setCellValueFactory(cellData ->cellData.getValue().getProperty().nilaiPropertyProperty());
+
+        nilaiPropertyColumn.setCellValueFactory(cellData -> cellData.getValue().getProperty().nilaiPropertyProperty());
         nilaiPropertyColumn.setCellFactory(col -> getTableCell(rp));
-        
-        nilaiPropertyPerMeterColumn.setCellValueFactory(cellData ->{
-            return new SimpleDoubleProperty(cellData.getValue().getProperty().getNilaiProperty()/
-                    cellData.getValue().getProperty().getLuasTanah());
+
+        nilaiPropertyPerMeterColumn.setCellValueFactory(cellData -> {
+            return new SimpleDoubleProperty(cellData.getValue().getProperty().getNilaiProperty()
+                    / cellData.getValue().getProperty().getLuasTanah());
         });
         nilaiPropertyPerMeterColumn.setCellFactory(col -> getTableCell(rp));
-        
-        hargaJualColumn.setCellValueFactory(cellData ->cellData.getValue().getProperty().hargaJualProperty());
+
+        hargaJualColumn.setCellValueFactory(cellData -> cellData.getValue().getProperty().hargaJualProperty());
         hargaJualColumn.setCellFactory(col -> getTableCell(rp));
-        
+
         final ContextMenu rowMenu = new ContextMenu();
         MenuItem add = new MenuItem("Add Property");
-        add.setOnAction((ActionEvent e)->{
+        add.setOnAction((ActionEvent e) -> {
             addChildren();
         });
         MenuItem refresh = new MenuItem("Refresh");
-        refresh.setOnAction((ActionEvent e)->{
+        refresh.setOnAction((ActionEvent e) -> {
             propertyTable.refresh();
         });
         rowMenu.getItems().addAll(add, refresh);
         propertyTable.setContextMenu(rowMenu);
         propertyTable.setRowFactory((TableView<PenggabunganPropertyDetail> tableView) -> {
-            final TableRow<PenggabunganPropertyDetail> row = new TableRow<PenggabunganPropertyDetail>(){
+            final TableRow<PenggabunganPropertyDetail> row = new TableRow<PenggabunganPropertyDetail>() {
                 @Override
                 public void updateItem(PenggabunganPropertyDetail item, boolean empty) {
                     super.updateItem(item, empty);
                     if (empty) {
                         setContextMenu(rowMenu);
-                    } else{
+                    } else {
                         final ContextMenu rowMenu = new ContextMenu();
                         MenuItem add = new MenuItem("Add Property");
-                        add.setOnAction((ActionEvent e)->{
+                        add.setOnAction((ActionEvent e) -> {
                             addChildren();
                         });
                         MenuItem delete = new MenuItem("Delete Property");
-                        delete.setOnAction((ActionEvent e)->{
+                        delete.setOnAction((ActionEvent e) -> {
                             deleteDetail(item);
                         });
                         MenuItem refresh = new MenuItem("Refresh");
-                        refresh.setOnAction((ActionEvent e)->{
+                        refresh.setOnAction((ActionEvent e) -> {
                             propertyTable.refresh();
                         });
                         rowMenu.getItems().addAll(add, delete, refresh);
@@ -121,7 +134,8 @@ public class PenggabunganPropertyController {
             return row;
         });
     }
-    public void setMainApp(Main mainApp,Stage owner, Stage stage){
+
+    public void setMainApp(Main mainApp, Stage owner, Stage stage) {
         this.mainApp = mainApp;
         this.owner = owner;
         this.stage = stage;
@@ -129,30 +143,33 @@ public class PenggabunganPropertyController {
         stage.setOnCloseRequest((event) -> {
             mainApp.closeDialog(owner, stage);
         });
-        stage.setHeight(mainApp.screenSize.getHeight()*80/100);
-        stage.setWidth(mainApp.screenSize.getWidth()*80/100);
+        stage.setHeight(mainApp.screenSize.getHeight() * 80 / 100);
+        stage.setWidth(mainApp.screenSize.getWidth() * 80 / 100);
         stage.setX((mainApp.screenSize.getWidth() - stage.getWidth()) / 2);
         stage.setY((mainApp.screenSize.getHeight() - stage.getHeight()) / 2);
     }
-    private void deleteDetail(PenggabunganPropertyDetail detail){
+
+    private void deleteDetail(PenggabunganPropertyDetail detail) {
         allDetail.remove(detail);
         propertyTable.refresh();
         hitungTotal();
     }
-    private void hitungTotal(){
+
+    private void hitungTotal() {
         int totalProperty = 0;
         double totalLuasTanah = 0;
         double totalNilaiProperty = 0;
         double nilaiPropertyPerMeter = 0;
         double totalJual = 0;
-        for(PenggabunganPropertyDetail x : allDetail){
+        for (PenggabunganPropertyDetail x : allDetail) {
             totalProperty = totalProperty + 1;
             totalLuasTanah = totalLuasTanah + x.getProperty().getLuasTanah();
             totalNilaiProperty = totalNilaiProperty + x.getProperty().getNilaiProperty();
             totalJual = totalJual + x.getProperty().getHargaJual();
         }
-        if(totalLuasTanah!=0)
-            nilaiPropertyPerMeter = totalNilaiProperty/totalLuasTanah;
+        if (totalLuasTanah != 0) {
+            nilaiPropertyPerMeter = totalNilaiProperty / totalLuasTanah;
+        }
         propertyTable.refresh();
         totalJualLabel.setText(rp.format(totalJual));
         totalPropertyLabel.setText(qty.format(totalProperty));
@@ -160,8 +177,9 @@ public class PenggabunganPropertyController {
         totalNilaiPropertyLabel.setText(rp.format(totalNilaiProperty));
         nilaiPropertyPerMeterLabel.setText(rp.format(nilaiPropertyPerMeter));
     }
+
     @FXML
-    private void addChildren(){
+    private void addChildren() {
         Stage child = new Stage();
         FXMLLoader loader = mainApp.showDialog(stage, child, "View/Dialog/AddProperty.fxml");
         AddPropertyController x = loader.getController();
@@ -172,21 +190,22 @@ public class PenggabunganPropertyController {
         x.propertyTable.setRowFactory((TableView<Property> tableView) -> {
             final TableRow<Property> row = new TableRow<>();
             row.setOnMouseClicked((MouseEvent mouseEvent) -> {
-                if(mouseEvent.getButton().equals(MouseButton.PRIMARY)&&mouseEvent.getClickCount() == 2){
+                if (mouseEvent.getButton().equals(MouseButton.PRIMARY) && mouseEvent.getClickCount() == 2) {
                     Property p = row.getItem();
                     Boolean status = true;
-                    for(PenggabunganPropertyDetail a : allDetail){
-                        if(a.getKodeProperty().equals(p.getKodeProperty()))
-                            status =false;
+                    for (PenggabunganPropertyDetail a : allDetail) {
+                        if (a.getKodeProperty().equals(p.getKodeProperty())) {
+                            status = false;
+                        }
                     }
-                    if(status){
+                    if (status) {
                         PenggabunganPropertyDetail detail = new PenggabunganPropertyDetail();
                         detail.setKodeProperty(p.getKodeProperty());
                         detail.setProperty(p);
                         allDetail.add(detail);
                         hitungTotal();
                         mainApp.closeDialog(stage, child);
-                    }else{
+                    } else {
                         mainApp.showMessage(Modality.NONE, "Warning", "Kode property sudah pernah diinput");
                     }
                 }
@@ -194,9 +213,10 @@ public class PenggabunganPropertyController {
             return row;
         });
     }
+
     @FXML
-    private void close(){
+    private void close() {
         mainApp.closeDialog(owner, stage);
-    }  
-    
+    }
+
 }

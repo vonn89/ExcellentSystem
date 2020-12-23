@@ -32,6 +32,7 @@
             <RowConstraints maxHeight="30.0" minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES" />
             <RowConstraints maxHeight="30.0" minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES" />
             <RowConstraints maxHeight="30.0" minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="30.0" minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES" />
             <RowConstraints maxHeight="5.0" minHeight="5.0" prefHeight="5.0" vgrow="SOMETIMES" />
             <RowConstraints maxHeight="20.0" minHeight="20.0" prefHeight="20.0" vgrow="SOMETIMES" />
             <RowConstraints maxHeight="150.0" prefHeight="150.0" vgrow="SOMETIMES" />
@@ -46,7 +47,7 @@
             <Label text="Property" GridPane.rowIndex="4" />
             <Label text="Harga" GridPane.rowIndex="6" />
             <TextField fx:id="hargaField" disable="true" maxWidth="1.7976931348623157E308" prefHeight="30.0" text="0" GridPane.columnIndex="1" GridPane.rowIndex="6" />
-            <TableView fx:id="SKLDetailtable" prefHeight="200.0" prefWidth="200.0" GridPane.columnSpan="2" GridPane.rowIndex="10">
+            <TableView fx:id="SKLDetailtable" prefHeight="200.0" prefWidth="200.0" GridPane.columnSpan="2" GridPane.rowIndex="11">
                <columnResizePolicy>
                   <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                </columnResizePolicy>
@@ -58,15 +59,15 @@
             </TableView>
             <Separator prefWidth="200.0" GridPane.columnSpan="2" GridPane.rowIndex="3" />
             <TextField fx:id="namaCustomerField" disable="true" prefHeight="30.0" GridPane.columnIndex="1" GridPane.rowIndex="5" />
-            <Separator prefWidth="200.0" GridPane.columnSpan="2" GridPane.rowIndex="8" />
-            <TextField fx:id="totalDPField" disable="true" maxWidth="1.7976931348623157E308" prefHeight="30.0" text="0" GridPane.columnIndex="1" GridPane.rowIndex="11" />
-            <TextField fx:id="jumlahDiterimaField" disable="true" maxWidth="1.7976931348623157E308" prefHeight="30.0" text="0" GridPane.columnIndex="1" GridPane.rowIndex="12" />
-            <Label text="Total DP" GridPane.rowIndex="11" />
-            <Label text="Jumlah Diterima" GridPane.rowIndex="12" />
+            <Separator prefWidth="200.0" GridPane.columnSpan="2" GridPane.rowIndex="9" />
+            <TextField fx:id="totalDPField" disable="true" maxWidth="1.7976931348623157E308" prefHeight="30.0" text="0" GridPane.columnIndex="1" GridPane.rowIndex="12" />
+            <TextField fx:id="jumlahDiterimaField" disable="true" maxWidth="1.7976931348623157E308" prefHeight="30.0" text="0" GridPane.columnIndex="1" GridPane.rowIndex="13" />
+            <Label text="Total DP" GridPane.rowIndex="12" />
+            <Label text="Jumlah Diterima" GridPane.rowIndex="13" />
             <Label style="-fx-font-size: 24;" styleClass="label-header" text="Detail Terima Pencairan KPR" GridPane.columnSpan="2" GridPane.halignment="LEFT" />
-            <Label text="Keterangan" GridPane.rowIndex="13" />
-            <Label text="Tipe Keuangan" GridPane.rowIndex="14" />
-            <ComboBox fx:id="tipeKeuanganCombo" maxWidth="1.7976931348623157E308" prefHeight="30.0" GridPane.columnIndex="1" GridPane.rowIndex="14" />
+            <Label text="Keterangan" GridPane.rowIndex="14" />
+            <Label text="Tipe Keuangan" GridPane.rowIndex="15" />
+            <ComboBox fx:id="tipeKeuanganCombo" maxWidth="1.7976931348623157E308" prefHeight="30.0" GridPane.columnIndex="1" GridPane.rowIndex="15" />
             <HBox alignment="CENTER_LEFT" spacing="10.0" GridPane.columnSpan="2" GridPane.halignment="RIGHT" GridPane.rowIndex="2">
                <children>
                   <Label prefHeight="25.0" text="No KPR" />
@@ -75,8 +76,8 @@
                   <TextField fx:id="tglKPRField" disable="true" maxWidth="1.7976931348623157E308" prefHeight="30.0" HBox.hgrow="ALWAYS" />
                </children>
             </HBox>
-            <TextField fx:id="keteranganField" prefHeight="30.0" GridPane.columnIndex="1" GridPane.rowIndex="13" />
-            <Label style="-fx-font-size: 14; -fx-font-weight: bold;" text="Pembayaran Down Payment" GridPane.columnSpan="2147483647" GridPane.halignment="LEFT" GridPane.rowIndex="9" />
+            <TextField fx:id="keteranganField" prefHeight="30.0" GridPane.columnIndex="1" GridPane.rowIndex="14" />
+            <Label style="-fx-font-size: 14; -fx-font-weight: bold;" text="Pembayaran Down Payment" GridPane.columnSpan="2147483647" GridPane.halignment="LEFT" GridPane.rowIndex="10" />
             <Button mnemonicParsing="false" onAction="#close" prefHeight="30.0" prefWidth="30.0" GridPane.columnIndex="1" GridPane.halignment="RIGHT">
                <graphic>
                   <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
@@ -88,7 +89,7 @@
             </Button>
             <Label text="Diskon" GridPane.rowIndex="7" />
             <TextField fx:id="diskonField" disable="true" maxWidth="1.7976931348623157E308" prefHeight="30.0" text="0" GridPane.columnIndex="1" GridPane.rowIndex="7" />
-            <HBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="200.0" spacing="1.0" GridPane.columnSpan="2147483647" GridPane.rowIndex="15">
+            <HBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="200.0" spacing="1.0" GridPane.columnSpan="2147483647" GridPane.rowIndex="16">
                <children>
                   <Button fx:id="saveButton" mnemonicParsing="false" prefHeight="30.0" prefWidth="100.0" text="Save" />
                   <Button fx:id="cancelButton" mnemonicParsing="false" onAction="#close" prefHeight="30.0" prefWidth="100.0" text="Cancel" />
@@ -96,6 +97,8 @@
             </HBox>
             <TextField fx:id="namaPropertyField" disable="true" prefHeight="30.0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
             <Button fx:id="propertyButton" mnemonicParsing="false" onAction="#setProperty" prefHeight="30.0" prefWidth="30.0" text="..." GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="4" />
+            <Label text="Addendum" GridPane.rowIndex="8" />
+            <TextField fx:id="addendumField" disable="true" prefHeight="30.0" text="0" GridPane.columnIndex="1" GridPane.rowIndex="8" />
          </children>
          <padding>
             <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />

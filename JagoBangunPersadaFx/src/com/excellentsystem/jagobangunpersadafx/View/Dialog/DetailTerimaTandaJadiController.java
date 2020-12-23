@@ -27,7 +27,6 @@ import com.excellentsystem.jagobangunpersadafx.Model.OtoritasKeuangan;
 import com.excellentsystem.jagobangunpersadafx.Model.Property;
 import com.excellentsystem.jagobangunpersadafx.Model.STJDetail;
 import com.excellentsystem.jagobangunpersadafx.Model.STJHead;
-import com.excellentsystem.jagobangunpersadafx.Service.Service;
 import java.sql.Connection;
 import java.text.ParseException;
 import java.time.LocalDate;
@@ -69,49 +68,79 @@ import javafx.stage.Stage;
  *
  * @author Xtreme
  */
-public class DetailTerimaTandaJadiController  {
+public class DetailTerimaTandaJadiController {
 
-    @FXML private VBox vbox;
-    @FXML private HBox salesHbox;
-    @FXML private HBox pembayaranHbox;
-    @FXML private HBox buttonHbox;
-    
-    @FXML private TableView<STJDetail> detailSTJtable;
-    @FXML private TableColumn<STJDetail,String> tglPembayaranColumn;
-    @FXML private TableColumn<STJDetail,Number> jumlahPembayaranColumn;
-    
-    @FXML private TextField noSTJField;
-    @FXML private TextField tglSTJField;
-    @FXML public TextField namaCustomerField;
-    @FXML private TextField alamatCustomerField;
-    @FXML public TextField kodePropertyField;
-    @FXML private TextField namaPropertyField;
-    @FXML private TextField tipeUnitField;
-    @FXML private TextField luasTanahField;
-    @FXML private TextField hargaField;
-    @FXML public TextField diskonField;
-    @FXML public TextField jumlahPembayaranField;
-    
-    @FXML public ComboBox<String> tipeKeuanganCombo;
-    @FXML private DatePicker tglPembayaranPicker;
-    @FXML private TextField jumlahDPField;
-    @FXML public TextArea catatanField;
-    @FXML public TextField salesField;
-    
-    @FXML private Button customerButton;
-    @FXML private Button propertyButton;
-    @FXML private Button addButton;
-    @FXML private Button salesButton;
-    @FXML public Button saveButton;
-    @FXML private Button cancelButton;
-    
+    @FXML
+    private VBox vbox;
+    @FXML
+    private HBox salesHbox;
+    @FXML
+    private HBox pembayaranHbox;
+    @FXML
+    private HBox buttonHbox;
+
+    @FXML
+    private TableView<STJDetail> detailSTJtable;
+    @FXML
+    private TableColumn<STJDetail, String> tglPembayaranColumn;
+    @FXML
+    private TableColumn<STJDetail, Number> jumlahPembayaranColumn;
+
+    @FXML
+    private TextField noSTJField;
+    @FXML
+    private TextField tglSTJField;
+    @FXML
+    public TextField namaCustomerField;
+    @FXML
+    private TextField alamatCustomerField;
+    @FXML
+    public TextField kodePropertyField;
+    @FXML
+    private TextField namaPropertyField;
+    @FXML
+    private TextField tipeUnitField;
+    @FXML
+    private TextField luasTanahField;
+    @FXML
+    private TextField hargaField;
+    @FXML
+    public TextField diskonField;
+    @FXML
+    public TextField jumlahPembayaranField;
+
+    @FXML
+    public ComboBox<String> tipeKeuanganCombo;
+    @FXML
+    private DatePicker tglPembayaranPicker;
+    @FXML
+    private TextField jumlahDPField;
+    @FXML
+    public TextArea catatanField;
+    @FXML
+    public TextField salesField;
+
+    @FXML
+    private Button customerButton;
+    @FXML
+    private Button propertyButton;
+    @FXML
+    private Button addButton;
+    @FXML
+    private Button salesButton;
+    @FXML
+    public Button saveButton;
+    @FXML
+    private Button cancelButton;
+
     private Main mainApp;
     private Stage owner;
     private Stage stage;
     public STJHead stj;
     public ObservableList<STJDetail> allDetail = FXCollections.observableArrayList();
+
     public void initialize() {
-        tglPembayaranColumn.setCellValueFactory(cellData -> { 
+        tglPembayaranColumn.setCellValueFactory(cellData -> {
             try {
                 return new SimpleStringProperty(cellData.getValue().getTglBayar());
             } catch (Exception ex) {
@@ -119,53 +148,57 @@ public class DetailTerimaTandaJadiController  {
             }
         });
         tglPembayaranColumn.setCellFactory(col -> Function.getWrapTableCell(tglPembayaranColumn));
-        
+
         jumlahPembayaranColumn.setCellValueFactory(celldata -> celldata.getValue().jumlahRpProperty());
         jumlahPembayaranColumn.setCellFactory(col -> getTableCell(rp));
-        
+
         tglPembayaranPicker.setConverter(Function.getTglConverter());
         tglPembayaranPicker.setDayCellFactory((final DatePicker datePicker) -> Function.getDateCellDisableBefore(LocalDate.now()));
         Function.setNumberField(diskonField);
         Function.setNumberField(jumlahDPField);
         Function.setNumberField(jumlahPembayaranField);
         jumlahDPField.setOnKeyPressed((KeyEvent keyEvent) -> {
-            if (keyEvent.getCode() == KeyCode.ENTER)  
+            if (keyEvent.getCode() == KeyCode.ENTER) {
                 addPlan();
+            }
         });
-        
+
         detailSTJtable.setRowFactory((TableView<STJDetail> tableView) -> {
             final TableRow<STJDetail> row = new TableRow<>();
             final ContextMenu rowMenu = new ContextMenu();
             MenuItem batal = new MenuItem("Delete");
             batal.setOnAction((ActionEvent event) -> {
                 allDetail.remove(row.getItem());
-                Collections.sort(allDetail, (STJDetail o1, STJDetail o2) ->{
-                    if (o1.getTglBayar() == null || o2.getTglBayar()== null)
+                Collections.sort(allDetail, (STJDetail o1, STJDetail o2) -> {
+                    if (o1.getTglBayar() == null || o2.getTglBayar() == null) {
                         return 0;
+                    }
                     try {
                         return tgl.parse(o1.getTglBayar()).compareTo(tgl.parse(o2.getTglBayar()));
                     } catch (ParseException ex) {
                         return 0;
                     }
                 });
-                for(int i = 0 ; i< allDetail.size() ; i++){
-                    int tahap = i+1;
+                for (int i = 0; i < allDetail.size(); i++) {
+                    int tahap = i + 1;
                     allDetail.get(i).setTahap(String.valueOf(tahap));
                 }
                 stj.setAllDetail(allDetail);
                 detailSTJtable.refresh();
             });
-            if(saveButton.isVisible())
+            if (saveButton.isVisible()) {
                 rowMenu.getItems().addAll(batal);
+            }
             row.contextMenuProperty().bind(
                     Bindings.when(Bindings.isNotNull(row.itemProperty()))
                             .then(rowMenu)
-                            .otherwise((ContextMenu)null));
+                            .otherwise((ContextMenu) null));
             return row;
         });
-        
-    }   
-    public void setMainApp(Main mainApp,Stage owner, Stage stage){
+
+    }
+
+    public void setMainApp(Main mainApp, Stage owner, Stage stage) {
         this.mainApp = mainApp;
         this.owner = owner;
         this.stage = stage;
@@ -176,32 +209,34 @@ public class DetailTerimaTandaJadiController  {
         stage.setY((mainApp.screenSize.getHeight() - stage.getHeight()) / 2);
         detailSTJtable.setItems(allDetail);
         ObservableList<String> listKeuangan = FXCollections.observableArrayList();
-        for(OtoritasKeuangan k : sistem.getUser().getOtoritasKeuangan()){
+        for (OtoritasKeuangan k : sistem.getUser().getOtoritasKeuangan()) {
             listKeuangan.add(k.getKodeKeuangan());
         }
         tipeKeuanganCombo.setItems(listKeuangan);
-        for(Node n : vbox.getChildren()){
+        for (Node n : vbox.getChildren()) {
             n.managedProperty().bind(n.visibleProperty());
         }
-        for(Node n : pembayaranHbox.getChildren()){
+        for (Node n : pembayaranHbox.getChildren()) {
             n.managedProperty().bind(n.visibleProperty());
         }
-        for(Node n : salesHbox.getChildren()){
+        for (Node n : salesHbox.getChildren()) {
             n.managedProperty().bind(n.visibleProperty());
         }
-        for(Node n : buttonHbox.getChildren()){
+        for (Node n : buttonHbox.getChildren()) {
             n.managedProperty().bind(n.visibleProperty());
         }
     }
-    public void setNewSTJ(){
+
+    public void setNewSTJ() {
         stj = new STJHead();
         noSTJField.setText("-");
         tglSTJField.setText(tglLengkap.format(new Date()));
     }
-    public void getSTJ(String noSTJ){
+
+    public void getSTJ(String noSTJ) {
         Task<STJHead> task = new Task<STJHead>() {
-            @Override 
-            public STJHead call() throws Exception{
+            @Override
+            public STJHead call() throws Exception {
                 try (Connection con = Koneksi.getConnection()) {
                     STJHead temp = STJHeadDAO.get(con, noSTJ);
                     temp.setAllDetail(STJDetailDAO.getAllByNoSTJ(con, noSTJ));
@@ -225,7 +260,8 @@ public class DetailTerimaTandaJadiController  {
         });
         new Thread(task).start();
     }
-    public void setSTJ(STJHead temp){
+
+    public void setSTJ(STJHead temp) {
         try {
             stj = temp;
             jumlahPembayaranField.setDisable(true);
@@ -240,7 +276,7 @@ public class DetailTerimaTandaJadiController  {
             salesButton.setVisible(false);
             saveButton.setVisible(false);
             cancelButton.setVisible(false);
-            
+
             noSTJField.setText(stj.getNoSTJ());
             tglSTJField.setText(tglLengkap.format(tglSql.parse(stj.getTglSTJ())));
             namaCustomerField.setText(stj.getCustomer().getNama());
@@ -257,14 +293,15 @@ public class DetailTerimaTandaJadiController  {
             catatanField.setText(stj.getKeterangan());
             salesField.setText(stj.getSales().getNama());
             allDetail.addAll(stj.getAllDetail());
-            
+
             detailSTJtable.refresh();
         } catch (ParseException ex) {
             mainApp.showMessage(Modality.NONE, "Error", ex.toString());
         }
     }
+
     @FXML
-    private void setCustomer(){
+    private void setCustomer() {
         Stage child = new Stage();
         FXMLLoader loader = mainApp.showDialog(stage, child, "View/Dialog/AddCustomer.fxml");
         AddCustomerController x = loader.getController();
@@ -272,7 +309,7 @@ public class DetailTerimaTandaJadiController  {
         x.customerTable.setRowFactory((TableView<Customer> tableView) -> {
             final TableRow<Customer> row = new TableRow<>();
             row.setOnMouseClicked((MouseEvent mouseEvent) -> {
-                if(mouseEvent.getButton().equals(MouseButton.PRIMARY)&&mouseEvent.getClickCount() == 2){
+                if (mouseEvent.getButton().equals(MouseButton.PRIMARY) && mouseEvent.getClickCount() == 2) {
                     Customer c = row.getItem();
                     namaCustomerField.setText(c.getNama());
                     alamatCustomerField.setText(c.getAlamat());
@@ -284,8 +321,9 @@ public class DetailTerimaTandaJadiController  {
             return row;
         });
     }
+
     @FXML
-    private void setSales(){
+    private void setSales() {
         Stage child = new Stage();
         FXMLLoader loader = mainApp.showDialog(stage, child, "View/Dialog/AddSales.fxml");
         AddSalesController x = loader.getController();
@@ -293,7 +331,7 @@ public class DetailTerimaTandaJadiController  {
         x.karyawanTable.setRowFactory((TableView<Karyawan> tableView) -> {
             final TableRow<Karyawan> row = new TableRow<>();
             row.setOnMouseClicked((MouseEvent mouseEvent) -> {
-                if(mouseEvent.getButton().equals(MouseButton.PRIMARY)&&mouseEvent.getClickCount() == 2){
+                if (mouseEvent.getButton().equals(MouseButton.PRIMARY) && mouseEvent.getClickCount() == 2) {
                     Karyawan k = row.getItem();
                     salesField.setText(k.getNama());
                     stj.setSales(k);
@@ -304,8 +342,9 @@ public class DetailTerimaTandaJadiController  {
             return row;
         });
     }
+
     @FXML
-    private void setProperty(){
+    private void setProperty() {
         Stage child = new Stage();
         FXMLLoader loader = mainApp.showDialog(stage, child, "View/Dialog/AddProperty.fxml");
         AddPropertyController x = loader.getController();
@@ -316,7 +355,7 @@ public class DetailTerimaTandaJadiController  {
         x.propertyTable.setRowFactory((TableView<Property> tableView) -> {
             final TableRow<Property> row = new TableRow<>();
             row.setOnMouseClicked((MouseEvent mouseEvent) -> {
-                if(mouseEvent.getButton().equals(MouseButton.PRIMARY)&&mouseEvent.getClickCount() == 2){
+                if (mouseEvent.getButton().equals(MouseButton.PRIMARY) && mouseEvent.getClickCount() == 2) {
                     Property p = row.getItem();
                     kodePropertyField.setText(p.getKodeProperty());
                     namaPropertyField.setText(p.getNamaProperty());
@@ -332,13 +371,14 @@ public class DetailTerimaTandaJadiController  {
             return row;
         });
     }
+
     @FXML
-    private void addPlan(){
-        if(tglPembayaranPicker.getValue()==null){
+    private void addPlan() {
+        if (tglPembayaranPicker.getValue() == null) {
             mainApp.showMessage(Modality.NONE, "Warning", "Tgl Pembayaran DP masih kosong");
-        }else if("".equals(jumlahDPField.getText())||"0".equals(jumlahDPField.getText())){
+        } else if ("".equals(jumlahDPField.getText()) || "0".equals(jumlahDPField.getText())) {
             mainApp.showMessage(Modality.NONE, "Warning", "Jumlah Pembayaran DP masih kosong");
-        }else{
+        } else {
             try {
                 STJDetail detail = new STJDetail();
                 detail.setNoSTJ(noSTJField.getText());
@@ -346,17 +386,18 @@ public class DetailTerimaTandaJadiController  {
                 detail.setTglBayar(tgl.format(tglBarang.parse(tglPembayaranPicker.getValue().toString())));
                 detail.setJumlahRp(Double.parseDouble(jumlahDPField.getText().replaceAll(",", "")));
                 allDetail.add(detail);
-                Collections.sort(allDetail, (STJDetail o1, STJDetail o2) ->{
-                    if (o1.getTglBayar() == null || o2.getTglBayar()== null)
+                Collections.sort(allDetail, (STJDetail o1, STJDetail o2) -> {
+                    if (o1.getTglBayar() == null || o2.getTglBayar() == null) {
                         return 0;
+                    }
                     try {
                         return tgl.parse(o1.getTglBayar()).compareTo(tgl.parse(o2.getTglBayar()));
                     } catch (ParseException ex) {
                         return 0;
                     }
                 });
-                for(int i = 0 ; i< allDetail.size() ; i++){
-                    int tahap = i+1;
+                for (int i = 0; i < allDetail.size(); i++) {
+                    int tahap = i + 1;
                     allDetail.get(i).setTahap(String.valueOf(tahap));
                 }
                 stj.setAllDetail(allDetail);
@@ -366,8 +407,9 @@ public class DetailTerimaTandaJadiController  {
             }
         }
     }
-    @FXML 
-    private void close(){
+
+    @FXML
+    private void close() {
         mainApp.closeDialog(owner, stage);
     }
 }

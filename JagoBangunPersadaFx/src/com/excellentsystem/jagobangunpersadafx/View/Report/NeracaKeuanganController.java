@@ -32,27 +32,37 @@ import javafx.stage.Stage;
  *
  * @author yunaz
  */
-public class NeracaKeuanganController  {
-    @FXML private TreeTableView<Keuangan> keuanganTable;
-    @FXML private TreeTableColumn<Keuangan, String> noKeuanganColumn;
-    @FXML private TreeTableColumn<Keuangan, String> tglKeuanganColumn;
-    @FXML private TreeTableColumn<Keuangan, String> kategoriColumn;
-    @FXML private TreeTableColumn<Keuangan, String> deskripsiColumn;
-    @FXML private TreeTableColumn<Keuangan, Number> jumlahRpColumn;
-    @FXML private Label saldoAwalLabel;
-    @FXML private Label saldoAkhirLabel;
+public class NeracaKeuanganController {
+
+    @FXML
+    private TreeTableView<Keuangan> keuanganTable;
+    @FXML
+    private TreeTableColumn<Keuangan, String> noKeuanganColumn;
+    @FXML
+    private TreeTableColumn<Keuangan, String> tglKeuanganColumn;
+    @FXML
+    private TreeTableColumn<Keuangan, String> kategoriColumn;
+    @FXML
+    private TreeTableColumn<Keuangan, String> deskripsiColumn;
+    @FXML
+    private TreeTableColumn<Keuangan, Number> jumlahRpColumn;
+    @FXML
+    private Label saldoAwalLabel;
+    @FXML
+    private Label saldoAkhirLabel;
     private LocalDate tglAwal;
     private LocalDate tglAkhir;
     private ObservableList<Keuangan> allKeuangan = FXCollections.observableArrayList();
-    private Main mainApp;   
+    private Main mainApp;
     private Stage owner;
     private Stage stage;
     final TreeItem<Keuangan> root = new TreeItem<>();
+
     public void initialize() {
         noKeuanganColumn.setCellValueFactory(param -> param.getValue().getValue().noKeuanganProperty());
         kategoriColumn.setCellValueFactory(param -> param.getValue().getValue().kategoriProperty());
         deskripsiColumn.setCellValueFactory(param -> param.getValue().getValue().deskripsiProperty());
-        tglKeuanganColumn.setCellValueFactory(cellData -> { 
+        tglKeuanganColumn.setCellValueFactory(cellData -> {
             try {
                 return new SimpleStringProperty(tgl.format(tglBarang.parse(cellData.getValue().getValue().getTglKeuangan())));
             } catch (Exception ex) {
@@ -62,7 +72,7 @@ public class NeracaKeuanganController  {
         tglKeuanganColumn.setComparator(Function.sortDate(tgl));
         jumlahRpColumn.setCellValueFactory(param -> param.getValue().getValue().jumlahRpProperty());
         jumlahRpColumn.setCellFactory(col -> Function.getTreeTableCell(rp));
-        
+
         final ContextMenu rm = new ContextMenu();
         MenuItem refresh = new MenuItem("Refresh");
         refresh.setOnAction((ActionEvent event) -> {
@@ -70,65 +80,73 @@ public class NeracaKeuanganController  {
         });
         rm.getItems().addAll(refresh);
         keuanganTable.setContextMenu(rm);
-    }    
-    public void setMainApp(Main mainApp, Stage owner,Stage stage){
+    }
+
+    public void setMainApp(Main mainApp, Stage owner, Stage stage) {
         this.mainApp = mainApp;
         this.owner = owner;
         this.stage = stage;
         stage.setOnCloseRequest((event) -> {
             mainApp.closeDialog(owner, stage);
         });
-        stage.setHeight(mainApp.screenSize.getHeight()*0.9);
-        stage.setWidth(mainApp.screenSize.getWidth()*0.9);
+        stage.setHeight(mainApp.screenSize.getHeight() * 0.9);
+        stage.setWidth(mainApp.screenSize.getWidth() * 0.9);
         stage.setX((mainApp.screenSize.getWidth() - stage.getWidth()) / 2);
         stage.setY((mainApp.screenSize.getHeight() - stage.getHeight()) / 2);
     }
-    public void setKeuangan(List<Keuangan> temp, LocalDate tglAwal, LocalDate tglAkhir){
+
+    public void setKeuangan(List<Keuangan> temp, LocalDate tglAwal, LocalDate tglAkhir) {
         allKeuangan.clear();
         allKeuangan.addAll(temp);
         this.tglAwal = tglAwal;
         this.tglAkhir = tglAkhir;
         setTable();
     }
-    private void setTable(){
-        if(keuanganTable.getRoot()!=null)
+
+    private void setTable() {
+        if (keuanganTable.getRoot() != null) {
             keuanganTable.getRoot().getChildren().clear();
+        }
         double saldoAwal = 0;
         double saldoAkhir = 0;
         List<String> allKategori = new ArrayList<>();
-        for(Keuangan keu : allKeuangan){
-            if(!allKategori.contains(keu.getKategori()))
+        for (Keuangan keu : allKeuangan) {
+            if (!allKategori.contains(keu.getKategori())) {
                 allKategori.add(keu.getKategori());
+            }
             saldoAkhir = saldoAkhir + keu.getJumlahRp();
-            if(LocalDate.parse(keu.getTglKeuangan().substring(0,10)).isAfter(tglAwal.minusDays(1))&&
-                    LocalDate.parse(keu.getTglKeuangan().substring(0,10)).isBefore(tglAkhir.plusDays(1))){
-            }else
+            if (LocalDate.parse(keu.getTglKeuangan().substring(0, 10)).isAfter(tglAwal.minusDays(1))
+                    && LocalDate.parse(keu.getTglKeuangan().substring(0, 10)).isBefore(tglAkhir.plusDays(1))) {
+            } else {
                 saldoAwal = saldoAwal + keu.getJumlahRp();
+            }
         }
         saldoAwalLabel.setText(rp.format(saldoAwal));
         saldoAkhirLabel.setText(rp.format(saldoAkhir));
-        for(String s : allKategori){
+        for (String s : allKategori) {
             Keuangan k = new Keuangan();
             k.setNoKeuangan(s);
             TreeItem<Keuangan> parent = new TreeItem<>(k);
             double total = 0;
-            for(Keuangan keu : allKeuangan){
-                if(LocalDate.parse(keu.getTglKeuangan().substring(0,10)).isAfter(tglAwal.minusDays(1))&&
-                    LocalDate.parse(keu.getTglKeuangan().substring(0,10)).isBefore(tglAkhir.plusDays(1))&&
-                    keu.getKategori().equals(s)){
+            for (Keuangan keu : allKeuangan) {
+                if (LocalDate.parse(keu.getTglKeuangan().substring(0, 10)).isAfter(tglAwal.minusDays(1))
+                        && LocalDate.parse(keu.getTglKeuangan().substring(0, 10)).isBefore(tglAkhir.plusDays(1))
+                        && keu.getKategori().equals(s)) {
                     parent.getChildren().add(new TreeItem<>(keu));
                     total = total + keu.getJumlahRp();
                 }
             }
             parent.getValue().setJumlahRp(total);
-            if(total!=0)
+            if (total != 0) {
                 root.getChildren().add(parent);
+            }
         }
         keuanganTable.setRoot(root);
-    } 
-    @FXML 
-    private void close(){
+    }
+
+    @FXML
+    private void close() {
         mainApp.closeDialog(owner, stage);
     }
-    
+
 }

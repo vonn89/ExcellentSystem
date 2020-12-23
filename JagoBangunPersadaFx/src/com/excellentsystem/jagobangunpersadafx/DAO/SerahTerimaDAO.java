@@ -35,16 +35,17 @@ public class SerahTerimaDAO {
             st.setKodeCustomer(rs.getString(4));
             st.setHarga(rs.getDouble(5));
             st.setDiskon(rs.getDouble(6));
-            st.setTotalDP(rs.getDouble(7));
-            st.setTotalKPR(rs.getDouble(8));
-            st.setNoHGB(rs.getString(9));
-            st.setNoIMB(rs.getString(10));
-            st.setKelengkapan(rs.getString(11));
-            st.setBonus(rs.getString(12));
-            st.setKodeUser(rs.getString(13));
-            st.setStatus(rs.getString(14));
-            st.setTglBatal(rs.getString(15));
-            st.setUserBatal(rs.getString(16));
+            st.setAddendum(rs.getDouble(7));
+            st.setTotalDP(rs.getDouble(8));
+            st.setTotalKPR(rs.getDouble(9));
+            st.setNoHGB(rs.getString(10));
+            st.setNoIMB(rs.getString(11));
+            st.setKelengkapan(rs.getString(12));
+            st.setBonus(rs.getString(13));
+            st.setKodeUser(rs.getString(14));
+            st.setStatus(rs.getString(15));
+            st.setTglBatal(rs.getString(16));
+            st.setUserBatal(rs.getString(17));
         }
         return st;
     }
@@ -65,16 +66,17 @@ public class SerahTerimaDAO {
             st.setKodeCustomer(rs.getString(4));
             st.setHarga(rs.getDouble(5));
             st.setDiskon(rs.getDouble(6));
-            st.setTotalDP(rs.getDouble(7));
-            st.setTotalKPR(rs.getDouble(8));
-            st.setNoHGB(rs.getString(9));
-            st.setNoIMB(rs.getString(10));
-            st.setKelengkapan(rs.getString(11));
-            st.setBonus(rs.getString(12));
-            st.setKodeUser(rs.getString(13));
-            st.setStatus(rs.getString(14));
-            st.setTglBatal(rs.getString(15));
-            st.setUserBatal(rs.getString(16));
+            st.setAddendum(rs.getDouble(7));
+            st.setTotalDP(rs.getDouble(8));
+            st.setTotalKPR(rs.getDouble(9));
+            st.setNoHGB(rs.getString(10));
+            st.setNoIMB(rs.getString(11));
+            st.setKelengkapan(rs.getString(12));
+            st.setBonus(rs.getString(13));
+            st.setKodeUser(rs.getString(14));
+            st.setStatus(rs.getString(15));
+            st.setTglBatal(rs.getString(16));
+            st.setUserBatal(rs.getString(17));
             allST.add(st);
         }
         return allST;
@@ -92,16 +94,17 @@ public class SerahTerimaDAO {
             st.setKodeCustomer(rs.getString(4));
             st.setHarga(rs.getDouble(5));
             st.setDiskon(rs.getDouble(6));
-            st.setTotalDP(rs.getDouble(7));
-            st.setTotalKPR(rs.getDouble(8));
-            st.setNoHGB(rs.getString(9));
-            st.setNoIMB(rs.getString(10));
-            st.setKelengkapan(rs.getString(11));
-            st.setBonus(rs.getString(12));
-            st.setKodeUser(rs.getString(13));
-            st.setStatus(rs.getString(14));
-            st.setTglBatal(rs.getString(15));
-            st.setUserBatal(rs.getString(16));
+            st.setAddendum(rs.getDouble(7));
+            st.setTotalDP(rs.getDouble(8));
+            st.setTotalKPR(rs.getDouble(9));
+            st.setNoHGB(rs.getString(10));
+            st.setNoIMB(rs.getString(11));
+            st.setKelengkapan(rs.getString(12));
+            st.setBonus(rs.getString(13));
+            st.setKodeUser(rs.getString(14));
+            st.setStatus(rs.getString(15));
+            st.setTglBatal(rs.getString(16));
+            st.setUserBatal(rs.getString(17));
         }
         return st;
     }
@@ -115,13 +118,38 @@ public class SerahTerimaDAO {
             return new DecimalFormat("000").format(1)+"/BAST/"+new SimpleDateFormat("MM").format(new Date())+"/"+kodeProperty+"/"+new SimpleDateFormat("yyyy").format(new Date());
     }
     public static void insert(Connection con, SerahTerima st)throws Exception{
-        PreparedStatement ps = con.prepareStatement("insert into tt_serah_terima values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
+        PreparedStatement ps = con.prepareStatement("insert into tt_serah_terima values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
         ps.setString(1, st.getNoSerahTerima());
         ps.setString(2, st.getTglSerahTerima());
         ps.setString(3, st.getKodeProperty());
         ps.setString(4, st.getKodeCustomer());
         ps.setDouble(5, st.getHarga());
         ps.setDouble(6, st.getDiskon());
+        ps.setDouble(7, st.getAddendum());
+        ps.setDouble(8, st.getTotalDP());
+        ps.setDouble(9, st.getTotalKPR());
+        ps.setString(10, st.getNoHGB());
+        ps.setString(11, st.getNoIMB());
+        ps.setString(12, st.getKelengkapan());
+        ps.setString(13, st.getBonus());
+        ps.setString(14, st.getKodeUser());
+        ps.setString(15, st.getStatus());
+        ps.setString(16, st.getTglBatal());
+        ps.setString(17, st.getUserBatal());
+        ps.executeUpdate();
+    }
+    public static void update(Connection con,SerahTerima st)throws Exception{
+        PreparedStatement ps = con.prepareStatement("update tt_serah_terima set "
+                + " tgl_serah_terima=?, kode_property=?, kode_customer=?, "
+                + " harga=?, diskon=?, addendum=?, total_dp=?, total_kpr=?, "
+                + " no_hgb=?, no_imb=?, kelengkapan=?, bonus=?, "
+                + " kode_user=?, status=?, tgl_batal=?, user_batal=? where no_serah_terima=?");
+        ps.setString(1, st.getTglSerahTerima());
+        ps.setString(2, st.getKodeProperty());
+        ps.setString(3, st.getKodeCustomer());
+        ps.setDouble(4, st.getHarga());
+        ps.setDouble(5, st.getDiskon());
+        ps.setDouble(6, st.getAddendum());
         ps.setDouble(7, st.getTotalDP());
         ps.setDouble(8, st.getTotalKPR());
         ps.setString(9, st.getNoHGB());
@@ -132,30 +160,7 @@ public class SerahTerimaDAO {
         ps.setString(14, st.getStatus());
         ps.setString(15, st.getTglBatal());
         ps.setString(16, st.getUserBatal());
-        ps.executeUpdate();
-    }
-    public static void update(Connection con,SerahTerima st)throws Exception{
-        PreparedStatement ps = con.prepareStatement("update tt_serah_terima set "
-                + " tgl_serah_terima=?, kode_property=?, kode_customer=?, "
-                + " harga=?, diskon=?, total_dp=?, total_kpr=?, "
-                + " no_hgb=?, no_imb=?, kelengkapan=?, bonus=?, "
-                + " kode_user=?, status=?, tgl_batal=?, user_batal=? where no_serah_terima=?");
-        ps.setString(1, st.getTglSerahTerima());
-        ps.setString(2, st.getKodeProperty());
-        ps.setString(3, st.getKodeCustomer());
-        ps.setDouble(4, st.getHarga());
-        ps.setDouble(5, st.getDiskon());
-        ps.setDouble(6, st.getTotalDP());
-        ps.setDouble(7, st.getTotalKPR());
-        ps.setString(8, st.getNoHGB());
-        ps.setString(9, st.getNoIMB());
-        ps.setString(10, st.getKelengkapan());
-        ps.setString(11, st.getBonus());
-        ps.setString(12, st.getKodeUser());
-        ps.setString(13, st.getStatus());
-        ps.setString(14, st.getTglBatal());
-        ps.setString(15, st.getUserBatal());
-        ps.setString(16, st.getNoSerahTerima());
+        ps.setString(17, st.getNoSerahTerima());
         ps.executeUpdate();
     }
 }

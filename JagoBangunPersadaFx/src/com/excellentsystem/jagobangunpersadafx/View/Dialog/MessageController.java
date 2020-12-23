@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package com.excellentsystem.jagobangunpersadafx.View.Dialog;
 
 import com.excellentsystem.jagobangunpersadafx.Main;
@@ -21,31 +20,39 @@ import javafx.util.Duration;
  */
 public class MessageController {
 
-    @FXML private Label title;
-    @FXML private Label content;
-    @FXML public Button OK;
-    @FXML public Button cancel;
+    @FXML
+    private Label title;
+    @FXML
+    private Label content;
+    @FXML
+    public Button OK;
+    @FXML
+    public Button cancel;
     private Main mainApp;
-    public void setMainApp(Main mainApp,String title,String content){
+
+    public void setMainApp(Main mainApp, String title, String content) {
         this.mainApp = mainApp;
         this.title.setText(title);
         this.content.setText(content);
         PauseTransition delay = new PauseTransition(Duration.seconds(5));
-        delay.setOnFinished( event -> mainApp.closeMessage() );
-        if(title.equals("Error"))
+        delay.setOnFinished(event -> mainApp.closeMessage());
+        if (title.equals("Error")) {
             this.title.setTextFill(Color.RED);
-        else if(title.equals("Confirmation")){
+        } else if (title.equals("Confirmation")) {
             OK.setVisible(true);
             cancel.setVisible(true);
-        }else{
+        } else {
             delay.play();
         }
     }
-    public void closeConfirmation(){
+
+    public void closeConfirmation() {
         mainApp.closeMessage();
     }
-    public void closeMessage(){
-        if(!title.getText().equals("Confirmation"))
+
+    public void closeMessage() {
+        if (!title.getText().equals("Confirmation")) {
             mainApp.closeMessage();
+        }
     }
 }

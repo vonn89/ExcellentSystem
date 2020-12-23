@@ -7,6 +7,7 @@ package com.excellentsystem.jagobangunpersadafx.View.Dialog;
 
 import com.excellentsystem.jagobangunpersadafx.Function;
 import com.excellentsystem.jagobangunpersadafx.Main;
+import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
@@ -17,20 +18,27 @@ import javafx.stage.Stage;
  *
  * @author Xtreme
  */
-public class TransferKeuanganController  {
+public class TransferKeuanganController {
 
+    @FXML
     public ComboBox<String> keCombo;
+    @FXML
     public TextField keteranganField;
+    @FXML
     public TextField jumlahRpField;
+    @FXML
     public ComboBox<String> dariCombo;
+    @FXML
     public Button saveButton;
-    public Main mainApp;   
+    public Main mainApp;
     private Stage owner;
     private Stage stage;
-    public void initialize(){
+
+    public void initialize() {
         Function.setNumberField(jumlahRpField);
     }
-    public void setMainApp(Main mainApp,Stage owner,Stage stage) {
+
+    public void setMainApp(Main mainApp, Stage owner, Stage stage) {
         this.mainApp = mainApp;
         this.stage = stage;
         this.owner = owner;
@@ -39,9 +47,10 @@ public class TransferKeuanganController  {
         });
         dariCombo.setItems(Function.getTipeKeuangan());
         keCombo.setItems(Function.getTipeKeuangan());
-    }   
-    public void closeDialog(){
+    }
+
+    public void closeDialog() {
         mainApp.closeDialog(owner, stage);
-    }      
-    
+    }
+
 }

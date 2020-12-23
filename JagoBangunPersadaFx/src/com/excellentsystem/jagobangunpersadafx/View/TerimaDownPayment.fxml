@@ -35,6 +35,7 @@
                   <TableColumn fx:id="namaCustomerColumn" prefWidth="75.0" text="Nama Customer" />
                   <TableColumn fx:id="hargaJualColumn" prefWidth="75.0" text="Harga Property" />
                   <TableColumn fx:id="diskonColumn" prefWidth="75.0" text="Diskon" />
+                  <TableColumn fx:id="addendumColumn" prefWidth="75.0" text="Addendum" />
                   <TableColumn fx:id="TahapDPColumn" prefWidth="75.0" text="Tahap DP" />
                   <TableColumn fx:id="jumlahDPColumn" prefWidth="75.0" text="Jumlah DP" />
                   <TableColumn fx:id="tipeKeuanganDPColumn" prefWidth="75.0" text="Tipe Keuangan" />

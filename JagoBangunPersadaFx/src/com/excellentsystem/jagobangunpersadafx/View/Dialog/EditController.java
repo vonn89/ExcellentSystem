@@ -16,20 +16,23 @@ import javafx.stage.Stage;
  *
  * @author yunaz
  */
-public class EditController  {
+public class EditController {
 
-    @FXML public TextField textField;
-    @FXML public Button saveButton;
-    private Main mainApp;   
+    @FXML
+    public TextField textField;
+    @FXML
+    public Button saveButton;
+    private Main mainApp;
     private Stage owner;
     private Stage stage;
-    public void setMainApp(Main mainApp,Stage owner,Stage stage) {
+
+    public void setMainApp(Main mainApp, Stage owner, Stage stage) {
         this.mainApp = mainApp;
         this.stage = stage;
         this.owner = owner;
         stage.setOnCloseRequest((event) -> {
             mainApp.closeDialog(owner, stage);
         });
-    }  
-    
+    }
+
 }

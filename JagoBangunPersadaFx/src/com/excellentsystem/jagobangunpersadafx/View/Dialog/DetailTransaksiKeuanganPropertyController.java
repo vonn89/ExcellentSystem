@@ -43,64 +43,78 @@ import javafx.stage.Stage;
  *
  * @author Excellent
  */
-public class DetailTransaksiKeuanganPropertyController  {
+public class DetailTransaksiKeuanganPropertyController {
 
-    @FXML private TableView<Keuangan> propertyTable;
-    @FXML private TableColumn<Keuangan,Boolean> checkColumn;
-    @FXML private TableColumn<Keuangan, String> namaPropertyColumn;
-    @FXML private TableColumn<Keuangan, Number> luasTanahColumn;
-    @FXML private TableColumn<Keuangan, Number> jumlahRpColumn;
-    
-    @FXML public Button closeButton;
-    @FXML public ComboBox<String> metodeCombo;
-    @FXML private Label kategoriPropertyLabel;
-    @FXML public ComboBox<String> kategoriPropertyCombo;
-    @FXML private CheckBox checkAll;
-    @FXML public Label totalPropertyLabel;
-    @FXML public Label totalLuasTanahLabel;
-    @FXML public Label totalTransaksiLabel;
-    
+    @FXML
+    private TableView<Keuangan> propertyTable;
+    @FXML
+    private TableColumn<Keuangan, Boolean> checkColumn;
+    @FXML
+    private TableColumn<Keuangan, String> namaPropertyColumn;
+    @FXML
+    private TableColumn<Keuangan, Number> luasTanahColumn;
+    @FXML
+    private TableColumn<Keuangan, Number> jumlahRpColumn;
+
+    @FXML
+    public Button closeButton;
+    @FXML
+    public ComboBox<String> metodeCombo;
+    @FXML
+    private Label kategoriPropertyLabel;
+    @FXML
+    public ComboBox<String> kategoriPropertyCombo;
+    @FXML
+    private CheckBox checkAll;
+    @FXML
+    public Label totalPropertyLabel;
+    @FXML
+    public Label totalLuasTanahLabel;
+    @FXML
+    public Label totalTransaksiLabel;
+
     private ObservableList<String> allKategori = FXCollections.observableArrayList();
     private ObservableList<String> allMetode = FXCollections.observableArrayList();
     public ObservableList<Keuangan> allDetail = FXCollections.observableArrayList();
-    
+
     private Main mainApp;
     private Stage owner;
     private Stage stage;
+
     public void initialize() {
-        namaPropertyColumn.setCellValueFactory(cellData ->cellData.getValue().getProperty().namaPropertyProperty());
+        namaPropertyColumn.setCellValueFactory(cellData -> cellData.getValue().getProperty().namaPropertyProperty());
         namaPropertyColumn.setCellFactory(col -> Function.getWrapTableCell(namaPropertyColumn));
-        
-        luasTanahColumn.setCellValueFactory(cellData ->cellData.getValue().getProperty().luasTanahProperty());
+
+        luasTanahColumn.setCellValueFactory(cellData -> cellData.getValue().getProperty().luasTanahProperty());
         luasTanahColumn.setCellFactory(col -> getTableCell(qty));
-        
+
         jumlahRpColumn.setCellValueFactory(cellData -> cellData.getValue().jumlahRpProperty());
         jumlahRpColumn.setCellFactory(col -> getTableCell(qty));
-        
+
         checkColumn.setCellValueFactory(cellData -> cellData.getValue().checkedProperty());
         checkColumn.setCellFactory(CheckBoxTableCell.forTableColumn((Integer param) -> {
             hitungTotal();
             return propertyTable.getItems().get(param).checkedProperty();
         }));
-        
+
         final ContextMenu rm = new ContextMenu();
         MenuItem refresh = new MenuItem("Refresh");
-        refresh.setOnAction((ActionEvent e)->{
+        refresh.setOnAction((ActionEvent e) -> {
             propertyTable.refresh();
         });
         rm.getItems().add(refresh);
         propertyTable.setContextMenu(rm);
         propertyTable.setRowFactory((TableView<Keuangan> tableView) -> {
-            final TableRow<Keuangan> row = new TableRow<Keuangan>(){
+            final TableRow<Keuangan> row = new TableRow<Keuangan>() {
                 @Override
                 public void updateItem(Keuangan item, boolean empty) {
                     super.updateItem(item, empty);
                     if (empty) {
                         setContextMenu(rm);
-                    } else{
+                    } else {
                         final ContextMenu rm = new ContextMenu();
                         MenuItem refresh = new MenuItem("Refresh");
-                        refresh.setOnAction((ActionEvent e)->{
+                        refresh.setOnAction((ActionEvent e) -> {
                             propertyTable.refresh();
                         });
                         rm.getItems().add(refresh);
@@ -109,8 +123,8 @@ public class DetailTransaksiKeuanganPropertyController  {
                 }
             };
             row.setOnMouseClicked((MouseEvent mouseEvent) -> {
-                if(mouseEvent.getButton().equals(MouseButton.PRIMARY)&&mouseEvent.getClickCount() == 2){
-                    if(checkColumn.isVisible()){
+                if (mouseEvent.getButton().equals(MouseButton.PRIMARY) && mouseEvent.getClickCount() == 2) {
+                    if (checkColumn.isVisible()) {
                         row.getItem().setChecked(!row.getItem().isChecked());
                         hitungTotal();
                     }
@@ -118,10 +132,10 @@ public class DetailTransaksiKeuanganPropertyController  {
             });
             return row;
         });
-    }    
-    
-    public void setMainApp(Main mainApp,Stage owner, Stage stage){
-        try{
+    }
+
+    public void setMainApp(Main mainApp, Stage owner, Stage stage) {
+        try {
             this.mainApp = mainApp;
             this.owner = owner;
             this.stage = stage;
@@ -136,29 +150,31 @@ public class DetailTransaksiKeuanganPropertyController  {
             kategoriPropertyCombo.setItems(allKategori);
 
             allMetode.clear();
-            allMetode.addAll("Rata-rata","Luas Tanah");
+            allMetode.addAll("Rata-rata", "Luas Tanah");
             metodeCombo.getSelectionModel().select("Rata-rata");
 
             allKategori.addAll(Function.getKategoriProperty());
             allKategori.add("Semua");
             kategoriPropertyCombo.getSelectionModel().clearSelection();
-        }catch(Exception e){
+        } catch (Exception e) {
             mainApp.showMessage(Modality.NONE, "Error", e.toString());
         }
 
     }
-    public void setProperty(String metode, List<Keuangan> listKeuangan, double totalTransaksi){
-        if(metode!=null)
+
+    public void setProperty(String metode, List<Keuangan> listKeuangan, double totalTransaksi) {
+        if (metode != null) {
             metodeCombo.getSelectionModel().select(metode);
-        else
+        } else {
             metodeCombo.getSelectionModel().selectFirst();
-        
+        }
+
         allDetail.clear();
         allDetail.addAll(listKeuangan);
         double totalProp = 0;
         double totalLuas = 0;
-        for(Keuangan d: allDetail){
-            if(d.isChecked()){
+        for (Keuangan d : allDetail) {
+            if (d.isChecked()) {
                 totalProp = totalProp + 1;
                 totalLuas = totalLuas + d.getProperty().getLuasTanah();
             }
@@ -167,24 +183,26 @@ public class DetailTransaksiKeuanganPropertyController  {
         totalLuasTanahLabel.setText(qty.format(totalLuas));
         totalTransaksiLabel.setText(rp.format(totalTransaksi));
     }
-    public void setViewOnly(){
+
+    public void setViewOnly() {
         kategoriPropertyLabel.setVisible(false);
         kategoriPropertyCombo.setVisible(false);
         metodeCombo.setDisable(true);
         checkColumn.setVisible(false);
     }
+
     @FXML
-    private void getProperty(){
-        if(kategoriPropertyCombo.isVisible()){
+    private void getProperty() {
+        if (kategoriPropertyCombo.isVisible()) {
             Task<List<Property>> task = new Task<List<Property>>() {
-                @Override 
-                public List<Property> call() throws Exception{
+                @Override
+                public List<Property> call() throws Exception {
                     try (Connection con = Koneksi.getConnection()) {
                         List<String> status = new ArrayList<>();
                         status.add("Available");
                         status.add("Reserved");
                         status.add("Sold");
-                        return PropertyDAO.getAllByStatus(con,status);
+                        return PropertyDAO.getAllByStatus(con, status);
                     }
                 }
             };
@@ -194,17 +212,19 @@ public class DetailTransaksiKeuanganPropertyController  {
             task.setOnSucceeded((WorkerStateEvent e) -> {
                 mainApp.closeLoading();
                 allDetail.clear();
-                for(Property p : task.getValue()){
+                for (Property p : task.getValue()) {
                     Keuangan d = new Keuangan();
                     d.setKodeProperty(p.getKodeProperty());
                     d.setChecked(checkAll.isSelected());
                     d.setProperty(p);
-                    if(p.getKodeKategori().equals(kategoriPropertyCombo.getSelectionModel().getSelectedItem())||
-                            kategoriPropertyCombo.getSelectionModel().getSelectedItem().equals("Semua"))
+                    if (p.getKodeKategori().equals(kategoriPropertyCombo.getSelectionModel().getSelectedItem())
+                            || kategoriPropertyCombo.getSelectionModel().getSelectedItem().equals("Semua")) {
                         allDetail.add(d);
+                    }
                 }
-                if(!allDetail.isEmpty())
+                if (!allDetail.isEmpty()) {
                     hitungTotal();
+                }
             });
             task.setOnFailed((e) -> {
                 mainApp.showMessage(Modality.NONE, "Error", task.getException().toString());
@@ -213,40 +233,44 @@ public class DetailTransaksiKeuanganPropertyController  {
             new Thread(task).start();
         }
     }
+
     @FXML
-    private void hitungTotal(){
+    private void hitungTotal() {
         double totalProp = 0;
         double totalLuas = 0;
-        for(Keuangan d: allDetail){
-            if(d.isChecked()){
+        for (Keuangan d : allDetail) {
+            if (d.isChecked()) {
                 totalProp = totalProp + 1;
                 totalLuas = totalLuas + d.getProperty().getLuasTanah();
             }
         }
         totalPropertyLabel.setText(qty.format(totalProp));
         totalLuasTanahLabel.setText(qty.format(totalLuas));
-        
+
         double totalBiaya = Double.parseDouble(totalTransaksiLabel.getText().replaceAll(",", ""));
-        if(metodeCombo.getSelectionModel().getSelectedItem().equals("Rata-rata")){
-            for(Keuangan d: allDetail){
-                if(d.isChecked())
-                    d.setJumlahRp(totalBiaya/totalProp);
-                else
+        if (metodeCombo.getSelectionModel().getSelectedItem().equals("Rata-rata")) {
+            for (Keuangan d : allDetail) {
+                if (d.isChecked()) {
+                    d.setJumlahRp(totalBiaya / totalProp);
+                } else {
                     d.setJumlahRp(0);
+                }
             }
-        }else if(metodeCombo.getSelectionModel().getSelectedItem().equals("Luas Tanah")){
-            for(Keuangan d: allDetail){
-                if(d.isChecked())
-                    d.setJumlahRp(totalBiaya*d.getProperty().getLuasTanah()/totalLuas);
-                else
+        } else if (metodeCombo.getSelectionModel().getSelectedItem().equals("Luas Tanah")) {
+            for (Keuangan d : allDetail) {
+                if (d.isChecked()) {
+                    d.setJumlahRp(totalBiaya * d.getProperty().getLuasTanah() / totalLuas);
+                } else {
                     d.setJumlahRp(0);
+                }
             }
         }
         propertyTable.refresh();
     }
+
     @FXML
-    private void checkAllHandle(){
-        for(Keuangan d: allDetail){
+    private void checkAllHandle() {
+        for (Keuangan d : allDetail) {
             d.setChecked(checkAll.isSelected());
         }
         hitungTotal();

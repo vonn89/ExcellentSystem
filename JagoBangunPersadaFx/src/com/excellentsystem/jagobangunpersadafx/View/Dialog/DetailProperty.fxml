@@ -40,6 +40,8 @@
             <RowConstraints fillHeight="false" maxHeight="30.0" minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES" />
             <RowConstraints fillHeight="false" maxHeight="30.0" minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES" />
             <RowConstraints fillHeight="false" maxHeight="30.0" minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints fillHeight="false" maxHeight="30.0" minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints fillHeight="false" maxHeight="30.0" minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES" />
          </rowConstraints>
          <children>
             <Label text="Kode Property" textFill="MAROON" GridPane.rowIndex="2" />
@@ -51,7 +53,7 @@
             <Label fx:id="nilaiTanahLabel" text="Nilai Property" textFill="MAROON" GridPane.rowIndex="11" />
             <Label fx:id="nilaiTanahPerMeterLabel" text="Nilai Property /m" textFill="MAROON" GridPane.columnIndex="2" GridPane.rowIndex="11" />
             <Label fx:id="hargaJualLabel" text="Harga Jual" textFill="MAROON" GridPane.rowIndex="12" />
-            <Label text="Keterangan" textFill="MAROON" GridPane.rowIndex="13" />
+            <Label text="Keterangan" textFill="MAROON" GridPane.rowIndex="15" />
             <TextField fx:id="namaPropertyField" prefHeight="30.0" prefWidth="250.0" GridPane.columnIndex="1" GridPane.columnSpan="2147483647" GridPane.rowIndex="4" />
             <TextArea fx:id="alamatField" prefHeight="200.0" prefWidth="250.0" GridPane.columnIndex="1" GridPane.columnSpan="2147483647" GridPane.rowIndex="6" GridPane.rowSpan="2" />
             <TextArea fx:id="spesifikasiField" prefHeight="200.0" prefWidth="250.0" GridPane.columnIndex="1" GridPane.columnSpan="2147483647" GridPane.rowIndex="8" GridPane.rowSpan="2" />
@@ -59,7 +61,7 @@
             <TextField fx:id="nilaiPropertyField" disable="true" prefHeight="30.0" text="0" GridPane.columnIndex="1" GridPane.rowIndex="11" />
             <TextField fx:id="nilaiPropertyPerMeterField" disable="true" prefHeight="30.0" text="0" GridPane.columnIndex="3" GridPane.rowIndex="11" />
             <TextField fx:id="hargaJualField" prefHeight="30.0" text="0" GridPane.columnIndex="1" GridPane.rowIndex="12" />
-            <TextArea fx:id="keteranganField" prefHeight="200.0" prefWidth="250.0" GridPane.columnIndex="1" GridPane.columnSpan="2147483647" GridPane.rowIndex="13" GridPane.rowSpan="2" />
+            <TextArea fx:id="keteranganField" prefHeight="200.0" prefWidth="250.0" GridPane.columnIndex="1" GridPane.columnSpan="2147483647" GridPane.rowIndex="15" GridPane.rowSpan="2" />
             <TextField fx:id="kodePropertyField" disable="true" prefHeight="30.0" GridPane.columnIndex="1" GridPane.columnSpan="2147483647" GridPane.rowIndex="2" />
             <Label fx:id="luasBangunanLabel" text="Luas Bangunan (m)" textFill="MAROON" GridPane.columnIndex="2" GridPane.rowIndex="10" />
             <TextField fx:id="luasBangunanField" prefHeight="30.0" prefWidth="100.0" text="0" GridPane.columnIndex="3" GridPane.rowIndex="10" />
@@ -76,11 +78,15 @@
                   </ImageView>
                </graphic>
             </Button>
-            <Button fx:id="saveButton" defaultButton="true" mnemonicParsing="false" prefHeight="30.0" prefWidth="100.0" text="Save" GridPane.columnIndex="3" GridPane.halignment="RIGHT" GridPane.rowIndex="16" />
+            <Button fx:id="saveButton" defaultButton="true" mnemonicParsing="false" prefHeight="30.0" prefWidth="100.0" text="Save" GridPane.columnIndex="3" GridPane.halignment="RIGHT" GridPane.rowIndex="18" />
             <Label text="Tipe" GridPane.rowIndex="5" />
             <TextField fx:id="tipeField" prefHeight="30.0" GridPane.columnIndex="1" GridPane.rowIndex="5" />
-            <TextField fx:id="statusField" disable="true" prefHeight="30.0" GridPane.columnIndex="1" GridPane.rowIndex="15" />
-            <Label text="Status" GridPane.rowIndex="15" />
+            <TextField fx:id="statusField" disable="true" prefHeight="30.0" GridPane.columnIndex="1" GridPane.rowIndex="17" />
+            <Label text="Status" GridPane.rowIndex="17" />
+            <Label text="Diskon" GridPane.rowIndex="13" />
+            <Label text="Addendum" GridPane.rowIndex="14" />
+            <TextField fx:id="diskonField" prefHeight="30.0" text="0" GridPane.columnIndex="1" GridPane.rowIndex="13" />
+            <TextField fx:id="addendumField" disable="true" prefHeight="30.0" text="0" GridPane.columnIndex="1" GridPane.rowIndex="14" />
          </children>
          <padding>
             <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />

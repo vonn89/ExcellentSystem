@@ -32,6 +32,7 @@
             <RowConstraints maxHeight="30.0" minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES" />
             <RowConstraints maxHeight="30.0" minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES" />
             <RowConstraints maxHeight="30.0" minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="30.0" minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES" />
             <RowConstraints maxHeight="100.0" minHeight="100.0" prefHeight="100.0" vgrow="SOMETIMES" />
             <RowConstraints maxHeight="100.0" minHeight="100.0" prefHeight="100.0" vgrow="SOMETIMES" />
             <RowConstraints maxHeight="5.0" minHeight="5.0" prefHeight="5.0" vgrow="SOMETIMES" />
@@ -51,18 +52,18 @@
                   <Button fx:id="propertyButton" layoutX="336.0" mnemonicParsing="false" onAction="#setProperty" prefWidth="30.0" text="..." AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
                </children>
             </AnchorPane>
-            <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="16">
+            <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="17">
                <children>
                   <Button fx:id="saveButton" layoutX="37.0" mnemonicParsing="false" prefWidth="100.0" text="Save" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="101.0" AnchorPane.topAnchor="0.0" />
                   <Button fx:id="cancelButton" layoutX="117.0" layoutY="-4.0" mnemonicParsing="false" onAction="#close" prefWidth="100.0" text="Cancel" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
                </children>
             </AnchorPane>
             <TextField fx:id="namaCustomerField" disable="true" prefHeight="30.0" GridPane.columnIndex="1" GridPane.rowIndex="6" />
-            <Separator prefWidth="200.0" GridPane.columnSpan="2" GridPane.rowIndex="13" />
-            <TextField fx:id="totalDPField" disable="true" prefHeight="30.0" text="0" GridPane.columnIndex="1" GridPane.rowIndex="14" />
-            <TextField fx:id="totalKPRField" disable="true" prefHeight="30.0" text="0" GridPane.columnIndex="1" GridPane.rowIndex="15" />
-            <Label text="Total DP" GridPane.rowIndex="14" />
-            <Label text="Total KPR" GridPane.rowIndex="15" />
+            <Separator prefWidth="200.0" GridPane.columnSpan="2" GridPane.rowIndex="14" />
+            <TextField fx:id="totalDPField" disable="true" prefHeight="30.0" text="0" GridPane.columnIndex="1" GridPane.rowIndex="15" />
+            <TextField fx:id="totalKPRField" disable="true" prefHeight="30.0" text="0" GridPane.columnIndex="1" GridPane.rowIndex="16" />
+            <Label text="Total DP" GridPane.rowIndex="15" />
+            <Label text="Total KPR" GridPane.rowIndex="16" />
             <Label text="Diskon" GridPane.rowIndex="8" />
             <TextField fx:id="diskonField" disable="true" prefHeight="30.0" text="0" GridPane.columnIndex="1" GridPane.rowIndex="8" />
             <Label styleClass="label-header" text="Detail Serah Terima" GridPane.columnSpan="2147483647" />
@@ -75,18 +76,20 @@
                   </ImageView>
                </graphic>
             </Button>
-            <Label text="No HGB" GridPane.rowIndex="9" />
-            <Label text="No IMB" GridPane.rowIndex="10" />
-            <Label text="Kelengkapan" GridPane.rowIndex="11" />
-            <Label text="Bonus" GridPane.rowIndex="12" />
-            <TextArea fx:id="kelengkapanField" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="11" />
-            <TextArea fx:id="bonusField" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="12" />
-            <TextField fx:id="noHGBField" prefHeight="30.0" GridPane.columnIndex="1" GridPane.rowIndex="9" />
-            <TextField fx:id="noIMBField" prefHeight="30.0" GridPane.columnIndex="1" GridPane.rowIndex="10" />
+            <Label text="No HGB" GridPane.rowIndex="10" />
+            <Label text="No IMB" GridPane.rowIndex="11" />
+            <Label text="Kelengkapan" GridPane.rowIndex="12" />
+            <Label text="Bonus" GridPane.rowIndex="13" />
+            <TextArea fx:id="kelengkapanField" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="12" />
+            <TextArea fx:id="bonusField" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="13" />
+            <TextField fx:id="noHGBField" prefHeight="30.0" GridPane.columnIndex="1" GridPane.rowIndex="10" />
+            <TextField fx:id="noIMBField" prefHeight="30.0" GridPane.columnIndex="1" GridPane.rowIndex="11" />
             <Label minWidth="40.0" text="Tgl Serah Terima" GridPane.rowIndex="3" />
             <TextField fx:id="tglSerahTerimaField" disable="true" prefHeight="30.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
             <TextField fx:id="noSerahTerimaField" disable="true" prefHeight="30.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
             <Label minWidth="40.0" text="No SerahTerima" GridPane.rowIndex="2" />
+            <Label text="Addendum" GridPane.rowIndex="9" />
+            <TextField fx:id="addendumField" disable="true" prefHeight="30.0" text="0" GridPane.columnIndex="1" GridPane.rowIndex="9" />
          </children>
          <padding>
             <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />

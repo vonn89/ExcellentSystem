@@ -40,23 +40,31 @@ import javafx.stage.Stage;
  *
  * @author yunaz
  */
-public class NeracaAsetTetapController  {
-    @FXML private TreeTableView<Keuangan> keuanganTable;
-    @FXML private TreeTableColumn<Keuangan, String> noKeuanganColumn;
-    @FXML private TreeTableColumn<Keuangan, String> tglKeuanganColumn;
-    @FXML private TreeTableColumn<Keuangan, String> deskripsiColumn;
-    @FXML private TreeTableColumn<Keuangan, Number> jumlahRpColumn;
-    @FXML private Label saldoAkhirLabel;
+public class NeracaAsetTetapController {
+
+    @FXML
+    private TreeTableView<Keuangan> keuanganTable;
+    @FXML
+    private TreeTableColumn<Keuangan, String> noKeuanganColumn;
+    @FXML
+    private TreeTableColumn<Keuangan, String> tglKeuanganColumn;
+    @FXML
+    private TreeTableColumn<Keuangan, String> deskripsiColumn;
+    @FXML
+    private TreeTableColumn<Keuangan, Number> jumlahRpColumn;
+    @FXML
+    private Label saldoAkhirLabel;
     private ObservableList<Keuangan> allKeuangan = FXCollections.observableArrayList();
     private List<AsetTetap> listAsetTetap = new ArrayList<>();
-    private Main mainApp;   
+    private Main mainApp;
     private Stage owner;
     private Stage stage;
     final TreeItem<Keuangan> root = new TreeItem<>();
+
     public void initialize() {
         noKeuanganColumn.setCellValueFactory(param -> param.getValue().getValue().noKeuanganProperty());
         deskripsiColumn.setCellValueFactory(param -> param.getValue().getValue().deskripsiProperty());
-        tglKeuanganColumn.setCellValueFactory(cellData -> { 
+        tglKeuanganColumn.setCellValueFactory(cellData -> {
             try {
                 return new SimpleStringProperty(tgl.format(tglBarang.parse(cellData.getValue().getValue().getTglKeuangan())));
             } catch (Exception ex) {
@@ -74,20 +82,20 @@ public class NeracaAsetTetapController  {
         rm.getItems().addAll(refresh);
         keuanganTable.setContextMenu(rm);
         keuanganTable.setRowFactory((TreeTableView<Keuangan> tableView) -> {
-            final TreeTableRow<Keuangan> row = new TreeTableRow<Keuangan>(){
+            final TreeTableRow<Keuangan> row = new TreeTableRow<Keuangan>() {
                 @Override
                 public void updateItem(Keuangan item, boolean empty) {
                     super.updateItem(item, empty);
                     if (empty) {
                         setContextMenu(rm);
-                    } else{
+                    } else {
                         final ContextMenu rm = new ContextMenu();
                         MenuItem lihat = new MenuItem("Detail Aset Tetap");
-                        lihat.setOnAction((ActionEvent e)->{
+                        lihat.setOnAction((ActionEvent e) -> {
                             showDetailAsetTetap(item);
                         });
                         MenuItem refresh = new MenuItem("Refresh");
-                        refresh.setOnAction((ActionEvent e)->{
+                        refresh.setOnAction((ActionEvent e) -> {
                             keuanganTable.refresh();
                         });
                         rm.getItems().addAll(refresh);
@@ -97,24 +105,26 @@ public class NeracaAsetTetapController  {
             };
             return row;
         });
-    }    
-    public void setMainApp(Main mainApp, Stage owner,Stage stage){
+    }
+
+    public void setMainApp(Main mainApp, Stage owner, Stage stage) {
         this.mainApp = mainApp;
         this.owner = owner;
         this.stage = stage;
         stage.setOnCloseRequest((event) -> {
             mainApp.closeDialog(owner, stage);
         });
-        stage.setHeight(mainApp.screenSize.getHeight()*0.9);
-        stage.setWidth(mainApp.screenSize.getWidth()*0.9);
+        stage.setHeight(mainApp.screenSize.getHeight() * 0.9);
+        stage.setWidth(mainApp.screenSize.getWidth() * 0.9);
         stage.setX((mainApp.screenSize.getWidth() - stage.getWidth()) / 2);
         stage.setY((mainApp.screenSize.getHeight() - stage.getHeight()) / 2);
     }
-    public void setKeuangan(List<Keuangan> temp){
+
+    public void setKeuangan(List<Keuangan> temp) {
         Task<List<AsetTetap>> task = new Task<List<AsetTetap>>() {
-            @Override 
-            public List<AsetTetap> call() throws Exception{
-                try(Connection con = Koneksi.getConnection()){
+            @Override
+            public List<AsetTetap> call() throws Exception {
+                try (Connection con = Koneksi.getConnection()) {
                     return AsetTetapDAO.getAllByStatus(con, "%");
                 }
             }
@@ -126,17 +136,18 @@ public class NeracaAsetTetapController  {
             mainApp.closeLoading();
             allKeuangan.clear();
             allKeuangan.addAll(temp);
-            if(keuanganTable.getRoot()!=null)
+            if (keuanganTable.getRoot() != null) {
                 keuanganTable.getRoot().getChildren().clear();
+            }
             double saldoAkhir = 0;
             listAsetTetap = task.getValue();
-            for(AsetTetap at : listAsetTetap){
+            for (AsetTetap at : listAsetTetap) {
                 Keuangan k = new Keuangan();
-                k.setNoKeuangan(at.getNoAset()+" - "+at.getNama());
+                k.setNoKeuangan(at.getNoAset() + " - " + at.getNama());
                 TreeItem<Keuangan> parent = new TreeItem<>(k);
                 double total = 0;
-                for(Keuangan keu : allKeuangan){
-                    if(keu.getDeskripsi().matches("(.*)"+at.getNoAset()+"(.*)")){
+                for (Keuangan keu : allKeuangan) {
+                    if (keu.getDeskripsi().matches("(.*)" + at.getNoAset() + "(.*)")) {
                         saldoAkhir = saldoAkhir + keu.getJumlahRp();
                         TreeItem<Keuangan> child = new TreeItem<>(keu);
                         parent.getChildren().addAll(child);
@@ -144,8 +155,9 @@ public class NeracaAsetTetapController  {
                     }
                 }
                 k.setJumlahRp(total);
-                if(total>1)
+                if (total > 1) {
                     root.getChildren().add(parent);
+                }
             }
             saldoAkhirLabel.setText(rp.format(saldoAkhir));
             keuanganTable.setRoot(root);
@@ -156,18 +168,21 @@ public class NeracaAsetTetapController  {
         });
         new Thread(task).start();
     }
+
     private void showDetailAsetTetap(Keuangan k) {
         AsetTetap aset = null;
-        for(AsetTetap at : listAsetTetap){
-            if(k.getDeskripsi()!=null){
-                if(k.getDeskripsi().matches("(.*)"+at.getNoAset()+"(.*)"))
+        for (AsetTetap at : listAsetTetap) {
+            if (k.getDeskripsi() != null) {
+                if (k.getDeskripsi().matches("(.*)" + at.getNoAset() + "(.*)")) {
                     aset = at;
-            }else{
-                if(k.getNoKeuangan().matches("(.*)"+at.getNoAset()+"(.*)"))
+                }
+            } else {
+                if (k.getNoKeuangan().matches("(.*)" + at.getNoAset() + "(.*)")) {
                     aset = at;
+                }
             }
         }
-        if(aset!=null){
+        if (aset != null) {
             Stage child = new Stage();
             FXMLLoader loader = mainApp.showDialog(stage, child, "View/Dialog/Child/DetailAsetTetap.fxml");
             DetailAsetTetapController x = loader.getController();
@@ -175,8 +190,9 @@ public class NeracaAsetTetapController  {
             x.setDetail(aset);
         }
     }
-    @FXML 
-    private void close(){
+
+    @FXML
+    private void close() {
         mainApp.closeDialog(owner, stage);
     }
 }

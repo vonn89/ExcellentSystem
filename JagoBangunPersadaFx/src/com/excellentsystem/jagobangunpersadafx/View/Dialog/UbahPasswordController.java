@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package com.excellentsystem.jagobangunpersadafx.View.Dialog;
 
 import com.excellentsystem.jagobangunpersadafx.DAO.UserDAO;
@@ -26,17 +25,23 @@ import javafx.stage.Stage;
  *
  * @author Xtreme
  */
-public class UbahPasswordController  {
+public class UbahPasswordController {
 
-    @FXML public Label username;
-    @FXML public PasswordField passwordLama;
-    @FXML public PasswordField passwordBaru;
-    @FXML public PasswordField ulangiPasswordBaru;
-    @FXML public Label warning;
+    @FXML
+    public Label username;
+    @FXML
+    public PasswordField passwordLama;
+    @FXML
+    public PasswordField passwordBaru;
+    @FXML
+    public PasswordField ulangiPasswordBaru;
+    @FXML
+    public Label warning;
     private Main mainApp;
     private Stage owner;
     private Stage stage;
-    public void setMainApp(Main main, Stage owner, Stage stage){
+
+    public void setMainApp(Main main, Stage owner, Stage stage) {
         this.mainApp = main;
         this.owner = owner;
         this.stage = stage;
@@ -46,22 +51,23 @@ public class UbahPasswordController  {
             mainApp.closeDialog(owner, stage);
         });
     }
-    public void save(){
-        try{
-            if(passwordLama.getText().equals(""))
+
+    public void save() {
+        try {
+            if (passwordLama.getText().equals("")) {
                 warning.setText("password lama masih kosong");
-            else if(passwordBaru.getText().equals(""))
+            } else if (passwordBaru.getText().equals("")) {
                 warning.setText("password baru masih kosong");
-            else if(ulangiPasswordBaru.getText().equals(""))
+            } else if (ulangiPasswordBaru.getText().equals("")) {
                 warning.setText("ulangi password baru masih kosong");
-            else if(!passwordLama.getText().equals(decrypt(sistem.getUser().getPassword(), key)))
+            } else if (!passwordLama.getText().equals(decrypt(sistem.getUser().getPassword(), key))) {
                 warning.setText("password lama salah");
-            else if(!passwordBaru.getText().equals(ulangiPasswordBaru.getText()))
+            } else if (!passwordBaru.getText().equals(ulangiPasswordBaru.getText())) {
                 warning.setText("password baru tidak sama");
-            else{
+            } else {
                 Task<Void> task = new Task<Void>() {
-                    @Override 
-                    public Void call() throws Exception{
+                    @Override
+                    public Void call() throws Exception {
                         try (Connection con = Koneksi.getConnection()) {
                             sistem.getUser().setPassword(passwordBaru.getText());
                             UserDAO.update(con, sistem.getUser());
@@ -73,11 +79,11 @@ public class UbahPasswordController  {
                     mainApp.showLoadingScreen();
                 });
                 task.setOnSucceeded((WorkerStateEvent e) -> {
-                    try{
+                    try {
                         mainApp.closeLoading();
                         mainApp.showMessage(Modality.NONE, "Success", "Password baru berhasil di simpan");
                         close();
-                    }catch(Exception ex){
+                    } catch (Exception ex) {
                         mainApp.showMessage(Modality.NONE, "Error", ex.toString());
                     }
                 });
@@ -87,12 +93,13 @@ public class UbahPasswordController  {
                 });
                 new Thread(task).start();
             }
-        }catch(Exception e){
+        } catch (Exception e) {
             mainApp.showMessage(Modality.NONE, "Error", e.toString());
         }
     }
-    public void close(){
+
+    public void close() {
         mainApp.closeDialog(owner, stage);
     }
-    
+
 }

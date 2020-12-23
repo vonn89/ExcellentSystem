@@ -37,20 +37,24 @@ import javafx.stage.Stage;
  *
  * @author Xtreme
  */
-public class KategoriPropertyController  {
+public class KategoriPropertyController {
 
-    @FXML private TableView<KategoriProperty> kategoriPropertyTable;
-    @FXML private TableColumn<KategoriProperty, String> kodeKategoriColumn;
-    
-    @FXML private TextField kodeKategoriField;
-    private ObservableList<KategoriProperty> allKategoriProperty= FXCollections.observableArrayList();
-    
+    @FXML
+    private TableView<KategoriProperty> kategoriPropertyTable;
+    @FXML
+    private TableColumn<KategoriProperty, String> kodeKategoriColumn;
+
+    @FXML
+    private TextField kodeKategoriField;
+    private ObservableList<KategoriProperty> allKategoriProperty = FXCollections.observableArrayList();
+
     private Main mainApp;
     private Stage owner;
     private Stage stage;
+
     public void initialize() {
         kodeKategoriColumn.setCellValueFactory(cellData -> cellData.getValue().kodeKategoriProperty());
-        
+
         final ContextMenu rm = new ContextMenu();
         MenuItem refresh = new MenuItem("Refresh");
         refresh.setOnAction((ActionEvent event) -> {
@@ -59,13 +63,13 @@ public class KategoriPropertyController  {
         rm.getItems().addAll(refresh);
         kategoriPropertyTable.setContextMenu(rm);
         kategoriPropertyTable.setRowFactory(table -> {
-            TableRow<KategoriProperty> row = new TableRow<KategoriProperty>(){
+            TableRow<KategoriProperty> row = new TableRow<KategoriProperty>() {
                 @Override
                 public void updateItem(KategoriProperty item, boolean empty) {
                     super.updateItem(item, empty);
                     if (empty) {
                         setContextMenu(rm);
-                    }else{
+                    } else {
                         final ContextMenu rm = new ContextMenu();
                         MenuItem hapus = new MenuItem("Delete Kategori Property");
                         hapus.setOnAction((ActionEvent event) -> {
@@ -75,7 +79,7 @@ public class KategoriPropertyController  {
                         refresh.setOnAction((ActionEvent event) -> {
                             getKategoriProperty();
                         });
-                        rm.getItems().addAll(hapus,refresh);
+                        rm.getItems().addAll(hapus, refresh);
                         setContextMenu(rm);
                     }
                 }
@@ -83,10 +87,12 @@ public class KategoriPropertyController  {
             return row;
         });
         kodeKategoriField.setOnKeyPressed((KeyEvent keyEvent) -> {
-            if (keyEvent.getCode() == KeyCode.ENTER)  
+            if (keyEvent.getCode() == KeyCode.ENTER) {
                 saveKategoriProperty();
+            }
         });
     }
+
     public void setMainApp(Main mainApp, Stage owner, Stage stage) {
         this.mainApp = mainApp;
         this.stage = stage;
@@ -97,11 +103,12 @@ public class KategoriPropertyController  {
             mainApp.closeDialog(owner, stage);
         });
     }
-    private void getKategoriProperty(){
+
+    private void getKategoriProperty() {
         Task<List<KategoriProperty>> task = new Task<List<KategoriProperty>>() {
-            @Override 
-            public List<KategoriProperty> call() throws Exception{
-                try(Connection con = Koneksi.getConnection()){
+            @Override
+            public List<KategoriProperty> call() throws Exception {
+                try (Connection con = Koneksi.getConnection()) {
                     return KategoriPropertyDAO.getAll(con);
                 }
             }
@@ -121,28 +128,30 @@ public class KategoriPropertyController  {
         });
         new Thread(task).start();
     }
-    public void deleteKategoriProperty(KategoriProperty k){
+
+    public void deleteKategoriProperty(KategoriProperty k) {
         MessageController controller = mainApp.showMessage(Modality.WINDOW_MODAL, "Confirmation",
-                "Delete Kategori Property "+k.getKodeKategori()+" ?");
+                "Delete Kategori Property " + k.getKodeKategori() + " ?");
         controller.OK.setOnAction((ActionEvent ex) -> {
-            Task<String>task = new Task<String>() {
-                @Override 
-                public String call() throws Exception{
+            Task<String> task = new Task<String>() {
+                @Override
+                public String call() throws Exception {
                     try (Connection con = Koneksi.getConnection()) {
                         boolean status = true;
                         List<String> statusProperty = new ArrayList<>();
                         statusProperty.add("Available");
                         statusProperty.add("Reserved");
                         statusProperty.add("Sold");
-                        List<Property> allProperty = PropertyDAO.getAllByStatus(con,statusProperty);
-                        for(Property p : allProperty){
-                            if(p.getKodeKategori().equals(k.getKodeKategori()))
+                        List<Property> allProperty = PropertyDAO.getAllByStatus(con, statusProperty);
+                        for (Property p : allProperty) {
+                            if (p.getKodeKategori().equals(k.getKodeKategori())) {
                                 status = false;
+                            }
                         }
-                        if(status){
-                            return Service.deleteKategoriProperty(con,k);
-                        }else{
-                            return "Tidak dapat dihapus,karena masih ada property dengan kategori "+k.getKodeKategori();
+                        if (status) {
+                            return Service.deleteKategoriProperty(con, k);
+                        } else {
+                            return "Tidak dapat dihapus,karena masih ada property dengan kategori " + k.getKodeKategori();
                         }
                     }
                 }
@@ -151,15 +160,16 @@ public class KategoriPropertyController  {
                 mainApp.showLoadingScreen();
             });
             task.setOnSucceeded((WorkerStateEvent e) -> {
-                try{
+                try {
                     mainApp.closeLoading();
                     getKategoriProperty();
-                    if(task.getValue().equals("true")){
+                    if (task.getValue().equals("true")) {
                         mainApp.showMessage(Modality.NONE, "Success", "Kategori Property berhasil dihapus");
                         kodeKategoriField.setText("");
-                    }else
+                    } else {
                         mainApp.showMessage(Modality.NONE, "Failed", task.getValue());
-                }catch(Exception exc){
+                    }
+                } catch (Exception exc) {
                     mainApp.showMessage(Modality.NONE, "Error", exc.toString());
                 }
             });
@@ -170,21 +180,23 @@ public class KategoriPropertyController  {
             new Thread(task).start();
         });
     }
+
     @FXML
-    private void saveKategoriProperty(){
-        if(kodeKategoriField.getText().equals(""))
+    private void saveKategoriProperty() {
+        if (kodeKategoriField.getText().equals("")) {
             mainApp.showMessage(Modality.NONE, "Warning", "Kode kategori masih kosong");
-        else{
+        } else {
             Boolean s = true;
-            for(KategoriProperty k : allKategoriProperty){
-                if(k.getKodeKategori().equals(kodeKategoriField.getText()))
+            for (KategoriProperty k : allKategoriProperty) {
+                if (k.getKodeKategori().equals(kodeKategoriField.getText())) {
                     s = false;
+                }
             }
-            if(s){
+            if (s) {
                 Task<String> task = new Task<String>() {
-                    @Override 
-                    public String call() throws Exception{
-                        try(Connection con = Koneksi.getConnection()){
+                    @Override
+                    public String call() throws Exception {
+                        try (Connection con = Koneksi.getConnection()) {
                             KategoriProperty k = new KategoriProperty();
                             k.setKodeKategori(kodeKategoriField.getText());
                             return Service.newKategoriProperty(con, k);
@@ -197,23 +209,25 @@ public class KategoriPropertyController  {
                 task.setOnSucceeded((e) -> {
                     mainApp.closeLoading();
                     getKategoriProperty();
-                    if(task.getValue().equals("true")){
+                    if (task.getValue().equals("true")) {
                         mainApp.showMessage(Modality.NONE, "Success", "Kategori property berhasil disimpan");
                         kodeKategoriField.setText("");
-                    }else
+                    } else {
                         mainApp.showMessage(Modality.NONE, "Failed", task.getValue());
+                    }
                 });
                 task.setOnFailed((e) -> {
                     mainApp.closeLoading();
                     mainApp.showMessage(Modality.NONE, "Error", task.getException().toString());
                 });
                 new Thread(task).start();
-            }else{
+            } else {
                 mainApp.showMessage(Modality.NONE, "Warning", "Kode Kategori sudah terdaftar");
             }
         }
-    }  
-    public void close(){
+    }
+
+    public void close() {
         mainApp.closeDialog(owner, stage);
-    }  
+    }
 }

@@ -39,48 +39,68 @@ import javafx.stage.Stage;
  */
 public class LaporanUntungRugiPropertyController {
 
-    @FXML private Label namaPropertyLabel;
-    @FXML private Label luasTanahLabel;
-    @FXML private Label luasBangunanLabel;
-    @FXML private Label hargaPropertyLabel;
-    @FXML private Label diskonLabel;
-    @FXML private Label nilaiPropertyLabel;
-    @FXML private Label nilaiPropertyPerMeterLabel;
-    
-    @FXML private Label terimaTandaJadiLabel;
-    @FXML private Label terimaDownPaymentLabel;
-    @FXML private Label terimaPencairanKPRLabel;
-    @FXML private Label terimaAngsuranLabel;
-    @FXML private Label pendapatanLabel;
-    
-    @FXML private Label totalPemasukanLabel;
-    
+    @FXML
+    private Label namaPropertyLabel;
+    @FXML
+    private Label luasTanahLabel;
+    @FXML
+    private Label luasBangunanLabel;
+    @FXML
+    private Label hargaPropertyLabel;
+    @FXML
+    private Label diskonLabel;
+    @FXML
+    private Label nilaiPropertyLabel;
+    @FXML
+    private Label nilaiPropertyPerMeterLabel;
+
+    @FXML
+    private Label terimaTandaJadiLabel;
+    @FXML
+    private Label terimaDownPaymentLabel;
+    @FXML
+    private Label terimaPencairanKPRLabel;
+    @FXML
+    private Label terimaAngsuranLabel;
+    @FXML
+    private Label pendapatanLabel;
+
+    @FXML
+    private Label totalPemasukanLabel;
+
     private List<Keuangan> terimaTandaJadiList = new ArrayList<>();
     private List<Keuangan> terimaDownPaymentList = new ArrayList<>();
     private List<Keuangan> terimaPencairanKPRList = new ArrayList<>();
     private List<Keuangan> terimaAngsuranList = new ArrayList<>();
     private List<Keuangan> pendapatanList = new ArrayList<>();
-    
-    @FXML private Label pembelianTanahLabel;
-    @FXML private Label pembangunanLabel;
-    @FXML private Label realisasiProyekLabel;
-    @FXML private Label bebanLabel;
-    
+
+    @FXML
+    private Label pembelianTanahLabel;
+    @FXML
+    private Label pembangunanLabel;
+    @FXML
+    private Label realisasiProyekLabel;
+    @FXML
+    private Label bebanLabel;
+
     private List<Keuangan> pembelianTanahList = new ArrayList<>();
     private List<Keuangan> realisasiProyekList = new ArrayList<>();
     private List<Keuangan> pembangunanList = new ArrayList<>();
     private List<Keuangan> bebanList = new ArrayList<>();
-    
-    @FXML private Label totalPengeluaranLabel;
-    
+
+    @FXML
+    private Label totalPengeluaranLabel;
+
     private Property property = null;
     private ObservableList<Keuangan> allKeuangan = FXCollections.observableArrayList();
     private ObservableList<KategoriTransaksi> allKategori = FXCollections.observableArrayList();
-    private Main mainApp;   
+    private Main mainApp;
+
     public void setMainApp(Main mainApp) {
         this.mainApp = mainApp;
-    }  
-    private void reset(){
+    }
+
+    private void reset() {
         namaPropertyLabel.setText("0");
         luasTanahLabel.setText("0");
         luasBangunanLabel.setText("0");
@@ -118,8 +138,9 @@ public class LaporanUntungRugiPropertyController {
         property = null;
         allKeuangan.clear();
     }
+
     @FXML
-    private void addProperty(){
+    private void addProperty() {
         Stage stage = new Stage();
         FXMLLoader loader = mainApp.showDialog(mainApp.MainStage, stage, "View/Dialog/AddProperty.fxml");
         AddPropertyController x = loader.getController();
@@ -132,7 +153,7 @@ public class LaporanUntungRugiPropertyController {
         x.propertyTable.setRowFactory((TableView<Property> tableView) -> {
             final TableRow<Property> row = new TableRow<>();
             row.setOnMouseClicked((MouseEvent mouseEvent) -> {
-                if(mouseEvent.getButton().equals(MouseButton.PRIMARY)&&mouseEvent.getClickCount() == 2){
+                if (mouseEvent.getButton().equals(MouseButton.PRIMARY) && mouseEvent.getClickCount() == 2) {
                     reset();
                     property = row.getItem();
                     namaPropertyLabel.setText(property.getNamaProperty());
@@ -141,7 +162,7 @@ public class LaporanUntungRugiPropertyController {
                     hargaPropertyLabel.setText(rp.format(property.getHargaJual()));
                     diskonLabel.setText(rp.format(property.getDiskon()));
                     nilaiPropertyLabel.setText(rp.format(property.getNilaiProperty()));
-                    nilaiPropertyPerMeterLabel.setText(rp.format(property.getNilaiProperty()/property.getLuasTanah()));
+                    nilaiPropertyPerMeterLabel.setText(rp.format(property.getNilaiProperty() / property.getLuasTanah()));
                     getKeuangan();
                     mainApp.closeDialog(mainApp.MainStage, stage);
                 }
@@ -149,17 +170,19 @@ public class LaporanUntungRugiPropertyController {
             return row;
         });
     }
-    private void getKeuangan(){
+
+    private void getKeuangan() {
         Task<List<Keuangan>> task = new Task<List<Keuangan>>() {
-            @Override 
-            public List<Keuangan> call() throws Exception{
+            @Override
+            public List<Keuangan> call() throws Exception {
                 try (Connection con = Koneksi.getConnection()) {
                     allKategori.clear();
                     allKategori.addAll(KategoriTransaksiDAO.getAll(con));
-                    if(property!=null){
-                        return KeuanganDAO.getAllByKodeProperty(con,property.getKodeProperty());
-                    }else
+                    if (property != null) {
+                        return KeuanganDAO.getAllByKodeProperty(con, property.getKodeProperty());
+                    } else {
                         return null;
+                    }
                 }
             }
         };
@@ -167,12 +190,12 @@ public class LaporanUntungRugiPropertyController {
             mainApp.showLoadingScreen();
         });
         task.setOnSucceeded((WorkerStateEvent e) -> {
-            try{
+            try {
                 mainApp.closeLoading();
                 allKeuangan.clear();
                 allKeuangan.addAll(task.getValue());
                 setData();
-            }catch(Exception ex){
+            } catch (Exception ex) {
                 mainApp.showMessage(Modality.NONE, "Error", ex.toString());
             }
         });
@@ -182,79 +205,80 @@ public class LaporanUntungRugiPropertyController {
         });
         new Thread(task).start();
     }
-    private void setData(){
+
+    private void setData() {
         try {
-            for(Keuangan k : allKeuangan){
-                if(k.getKategori().equals("Terima Tanda Jadi")&&!k.getTipeKeuangan().equals("HUTANG")){
+            for (Keuangan k : allKeuangan) {
+                if (k.getKategori().equals("Terima Tanda Jadi") && !k.getTipeKeuangan().equals("HUTANG")) {
                     terimaTandaJadiLabel.setText(rp.format(
-                            Double.parseDouble(terimaTandaJadiLabel.getText().replaceAll(",", ""))+k.getJumlahRp()
+                            Double.parseDouble(terimaTandaJadiLabel.getText().replaceAll(",", "")) + k.getJumlahRp()
                     ));
                     terimaTandaJadiList.add(k);
                 }
-                if(k.getKategori().equals("Terima Down Payment")&&!k.getTipeKeuangan().equals("HUTANG")){
+                if (k.getKategori().equals("Terima Down Payment") && !k.getTipeKeuangan().equals("HUTANG")) {
                     terimaDownPaymentLabel.setText(rp.format(
-                            Double.parseDouble(terimaDownPaymentLabel.getText().replaceAll(",", ""))+k.getJumlahRp()
+                            Double.parseDouble(terimaDownPaymentLabel.getText().replaceAll(",", "")) + k.getJumlahRp()
                     ));
                     terimaDownPaymentList.add(k);
                 }
-                if(k.getKategori().equals("Pencairan KPR")&&!k.getTipeKeuangan().equals("PIUTANG")){
+                if (k.getKategori().equals("Pencairan KPR") && !k.getTipeKeuangan().equals("PIUTANG")) {
                     terimaPencairanKPRLabel.setText(rp.format(
-                            Double.parseDouble(terimaPencairanKPRLabel.getText().replaceAll(",", ""))+k.getJumlahRp()
+                            Double.parseDouble(terimaPencairanKPRLabel.getText().replaceAll(",", "")) + k.getJumlahRp()
                     ));
                     terimaPencairanKPRList.add(k);
                 }
-                if(k.getKategori().equals("Terima Pembayaran Angsuran")&&!k.getTipeKeuangan().equals("PIUTANG")){
+                if (k.getKategori().equals("Terima Pembayaran Angsuran") && !k.getTipeKeuangan().equals("PIUTANG")) {
                     terimaAngsuranLabel.setText(rp.format(
-                            Double.parseDouble(terimaAngsuranLabel.getText().replaceAll(",", ""))+k.getJumlahRp()
+                            Double.parseDouble(terimaAngsuranLabel.getText().replaceAll(",", "")) + k.getJumlahRp()
                     ));
                     terimaAngsuranList.add(k);
                 }
-                for(KategoriTransaksi kt : allKategori){
-                    if(kt.getJenisTransaksi().equals("D")){
-                        if(k.getKategori().equals(kt.getKodeKategori())&&!k.getTipeKeuangan().equals("PENDAPATAN")){
+                for (KategoriTransaksi kt : allKategori) {
+                    if (kt.getJenisTransaksi().equals("D")) {
+                        if (k.getKategori().equals(kt.getKodeKategori()) && !k.getTipeKeuangan().equals("PENDAPATAN")) {
                             pendapatanLabel.setText(rp.format(
-                                    Double.parseDouble(pendapatanLabel.getText().replaceAll(",", ""))+k.getJumlahRp()
+                                    Double.parseDouble(pendapatanLabel.getText().replaceAll(",", "")) + k.getJumlahRp()
                             ));
                             pendapatanList.add(k);
                         }
                     }
                 }
-                
-                if(k.getKategori().equals("Pembelian Tanah")){
+
+                if (k.getKategori().equals("Pembelian Tanah")) {
                     pembelianTanahLabel.setText(rp.format(
-                            Double.parseDouble(pembelianTanahLabel.getText().replaceAll(",", ""))+k.getJumlahRp()*-1
+                            Double.parseDouble(pembelianTanahLabel.getText().replaceAll(",", "")) + k.getJumlahRp() * -1
                     ));
                     pembelianTanahList.add(k);
                 }
-                if(k.getDeskripsi().startsWith("Pemecahan Property")){
+                if (k.getDeskripsi().startsWith("Pemecahan Property")) {
                     pembelianTanahLabel.setText(rp.format(
-                            Double.parseDouble(pembelianTanahLabel.getText().replaceAll(",", ""))+k.getJumlahRp()
+                            Double.parseDouble(pembelianTanahLabel.getText().replaceAll(",", "")) + k.getJumlahRp()
                     ));
                     pembelianTanahList.add(k);
                 }
-                if(k.getDeskripsi().startsWith("Penggabungan Property")){
+                if (k.getDeskripsi().startsWith("Penggabungan Property")) {
                     pembelianTanahLabel.setText(rp.format(
-                            Double.parseDouble(pembelianTanahLabel.getText().replaceAll(",", ""))+k.getJumlahRp()
+                            Double.parseDouble(pembelianTanahLabel.getText().replaceAll(",", "")) + k.getJumlahRp()
                     ));
                     pembelianTanahList.add(k);
                 }
-                if(k.getKategori().equals("Realisasi Proyek")){
+                if (k.getKategori().equals("Realisasi Proyek")) {
                     realisasiProyekLabel.setText(rp.format(
-                            Double.parseDouble(realisasiProyekLabel.getText().replaceAll(",", ""))+k.getJumlahRp()*-1
+                            Double.parseDouble(realisasiProyekLabel.getText().replaceAll(",", "")) + k.getJumlahRp() * -1
                     ));
                     realisasiProyekList.add(k);
                 }
-                if(k.getKategori().equals("Pembangunan")){
+                if (k.getKategori().equals("Pembangunan")) {
                     pembangunanLabel.setText(rp.format(
-                            Double.parseDouble(pembangunanLabel.getText().replaceAll(",", ""))+k.getJumlahRp()*-1
+                            Double.parseDouble(pembangunanLabel.getText().replaceAll(",", "")) + k.getJumlahRp() * -1
                     ));
                     pembangunanList.add(k);
                 }
-                for(KategoriTransaksi kt : allKategori){
-                    if(kt.getJenisTransaksi().equals("K")){
-                        if(k.getKategori().equals(kt.getKodeKategori())&&!k.getTipeKeuangan().equals("BEBAN")){
+                for (KategoriTransaksi kt : allKategori) {
+                    if (kt.getJenisTransaksi().equals("K")) {
+                        if (k.getKategori().equals(kt.getKodeKategori()) && !k.getTipeKeuangan().equals("BEBAN")) {
                             bebanLabel.setText(rp.format(
-                                    Double.parseDouble(bebanLabel.getText().replaceAll(",", ""))+k.getJumlahRp()*-1
+                                    Double.parseDouble(bebanLabel.getText().replaceAll(",", "")) + k.getJumlahRp() * -1
                             ));
                             bebanList.add(k);
                         }
@@ -262,63 +286,73 @@ public class LaporanUntungRugiPropertyController {
                 }
             }
             totalPemasukanLabel.setText(rp.format(
-                    Double.parseDouble(terimaTandaJadiLabel.getText().replaceAll(",", ""))+
-                    Double.parseDouble(terimaDownPaymentLabel.getText().replaceAll(",", ""))+
-                    Double.parseDouble(terimaPencairanKPRLabel.getText().replaceAll(",", ""))+
-                    Double.parseDouble(terimaAngsuranLabel.getText().replaceAll(",", ""))+
-                    Double.parseDouble(pendapatanLabel.getText().replaceAll(",", ""))
+                    Double.parseDouble(terimaTandaJadiLabel.getText().replaceAll(",", ""))
+                    + Double.parseDouble(terimaDownPaymentLabel.getText().replaceAll(",", ""))
+                    + Double.parseDouble(terimaPencairanKPRLabel.getText().replaceAll(",", ""))
+                    + Double.parseDouble(terimaAngsuranLabel.getText().replaceAll(",", ""))
+                    + Double.parseDouble(pendapatanLabel.getText().replaceAll(",", ""))
             ));
             totalPengeluaranLabel.setText(rp.format(
-                    Double.parseDouble(pembelianTanahLabel.getText().replaceAll(",", ""))+
-                    Double.parseDouble(realisasiProyekLabel.getText().replaceAll(",", ""))+
-                    Double.parseDouble(pembangunanLabel.getText().replaceAll(",", ""))+
-                    Double.parseDouble(bebanLabel.getText().replaceAll(",", ""))
+                    Double.parseDouble(pembelianTanahLabel.getText().replaceAll(",", ""))
+                    + Double.parseDouble(realisasiProyekLabel.getText().replaceAll(",", ""))
+                    + Double.parseDouble(pembangunanLabel.getText().replaceAll(",", ""))
+                    + Double.parseDouble(bebanLabel.getText().replaceAll(",", ""))
             ));
         } catch (Exception ex) {
             mainApp.showMessage(Modality.NONE, "Error", ex.toString());
         }
     }
-    private void viewDetail(List<Keuangan> keuangan){
+
+    private void viewDetail(List<Keuangan> keuangan) {
         Stage stage = new Stage();
         FXMLLoader loader = mainApp.showDialog(mainApp.MainStage, stage, "View/Report/DetailKeuangan.fxml");
         DetailKeuanganController x = loader.getController();
         x.setMainApp(mainApp, mainApp.MainStage, stage);
         x.setKeuangan(keuangan);
     }
+
     @FXML
-    private void viewDetailTerimaTandaJadi(){
+    private void viewDetailTerimaTandaJadi() {
         viewDetail(terimaTandaJadiList);
     }
+
     @FXML
-    private void viewDetailTerimaDownPayment(){
+    private void viewDetailTerimaDownPayment() {
         viewDetail(terimaDownPaymentList);
     }
+
     @FXML
-    private void viewDetailTerimaPencairanKPR(){
+    private void viewDetailTerimaPencairanKPR() {
         viewDetail(terimaPencairanKPRList);
     }
+
     @FXML
-    private void viewDetailTerimaAngsuran(){
+    private void viewDetailTerimaAngsuran() {
         viewDetail(terimaAngsuranList);
     }
+
     @FXML
-    private void viewDetailPendapatan(){
+    private void viewDetailPendapatan() {
         viewDetail(pendapatanList);
     }
+
     @FXML
-    private void viewDetailPembelianTanah(){
+    private void viewDetailPembelianTanah() {
         viewDetail(pembelianTanahList);
     }
+
     @FXML
-    private void viewDetailRealisasi(){
+    private void viewDetailRealisasi() {
         viewDetail(realisasiProyekList);
     }
+
     @FXML
-    private void viewDetailPembangunan(){
+    private void viewDetailPembangunan() {
         viewDetail(pembangunanList);
     }
+
     @FXML
-    private void viewDetailBeban(){
+    private void viewDetailBeban() {
         viewDetail(bebanList);
     }
 }

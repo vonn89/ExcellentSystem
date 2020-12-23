@@ -96,7 +96,7 @@ public class PrintOut {
         JRViewerFx jrViewerFx = new JRViewerFx(jasperPrint);
     }
     public void printSuratSerahTerima(SerahTerima st)throws Exception{
-        JasperDesign jasperDesign = JRXmlLoader.load(getClass().getResourceAsStream("SerahTerima.jrxml"));
+        JasperDesign jasperDesign = JRXmlLoader.load(getClass().getResourceAsStream("BAST.jrxml"));
         Map parameters = new HashMap<>();
         DateFormat tgl = new SimpleDateFormat("dd MMMMM yyyy");
         parameters.put("tglSerahTerima", tgl.format(tglSql.parse(st.getTglSerahTerima())));

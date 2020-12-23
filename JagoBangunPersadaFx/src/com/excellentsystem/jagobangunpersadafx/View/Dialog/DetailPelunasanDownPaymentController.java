@@ -49,46 +49,64 @@ import javafx.stage.Stage;
  *
  * @author Xtreme
  */
-public class DetailPelunasanDownPaymentController  {
-    @FXML private TableView<SKLDetail> SKLDetailtable;
-    @FXML private TableColumn<SKLDetail,String> tahapColumn;
-    @FXML private TableColumn<SKLDetail,String> tglPembayaranColumn;
-    @FXML private TableColumn<SKLDetail,Number> jumlahPembayaranColumn;
-    
-    @FXML private TextField noSKLField;
-    @FXML private TextField tglSKLField;
-    
-    @FXML private TextField namaPropertyField;
-    @FXML private TextField hargaField;
-    @FXML private TextField diskonField;
-    @FXML private TextField namaCustomerField;
-    
-    @FXML private TextField totalPembayaranField;
-    @FXML private TextField sisaPelunasanField;
-    
-    @FXML private Button propertyButton;
-    @FXML public Button saveButton;
-    @FXML private Button cancelButton;
-    
+public class DetailPelunasanDownPaymentController {
+
+    @FXML
+    private TableView<SKLDetail> SKLDetailtable;
+    @FXML
+    private TableColumn<SKLDetail, String> tahapColumn;
+    @FXML
+    private TableColumn<SKLDetail, String> tglPembayaranColumn;
+    @FXML
+    private TableColumn<SKLDetail, Number> jumlahPembayaranColumn;
+
+    @FXML
+    private TextField noSKLField;
+    @FXML
+    private TextField tglSKLField;
+
+    @FXML
+    private TextField namaPropertyField;
+    @FXML
+    private TextField hargaField;
+    @FXML
+    private TextField diskonField;
+    @FXML
+    private TextField addendumField;
+    @FXML
+    private TextField namaCustomerField;
+
+    @FXML
+    private TextField totalPembayaranField;
+
+    @FXML
+    private Button propertyButton;
+    @FXML
+    public Button saveButton;
+    @FXML
+    private Button cancelButton;
+
     private Main mainApp;
     private Stage owner;
     private Stage stage;
     public SKLHead skl;
     public ObservableList<SKLDetail> allDetail = FXCollections.observableArrayList();
+
     public void initialize() {
         tahapColumn.setCellValueFactory(celldata -> celldata.getValue().tahapProperty());
         tahapColumn.setCellFactory(col -> Function.getWrapTableCell(tahapColumn));
-        
-        tglPembayaranColumn.setCellValueFactory(celldata -> celldata.getValue().tglBayarProperty()); 
+
+        tglPembayaranColumn.setCellValueFactory(celldata -> celldata.getValue().tglBayarProperty());
         tglPembayaranColumn.setCellFactory(col -> Function.getWrapTableCell(tglPembayaranColumn));
-        
+
         jumlahPembayaranColumn.setCellValueFactory(celldata -> celldata.getValue().jumlahRpProperty());
         jumlahPembayaranColumn.setCellFactory(col -> getTableCell(rp));
-        
+
         Function.setNumberField(totalPembayaranField);
         Function.setNumberField(hargaField);
-    }   
-    public void setMainApp(Main mainApp, Stage owner, Stage stage){
+    }
+
+    public void setMainApp(Main mainApp, Stage owner, Stage stage) {
         this.mainApp = mainApp;
         this.owner = owner;
         this.stage = stage;
@@ -99,15 +117,17 @@ public class DetailPelunasanDownPaymentController  {
         stage.setX((mainApp.screenSize.getWidth() - stage.getWidth()) / 2);
         stage.setY((mainApp.screenSize.getHeight() - stage.getHeight()) / 2);
     }
-    public void setNewSKL(){
+
+    public void setNewSKL() {
         skl = new SKLHead();
         noSKLField.setText("-");
         tglSKLField.setText(tglSql.format(new Date()));
     }
-    public void getSKL(String noSKL){
+
+    public void getSKL(String noSKL) {
         Task<SKLHead> task = new Task<SKLHead>() {
-            @Override 
-            public SKLHead call() throws Exception{
+            @Override
+            public SKLHead call() throws Exception {
                 try (Connection con = Koneksi.getConnection()) {
                     SKLHead skl = SKLHeadDAO.get(con, noSKL);
                     skl.setAllDetail(SKLDetailDAO.getAllByNoSkl(con, noSKL));
@@ -121,10 +141,10 @@ public class DetailPelunasanDownPaymentController  {
             mainApp.showLoadingScreen();
         });
         task.setOnSucceeded((WorkerStateEvent e) -> {
-            try{
+            try {
                 mainApp.closeLoading();
                 setSKL(task.getValue());
-            }catch(Exception ex){
+            } catch (Exception ex) {
                 mainApp.showMessage(Modality.NONE, "Error", ex.toString());
             }
         });
@@ -134,28 +154,30 @@ public class DetailPelunasanDownPaymentController  {
         });
         new Thread(task).start();
     }
-    public void setSKL(SKLHead s){
-        try{
+
+    public void setSKL(SKLHead s) {
+        try {
             propertyButton.setVisible(false);
             saveButton.setVisible(false);
             cancelButton.setVisible(false);
-            
+
             noSKLField.setText(s.getNoSKL());
             tglSKLField.setText(tglLengkap.format(tglSql.parse(s.getTglSKL())));
             namaPropertyField.setText(s.getProperty().getNamaProperty());
             hargaField.setText(rp.format(s.getProperty().getHargaJual()));
             diskonField.setText(rp.format(s.getProperty().getDiskon()));
+            addendumField.setText(rp.format(s.getProperty().getAddendum()));
             namaCustomerField.setText(s.getCustomer().getNama());
             allDetail.addAll(s.getAllDetail());
             totalPembayaranField.setText(rp.format(s.getTotalPembayaran()));
-            sisaPelunasanField.setText(rp.format(s.getSisaPelunasan()));
-            stage.setHeight(stage.getHeight()-20);
-        }catch(Exception e){
+            stage.setHeight(stage.getHeight() - 20);
+        } catch (Exception e) {
             mainApp.showMessage(Modality.NONE, "Error", e.toString());
         }
     }
+
     @FXML
-    private void setProperty(){
+    private void setProperty() {
         Stage child = new Stage();
         FXMLLoader loader = mainApp.showDialog(stage, child, "View/Dialog/AddProperty.fxml");
         AddPropertyController x = loader.getController();
@@ -166,17 +188,17 @@ public class DetailPelunasanDownPaymentController  {
         x.propertyTable.setRowFactory((TableView<Property> tableView) -> {
             final TableRow<Property> row = new TableRow<>();
             row.setOnMouseClicked((MouseEvent mouseEvent) -> {
-                if(mouseEvent.getButton().equals(MouseButton.PRIMARY)&&mouseEvent.getClickCount() == 2){
+                if (mouseEvent.getButton().equals(MouseButton.PRIMARY) && mouseEvent.getClickCount() == 2) {
                     Task<List<SDP>> task = new Task<List<SDP>>() {
-                        @Override 
-                        public List<SDP> call() throws Exception{
+                        @Override
+                        public List<SDP> call() throws Exception {
                             try (Connection con = Koneksi.getConnection()) {
-                                if(SKLHeadDAO.getByKodeProperty(con, row.getItem().getKodeProperty(), "true")==null){
+                                if (SKLHeadDAO.getByKodeProperty(con, row.getItem().getKodeProperty(), "true") == null) {
                                     skl.setStj(STJHeadDAO.getByKodeProperty(con, row.getItem().getKodeProperty(), "true"));
                                     skl.setCustomer(CustomerDAO.get(con, skl.getStj().getKodeCustomer()));
                                     skl.setSales(KaryawanDAO.get(con, skl.getStj().getKodeSales()));
                                     return SDPDAO.getAllByKodeProperty(con, row.getItem().getKodeProperty(), "true");
-                                }else{
+                                } else {
                                     return null;
                                 }
                             }
@@ -186,13 +208,14 @@ public class DetailPelunasanDownPaymentController  {
                         mainApp.showLoadingScreen();
                     });
                     task.setOnSucceeded((WorkerStateEvent e) -> {
-                        try{
+                        try {
                             mainApp.closeLoading();
-                            if(task.getValue()!=null){
+                            if (task.getValue() != null) {
                                 Property p = row.getItem();
                                 namaPropertyField.setText(p.getNamaProperty());
                                 hargaField.setText(rp.format(p.getHargaJual()));
                                 diskonField.setText(rp.format(p.getDiskon()));
+                                addendumField.setText(rp.format(p.getAddendum()));
                                 skl.setProperty(p);
                                 skl.setKodeProperty(p.getKodeProperty());
 
@@ -207,29 +230,28 @@ public class DetailPelunasanDownPaymentController  {
                                 totalPembayaran = totalPembayaran + skl.getStj().getJumlahRp();
 
                                 List<SDP> allSDP = task.getValue();
-                                for(SDP sdp : allSDP){
+                                for (SDP sdp : allSDP) {
                                     SKLDetail detail = new SKLDetail();
-                                    detail.setTahap("Down Payment Tahap "+sdp.getTahap());
-                                    if(allSDP.get(allSDP.size()-1).equals(sdp))
+                                    detail.setTahap("Down Payment Tahap " + sdp.getTahap());
+                                    if (allSDP.get(allSDP.size() - 1).equals(sdp)) {
                                         detail.setTahap("Pelunasan Down Payment");
+                                    }
                                     detail.setTglBayar(tgl.format(tglSql.parse(sdp.getTglSDP())));
                                     detail.setJumlahRp(sdp.getJumlahRp());
                                     allDetail.add(detail);
-                                    totalPembayaran= totalPembayaran +sdp.getJumlahRp();
+                                    totalPembayaran = totalPembayaran + sdp.getJumlahRp();
                                 }
                                 skl.setTotalPembayaran(totalPembayaran);
                                 totalPembayaranField.setText(rp.format(totalPembayaran));
-                                skl.setSisaPelunasan(p.getHargaJual()-p.getDiskon()-totalPembayaran);
-                                sisaPelunasanField.setText(rp.format(skl.getSisaPelunasan()));
                                 namaCustomerField.setText(skl.getCustomer().getNama());
                                 skl.setKodeCustomer(skl.getCustomer().getKodeCustomer());
                                 skl.setKodeSales(skl.getSales().getKodeKaryawan());
                                 mainApp.closeDialog(stage, child);
-                            }else{
+                            } else {
                                 mainApp.showMessage(Modality.NONE, "Warning", "Pelunasan down payment tidak dapat dibuat, "
                                         + "karena surat keterangan lunas sudah dibuat");
                             }
-                        }catch(Exception ex){
+                        } catch (Exception ex) {
                             mainApp.showMessage(Modality.NONE, "Error", ex.toString());
                         }
                     });
@@ -243,8 +265,9 @@ public class DetailPelunasanDownPaymentController  {
             return row;
         });
     }
+
     @FXML
-    private void close(){
+    private void close() {
         mainApp.closeDialog(owner, stage);
     }
 }

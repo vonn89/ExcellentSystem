@@ -22,7 +22,6 @@ public class SKLHead {
     private final StringProperty kodeProperty = new SimpleStringProperty();
     private final StringProperty kodeCustomer = new SimpleStringProperty();
     private final DoubleProperty totalPembayaran = new SimpleDoubleProperty();
-    private final DoubleProperty sisaPelunasan = new SimpleDoubleProperty();
     private final StringProperty kodeSales = new SimpleStringProperty();
     private final StringProperty kodeUser = new SimpleStringProperty();
     private final StringProperty status = new SimpleStringProperty();
@@ -144,18 +143,6 @@ public class SKLHead {
 
     public StringProperty kodeUserProperty() {
         return kodeUser;
-    }
-
-    public double getSisaPelunasan() {
-        return sisaPelunasan.get();
-    }
-
-    public void setSisaPelunasan(double value) {
-        sisaPelunasan.set(value);
-    }
-
-    public DoubleProperty sisaPelunasanProperty() {
-        return sisaPelunasan;
     }
 
 

@@ -35,8 +35,8 @@
                   <TableColumn fx:id="namaCustomerColumn" maxWidth="1000.0" prefWidth="75.0" text="Nama Customer" />
                   <TableColumn fx:id="hargaJualColumn" maxWidth="1000.0" prefWidth="75.0" text="Harga Jual" />
                   <TableColumn fx:id="diskonColumn" maxWidth="1000.0" prefWidth="75.0" text="Diskon" />
+                  <TableColumn fx:id="addendumColumn" maxWidth="1000.0" prefWidth="75.0" text="Addendum" />
                   <TableColumn fx:id="totalPembayaranColumn" maxWidth="1000.0" prefWidth="75.0" text="Total Pembayaran" />
-                  <TableColumn fx:id="sisaPelunasanColumn" maxWidth="1000.0" prefWidth="75.0" text="Sisa Pelunasan" />
                   <TableColumn fx:id="namaSalesColumn" maxWidth="1000.0" prefWidth="75.0" text="Nama Sales" />
                </columns>
                <columnResizePolicy>

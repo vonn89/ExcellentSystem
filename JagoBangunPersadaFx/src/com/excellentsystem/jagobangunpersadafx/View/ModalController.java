@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package com.excellentsystem.jagobangunpersadafx.View;
 
 import com.excellentsystem.jagobangunpersadafx.DAO.KeuanganDAO;
@@ -48,37 +47,50 @@ import javafx.scene.control.TextField;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
-
 /**
  * FXML Controller class
  *
  * @author Xtreme
  */
-public class ModalController  {
+public class ModalController {
 
-    @FXML private TableView<Keuangan> modalTable;
-    @FXML private TableColumn<Keuangan, String> noPerubahanModalColumn;
-    @FXML private TableColumn<Keuangan, String> tglPerubahanModalColumn;
-    @FXML private TableColumn<Keuangan, String> kategoriColumn;
-    @FXML private TableColumn<Keuangan, String> deskripsiColumn;
-    @FXML private TableColumn<Keuangan, Number> jumlahRpColumn;
-    @FXML private TableColumn<Keuangan, String> kodeUserColumn;
-    @FXML private TableColumn<Keuangan, String> tglInputColumn;
-    @FXML private TextField searchField;
-    @FXML private Label modalAwalField;
-    @FXML private Label modalAkhirField;
-    @FXML private DatePicker tglAwalPicker;
-    @FXML private DatePicker tglAkhirPicker;
+    @FXML
+    private TableView<Keuangan> modalTable;
+    @FXML
+    private TableColumn<Keuangan, String> noPerubahanModalColumn;
+    @FXML
+    private TableColumn<Keuangan, String> tglPerubahanModalColumn;
+    @FXML
+    private TableColumn<Keuangan, String> kategoriColumn;
+    @FXML
+    private TableColumn<Keuangan, String> deskripsiColumn;
+    @FXML
+    private TableColumn<Keuangan, Number> jumlahRpColumn;
+    @FXML
+    private TableColumn<Keuangan, String> kodeUserColumn;
+    @FXML
+    private TableColumn<Keuangan, String> tglInputColumn;
+    @FXML
+    private TextField searchField;
+    @FXML
+    private Label modalAwalField;
+    @FXML
+    private Label modalAkhirField;
+    @FXML
+    private DatePicker tglAwalPicker;
+    @FXML
+    private DatePicker tglAkhirPicker;
     private double modalAwal = 0;
     private double modalAkhir = 0;
-    private Main mainApp;   
+    private Main mainApp;
     private ObservableList<Keuangan> allModal = FXCollections.observableArrayList();
     private ObservableList<Keuangan> filterData = FXCollections.observableArrayList();
+
     public void initialize() {
         noPerubahanModalColumn.setCellValueFactory(cellData -> cellData.getValue().noKeuanganProperty());
         noPerubahanModalColumn.setCellFactory(col -> Function.getWrapTableCell(noPerubahanModalColumn));
-        
-        tglPerubahanModalColumn.setCellValueFactory(cellData -> { 
+
+        tglPerubahanModalColumn.setCellValueFactory(cellData -> {
             try {
                 return new SimpleStringProperty(tgl.format(tglBarang.parse(cellData.getValue().getTglKeuangan())));
             } catch (Exception ex) {
@@ -87,17 +99,17 @@ public class ModalController  {
         });
         tglPerubahanModalColumn.setCellFactory(col -> Function.getWrapTableCell(tglPerubahanModalColumn));
         tglPerubahanModalColumn.setComparator(Function.sortDate(tglLengkap));
-        
+
         kategoriColumn.setCellValueFactory(cellData -> cellData.getValue().kategoriProperty());
         kategoriColumn.setCellFactory(col -> Function.getWrapTableCell(kategoriColumn));
-        
+
         deskripsiColumn.setCellValueFactory(cellData -> cellData.getValue().deskripsiProperty());
         deskripsiColumn.setCellFactory(col -> Function.getWrapTableCell(deskripsiColumn));
-        
+
         kodeUserColumn.setCellValueFactory(cellData -> cellData.getValue().kodeUserProperty());
         kodeUserColumn.setCellFactory(col -> Function.getWrapTableCell(kodeUserColumn));
-        
-        tglInputColumn.setCellValueFactory(cellData -> { 
+
+        tglInputColumn.setCellValueFactory(cellData -> {
             try {
                 return new SimpleStringProperty(tglLengkap.format(tglSql.parse(cellData.getValue().getTglInput())));
             } catch (Exception ex) {
@@ -106,10 +118,10 @@ public class ModalController  {
         });
         tglInputColumn.setCellFactory(col -> Function.getWrapTableCell(tglInputColumn));
         tglInputColumn.setComparator(Function.sortDate(tglLengkap));
-        
+
         jumlahRpColumn.setCellValueFactory(cellData -> cellData.getValue().jumlahRpProperty());
         jumlahRpColumn.setCellFactory(col -> getTableCell(rp));
-        
+
         tglAwalPicker.setConverter(Function.getTglConverter());
         tglAwalPicker.setValue(LocalDate.now().minusMonths(1));
         tglAwalPicker.setDayCellFactory((final DatePicker datePicker) -> getDateCellMulai(tglAkhirPicker));
@@ -118,7 +130,7 @@ public class ModalController  {
         tglAkhirPicker.setDayCellFactory((final DatePicker datePicker) -> getDateCellAkhir(tglAwalPicker));
         final ContextMenu rowMenu = new ContextMenu();
         MenuItem tambah = new MenuItem("Tambah Modal");
-        tambah.setOnAction((ActionEvent e)->{
+        tambah.setOnAction((ActionEvent e) -> {
             showTambahModal();
         });
         MenuItem ambil = new MenuItem("Ambil Modal");
@@ -129,11 +141,13 @@ public class ModalController  {
         refresh.setOnAction((ActionEvent event) -> {
             getModal();
         });
-        for(Otoritas o : sistem.getUser().getOtoritas()){
-            if(o.getJenis().equals("Tambah Modal")&&o.isStatus())
+        for (Otoritas o : sistem.getUser().getOtoritas()) {
+            if (o.getJenis().equals("Tambah Modal") && o.isStatus()) {
                 rowMenu.getItems().add(tambah);
-            if(o.getJenis().equals("Ambil Modal")&&o.isStatus())
+            }
+            if (o.getJenis().equals("Ambil Modal") && o.isStatus()) {
                 rowMenu.getItems().add(ambil);
+            }
         }
         rowMenu.getItems().addAll(refresh);
         modalTable.setContextMenu(rowMenu);
@@ -141,26 +155,28 @@ public class ModalController  {
             searchModal();
         });
         searchField.textProperty().addListener(
-            (ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
-            searchModal();
-        });
+                (ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
+                    searchModal();
+                });
         filterData.addAll(allModal);
     }
-    public void setMainApp(Main mainApp){
+
+    public void setMainApp(Main mainApp) {
         this.mainApp = mainApp;
         getModal();
         modalTable.setItems(filterData);
     }
+
     @FXML
-    private void getModal(){
+    private void getModal() {
         Task<List<Keuangan>> task = new Task<List<Keuangan>>() {
-            @Override 
-            public List<Keuangan> call() throws Exception{
+            @Override
+            public List<Keuangan> call() throws Exception {
                 try (Connection con = Koneksi.getConnection()) {
-                    modalAwal = KeuanganDAO.getSaldoAkhirByDateAndTipeKeuangan(con,tglAwalPicker.getValue().toString(), "MODAL");
-                    modalAkhir = KeuanganDAO.getSaldoAkhirByDateAndTipeKeuangan(con,tglAkhirPicker.getValue().toString(), "MODAL");
+                    modalAwal = KeuanganDAO.getSaldoAkhirByDateAndTipeKeuangan(con, tglAwalPicker.getValue().toString(), "MODAL");
+                    modalAkhir = KeuanganDAO.getSaldoAkhirByDateAndTipeKeuangan(con, tglAkhirPicker.getValue().toString(), "MODAL");
                     return KeuanganDAO.getAllByTipeKeuanganAndDate(
-                        con,"MODAL",tglAwalPicker.getValue().toString(),tglAkhirPicker.getValue().toString());
+                            con, "MODAL", tglAwalPicker.getValue().toString(), tglAkhirPicker.getValue().toString());
                 }
             }
         };
@@ -168,13 +184,13 @@ public class ModalController  {
             mainApp.showLoadingScreen();
         });
         task.setOnSucceeded((WorkerStateEvent e) -> {
-            try{
+            try {
                 mainApp.closeLoading();
                 allModal.clear();
                 allModal.addAll(task.getValue());
                 modalAwalField.setText(rp.format(modalAwal));
                 modalAkhirField.setText(rp.format(modalAkhir));
-            }catch(Exception ex){
+            } catch (Exception ex) {
                 mainApp.showMessage(Modality.NONE, "Error", ex.toString());
             }
         });
@@ -184,50 +200,55 @@ public class ModalController  {
         });
         new Thread(task).start();
     }
-    private Boolean checkColumn(String column){
-        if(column!=null){
-            if(column.toLowerCase().contains(searchField.getText().toLowerCase()))
+
+    private Boolean checkColumn(String column) {
+        if (column != null) {
+            if (column.toLowerCase().contains(searchField.getText().toLowerCase())) {
                 return true;
+            }
         }
         return false;
     }
+
     private void searchModal() {
-        try{
+        try {
             filterData.clear();
             for (Keuangan temp : allModal) {
-                if (searchField.getText() == null || searchField.getText().equals(""))
+                if (searchField.getText() == null || searchField.getText().equals("")) {
                     filterData.add(temp);
-                else{
-                    if(checkColumn(temp.getNoKeuangan())||
-                        checkColumn(tgl.format(tglBarang.parse(temp.getTglKeuangan())))||
-                        checkColumn(tglLengkap.format(tglSql.parse(temp.getTglInput())))||
-                        checkColumn(temp.getKategori())||
-                        checkColumn(temp.getDeskripsi())||
-                        checkColumn(rp.format(temp.getJumlahRp()))||
-                        checkColumn(temp.getKodeUser()))
+                } else {
+                    if (checkColumn(temp.getNoKeuangan())
+                            || checkColumn(tgl.format(tglBarang.parse(temp.getTglKeuangan())))
+                            || checkColumn(tglLengkap.format(tglSql.parse(temp.getTglInput())))
+                            || checkColumn(temp.getKategori())
+                            || checkColumn(temp.getDeskripsi())
+                            || checkColumn(rp.format(temp.getJumlahRp()))
+                            || checkColumn(temp.getKodeUser())) {
                         filterData.add(temp);
+                    }
                 }
             }
-        }catch(Exception e){
+        } catch (Exception e) {
             mainApp.showMessage(Modality.NONE, "Error", e.toString());
         }
     }
-    private void showTambahModal(){
+
+    private void showTambahModal() {
         Stage stage = new Stage();
         FXMLLoader loader = mainApp.showDialog(mainApp.MainStage, stage, "View/Dialog/NewModal.fxml");
         NewModalController x = loader.getController();
         x.setMainApp(mainApp, mainApp.MainStage, stage);
         x.setModal("Tambah Modal");
         x.saveButton.setOnAction((ActionEvent event) -> {
-            if("0".equals(x.jumlahRpField.getText().replaceAll(",", ""))||
-                    "".equals(x.jumlahRpField.getText().replaceAll(",", ""))){
+            if ("0".equals(x.jumlahRpField.getText().replaceAll(",", ""))
+                    || "".equals(x.jumlahRpField.getText().replaceAll(",", ""))) {
                 mainApp.showMessage(Modality.NONE, "Warning", "Jumlah Rp masih kosong");
-            }else if(x.tipeKeuanganCombo.getSelectionModel().getSelectedItem()==null){
+            } else if (x.tipeKeuanganCombo.getSelectionModel().getSelectedItem() == null) {
                 mainApp.showMessage(Modality.NONE, "Warning", "Tipe keuangan belum dipilih");
-            }else{
+            } else {
                 Task<String> task = new Task<String>() {
-                    @Override 
-                    public String call() throws Exception{
+                    @Override
+                    public String call() throws Exception {
                         try (Connection con = Koneksi.getConnection()) {
                             Keuangan modal = new Keuangan();
                             modal.setTglKeuangan(tglBarang.format(new Date()));
@@ -242,7 +263,7 @@ public class ModalController  {
                             modal.setStatus("true");
                             modal.setTglBatal("2000-01-01 00:00:00");
                             modal.setUserBatal("");
-                            
+
                             Keuangan keu = new Keuangan();
                             keu.setTglKeuangan(tglBarang.format(new Date()));
                             keu.setTipeKeuangan(x.tipeKeuanganCombo.getSelectionModel().getSelectedItem());
@@ -256,7 +277,7 @@ public class ModalController  {
                             keu.setStatus("true");
                             keu.setTglBatal("2000-01-01 00:00:00");
                             keu.setUserBatal("");
-                            
+
                             List<Keuangan> listKeuangan = new ArrayList<>();
                             listKeuangan.add(modal);
                             listKeuangan.add(keu);
@@ -268,16 +289,16 @@ public class ModalController  {
                     mainApp.showLoadingScreen();
                 });
                 task.setOnSucceeded((WorkerStateEvent e) -> {
-                    try{
+                    try {
                         mainApp.closeLoading();
                         getModal();
-                        if(task.getValue().equals("true")){
+                        if (task.getValue().equals("true")) {
                             mainApp.closeDialog(mainApp.MainStage, stage);
                             mainApp.showMessage(Modality.NONE, "Success", "Penambahan modal berhasil disimpan");
-                        }else{
+                        } else {
                             mainApp.showMessage(Modality.NONE, "Failed", task.getValue());
                         }
-                    }catch(Exception ex){
+                    } catch (Exception ex) {
                         mainApp.showMessage(Modality.NONE, "Error", ex.toString());
                     }
                 });
@@ -289,23 +310,23 @@ public class ModalController  {
             }
         });
     }
-    
-    private void showAmbilModal(){
+
+    private void showAmbilModal() {
         Stage stage = new Stage();
         FXMLLoader loader = mainApp.showDialog(mainApp.MainStage, stage, "View/Dialog/NewModal.fxml");
         NewModalController x = loader.getController();
         x.setMainApp(mainApp, mainApp.MainStage, stage);
         x.setModal("Ambil Modal");
         x.saveButton.setOnAction((ActionEvent event) -> {
-            if("0".equals(x.jumlahRpField.getText().replaceAll(",", ""))||
-                    "".equals(x.jumlahRpField.getText().replaceAll(",", ""))){
+            if ("0".equals(x.jumlahRpField.getText().replaceAll(",", ""))
+                    || "".equals(x.jumlahRpField.getText().replaceAll(",", ""))) {
                 mainApp.showMessage(Modality.NONE, "Warning", "Jumlah Rp masih kosong");
-            }else if(x.tipeKeuanganCombo.getSelectionModel().getSelectedItem()==null){
+            } else if (x.tipeKeuanganCombo.getSelectionModel().getSelectedItem() == null) {
                 mainApp.showMessage(Modality.NONE, "Warning", "Tipe keuangan belum dipilih");
-            }else{
+            } else {
                 Task<String> task = new Task<String>() {
-                    @Override 
-                    public String call() throws Exception{
+                    @Override
+                    public String call() throws Exception {
                         try (Connection con = Koneksi.getConnection()) {
                             Keuangan modal = new Keuangan();
                             modal.setTglKeuangan(tglBarang.format(new Date()));
@@ -320,7 +341,7 @@ public class ModalController  {
                             modal.setStatus("true");
                             modal.setTglBatal("2000-01-01 00:00:00");
                             modal.setUserBatal("");
-                            
+
                             Keuangan keu = new Keuangan();
                             keu.setTglKeuangan(tglBarang.format(new Date()));
                             keu.setTipeKeuangan(x.tipeKeuanganCombo.getSelectionModel().getSelectedItem());
@@ -334,7 +355,7 @@ public class ModalController  {
                             keu.setStatus("true");
                             keu.setTglBatal("2000-01-01 00:00:00");
                             keu.setUserBatal("");
-                            
+
                             List<Keuangan> listKeuangan = new ArrayList<>();
                             listKeuangan.add(modal);
                             listKeuangan.add(keu);
@@ -346,16 +367,16 @@ public class ModalController  {
                     mainApp.showLoadingScreen();
                 });
                 task.setOnSucceeded((WorkerStateEvent e) -> {
-                    try{
+                    try {
                         mainApp.closeLoading();
                         getModal();
-                        if(task.getValue().equals("true")){
+                        if (task.getValue().equals("true")) {
                             mainApp.closeDialog(mainApp.MainStage, stage);
                             mainApp.showMessage(Modality.NONE, "Success", "Pengambilan modal berhasil disimpan");
-                        }else{
+                        } else {
                             mainApp.showMessage(Modality.NONE, "Failed", task.getValue());
                         }
-                    }catch(Exception ex){
+                    } catch (Exception ex) {
                         mainApp.showMessage(Modality.NONE, "Error", ex.toString());
                     }
                 });

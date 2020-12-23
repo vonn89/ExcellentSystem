@@ -48,45 +48,66 @@ import javafx.stage.Stage;
  *
  * @author Xtreme
  */
-public class DetailTerimaPencairanKPRController  {
+public class DetailTerimaPencairanKPRController {
 
-    @FXML private TableView<SKLDetail> SKLDetailtable;
-    @FXML private TableColumn<SKLDetail,String> tahapColumn;
-    @FXML private TableColumn<SKLDetail,String> tglPembayaranColumn;
-    @FXML private TableColumn<SKLDetail,Number> jumlahPembayaranColumn;
-    @FXML private TextField noKPRField;
-    @FXML private TextField tglKPRField;
-    @FXML public TextField namaPropertyField;
-    @FXML private TextField hargaField;
-    @FXML private TextField diskonField;
-    @FXML private TextField namaCustomerField;
-    @FXML private TextField totalDPField;
-    @FXML public TextField jumlahDiterimaField;
-    @FXML public TextField keteranganField;    
-    @FXML public ComboBox<String> tipeKeuanganCombo;
-    @FXML private Button propertyButton;
-    @FXML public Button saveButton;
-    @FXML private Button cancelButton;
-    
+    @FXML
+    private TableView<SKLDetail> SKLDetailtable;
+    @FXML
+    private TableColumn<SKLDetail, String> tahapColumn;
+    @FXML
+    private TableColumn<SKLDetail, String> tglPembayaranColumn;
+    @FXML
+    private TableColumn<SKLDetail, Number> jumlahPembayaranColumn;
+    @FXML
+    private TextField noKPRField;
+    @FXML
+    private TextField tglKPRField;
+    @FXML
+    public TextField namaPropertyField;
+    @FXML
+    private TextField hargaField;
+    @FXML
+    private TextField diskonField;
+    @FXML
+    private TextField addendumField;
+    @FXML
+    private TextField namaCustomerField;
+    @FXML
+    private TextField totalDPField;
+    @FXML
+    public TextField jumlahDiterimaField;
+    @FXML
+    public TextField keteranganField;
+    @FXML
+    public ComboBox<String> tipeKeuanganCombo;
+    @FXML
+    private Button propertyButton;
+    @FXML
+    public Button saveButton;
+    @FXML
+    private Button cancelButton;
+
     private Main mainApp;
     private Stage owner;
     private Stage stage;
     public SKLHead skl;
     private ObservableList<SKLDetail> allDetail = FXCollections.observableArrayList();
+
     public void initialize() {
         tahapColumn.setCellValueFactory(celldata -> celldata.getValue().tahapProperty());
         tahapColumn.setCellFactory(col -> Function.getWrapTableCell(tahapColumn));
-        
-        tglPembayaranColumn.setCellValueFactory(celldata -> celldata.getValue().tglBayarProperty()); 
+
+        tglPembayaranColumn.setCellValueFactory(celldata -> celldata.getValue().tglBayarProperty());
         tglPembayaranColumn.setCellFactory(col -> Function.getWrapTableCell(tglPembayaranColumn));
-        
+
         jumlahPembayaranColumn.setCellValueFactory(celldata -> celldata.getValue().jumlahRpProperty());
         jumlahPembayaranColumn.setCellFactory(col -> getTableCell(rp));
-        
+
         Function.setNumberField(jumlahDiterimaField);
-        
-    }    
-    public void setMainApp(Main mainApp,Stage owner, Stage stage){
+
+    }
+
+    public void setMainApp(Main mainApp, Stage owner, Stage stage) {
         this.mainApp = mainApp;
         this.owner = owner;
         this.stage = stage;
@@ -98,20 +119,22 @@ public class DetailTerimaPencairanKPRController  {
         SKLDetailtable.setItems(allDetail);
         SKLDetailtable.setSelectionModel(null);
         ObservableList<String> listKeuangan = FXCollections.observableArrayList();
-        for(OtoritasKeuangan k : sistem.getUser().getOtoritasKeuangan()){
+        for (OtoritasKeuangan k : sistem.getUser().getOtoritasKeuangan()) {
             listKeuangan.add(k.getKodeKeuangan());
         }
         tipeKeuanganCombo.setItems(listKeuangan);
     }
-    public void setNewKPR(){
+
+    public void setNewKPR() {
         noKPRField.setText("-");
         tglKPRField.setText(tglSql.format(new Date()));
     }
-    public void getKPR(Property p){
+
+    public void getKPR(Property p) {
         Task<KPR> task = new Task<KPR>() {
-            @Override 
-            public KPR call() throws Exception{
-                try(Connection con = Koneksi.getConnection()){
+            @Override
+            public KPR call() throws Exception {
+                try (Connection con = Koneksi.getConnection()) {
                     KPR k = KPRDAO.getByKodeProperty(con, p.getKodeProperty());
                     k.setProperty(p);
                     k.setCustomer(CustomerDAO.get(con, k.getKodeCustomer()));
@@ -125,10 +148,10 @@ public class DetailTerimaPencairanKPRController  {
             mainApp.showLoadingScreen();
         });
         task.setOnSucceeded((WorkerStateEvent e) -> {
-            try{
+            try {
                 mainApp.closeLoading();
                 setKPR(task.getValue());
-            }catch(Exception ex){
+            } catch (Exception ex) {
                 mainApp.showMessage(Modality.NONE, "Error", ex.toString());
             }
         });
@@ -138,12 +161,14 @@ public class DetailTerimaPencairanKPRController  {
         });
         new Thread(task).start();
     }
-    public void setKPR(KPR kpr){
+
+    public void setKPR(KPR kpr) {
         noKPRField.setText(kpr.getNoKPR());
         tglKPRField.setText(kpr.getTglKPR());
         namaPropertyField.setText(kpr.getProperty().getNamaProperty());
         hargaField.setText(rp.format(kpr.getProperty().getHargaJual()));
         diskonField.setText(rp.format(kpr.getProperty().getDiskon()));
+        addendumField.setText(rp.format(kpr.getProperty().getAddendum()));
         namaCustomerField.setText(kpr.getCustomer().getNama());
         allDetail.clear();
         allDetail.addAll(kpr.getSkl().getAllDetail());
@@ -157,10 +182,11 @@ public class DetailTerimaPencairanKPRController  {
         propertyButton.setVisible(false);
         saveButton.setVisible(false);
         cancelButton.setVisible(false);
-        stage.setHeight(stage.getHeight()-30);
+        stage.setHeight(stage.getHeight() - 30);
     }
+
     @FXML
-    private void setProperty(){
+    private void setProperty() {
         Stage child = new Stage();
         FXMLLoader loader = mainApp.showDialog(stage, child, "View/Dialog/AddProperty.fxml");
         AddPropertyController x = loader.getController();
@@ -171,20 +197,20 @@ public class DetailTerimaPencairanKPRController  {
         x.propertyTable.setRowFactory((TableView<Property> tableView) -> {
             final TableRow<Property> row = new TableRow<>();
             row.setOnMouseClicked((MouseEvent mouseEvent) -> {
-                if(mouseEvent.getButton().equals(MouseButton.PRIMARY)&&mouseEvent.getClickCount() == 2){
+                if (mouseEvent.getButton().equals(MouseButton.PRIMARY) && mouseEvent.getClickCount() == 2) {
                     Task<SKLHead> task = new Task<SKLHead>() {
-                        @Override 
-                        public SKLHead call() throws Exception{
+                        @Override
+                        public SKLHead call() throws Exception {
                             try (Connection con = Koneksi.getConnection()) {
                                 SKLHead skl = SKLHeadDAO.getByKodeProperty(con, row.getItem().getKodeProperty(), "true");
-                                if(skl!=null){
+                                if (skl != null) {
                                     skl.setProperty(row.getItem());
                                     List<SKLDetail> sklDetail = SKLDetailDAO.getAllByNoSkl(con, skl.getNoSKL());
                                     Customer cust = CustomerDAO.get(con, skl.getKodeCustomer());
                                     skl.setCustomer(cust);
                                     skl.setAllDetail(sklDetail);
                                     return skl;
-                                }else{
+                                } else {
                                     return null;
                                 }
                             }
@@ -194,24 +220,25 @@ public class DetailTerimaPencairanKPRController  {
                         mainApp.showLoadingScreen();
                     });
                     task.setOnSucceeded((WorkerStateEvent e) -> {
-                        try{
+                        try {
                             mainApp.closeLoading();
-                            if(task.getValue()!=null){
+                            if (task.getValue() != null) {
                                 skl = task.getValue();
                                 namaPropertyField.setText(skl.getProperty().getNamaProperty());
                                 hargaField.setText(rp.format(skl.getProperty().getHargaJual()));
                                 diskonField.setText(rp.format(skl.getProperty().getDiskon()));
+                                addendumField.setText(rp.format(skl.getProperty().getAddendum()));
                                 totalDPField.setText(rp.format(skl.getTotalPembayaran()));
-                                jumlahDiterimaField.setText(rp.format(skl.getSisaPelunasan()));
+                                jumlahDiterimaField.setText(rp.format(skl.getProperty().getHargaJual() - skl.getProperty().getDiskon() + skl.getProperty().getAddendum() - skl.getTotalPembayaran()));
                                 namaCustomerField.setText(skl.getCustomer().getNama());
                                 allDetail.clear();
                                 allDetail.addAll(skl.getAllDetail());
                                 mainApp.closeDialog(stage, child);
-                            }else{
+                            } else {
                                 mainApp.showMessage(Modality.NONE, "Warning", "Tidak dapat menerima pencairan KPR, "
                                         + "karena surat keterangan lunas belum dibuat");
                             }
-                        }catch(Exception ex){
+                        } catch (Exception ex) {
                             mainApp.showMessage(Modality.NONE, "Error", ex.toString());
                         }
                     });
@@ -225,8 +252,9 @@ public class DetailTerimaPencairanKPRController  {
             return row;
         });
     }
-    @FXML 
-    private void close(){
+
+    @FXML
+    private void close() {
         mainApp.closeDialog(owner, stage);
     }
 }

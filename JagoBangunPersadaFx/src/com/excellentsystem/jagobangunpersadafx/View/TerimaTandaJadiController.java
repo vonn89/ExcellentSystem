@@ -66,30 +66,45 @@ import javafx.stage.Stage;
  *
  * @author Xtreme
  */
-public class TerimaTandaJadiController  {
+public class TerimaTandaJadiController {
 
-    @FXML private TableView<STJHead> STJTable;
-    @FXML private TableColumn<STJHead, String> noSTJColumn;
-    @FXML private TableColumn<STJHead, String> tglSTJColumn;
-    @FXML private TableColumn<STJHead, String> kodeKategoriColumn;
-    @FXML private TableColumn<STJHead, String> namaPropertyColumn;
-    @FXML private TableColumn<STJHead, Number> hargaJualColumn;
-    @FXML private TableColumn<STJHead, Number> diskonColumn;
-    @FXML private TableColumn<STJHead, String> namaCustomerColumn;
-    @FXML private TableColumn<STJHead, Number> jumlahRpColumn;
-    @FXML private TableColumn<STJHead, String> tipeKeuanganColumn;
-    @FXML private TableColumn<STJHead, String> namaSalesColumn;
-    @FXML private DatePicker tglAwalPicker;
-    @FXML private DatePicker tglAkhirPicker;
-    @FXML private TextField searchField;
-    private Main mainApp;   
+    @FXML
+    private TableView<STJHead> STJTable;
+    @FXML
+    private TableColumn<STJHead, String> noSTJColumn;
+    @FXML
+    private TableColumn<STJHead, String> tglSTJColumn;
+    @FXML
+    private TableColumn<STJHead, String> kodeKategoriColumn;
+    @FXML
+    private TableColumn<STJHead, String> namaPropertyColumn;
+    @FXML
+    private TableColumn<STJHead, Number> hargaJualColumn;
+    @FXML
+    private TableColumn<STJHead, Number> diskonColumn;
+    @FXML
+    private TableColumn<STJHead, String> namaCustomerColumn;
+    @FXML
+    private TableColumn<STJHead, Number> jumlahRpColumn;
+    @FXML
+    private TableColumn<STJHead, String> tipeKeuanganColumn;
+    @FXML
+    private TableColumn<STJHead, String> namaSalesColumn;
+    @FXML
+    private DatePicker tglAwalPicker;
+    @FXML
+    private DatePicker tglAkhirPicker;
+    @FXML
+    private TextField searchField;
+    private Main mainApp;
     private ObservableList<STJHead> allSTJ = FXCollections.observableArrayList();
     private ObservableList<STJHead> filterData = FXCollections.observableArrayList();
+
     public void initialize() {
         noSTJColumn.setCellValueFactory(cellData -> cellData.getValue().noSTJProperty());
         noSTJColumn.setCellFactory(col -> Function.getWrapTableCell(noSTJColumn));
-        
-        tglSTJColumn.setCellValueFactory(cellData -> { 
+
+        tglSTJColumn.setCellValueFactory(cellData -> {
             try {
                 return new SimpleStringProperty(tglLengkap.format(tglSql.parse(cellData.getValue().getTglSTJ())));
             } catch (Exception ex) {
@@ -98,52 +113,52 @@ public class TerimaTandaJadiController  {
         });
         tglSTJColumn.setCellFactory(col -> Function.getWrapTableCell(tglSTJColumn));
         tglSTJColumn.setComparator(Function.sortDate(tglLengkap));
-        
-        kodeKategoriColumn.setCellValueFactory(cellData ->cellData.getValue().getProperty().kodeKategoriProperty());
+
+        kodeKategoriColumn.setCellValueFactory(cellData -> cellData.getValue().getProperty().kodeKategoriProperty());
         kodeKategoriColumn.setCellFactory(col -> Function.getWrapTableCell(kodeKategoriColumn));
-        
-        namaPropertyColumn.setCellValueFactory(cellData ->cellData.getValue().getProperty().namaPropertyProperty());
+
+        namaPropertyColumn.setCellValueFactory(cellData -> cellData.getValue().getProperty().namaPropertyProperty());
         namaPropertyColumn.setCellFactory(col -> Function.getWrapTableCell(namaPropertyColumn));
-        
-        hargaJualColumn.setCellValueFactory(cellData ->cellData.getValue().getProperty().hargaJualProperty());
+
+        hargaJualColumn.setCellValueFactory(cellData -> cellData.getValue().getProperty().hargaJualProperty());
         hargaJualColumn.setCellFactory(col -> getTableCell(rp));
-        
-        diskonColumn.setCellValueFactory(cellData ->cellData.getValue().getProperty().diskonProperty());
+
+        diskonColumn.setCellValueFactory(cellData -> cellData.getValue().getProperty().diskonProperty());
         diskonColumn.setCellFactory(col -> getTableCell(rp));
-        
-        namaCustomerColumn.setCellValueFactory(cellData ->cellData.getValue().getCustomer().namaProperty());
+
+        namaCustomerColumn.setCellValueFactory(cellData -> cellData.getValue().getCustomer().namaProperty());
         namaCustomerColumn.setCellFactory(col -> Function.getWrapTableCell(namaCustomerColumn));
-        
-        jumlahRpColumn.setCellValueFactory(cellData ->cellData.getValue().jumlahRpProperty());
+
+        jumlahRpColumn.setCellValueFactory(cellData -> cellData.getValue().jumlahRpProperty());
         jumlahRpColumn.setCellFactory(col -> getTableCell(rp));
-        
-        tipeKeuanganColumn.setCellValueFactory(cellData ->cellData.getValue().tipeKeuanganProperty());
+
+        tipeKeuanganColumn.setCellValueFactory(cellData -> cellData.getValue().tipeKeuanganProperty());
         tipeKeuanganColumn.setCellFactory(col -> Function.getWrapTableCell(tipeKeuanganColumn));
-        
-        namaSalesColumn.setCellValueFactory(cellData ->cellData.getValue().getSales().namaProperty());
+
+        namaSalesColumn.setCellValueFactory(cellData -> cellData.getValue().getSales().namaProperty());
         namaSalesColumn.setCellFactory(col -> Function.getWrapTableCell(namaSalesColumn));
-        
-        
+
         tglAwalPicker.setConverter(Function.getTglConverter());
         tglAwalPicker.setValue(LocalDate.now().minusMonths(1));
         tglAwalPicker.setDayCellFactory((final DatePicker datePicker) -> getDateCellMulai(tglAkhirPicker));
-        
+
         tglAkhirPicker.setConverter(Function.getTglConverter());
         tglAkhirPicker.setValue(LocalDate.now());
         tglAkhirPicker.setDayCellFactory((final DatePicker datePicker) -> getDateCellAkhir(tglAwalPicker));
-        
+
         ContextMenu rowMenu = new ContextMenu();
         MenuItem addNew = new MenuItem("Add New Terima Tanda Jadi");
-        addNew.setOnAction((ActionEvent e)->{
+        addNew.setOnAction((ActionEvent e) -> {
             addNewTerimaTandaJadi();
         });
         MenuItem refresh = new MenuItem("Refresh");
-        refresh.setOnAction((ActionEvent e)->{
+        refresh.setOnAction((ActionEvent e) -> {
             getSTJ();
         });
-        for(Otoritas o : sistem.getUser().getOtoritas()){
-            if(o.getJenis().equals("Add New Terima Tanda Jadi")&&o.isStatus())
+        for (Otoritas o : sistem.getUser().getOtoritas()) {
+            if (o.getJenis().equals("Add New Terima Tanda Jadi") && o.isStatus()) {
                 rowMenu.getItems().add(addNew);
+            }
         }
         rowMenu.getItems().addAll(refresh);
         STJTable.setContextMenu(rowMenu);
@@ -154,14 +169,14 @@ public class TerimaTandaJadiController  {
                     super.updateItem(item, empty);
                     if (empty) {
                         setContextMenu(rowMenu);
-                    }else{ 
+                    } else {
                         ContextMenu rowMenu = new ContextMenu();
                         MenuItem addNew = new MenuItem("Add New Terima Tanda Jadi");
-                        addNew.setOnAction((ActionEvent e)->{
+                        addNew.setOnAction((ActionEvent e) -> {
                             addNewTerimaTandaJadi();
                         });
                         MenuItem print = new MenuItem("Print Surat Tanda Jadi");
-                        print.setOnAction((ActionEvent e)->{
+                        print.setOnAction((ActionEvent e) -> {
                             printSTJ(item);
                         });
                         MenuItem batal = new MenuItem("Batal Terima Tanda Jadi");
@@ -185,24 +200,31 @@ public class TerimaTandaJadiController  {
                             detailTerimaTandaJadi(item);
                         });
                         MenuItem refresh = new MenuItem("Refresh");
-                        refresh.setOnAction((ActionEvent e)->{
+                        refresh.setOnAction((ActionEvent e) -> {
                             getSTJ();
                         });
-                        for(Otoritas o : sistem.getUser().getOtoritas()){
-                            if(o.getJenis().equals("Add New Terima Tanda Jadi")&&o.isStatus())
+                        for (Otoritas o : sistem.getUser().getOtoritas()) {
+                            if (o.getJenis().equals("Add New Terima Tanda Jadi") && o.isStatus()) {
                                 rowMenu.getItems().add(addNew);
-                            if(o.getJenis().equals("Detail Terima Tanda Jadi")&&o.isStatus())
+                            }
+                            if (o.getJenis().equals("Detail Terima Tanda Jadi") && o.isStatus()) {
                                 rowMenu.getItems().add(detailTerimaTandaJadi);
-                            if(o.getJenis().equals("Detail Customer")&&o.isStatus())
+                            }
+                            if (o.getJenis().equals("Detail Customer") && o.isStatus()) {
                                 rowMenu.getItems().add(detailCustomer);
-                            if(o.getJenis().equals("Detail Karyawan")&&o.isStatus())
+                            }
+                            if (o.getJenis().equals("Detail Karyawan") && o.isStatus()) {
                                 rowMenu.getItems().add(detailSales);
-                            if(o.getJenis().equals("Detail Property")&&o.isStatus())
+                            }
+                            if (o.getJenis().equals("Detail Property") && o.isStatus()) {
                                 rowMenu.getItems().add(detailProperty);
-                            if(o.getJenis().equals("Batal Terima Tanda Jadi")&&o.isStatus())
+                            }
+                            if (o.getJenis().equals("Batal Terima Tanda Jadi") && o.isStatus()) {
                                 rowMenu.getItems().add(batal);
-                            if(o.getJenis().equals("Print Surat Tanda Jadi")&&o.isStatus())
+                            }
+                            if (o.getJenis().equals("Print Surat Tanda Jadi") && o.isStatus()) {
                                 rowMenu.getItems().add(print);
+                            }
                         }
                         rowMenu.getItems().addAll(refresh);
                         setContextMenu(rowMenu);
@@ -210,11 +232,13 @@ public class TerimaTandaJadiController  {
                 }
             };
             row.setOnMouseClicked((MouseEvent mouseEvent) -> {
-                if(mouseEvent.getButton().equals(MouseButton.PRIMARY) && mouseEvent.getClickCount() == 2)
-                    for(Otoritas o : sistem.getUser().getOtoritas()){
-                        if(o.getJenis().equals("Detail Terima Tanda Jadi")&&o.isStatus())
+                if (mouseEvent.getButton().equals(MouseButton.PRIMARY) && mouseEvent.getClickCount() == 2) {
+                    for (Otoritas o : sistem.getUser().getOtoritas()) {
+                        if (o.getJenis().equals("Detail Terima Tanda Jadi") && o.isStatus()) {
                             detailTerimaTandaJadi(row.getItem());
+                        }
                     }
+                }
             });
             return row;
         });
@@ -222,21 +246,23 @@ public class TerimaTandaJadiController  {
             searchSTJ();
         });
         searchField.textProperty().addListener(
-            (ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
-            searchSTJ();
-        });
+                (ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
+                    searchSTJ();
+                });
         filterData.addAll(allSTJ);
-    }    
-    public void setMainApp(Main mainApp){
+    }
+
+    public void setMainApp(Main mainApp) {
         this.mainApp = mainApp;
         getSTJ();
         STJTable.setItems(filterData);
     }
+
     @FXML
-    private void getSTJ(){
-        Task<List<STJHead>>task = new Task<List<STJHead>>() {
-            @Override 
-            public List<STJHead> call() throws Exception{
+    private void getSTJ() {
+        Task<List<STJHead>> task = new Task<List<STJHead>>() {
+            @Override
+            public List<STJHead> call() throws Exception {
                 try (Connection con = Koneksi.getConnection()) {
                     List<Customer> listCustomer = CustomerDAO.getAllByStatus(con, "true");
                     List<String> statusProperty = new ArrayList<>();
@@ -245,28 +271,32 @@ public class TerimaTandaJadiController  {
                     statusProperty.add("Sold");
                     List<Property> listProperty = PropertyDAO.getAllByStatus(con, statusProperty);
                     List<Karyawan> listKaryawan = KaryawanDAO.getAllByStatus(con, "true");
-                    List<STJDetail> listSTJDetail = STJDetailDAO.getAllByDateAndStatus(con, 
+                    List<STJDetail> listSTJDetail = STJDetailDAO.getAllByDateAndStatus(con,
                             tglAwalPicker.getValue().toString(), tglAkhirPicker.getValue().toString(), "true");
-                    List<STJHead> listSTJ = STJHeadDAO.getAllByDateAndStatus(con, 
+                    List<STJHead> listSTJ = STJHeadDAO.getAllByDateAndStatus(con,
                             tglAwalPicker.getValue().toString(), tglAkhirPicker.getValue().toString(), "true");
-                    for(STJHead stj : listSTJ){
+                    for (STJHead stj : listSTJ) {
                         List<STJDetail> stjDetail = new ArrayList<>();
-                        for(STJDetail d : listSTJDetail){
-                            if(stj.getNoSTJ().equals(d.getNoSTJ()))
+                        for (STJDetail d : listSTJDetail) {
+                            if (stj.getNoSTJ().equals(d.getNoSTJ())) {
                                 stjDetail.add(d);
+                            }
                         }
                         stj.setAllDetail(stjDetail);
-                        for(Customer c : listCustomer){
-                            if(stj.getKodeCustomer().equals(c.getKodeCustomer()))
+                        for (Customer c : listCustomer) {
+                            if (stj.getKodeCustomer().equals(c.getKodeCustomer())) {
                                 stj.setCustomer(c);
+                            }
                         }
-                        for(Property p : listProperty){
-                            if(stj.getKodeProperty().equals(p.getKodeProperty()))
+                        for (Property p : listProperty) {
+                            if (stj.getKodeProperty().equals(p.getKodeProperty())) {
                                 stj.setProperty(p);
+                            }
                         }
-                        for(Karyawan k : listKaryawan){
-                            if(stj.getKodeSales().equals(k.getKodeKaryawan()))
+                        for (Karyawan k : listKaryawan) {
+                            if (stj.getKodeSales().equals(k.getKodeKaryawan())) {
                                 stj.setSales(k);
+                            }
                         }
                     }
                     return listSTJ;
@@ -277,11 +307,11 @@ public class TerimaTandaJadiController  {
             mainApp.showLoadingScreen();
         });
         task.setOnSucceeded((WorkerStateEvent e) -> {
-            try{
+            try {
                 mainApp.closeLoading();
                 allSTJ.clear();
                 allSTJ.addAll(task.getValue());
-            }catch(Exception ex){
+            } catch (Exception ex) {
                 mainApp.showMessage(Modality.NONE, "Error", ex.toString());
             }
         });
@@ -292,61 +322,67 @@ public class TerimaTandaJadiController  {
         });
         new Thread(task).start();
     }
-    private Boolean checkColumn(String column){
-        if(column!=null){
-            if(column.toLowerCase().contains(searchField.getText().toLowerCase()))
+
+    private Boolean checkColumn(String column) {
+        if (column != null) {
+            if (column.toLowerCase().contains(searchField.getText().toLowerCase())) {
                 return true;
+            }
         }
         return false;
     }
+
     private void searchSTJ() {
         filterData.clear();
         for (STJHead temp : allSTJ) {
-            if (searchField.getText() == null || searchField.getText().equals(""))
+            if (searchField.getText() == null || searchField.getText().equals("")) {
                 filterData.add(temp);
-            else{
-                if(checkColumn(temp.getNoSTJ())||
-                    checkColumn(temp.getTglSTJ())||
-                    checkColumn(temp.getCustomer().getNama())||
-                    checkColumn(temp.getProperty().getKodeKategori())||
-                    checkColumn(temp.getProperty().getNamaProperty())||
-                    checkColumn(rp.format(temp.getProperty().getHargaJual()))||
-                    checkColumn(rp.format(temp.getProperty().getDiskon()))||
-                    checkColumn(temp.getTipeKeuangan())||
-                    checkColumn(rp.format(temp.getJumlahRp()))||
-                    checkColumn(temp.getSales().getNama()))
-                        filterData.add(temp);
+            } else {
+                if (checkColumn(temp.getNoSTJ())
+                        || checkColumn(temp.getTglSTJ())
+                        || checkColumn(temp.getCustomer().getNama())
+                        || checkColumn(temp.getProperty().getKodeKategori())
+                        || checkColumn(temp.getProperty().getNamaProperty())
+                        || checkColumn(rp.format(temp.getProperty().getHargaJual()))
+                        || checkColumn(rp.format(temp.getProperty().getDiskon()))
+                        || checkColumn(temp.getTipeKeuangan())
+                        || checkColumn(rp.format(temp.getJumlahRp()))
+                        || checkColumn(temp.getSales().getNama())) {
+                    filterData.add(temp);
+                }
             }
         }
     }
+
     @FXML
-    private void addNewTerimaTandaJadi(){
+    private void addNewTerimaTandaJadi() {
         Stage stage = new Stage();
         FXMLLoader loader = mainApp.showDialog(mainApp.MainStage, stage, "View/Dialog/DetailTerimaTandaJadi.fxml");
         DetailTerimaTandaJadiController x = loader.getController();
         x.setMainApp(mainApp, mainApp.MainStage, stage);
         x.setNewSTJ();
         x.saveButton.setOnAction((event) -> {
-            if("".equals(x.namaCustomerField.getText())||x.stj.getCustomer()==null){
+            if ("".equals(x.namaCustomerField.getText()) || x.stj.getCustomer() == null) {
                 mainApp.showMessage(Modality.NONE, "Warning", "Customer belum dipilih");
-            }else if("".equals(x.kodePropertyField.getText())||x.stj.getProperty()==null){
+            } else if ("".equals(x.kodePropertyField.getText()) || x.stj.getProperty() == null) {
                 mainApp.showMessage(Modality.NONE, "Warning", "Property belum dipilih");
-            }else if("".equals(x.jumlahPembayaranField.getText())||"0".equals(x.jumlahPembayaranField.getText())){
+            } else if ("".equals(x.jumlahPembayaranField.getText()) || "0".equals(x.jumlahPembayaranField.getText())) {
                 mainApp.showMessage(Modality.NONE, "Warning", "Jumlah Pembayaran masih kosong");
-            }else if(x.tipeKeuanganCombo.getSelectionModel().getSelectedItem()==null||
-                    "".equals(x.tipeKeuanganCombo.getSelectionModel().getSelectedItem())){
+            } else if (x.tipeKeuanganCombo.getSelectionModel().getSelectedItem() == null
+                    || "".equals(x.tipeKeuanganCombo.getSelectionModel().getSelectedItem())) {
                 mainApp.showMessage(Modality.NONE, "Warning", "Tipe keuangan belum dipilih");
-            }else if(x.allDetail.isEmpty()){
+            } else if (x.allDetail.isEmpty()) {
                 mainApp.showMessage(Modality.NONE, "Warning", "Rencana pembayaran dp masih kosong");
-            }else if("".equals(x.salesField.getText())||x.stj.getSales()==null){
+            } else if ("".equals(x.salesField.getText()) || x.stj.getSales() == null) {
                 mainApp.showMessage(Modality.NONE, "Warning", "sales belum dipilih");
-            }else{
+            } else {
                 Task<String> task = new Task<String>() {
-                    @Override 
-                    public String call() throws Exception{
+                    @Override
+                    public String call() throws Exception {
                         try (Connection con = Koneksi.getConnection()) {
-                            if(x.stj.getProperty()!=null)
+                            if (x.stj.getProperty() != null) {
                                 x.stj.getProperty().setDiskon(Double.parseDouble(x.diskonField.getText().replaceAll(",", "")));
+                            }
                             x.stj.setKeterangan(x.catatanField.getText());
                             x.stj.setJumlahRp(Double.parseDouble(x.jumlahPembayaranField.getText().replaceAll(",", "")));
                             x.stj.setTipeKeuangan(x.tipeKeuanganCombo.getSelectionModel().getSelectedItem());
@@ -362,16 +398,16 @@ public class TerimaTandaJadiController  {
                     mainApp.showLoadingScreen();
                 });
                 task.setOnSucceeded((WorkerStateEvent e) -> {
-                    try{
+                    try {
                         getSTJ();
                         mainApp.closeLoading();
-                        if(task.getValue().equals("true")){
+                        if (task.getValue().equals("true")) {
                             mainApp.showMessage(Modality.NONE, "Success", "Terima tanda jadi berhasil disimpan");
                             mainApp.closeDialog(mainApp.MainStage, stage);
-                        }else{
+                        } else {
                             mainApp.showMessage(Modality.NONE, "Failed", task.getValue());
                         }
-                    }catch(Exception ex){
+                    } catch (Exception ex) {
                         mainApp.showMessage(Modality.NONE, "Error", ex.toString());
                     }
                 });
@@ -383,33 +419,36 @@ public class TerimaTandaJadiController  {
             }
         });
     }
-    private void detailTerimaTandaJadi(STJHead stj){
+
+    private void detailTerimaTandaJadi(STJHead stj) {
         Stage stage = new Stage();
         FXMLLoader loader = mainApp.showDialog(mainApp.MainStage, stage, "View/Dialog/DetailTerimaTandaJadi.fxml");
         DetailTerimaTandaJadiController x = loader.getController();
         x.setMainApp(mainApp, mainApp.MainStage, stage);
         x.setSTJ(stj);
     }
-    private void printSTJ(STJHead stj){
-        try{
+
+    private void printSTJ(STJHead stj) {
+        try {
             PrintOut print = new PrintOut();
             print.printSuratTandaJadi(stj);
-        }catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
-            mainApp.showMessage(Modality.NONE, "Error",e.toString());
+            mainApp.showMessage(Modality.NONE, "Error", e.toString());
         }
     }
-    private void batalTerimaTandaJadi(STJHead stj){
+
+    private void batalTerimaTandaJadi(STJHead stj) {
         MessageController controller = mainApp.showMessage(Modality.WINDOW_MODAL, "Confirmation",
                 "Batal terima tanda jadi " + stj.getNoSTJ() + ", anda yakin ?");
         controller.OK.setOnAction((ActionEvent ev) -> {
             Task<String> task = new Task<String>() {
-                @Override 
-                public String call() throws Exception{
+                @Override
+                public String call() throws Exception {
                     try (Connection con = Koneksi.getConnection()) {
-                        if(!SDPDAO.getAllByKodeProperty(con,stj.getKodeProperty(), "true").isEmpty()){
+                        if (!SDPDAO.getAllByKodeProperty(con, stj.getKodeProperty(), "true").isEmpty()) {
                             return "Terima tanda jadi tidak dapat dibatalkan, karena sudah ada pembayaran DP";
-                        }else {
+                        } else {
                             stj.setTglBatal(tglSql.format(new Date()));
                             stj.setUserBatal(sistem.getUser().getUsername());
                             stj.setStatus("false");
@@ -422,14 +461,15 @@ public class TerimaTandaJadiController  {
                 mainApp.showLoadingScreen();
             });
             task.setOnSucceeded((WorkerStateEvent e) -> {
-                try{
+                try {
                     mainApp.closeLoading();
                     getSTJ();
-                    if (task.getValue().equals("true"))
+                    if (task.getValue().equals("true")) {
                         mainApp.showMessage(Modality.NONE, "Success", "Data terima tanda jadi berhasil dibatal");
-                    else 
+                    } else {
                         mainApp.showMessage(Modality.NONE, "Failed", task.getValue());
-                }catch(Exception ex){
+                    }
+                } catch (Exception ex) {
                     mainApp.showMessage(Modality.NONE, "Error", ex.toString());
                 }
             });
@@ -440,7 +480,8 @@ public class TerimaTandaJadiController  {
             new Thread(task).start();
         });
     }
-    private void detailCustomer(Customer c){
+
+    private void detailCustomer(Customer c) {
         Stage stage = new Stage();
         FXMLLoader loader = mainApp.showDialog(mainApp.MainStage, stage, "View/Dialog/DetailCustomer.fxml");
         DetailCustomerController x = loader.getController();
@@ -448,7 +489,8 @@ public class TerimaTandaJadiController  {
         x.setCustomer(c);
         x.setViewOnly();
     }
-    private void detailSales(Karyawan s){
+
+    private void detailSales(Karyawan s) {
         Stage stage = new Stage();
         FXMLLoader loader = mainApp.showDialog(mainApp.MainStage, stage, "View/Dialog/DetailKaryawan.fxml");
         DetailKaryawanController x = loader.getController();
@@ -456,7 +498,8 @@ public class TerimaTandaJadiController  {
         x.setKaryawan(s);
         x.setViewOnly();
     }
-    private void detailProperty(Property p){
+
+    private void detailProperty(Property p) {
         Stage stage = new Stage();
         FXMLLoader loader = mainApp.showDialog(mainApp.MainStage, stage, "View/Dialog/DetailProperty.fxml");
         DetailPropertyController x = loader.getController();

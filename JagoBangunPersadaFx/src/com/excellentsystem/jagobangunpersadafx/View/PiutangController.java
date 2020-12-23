@@ -3,13 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package com.excellentsystem.jagobangunpersadafx.View;
 
 import com.excellentsystem.jagobangunpersadafx.DAO.PiutangDAO;
 import com.excellentsystem.jagobangunpersadafx.DAO.TerimaPembayaranDAO;
 import com.excellentsystem.jagobangunpersadafx.Function;
-import static com.excellentsystem.jagobangunpersadafx.Function.getTableCell;
+import static com.excellentsystem.jagobangunpersadafx.Function.getTreeTableCell;
 import com.excellentsystem.jagobangunpersadafx.Koneksi;
 import com.excellentsystem.jagobangunpersadafx.Main;
 import static com.excellentsystem.jagobangunpersadafx.Main.rp;
@@ -28,6 +27,7 @@ import com.excellentsystem.jagobangunpersadafx.View.Dialog.MessageController;
 import com.excellentsystem.jagobangunpersadafx.View.Dialog.NewPiutangController;
 import com.excellentsystem.jagobangunpersadafx.View.Dialog.NewTerimaPembayaranPiutangController;
 import java.sql.Connection;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javafx.beans.property.SimpleStringProperty;
@@ -44,10 +44,13 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
-import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TreeItem;
+import javafx.scene.control.TreeTableColumn;
+import javafx.scene.control.TreeTableRow;
+import javafx.scene.control.TreeTableView;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
@@ -56,128 +59,149 @@ import javafx.stage.Stage;
  *
  * @author Xtreme
  */
-public class PiutangController  {
+public class PiutangController {
 
-    @FXML private TableView<Piutang> piutangTable;
-    @FXML private TableColumn<Piutang, String> noPiutangColumn;
-    @FXML private TableColumn<Piutang, String> tglPiutangColumn;
-    @FXML private TableColumn<Piutang, String> kategoriColumn;
-    @FXML private TableColumn<Piutang, String> keteranganColumn;
-    @FXML private TableColumn<Piutang, Number> jumlahPiutangColumn;
-    @FXML private TableColumn<Piutang, Number> pembayaranColumn;
-    @FXML private TableColumn<Piutang, Number> sisaPiutangColumn;
-    @FXML private TableColumn<Piutang, String> jatuhTempoColumn;
-    
-    @FXML private TextField searchField;
-    @FXML private Label totalPiutangField;
-    @FXML private Label totalPembayaranField;
-    @FXML private ComboBox<String> groupByCombo;
-    
+    @FXML
+    private TreeTableView<Piutang> piutangTable;
+    @FXML
+    private TreeTableColumn<Piutang, String> noPiutangColumn;
+    @FXML
+    private TreeTableColumn<Piutang, String> tglPiutangColumn;
+    @FXML
+    private TreeTableColumn<Piutang, String> kategoriColumn;
+    @FXML
+    private TreeTableColumn<Piutang, String> keteranganColumn;
+    @FXML
+    private TreeTableColumn<Piutang, Number> jumlahPiutangColumn;
+    @FXML
+    private TreeTableColumn<Piutang, Number> pembayaranColumn;
+    @FXML
+    private TreeTableColumn<Piutang, Number> sisaPiutangColumn;
+    @FXML
+    private TreeTableColumn<Piutang, String> jatuhTempoColumn;
+
+    @FXML
+    private TextField searchField;
+    @FXML
+    private Label totalPiutangField;
+    @FXML
+    private Label totalPembayaranField;
+    @FXML
+    private ComboBox<String> groupByCombo;
+
+    private final TreeItem<Piutang> root = new TreeItem<>();
     private ObservableList<Piutang> allPiutang = FXCollections.observableArrayList();
     private ObservableList<Piutang> filterData = FXCollections.observableArrayList();
-    private Main mainApp;   
+    private Main mainApp;
+
     public void initialize() {
-        noPiutangColumn.setCellValueFactory(cellData -> cellData.getValue().noPiutangProperty());
-        noPiutangColumn.setCellFactory(col -> Function.getWrapTableCell(noPiutangColumn));
-        
-        kategoriColumn.setCellValueFactory(cellData -> cellData.getValue().kategoriProperty());
-        kategoriColumn.setCellFactory(col -> Function.getWrapTableCell(kategoriColumn));
-        
-        keteranganColumn.setCellValueFactory(cellData -> cellData.getValue().keteranganProperty());
-        keteranganColumn.setCellFactory(col -> Function.getWrapTableCell(keteranganColumn));
-        
-        tglPiutangColumn.setCellValueFactory(cellData -> { 
+        noPiutangColumn.setCellValueFactory(cellData -> cellData.getValue().getValue().noPiutangProperty());
+        noPiutangColumn.setCellFactory(col -> Function.getWrapTreeTableCell(noPiutangColumn));
+
+        kategoriColumn.setCellValueFactory(cellData -> cellData.getValue().getValue().kategoriProperty());
+        kategoriColumn.setCellFactory(col -> Function.getWrapTreeTableCell(kategoriColumn));
+
+        keteranganColumn.setCellValueFactory(cellData -> cellData.getValue().getValue().keteranganProperty());
+        keteranganColumn.setCellFactory(col -> Function.getWrapTreeTableCell(keteranganColumn));
+
+        tglPiutangColumn.setCellValueFactory(cellData -> {
             try {
-                return new SimpleStringProperty(tglLengkap.format(tglSql.parse(cellData.getValue().getTglPiutang())));
+                return new SimpleStringProperty(tglLengkap.format(tglSql.parse(cellData.getValue().getValue().getTglPiutang())));
             } catch (Exception ex) {
                 return null;
             }
         });
-        tglPiutangColumn.setCellFactory(col -> Function.getWrapTableCell(tglPiutangColumn));
+        tglPiutangColumn.setCellFactory(col -> Function.getWrapTreeTableCell(tglPiutangColumn));
         tglPiutangColumn.setComparator(Function.sortDate(tglLengkap));
-        
-        jatuhTempoColumn.setCellValueFactory(cellData -> { 
+
+        jatuhTempoColumn.setCellValueFactory(cellData -> {
             try {
-                if(cellData.getValue().getJatuhTempo().equals("2000-01-01"))
+                if (cellData.getValue().getValue().getJatuhTempo().equals("2000-01-01")) {
                     return null;
-                else
-                    return new SimpleStringProperty(tgl.format(tglBarang.parse(cellData.getValue().getJatuhTempo())));
+                } else {
+                    return new SimpleStringProperty(tgl.format(tglBarang.parse(cellData.getValue().getValue().getJatuhTempo())));
+                }
             } catch (Exception ex) {
                 return null;
             }
         });
-        jatuhTempoColumn.setCellFactory(col -> Function.getWrapTableCell(jatuhTempoColumn));
-        
-        jumlahPiutangColumn.setCellValueFactory(cellData -> cellData.getValue().jumlahPiutangProperty());
-        jumlahPiutangColumn.setCellFactory(col -> getTableCell(rp));
-        
-        pembayaranColumn.setCellValueFactory(cellData -> cellData.getValue().pembayaranProperty());
-        pembayaranColumn.setCellFactory(col -> getTableCell(rp));
-        
-        sisaPiutangColumn.setCellValueFactory(cellData -> cellData.getValue().sisaPiutangProperty());
-        sisaPiutangColumn.setCellFactory(col -> getTableCell(rp));
-        
+        jatuhTempoColumn.setCellFactory(col -> Function.getWrapTreeTableCell(jatuhTempoColumn));
+
+        jumlahPiutangColumn.setCellValueFactory(cellData -> cellData.getValue().getValue().jumlahPiutangProperty());
+        jumlahPiutangColumn.setCellFactory(col -> getTreeTableCell(rp));
+
+        pembayaranColumn.setCellValueFactory(cellData -> cellData.getValue().getValue().pembayaranProperty());
+        pembayaranColumn.setCellFactory(col -> getTreeTableCell(rp));
+
+        sisaPiutangColumn.setCellValueFactory(cellData -> cellData.getValue().getValue().sisaPiutangProperty());
+        sisaPiutangColumn.setCellFactory(col -> getTreeTableCell(rp));
+
         ContextMenu rowMenu = new ContextMenu();
         MenuItem addNew = new MenuItem("Add New Piutang");
-        addNew.setOnAction((ActionEvent e)->{
+        addNew.setOnAction((ActionEvent e) -> {
             showNewPiutang();
         });
         MenuItem refresh = new MenuItem("Refresh");
-        refresh.setOnAction((ActionEvent e)->{
+        refresh.setOnAction((ActionEvent e) -> {
             getPiutang();
         });
-        for(Otoritas o : sistem.getUser().getOtoritas()){
-            if(o.getJenis().equals("Add New Piutang")&&o.isStatus())
+        for (Otoritas o : sistem.getUser().getOtoritas()) {
+            if (o.getJenis().equals("Add New Piutang") && o.isStatus()) {
                 rowMenu.getItems().add(addNew);
+            }
         }
         rowMenu.getItems().add(refresh);
         piutangTable.setContextMenu(rowMenu);
         piutangTable.setRowFactory(tv -> {
-            TableRow<Piutang> row = new TableRow<Piutang>() {
+            TreeTableRow<Piutang> row = new TreeTableRow<Piutang>() {
                 @Override
                 public void updateItem(Piutang item, boolean empty) {
                     super.updateItem(item, empty);
                     if (empty) {
                         setContextMenu(rowMenu);
-                    }else{ 
-                        ContextMenu rowMenu = new ContextMenu();
-                        MenuItem addNew = new MenuItem("Add New Piutang");
-                        addNew.setOnAction((ActionEvent e)->{
-                            showNewPiutang();
-                        });
-                        MenuItem detail = new MenuItem("Detail Piutang");
-                        detail.setOnAction((ActionEvent e)->{
-                            showDetailPiutang(item);
-                        });
-                        MenuItem skl = new MenuItem("Detail Pelunasan Down Payment");
-                        skl.setOnAction((ActionEvent event) -> {
-                            detailPelunasanDownPayment(item.getKeterangan());
-                        });
-                        MenuItem bayar = new MenuItem("Terima Pembayaran Piutang");
-                        bayar.setOnAction((ActionEvent e)->{
-                            showTerimaPembayaran(item);
-                        });
-                        MenuItem refresh = new MenuItem("Refresh");
-                        refresh.setOnAction((ActionEvent e)->{
-                            getPiutang();
-                        });
-                        for(Otoritas o : sistem.getUser().getOtoritas()){
-                            if(o.getJenis().equals("Add New Piutang")&&o.isStatus())
-                                rowMenu.getItems().add(addNew);
-                        }
-                        rowMenu.getItems().add(detail);
-                        if(item.getKategori().equals("Piutang Penjualan")){
-                            rowMenu.getItems().add(skl);
-                        }else{
-                            for(Otoritas o : sistem.getUser().getOtoritas()){
-                                if(o.getJenis().equals("Terima Pembayaran Piutang")&&o.isStatus()&&
-                                        item.getStatus().equals("open")&&
-                                    !item.getKategori().equals("Terima Pembayaran Down Payment"))
-                                    rowMenu.getItems().add(bayar);
+                    } else {
+                        if (item.getNoPiutang().startsWith("PT")) {
+                            ContextMenu rowMenu = new ContextMenu();
+                            MenuItem addNew = new MenuItem("Add New Piutang");
+                            addNew.setOnAction((ActionEvent e) -> {
+                                showNewPiutang();
+                            });
+                            MenuItem detail = new MenuItem("Detail Piutang");
+                            detail.setOnAction((ActionEvent e) -> {
+                                showDetailPiutang(item);
+                            });
+                            MenuItem skl = new MenuItem("Detail Pelunasan Down Payment");
+                            skl.setOnAction((ActionEvent event) -> {
+                                detailPelunasanDownPayment(item.getKeterangan());
+                            });
+                            MenuItem bayar = new MenuItem("Terima Pembayaran Piutang");
+                            bayar.setOnAction((ActionEvent e) -> {
+                                showTerimaPembayaran(item);
+                            });
+                            MenuItem refresh = new MenuItem("Refresh");
+                            refresh.setOnAction((ActionEvent e) -> {
+                                getPiutang();
+                            });
+                            for (Otoritas o : sistem.getUser().getOtoritas()) {
+                                if (o.getJenis().equals("Add New Piutang") && o.isStatus()) {
+                                    rowMenu.getItems().add(addNew);
+                                }
                             }
+                            rowMenu.getItems().add(detail);
+                            if (item.getKategori().equals("Piutang Penjualan")) {
+                                rowMenu.getItems().add(skl);
+                            } else {
+                                for (Otoritas o : sistem.getUser().getOtoritas()) {
+                                    if (o.getJenis().equals("Terima Pembayaran Piutang") && o.isStatus()
+                                            && item.getStatus().equals("open")
+                                            && !item.getKategori().equals("Terima Pembayaran Down Payment")) {
+                                        rowMenu.getItems().add(bayar);
+                                    }
+                                }
+                            }
+                            rowMenu.getItems().add(refresh);
+                            setContextMenu(rowMenu);
                         }
-                        rowMenu.getItems().add(refresh);
-                        setContextMenu(rowMenu);
                     }
                 }
             };
@@ -187,12 +211,13 @@ public class PiutangController  {
             searchPiutang();
         });
         searchField.textProperty().addListener(
-            (ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
-            searchPiutang();
-        });
+                (ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
+                    searchPiutang();
+                });
         filterData.addAll(allPiutang);
     }
-     public void setMainApp(Main mainApp) {
+
+    public void setMainApp(Main mainApp) {
         this.mainApp = mainApp;
         ObservableList<String> groupBy = FXCollections.observableArrayList();
         groupBy.clear();
@@ -201,19 +226,20 @@ public class PiutangController  {
         groupByCombo.setItems(groupBy);
         groupByCombo.getSelectionModel().select("Belum Lunas");
         getPiutang();
-        piutangTable.setItems(filterData);
-    } 
-     @FXML
-    private void getPiutang(){
+    }
+
+    @FXML
+    private void getPiutang() {
         Task<List<Piutang>> task = new Task<List<Piutang>>() {
-            @Override 
-            public List<Piutang>call() throws Exception{
+            @Override
+            public List<Piutang> call() throws Exception {
                 try (Connection con = Koneksi.getConnection()) {
                     String statusHutang = "";
-                    if(groupByCombo.getSelectionModel().getSelectedItem().equals("Lunas"))
+                    if (groupByCombo.getSelectionModel().getSelectedItem().equals("Lunas")) {
                         statusHutang = "close";
-                    else if(groupByCombo.getSelectionModel().getSelectedItem().equals("Belum Lunas"))
+                    } else if (groupByCombo.getSelectionModel().getSelectedItem().equals("Belum Lunas")) {
                         statusHutang = "open";
+                    }
                     List<Piutang> listPiutang = PiutangDAO.getAllByKategoriAndStatus(con, "%", statusHutang);
                     return listPiutang;
                 }
@@ -223,11 +249,11 @@ public class PiutangController  {
             mainApp.showLoadingScreen();
         });
         task.setOnSucceeded((WorkerStateEvent e) -> {
-            try{
+            try {
                 mainApp.closeLoading();
                 allPiutang.clear();
                 allPiutang.addAll(task.getValue());
-            }catch(Exception ex){
+            } catch (Exception ex) {
                 mainApp.showMessage(Modality.NONE, "Error", ex.toString());
             }
         });
@@ -238,81 +264,109 @@ public class PiutangController  {
         });
         new Thread(task).start();
     }
-    private Boolean checkColumn(String column){
-        if(column!=null){
-            if(column.toLowerCase().contains(searchField.getText().toLowerCase()))
+
+    private Boolean checkColumn(String column) {
+        if (column != null) {
+            if (column.toLowerCase().contains(searchField.getText().toLowerCase())) {
                 return true;
+            }
         }
         return false;
     }
-    private void searchPiutang(){
-        try{
+
+    private void searchPiutang() {
+        try {
             filterData.clear();
             for (Piutang temp : allPiutang) {
-                if (searchField.getText() == null || searchField.getText().equals(""))
+                if (searchField.getText() == null || searchField.getText().equals("")) {
                     filterData.add(temp);
-                else{
-                    if(checkColumn(temp.getNoPiutang())||
-                        checkColumn(rp.format(temp.getJumlahPiutang()))||
-                        checkColumn(tglLengkap.format(tglSql.parse(temp.getTglPiutang())))||
-                        checkColumn(temp.getKategori())||
-                        checkColumn(temp.getKeterangan())||
-                        checkColumn(rp.format(temp.getPembayaran()))||
-                        checkColumn(rp.format(temp.getSisaPiutang()))||
-                        checkColumn(tgl.format(tglBarang.parse(temp.getJatuhTempo()))))
-                            filterData.add(temp);
-                    else{
-                        Boolean status = false;
-                        for(TerimaPembayaran terimaPembayaran : temp.getAllTerimaPembayaran()){
-                            if(checkColumn(terimaPembayaran.getNoTerimaPembayaran())||
-                                checkColumn(terimaPembayaran.getTipeKeuangan())||
-                                checkColumn(tglLengkap.format(tglSql.parse(terimaPembayaran.getTglTerima())))||
-                                checkColumn(rp.format(terimaPembayaran.getJumlahPembayaran()))||
-                                checkColumn(terimaPembayaran.getCatatan()))
-                                    status=true;
-                        }
-                        if(status)
-                            filterData.add(temp);
+                } else {
+                    if (checkColumn(temp.getNoPiutang())
+                            || checkColumn(rp.format(temp.getJumlahPiutang()))
+                            || checkColumn(tglLengkap.format(tglSql.parse(temp.getTglPiutang())))
+                            || checkColumn(temp.getKategori())
+                            || checkColumn(temp.getKeterangan())
+                            || checkColumn(rp.format(temp.getPembayaran()))
+                            || checkColumn(rp.format(temp.getSisaPiutang()))
+                            || checkColumn(tgl.format(tglBarang.parse(temp.getJatuhTempo())))) {
+                        filterData.add(temp);
                     }
                 }
             }
+            setTable();
             hitungTotal();
-        }catch(Exception e){
+        } catch (Exception e) {
             mainApp.showMessage(Modality.NONE, "Error", e.toString());
         }
     }
-    private void hitungTotal(){
+
+    private void setTable() throws Exception {
+        if (piutangTable.getRoot() != null) {
+            piutangTable.getRoot().getChildren().clear();
+        }
+        List<String> group = new ArrayList<>();
+        for (Piutang temp : filterData) {
+            if (!group.contains(temp.getKategori())) {
+                group.add(temp.getKategori());
+            }
+        }
+        for (String t : group) {
+            Piutang piutangGroup = new Piutang();
+            piutangGroup.setNoPiutang(t);
+            TreeItem<Piutang> parent = new TreeItem<>(piutangGroup);
+            double jumlahPiutang = 0;
+            double sisaPiutang = 0;
+            double pembayaran = 0;
+            for (Piutang h : filterData) {
+                if (t.equals(h.getKategori())) {
+                    parent.getChildren().add(new TreeItem<>(h));
+                    jumlahPiutang = jumlahPiutang + h.getJumlahPiutang();
+                    sisaPiutang = sisaPiutang + h.getSisaPiutang();
+                    pembayaran = pembayaran + h.getPembayaran();
+                }
+            }
+            parent.getValue().setJumlahPiutang(jumlahPiutang);
+            parent.getValue().setSisaPiutang(sisaPiutang);
+            parent.getValue().setPembayaran(pembayaran);
+            root.getChildren().add(parent);
+        }
+        piutangTable.setRoot(root);
+    }
+
+    private void hitungTotal() {
         double belumDibayar = 0;
         double sudahDibayar = 0;
-        for(Piutang temp : filterData){
+        for (Piutang temp : filterData) {
             belumDibayar = belumDibayar + temp.getSisaPiutang();
             sudahDibayar = sudahDibayar + temp.getPembayaran();
         }
         totalPiutangField.setText(rp.format(belumDibayar));
         totalPembayaranField.setText(rp.format(sudahDibayar));
     }
+
     @FXML
-    private void showNewPiutang(){
+    private void showNewPiutang() {
         Stage stage = new Stage();
         FXMLLoader loader = mainApp.showDialog(mainApp.MainStage, stage, "View/Dialog/NewPiutang.fxml");
         NewPiutangController x = loader.getController();
         x.setMainApp(mainApp, mainApp.MainStage, stage);
         x.saveButton.setOnAction((ActionEvent event) -> {
-            if("0".equals(x.jumlahRpField.getText().replaceAll(",", ""))||
-                    "".equals(x.jumlahRpField.getText().replaceAll(",", ""))){
+            if ("0".equals(x.jumlahRpField.getText().replaceAll(",", ""))
+                    || "".equals(x.jumlahRpField.getText().replaceAll(",", ""))) {
                 mainApp.showMessage(Modality.NONE, "Warning", "Jumlah Rp masih kosong");
-            }else if(x.kategoriCombo.getSelectionModel().getSelectedItem()==null){
+            } else if (x.kategoriCombo.getSelectionModel().getSelectedItem() == null) {
                 mainApp.showMessage(Modality.NONE, "Warning", "Kategori belum dipilih");
-            }else if(x.tipeKeuanganCombo.getSelectionModel().getSelectedItem()==null){
+            } else if (x.tipeKeuanganCombo.getSelectionModel().getSelectedItem() == null) {
                 mainApp.showMessage(Modality.NONE, "Warning", "Tipe keuangan belum dipilih");
-            }else{
+            } else {
                 Task<String> task = new Task<String>() {
-                    @Override 
-                    public String call() throws Exception{
+                    @Override
+                    public String call() throws Exception {
                         try (Connection con = Koneksi.getConnection()) {
                             String jatuhTempo = "2000-01-01";
-                            if(x.jatuhTempoField.getValue()!=null)
-                                jatuhTempo= x.jatuhTempoField.getValue().toString();
+                            if (x.jatuhTempoField.getValue() != null) {
+                                jatuhTempo = x.jatuhTempoField.getValue().toString();
+                            }
                             Piutang p = new Piutang();
                             p.setNoPiutang(PiutangDAO.getId(con));
                             p.setTglPiutang(tglSql.format(new Date()));
@@ -323,7 +377,7 @@ public class PiutangController  {
                             p.setSisaPiutang(Double.parseDouble(x.jumlahRpField.getText().replaceAll(",", "")));
                             p.setJatuhTempo(jatuhTempo);
                             p.setStatus("open");
-                            return Service.saveNewPiutang(con, p, 
+                            return Service.saveNewPiutang(con, p,
                                     x.tipeKeuanganCombo.getSelectionModel().getSelectedItem());
                         }
                     }
@@ -332,16 +386,16 @@ public class PiutangController  {
                     mainApp.showLoadingScreen();
                 });
                 task.setOnSucceeded((WorkerStateEvent e) -> {
-                    try{
+                    try {
                         mainApp.closeLoading();
                         getPiutang();
-                        if(task.getValue().equals("true")){
+                        if (task.getValue().equals("true")) {
                             mainApp.closeDialog(mainApp.MainStage, stage);
                             mainApp.showMessage(Modality.NONE, "Success", "Data piutang berhasil disimpan");
-                        }else{
+                        } else {
                             mainApp.showMessage(Modality.NONE, "Failed", task.getValue());
                         }
-                    }catch(Exception ex){
+                    } catch (Exception ex) {
                         mainApp.showMessage(Modality.NONE, "Error", ex.toString());
                     }
                 });
@@ -353,41 +407,45 @@ public class PiutangController  {
             }
         });
     }
-    private void showDetailPiutang(Piutang piutang){
-        try{
+
+    private void showDetailPiutang(Piutang piutang) {
+        try {
             List<String> listKategoriHutang = Function.getKategoriHutang();
             Stage stage = new Stage();
             FXMLLoader loader = mainApp.showDialog(mainApp.MainStage, stage, "View/Dialog/DetailPiutang.fxml");
             DetailPiutangController x = loader.getController();
-            x.setMainApp(mainApp,mainApp.MainStage, stage);
+            x.setMainApp(mainApp, mainApp.MainStage, stage);
             x.setDetail(piutang.getNoPiutang());
             x.pembayaranPiutangTable.setRowFactory((TableView<TerimaPembayaran> tableView) -> {
-                final TableRow<TerimaPembayaran> row = new TableRow<TerimaPembayaran>(){
+                final TableRow<TerimaPembayaran> row = new TableRow<TerimaPembayaran>() {
                     @Override
                     public void updateItem(TerimaPembayaran item, boolean empty) {
                         super.updateItem(item, empty);
                         if (empty) {
                             setContextMenu(null);
-                        } else{
+                        } else {
                             final ContextMenu rm = new ContextMenu();
                             MenuItem batal = new MenuItem("Batal Terima Pembayaran Piutang");
-                            batal.setOnAction((ActionEvent e)->{
+                            batal.setOnAction((ActionEvent e) -> {
                                 batalPembayaran(item, stage);
                             });
                             boolean status = false;
                             List<String> listTipeKeuangan = Function.getTipeKeuangan();
-                            for(String s : listTipeKeuangan){
-                                if(item.getTipeKeuangan().equals(s))
+                            for (String s : listTipeKeuangan) {
+                                if (item.getTipeKeuangan().equals(s)) {
                                     status = true;
+                                }
                             }
                             boolean statusKategori = false;
-                            for(String s : listKategoriHutang){
-                                if(piutang.getKategori().equals(s))
+                            for (String s : listKategoriHutang) {
+                                if (piutang.getKategori().equals(s)) {
                                     statusKategori = true;
+                                }
                             }
-                            for(Otoritas o : sistem.getUser().getOtoritas()){
-                                if(o.getJenis().equals("Batal Terima Pembayaran Piutang")&&o.isStatus()&&status&&statusKategori)
+                            for (Otoritas o : sistem.getUser().getOtoritas()) {
+                                if (o.getJenis().equals("Batal Terima Pembayaran Piutang") && o.isStatus() && status && statusKategori) {
                                     rm.getItems().add(batal);
+                                }
                             }
                             setContextMenu(rm);
                         }
@@ -395,18 +453,19 @@ public class PiutangController  {
                 };
                 return row;
             });
-        }catch(Exception e){
+        } catch (Exception e) {
             mainApp.showMessage(Modality.NONE, "Error", e.toString());
         }
     }
-    private void batalPembayaran(TerimaPembayaran pembayaran, Stage stage){
+
+    private void batalPembayaran(TerimaPembayaran pembayaran, Stage stage) {
         MessageController controller = mainApp.showMessage(Modality.WINDOW_MODAL, "Confirmation",
-            "Batal pembayaran "+pembayaran.getNoTerimaPembayaran()+" ?");
+                "Batal pembayaran " + pembayaran.getNoTerimaPembayaran() + " ?");
         controller.OK.setOnAction((ActionEvent e) -> {
             mainApp.closeMessage();
             Task<String> task = new Task<String>() {
-                @Override 
-                public String call()throws Exception {
+                @Override
+                public String call() throws Exception {
                     try (Connection con = Koneksi.getConnection()) {
                         Piutang piutang = PiutangDAO.get(con, pembayaran.getNoPiutang());
                         pembayaran.setTglBatal(tglSql.format(Function.getServerDate(con)));
@@ -423,10 +482,10 @@ public class PiutangController  {
             task.setOnSucceeded((WorkerStateEvent ex) -> {
                 mainApp.closeLoading();
                 getPiutang();
-                if(task.getValue().equals("true")){
+                if (task.getValue().equals("true")) {
                     mainApp.closeDialog(mainApp.MainStage, stage);
                     mainApp.showMessage(Modality.NONE, "Success", "Data pembayaran berhasil dibatal");
-                }else{
+                } else {
                     mainApp.showMessage(Modality.NONE, "Error", task.getValue());
                 }
             });
@@ -437,28 +496,27 @@ public class PiutangController  {
             new Thread(task).start();
         });
     }
-    private void showTerimaPembayaran(Piutang p){
+
+    private void showTerimaPembayaran(Piutang p) {
         Stage stage = new Stage();
         FXMLLoader loader = mainApp.showDialog(mainApp.MainStage, stage, "View/Dialog/NewTerimaPembayaranPiutang.fxml");
         NewTerimaPembayaranPiutangController x = loader.getController();
         x.setMainApp(mainApp, mainApp.MainStage, stage);
         x.setNewTerimaPembayaran(p);
         x.saveButton.setOnAction((ActionEvent event) -> {
-            if("0".equals(x.jumlahPembayaranField.getText().replaceAll(",", ""))||
-                    "".equals(x.jumlahPembayaranField.getText().replaceAll(",", ""))){
+            if ("0".equals(x.jumlahPembayaranField.getText().replaceAll(",", ""))
+                    || "".equals(x.jumlahPembayaranField.getText().replaceAll(",", ""))) {
                 mainApp.showMessage(Modality.NONE, "Warning", "Jumlah Pembayaran masih kosong");
-            }else if(Double.parseDouble(x.jumlahPembayaranField.getText().replaceAll(",", ""))>p.getSisaPiutang()){
+            } else if (Double.parseDouble(x.jumlahPembayaranField.getText().replaceAll(",", "")) > p.getSisaPiutang()) {
                 mainApp.showMessage(Modality.NONE, "Warning", "Jumlah Pembayaran melebihi sisa piutang");
-            }else if(x.tipeKeuanganCombo.getSelectionModel().getSelectedItem()==null){
+            } else if (x.tipeKeuanganCombo.getSelectionModel().getSelectedItem() == null) {
                 mainApp.showMessage(Modality.NONE, "Warning", "Tipe keuangan belum dipilih");
-            }else{
+            } else {
                 Task<String> task = new Task<String>() {
-                    @Override 
-                    public String call() throws Exception{
+                    @Override
+                    public String call() throws Exception {
                         try (Connection con = Koneksi.getConnection()) {
                             String jatuhTempo = "2000-01-01";
-                            if(x.jatuhTempoField.getValue()!=null)
-                                jatuhTempo= x.jatuhTempoField.getValue().toString();
                             TerimaPembayaran terimaPembayaran = new TerimaPembayaran();
                             terimaPembayaran.setNoTerimaPembayaran(TerimaPembayaranDAO.getId(con));
                             terimaPembayaran.setTglTerima(tglSql.format(new Date()));
@@ -479,16 +537,16 @@ public class PiutangController  {
                     mainApp.showLoadingScreen();
                 });
                 task.setOnSucceeded((WorkerStateEvent e) -> {
-                    try{
+                    try {
                         mainApp.closeLoading();
                         getPiutang();
-                        if(task.getValue().equals("true")){
+                        if (task.getValue().equals("true")) {
                             mainApp.closeDialog(mainApp.MainStage, stage);
                             mainApp.showMessage(Modality.NONE, "Success", "Terima Pembayaran Piutang berhasil disimpan");
-                        }else{
+                        } else {
                             mainApp.showMessage(Modality.NONE, "Failed", task.getValue());
                         }
-                    }catch(Exception ex){
+                    } catch (Exception ex) {
                         mainApp.showMessage(Modality.NONE, "Error", ex.toString());
                     }
                 });
@@ -500,7 +558,8 @@ public class PiutangController  {
             }
         });
     }
-    private void detailPelunasanDownPayment(String noSKL){
+
+    private void detailPelunasanDownPayment(String noSKL) {
         Stage stage = new Stage();
         FXMLLoader loader = mainApp.showDialog(mainApp.MainStage, stage, "View/Dialog/DetailPelunasanDownPayment.fxml");
         DetailPelunasanDownPaymentController x = loader.getController();

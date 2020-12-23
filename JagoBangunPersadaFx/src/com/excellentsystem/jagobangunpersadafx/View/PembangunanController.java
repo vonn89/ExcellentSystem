@@ -59,30 +59,47 @@ import javafx.stage.Stage;
  *
  * @author Xtreme
  */
-public class PembangunanController  {
-    @FXML private TableView<PembangunanHead> pembangunanTable;
-    @FXML private TableColumn<PembangunanHead, String> noPembangunanColumn;
-    @FXML private TableColumn<PembangunanHead, String> tglPembangunanColumn;
-    @FXML private TableColumn<PembangunanHead, String> kategoriColumn;
-    @FXML private TableColumn<PembangunanHead, String> keteranganColumn;
-    @FXML private TableColumn<PembangunanHead, Number> totalPropertyColumn;
-    @FXML private TableColumn<PembangunanHead, Number> totalLuasTanahColumn;
-    @FXML private TableColumn<PembangunanHead, Number> totalBiayaColumn;
-    @FXML private TableColumn<PembangunanHead, String> metodeColumn;
-    @FXML private TableColumn<PembangunanHead, String> tipeKeuanganColumn;
-    @FXML private TableColumn<PembangunanHead, String> kodeUserColumn;
-    @FXML private TextField searchField;
-    @FXML private DatePicker tglAwalPicker;
-    @FXML private DatePicker tglAkhirPicker;
-    @FXML private Label totalPembangunan;
+public class PembangunanController {
+
+    @FXML
+    private TableView<PembangunanHead> pembangunanTable;
+    @FXML
+    private TableColumn<PembangunanHead, String> noPembangunanColumn;
+    @FXML
+    private TableColumn<PembangunanHead, String> tglPembangunanColumn;
+    @FXML
+    private TableColumn<PembangunanHead, String> kategoriColumn;
+    @FXML
+    private TableColumn<PembangunanHead, String> keteranganColumn;
+    @FXML
+    private TableColumn<PembangunanHead, Number> totalPropertyColumn;
+    @FXML
+    private TableColumn<PembangunanHead, Number> totalLuasTanahColumn;
+    @FXML
+    private TableColumn<PembangunanHead, Number> totalBiayaColumn;
+    @FXML
+    private TableColumn<PembangunanHead, String> metodeColumn;
+    @FXML
+    private TableColumn<PembangunanHead, String> tipeKeuanganColumn;
+    @FXML
+    private TableColumn<PembangunanHead, String> kodeUserColumn;
+    @FXML
+    private TextField searchField;
+    @FXML
+    private DatePicker tglAwalPicker;
+    @FXML
+    private DatePicker tglAkhirPicker;
+    @FXML
+    private Label totalPembangunan;
     private ObservableList<PembangunanHead> allPembangunan = FXCollections.observableArrayList();
     private ObservableList<PembangunanHead> filterData = FXCollections.observableArrayList();
-    private Main mainApp;   
+    private Main mainApp;
+
     public void initialize() {
         noPembangunanColumn.setCellValueFactory(cellData -> cellData.getValue().noPembangunanProperty());
         noPembangunanColumn.setCellFactory(col -> Function.getWrapTableCell(noPembangunanColumn));
-        
-        tglPembangunanColumn.setCellValueFactory(cellData -> { 
+
+        tglPembangunanColumn.setCellValueFactory(cellData -> {
             try {
                 return new SimpleStringProperty(tglLengkap.format(tglSql.parse(cellData.getValue().getTglPembangunan())));
             } catch (Exception ex) {
@@ -91,59 +108,60 @@ public class PembangunanController  {
         });
         tglPembangunanColumn.setCellFactory(col -> Function.getWrapTableCell(tglPembangunanColumn));
         tglPembangunanColumn.setComparator(Function.sortDate(tglLengkap));
-        
-        kategoriColumn.setCellValueFactory(cellData ->cellData.getValue().kategoriProperty());
+
+        kategoriColumn.setCellValueFactory(cellData -> cellData.getValue().kategoriProperty());
         kategoriColumn.setCellFactory(col -> Function.getWrapTableCell(kategoriColumn));
-        
-        keteranganColumn.setCellValueFactory(cellData ->cellData.getValue().keteranganProperty());
+
+        keteranganColumn.setCellValueFactory(cellData -> cellData.getValue().keteranganProperty());
         keteranganColumn.setCellFactory(col -> Function.getWrapTableCell(keteranganColumn));
-        
-        totalPropertyColumn.setCellValueFactory(cellData ->cellData.getValue().totalPropertyProperty());
+
+        totalPropertyColumn.setCellValueFactory(cellData -> cellData.getValue().totalPropertyProperty());
         totalPropertyColumn.setCellFactory(col -> getTableCell(qty));
-        
-        totalLuasTanahColumn.setCellValueFactory(cellData ->cellData.getValue().totalLuasTanahProperty());
+
+        totalLuasTanahColumn.setCellValueFactory(cellData -> cellData.getValue().totalLuasTanahProperty());
         totalLuasTanahColumn.setCellFactory(col -> getTableCell(qty));
-        
-        totalBiayaColumn.setCellValueFactory(cellData ->cellData.getValue().totalBiayaProperty());
+
+        totalBiayaColumn.setCellValueFactory(cellData -> cellData.getValue().totalBiayaProperty());
         totalBiayaColumn.setCellFactory(col -> getTableCell(rp));
-        
-        metodeColumn.setCellValueFactory(cellData ->cellData.getValue().metodeProperty());
+
+        metodeColumn.setCellValueFactory(cellData -> cellData.getValue().metodeProperty());
         metodeColumn.setCellFactory(col -> Function.getWrapTableCell(metodeColumn));
-        
-        tipeKeuanganColumn.setCellValueFactory(cellData ->cellData.getValue().tipeKeuanganProperty());
+
+        tipeKeuanganColumn.setCellValueFactory(cellData -> cellData.getValue().tipeKeuanganProperty());
         tipeKeuanganColumn.setCellFactory(col -> Function.getWrapTableCell(tipeKeuanganColumn));
-        
-        kodeUserColumn.setCellValueFactory(cellData ->cellData.getValue().kodeUserProperty());
+
+        kodeUserColumn.setCellValueFactory(cellData -> cellData.getValue().kodeUserProperty());
         kodeUserColumn.setCellFactory(col -> Function.getWrapTableCell(kodeUserColumn));
-        
+
         tglAwalPicker.setConverter(Function.getTglConverter());
         tglAwalPicker.setValue(LocalDate.now().minusMonths(1));
         tglAwalPicker.setDayCellFactory((final DatePicker datePicker) -> getDateCellMulai(tglAkhirPicker));
-        
+
         tglAkhirPicker.setConverter(Function.getTglConverter());
         tglAkhirPicker.setValue(LocalDate.now());
         tglAkhirPicker.setDayCellFactory((final DatePicker datePicker) -> getDateCellAkhir(tglAwalPicker));
-        
+
         allPembangunan.addListener((ListChangeListener.Change<? extends PembangunanHead> change) -> {
             searchPembangunan();
         });
         searchField.textProperty().addListener(
-            (ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
-            searchPembangunan();
-        });
+                (ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
+                    searchPembangunan();
+                });
         filterData.addAll(allPembangunan);
         ContextMenu rowMenu = new ContextMenu();
         MenuItem addNew = new MenuItem("Add New Pembangunan");
-        addNew.setOnAction((ActionEvent e)->{
+        addNew.setOnAction((ActionEvent e) -> {
             addNewPembangunan();
         });
         MenuItem refresh = new MenuItem("Refresh");
-        refresh.setOnAction((ActionEvent e)->{
+        refresh.setOnAction((ActionEvent e) -> {
             getPembangunan();
         });
-        for(Otoritas o : sistem.getUser().getOtoritas()){
-            if(o.getJenis().equals("Add New Pembangunan")&&o.isStatus())
+        for (Otoritas o : sistem.getUser().getOtoritas()) {
+            if (o.getJenis().equals("Add New Pembangunan") && o.isStatus()) {
                 rowMenu.getItems().add(addNew);
+            }
         }
         rowMenu.getItems().addAll(refresh);
         pembangunanTable.setContextMenu(rowMenu);
@@ -154,10 +172,10 @@ public class PembangunanController  {
                     super.updateItem(item, empty);
                     if (empty) {
                         setContextMenu(rowMenu);
-                    }else{ 
+                    } else {
                         ContextMenu rowMenu = new ContextMenu();
                         MenuItem addNew = new MenuItem("Add New Pembangunan");
-                        addNew.setOnAction((ActionEvent e)->{
+                        addNew.setOnAction((ActionEvent e) -> {
                             addNewPembangunan();
                         });
                         MenuItem batal = new MenuItem("Batal Pembangunan");
@@ -169,16 +187,19 @@ public class PembangunanController  {
                             detailPembangunan(item);
                         });
                         MenuItem refresh = new MenuItem("Refresh");
-                        refresh.setOnAction((ActionEvent e)->{
+                        refresh.setOnAction((ActionEvent e) -> {
                             getPembangunan();
                         });
-                        for(Otoritas o : sistem.getUser().getOtoritas()){
-                            if(o.getJenis().equals("Add New Pembangunan")&&o.isStatus())
+                        for (Otoritas o : sistem.getUser().getOtoritas()) {
+                            if (o.getJenis().equals("Add New Pembangunan") && o.isStatus()) {
                                 rowMenu.getItems().add(addNew);
-                            if(o.getJenis().equals("Detail Pembangunan")&&o.isStatus())
+                            }
+                            if (o.getJenis().equals("Detail Pembangunan") && o.isStatus()) {
                                 rowMenu.getItems().add(detail);
-                            if(o.getJenis().equals("Batal Pembangunan")&&o.isStatus())
+                            }
+                            if (o.getJenis().equals("Batal Pembangunan") && o.isStatus()) {
                                 rowMenu.getItems().add(batal);
+                            }
                         }
                         rowMenu.getItems().addAll(refresh);
                         setContextMenu(rowMenu);
@@ -186,25 +207,29 @@ public class PembangunanController  {
                 }
             };
             row.setOnMouseClicked((MouseEvent mouseEvent) -> {
-                if(mouseEvent.getButton().equals(MouseButton.PRIMARY) && mouseEvent.getClickCount() == 2)
-                    for(Otoritas o : sistem.getUser().getOtoritas()){
-                        if(o.getJenis().equals("Detail Pembangunan")&&o.isStatus())
+                if (mouseEvent.getButton().equals(MouseButton.PRIMARY) && mouseEvent.getClickCount() == 2) {
+                    for (Otoritas o : sistem.getUser().getOtoritas()) {
+                        if (o.getJenis().equals("Detail Pembangunan") && o.isStatus()) {
                             detailPembangunan(row.getItem());
+                        }
                     }
+                }
             });
             return row;
         });
     }
-    public void setMainApp(Main mainApp){
+
+    public void setMainApp(Main mainApp) {
         this.mainApp = mainApp;
         getPembangunan();
         pembangunanTable.setItems(filterData);
     }
+
     @FXML
-    private void getPembangunan(){
+    private void getPembangunan() {
         Task<List<PembangunanHead>> task = new Task<List<PembangunanHead>>() {
-            @Override 
-            public List<PembangunanHead> call() throws Exception{
+            @Override
+            public List<PembangunanHead> call() throws Exception {
                 try (Connection con = Koneksi.getConnection()) {
                     List<PembangunanHead> listPembangunan = PembangunanHeadDAO.getAllByDateAndStatus(
                             con, tglAwalPicker.getValue().toString(), tglAkhirPicker.getValue().toString(), "true");
@@ -226,61 +251,67 @@ public class PembangunanController  {
         });
         new Thread(task).start();
     }
-    private Boolean checkColumn(String column){
-        if(column!=null){
-            if(column.toLowerCase().contains(searchField.getText().toLowerCase()))
+
+    private Boolean checkColumn(String column) {
+        if (column != null) {
+            if (column.toLowerCase().contains(searchField.getText().toLowerCase())) {
                 return true;
+            }
         }
         return false;
     }
+
     private void searchPembangunan() {
         filterData.clear();
         for (PembangunanHead temp : allPembangunan) {
-            if (searchField.getText() == null || searchField.getText().equals(""))
+            if (searchField.getText() == null || searchField.getText().equals("")) {
                 filterData.add(temp);
-            else{
-                if(checkColumn(temp.getNoPembangunan())||
-                    checkColumn(temp.getTglPembangunan())||
-                    checkColumn(temp.getKategori())||
-                    checkColumn(temp.getTipeKeuangan())||
-                    checkColumn(temp.getMetode())||
-                    checkColumn(temp.getKeterangan())||
-                    checkColumn(qty.format(temp.getTotalProperty()))||
-                    checkColumn(qty.format(temp.getTotalLuasTanah()))||
-                    checkColumn(rp.format(temp.getTotalBiaya()))||
-                    checkColumn(temp.getKodeUser()))
-                        filterData.add(temp);
+            } else {
+                if (checkColumn(temp.getNoPembangunan())
+                        || checkColumn(temp.getTglPembangunan())
+                        || checkColumn(temp.getKategori())
+                        || checkColumn(temp.getTipeKeuangan())
+                        || checkColumn(temp.getMetode())
+                        || checkColumn(temp.getKeterangan())
+                        || checkColumn(qty.format(temp.getTotalProperty()))
+                        || checkColumn(qty.format(temp.getTotalLuasTanah()))
+                        || checkColumn(rp.format(temp.getTotalBiaya()))
+                        || checkColumn(temp.getKodeUser())) {
+                    filterData.add(temp);
+                }
             }
         }
         hitungTotal();
     }
-    private void hitungTotal(){
+
+    private void hitungTotal() {
         double total = 0;
-        for(PembangunanHead pt : filterData){
+        for (PembangunanHead pt : filterData) {
             total = total + pt.getTotalBiaya();
         }
         totalPembangunan.setText(rp.format(total));
     }
+
     @FXML
-    private void addNewPembangunan(){
+    private void addNewPembangunan() {
         Stage stage = new Stage();
         FXMLLoader loader = mainApp.showDialog(mainApp.MainStage, stage, "View/Dialog/DetailPembangunan.fxml");
         DetailPembangunanController x = loader.getController();
         x.setMainApp(mainApp, mainApp.MainStage, stage);
         x.setNewPembangunan();
-        x.saveButton.setOnAction((ActionEvent ev)->{
-            if("".equals(x.totalBiayaAkhirLabel.getText())||"0".equals(x.totalBiayaAkhirLabel.getText())){
+        x.saveButton.setOnAction((ActionEvent ev) -> {
+            if ("".equals(x.totalBiayaAkhirLabel.getText()) || "0".equals(x.totalBiayaAkhirLabel.getText())) {
                 mainApp.showMessage(Modality.NONE, "Warning", "Total biaya masih kosong");
-            }else if(x.kategoriCombo.getSelectionModel().getSelectedItem()==null||
-                    "".equals(x.kategoriCombo.getSelectionModel().getSelectedItem())){
+            } else if (x.kategoriCombo.getSelectionModel().getSelectedItem() == null
+                    || "".equals(x.kategoriCombo.getSelectionModel().getSelectedItem())) {
                 mainApp.showMessage(Modality.NONE, "Warning", "Kategori pembangunan belum dipilih");
-            }else if(x.tipeKeuanganCombo.getSelectionModel().getSelectedItem()==null||
-                    "".equals(x.tipeKeuanganCombo.getSelectionModel().getSelectedItem())){
+            } else if (x.tipeKeuanganCombo.getSelectionModel().getSelectedItem() == null
+                    || "".equals(x.tipeKeuanganCombo.getSelectionModel().getSelectedItem())) {
                 mainApp.showMessage(Modality.NONE, "Warning", "Tipe Keuangan belum dipilih");
-            }else{
+            } else {
                 Task<String> task = new Task<String>() {
-                    @Override 
-                    public String call() throws Exception{
+                    @Override
+                    public String call() throws Exception {
                         try (Connection con = Koneksi.getConnection()) {
                             PembangunanHead p = new PembangunanHead();
                             p.setNoPembangunan(PembangunanHeadDAO.getId(con));
@@ -297,10 +328,11 @@ public class PembangunanController  {
                             p.setTglBatal("2000-01-01 00:00:00");
                             p.setUserBatal("");
                             List<PembangunanDetail> detail = new ArrayList<>();
-                            for(PembangunanDetail d : x.allDetail){
+                            for (PembangunanDetail d : x.allDetail) {
                                 d.setNoPembangunan(p.getNoPembangunan());
-                                if(d.isStatus())
+                                if (d.isStatus()) {
                                     detail.add(d);
+                                }
                             }
                             p.setAllDetail(detail);
                             return Service.savePembangunan(con, p);
@@ -313,10 +345,10 @@ public class PembangunanController  {
                 task.setOnSucceeded((WorkerStateEvent e) -> {
                     mainApp.closeLoading();
                     getPembangunan();
-                    if(task.getValue().equals("true")){
+                    if (task.getValue().equals("true")) {
                         mainApp.closeDialog(mainApp.MainStage, stage);
-                        mainApp.showMessage(Modality.NONE, "Success","Pembangunan berhasil disimpan");
-                    }else{
+                        mainApp.showMessage(Modality.NONE, "Success", "Pembangunan berhasil disimpan");
+                    } else {
                         mainApp.showMessage(Modality.NONE, "Failed", task.getValue());
                     }
                 });
@@ -328,37 +360,41 @@ public class PembangunanController  {
             }
         });
     }
-    private void detailPembangunan(PembangunanHead p){
+
+    private void detailPembangunan(PembangunanHead p) {
         Stage stage = new Stage();
         FXMLLoader loader = mainApp.showDialog(mainApp.MainStage, stage, "View/Dialog/DetailPembangunan.fxml");
         DetailPembangunanController x = loader.getController();
         x.setMainApp(mainApp, mainApp.MainStage, stage);
         x.getPembangunan(p.getNoPembangunan());
     }
-    private void deletePembangunan(PembangunanHead p){
+
+    private void deletePembangunan(PembangunanHead p) {
         MessageController controller = mainApp.showMessage(Modality.WINDOW_MODAL, "Confirmation",
-                "Batal pembangunan " + p.getNoPembangunan()+ ", anda yakin ?");
+                "Batal pembangunan " + p.getNoPembangunan() + ", anda yakin ?");
         controller.OK.setOnAction((ActionEvent ev) -> {
             Task<String> task = new Task<String>() {
-                @Override 
-                public String call() throws Exception{
+                @Override
+                public String call() throws Exception {
                     try (Connection con = Koneksi.getConnection()) {
                         p.setAllDetail(PembangunanDetailDAO.getAllByNo(con, p.getNoPembangunan()));
                         Boolean statusTanah = true;
-                        for(PembangunanDetail detail : p.getAllDetail()){
+                        for (PembangunanDetail detail : p.getAllDetail()) {
                             Property prop = PropertyDAO.get(con, detail.getKodeProperty());
-                            if(prop.getStatus().equals("Mapped")||
-                                    prop.getStatus().equals("Combined")||
-                                    prop.getStatus().equals("Sold"))
+                            if (prop.getStatus().equals("Mapped")
+                                    || prop.getStatus().equals("Combined")
+                                    || prop.getStatus().equals("Sold")) {
                                 statusTanah = false;
+                            }
                         }
-                        if(statusTanah){
+                        if (statusTanah) {
                             p.setTglBatal(tglSql.format(new Date()));
                             p.setUserBatal(sistem.getUser().getUsername());
                             p.setStatus("false");
                             return Service.batalPembangunan(con, p);
-                        }else 
+                        } else {
                             return "Pembangunan tidak dapat dibatalkan, karena status tanah sudah terjual/sudah dipecah/sudah digabung";
+                        }
                     }
                 }
             };
@@ -368,10 +404,11 @@ public class PembangunanController  {
             task.setOnSucceeded((WorkerStateEvent e) -> {
                 mainApp.closeLoading();
                 getPembangunan();
-                if (task.getValue().equals("true")) 
+                if (task.getValue().equals("true")) {
                     mainApp.showMessage(Modality.NONE, "Success", "Data Pembangunan berhasil dibatal");
-                else 
+                } else {
                     mainApp.showMessage(Modality.NONE, "Failed", task.getValue());
+                }
             });
             task.setOnFailed((e) -> {
                 mainApp.showMessage(Modality.NONE, "Error", task.getException().toString());
@@ -380,5 +417,5 @@ public class PembangunanController  {
             new Thread(task).start();
         });
     }
-    
+
 }

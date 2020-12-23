@@ -17,42 +17,40 @@ import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
-import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
-import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafx.util.Callback;
 
 /**
  * FXML Controller class
  *
  * @author Xtreme
  */
-public class KategoriPiutangController  {
+public class KategoriPiutangController {
 
-    @FXML private TableView<KategoriPiutang> kategoriPiutangTable;
-    @FXML private TableColumn<KategoriPiutang, String> kodeKategoriColumn;
-    
-    @FXML private TextField kodeKategoriField;
-    private ObservableList<KategoriPiutang> allKategoriPiutang= FXCollections.observableArrayList();
-    
+    @FXML
+    private TableView<KategoriPiutang> kategoriPiutangTable;
+    @FXML
+    private TableColumn<KategoriPiutang, String> kodeKategoriColumn;
+
+    @FXML
+    private TextField kodeKategoriField;
+    private ObservableList<KategoriPiutang> allKategoriPiutang = FXCollections.observableArrayList();
+
     private Main mainApp;
     private Stage owner;
     private Stage stage;
+
     public void initialize() {
         kodeKategoriColumn.setCellValueFactory(cellData -> cellData.getValue().kodeKategoriProperty());
-        
+
         final ContextMenu rm = new ContextMenu();
         MenuItem refresh = new MenuItem("Refresh");
         refresh.setOnAction((ActionEvent event) -> {
@@ -61,13 +59,13 @@ public class KategoriPiutangController  {
         rm.getItems().addAll(refresh);
         kategoriPiutangTable.setContextMenu(rm);
         kategoriPiutangTable.setRowFactory(table -> {
-            TableRow<KategoriPiutang> row = new TableRow<KategoriPiutang>(){
+            TableRow<KategoriPiutang> row = new TableRow<KategoriPiutang>() {
                 @Override
                 public void updateItem(KategoriPiutang item, boolean empty) {
                     super.updateItem(item, empty);
                     if (empty) {
                         setContextMenu(rm);
-                    }else{
+                    } else {
                         final ContextMenu rm = new ContextMenu();
                         MenuItem hapus = new MenuItem("Delete Kategori Piutang");
                         hapus.setOnAction((ActionEvent event) -> {
@@ -77,7 +75,7 @@ public class KategoriPiutangController  {
                         refresh.setOnAction((ActionEvent event) -> {
                             getKategoriPiutang();
                         });
-                        rm.getItems().addAll(hapus,refresh);
+                        rm.getItems().addAll(hapus, refresh);
                         setContextMenu(rm);
                     }
                 }
@@ -85,11 +83,12 @@ public class KategoriPiutangController  {
             return row;
         });
         kodeKategoriField.setOnKeyPressed((KeyEvent keyEvent) -> {
-            if (keyEvent.getCode() == KeyCode.ENTER)  
+            if (keyEvent.getCode() == KeyCode.ENTER) {
                 saveKategoriPiutang();
+            }
         });
     }
-    
+
     public void setMainApp(Main mainApp, Stage owner, Stage stage) {
         this.mainApp = mainApp;
         this.stage = stage;
@@ -100,12 +99,13 @@ public class KategoriPiutangController  {
             mainApp.closeDialog(owner, stage);
         });
     }
-    private void getKategoriPiutang(){
-        try{
+
+    private void getKategoriPiutang() {
+        try {
             Task<List<KategoriPiutang>> task = new Task<List<KategoriPiutang>>() {
-                @Override 
-                public List<KategoriPiutang> call() throws Exception{
-                    try(Connection con = Koneksi.getConnection()){
+                @Override
+                public List<KategoriPiutang> call() throws Exception {
+                    try (Connection con = Koneksi.getConnection()) {
                         return KategoriPiutangDAO.getAll(con);
                     }
                 }
@@ -124,19 +124,20 @@ public class KategoriPiutangController  {
                 mainApp.showMessage(Modality.NONE, "Error", task.getException().toString());
             });
             new Thread(task).start();
-        }catch(Exception e){
+        } catch (Exception e) {
             mainApp.showMessage(Modality.NONE, "Error", e.toString());
         }
     }
-    private void deleteKategoriPiutang(KategoriPiutang temp){
+
+    private void deleteKategoriPiutang(KategoriPiutang temp) {
         MessageController controller = mainApp.showMessage(Modality.WINDOW_MODAL, "Confirmation",
-                "Delete Kategori Piutang "+temp.getKodeKategori()+" ?");
+                "Delete Kategori Piutang " + temp.getKodeKategori() + " ?");
         controller.OK.setOnAction((ActionEvent ex) -> {
-            try{
+            try {
                 Task<String> task = new Task<String>() {
-                    @Override 
-                    public String call() throws Exception{
-                        try(Connection con = Koneksi.getConnection()){
+                    @Override
+                    public String call() throws Exception {
+                        try (Connection con = Koneksi.getConnection()) {
                             return Service.deleteKategoriPiutang(con, temp);
                         }
                     }
@@ -148,42 +149,46 @@ public class KategoriPiutangController  {
                     mainApp.closeLoading();
                     getKategoriPiutang();
                     String status = task.getValue();
-                    if(status.equals("true")){
+                    if (status.equals("true")) {
                         mainApp.showMessage(Modality.NONE, "Success", "Kategori Piutang berhasil dihapus");
                         kodeKategoriField.setText("");
-                    }else
+                    } else {
                         mainApp.showMessage(Modality.NONE, "Failed", status);
+                    }
                 });
                 task.setOnFailed((e) -> {
                     mainApp.closeLoading();
                     mainApp.showMessage(Modality.NONE, "Error", task.getException().toString());
                 });
                 new Thread(task).start();
-            }catch(Exception e){
+            } catch (Exception e) {
                 mainApp.showMessage(Modality.NONE, "Error", e.toString());
             }
         });
     }
+
     @FXML
-    private void saveKategoriPiutang(){
-        if(kodeKategoriField.getText().equals(""))
+    private void saveKategoriPiutang() {
+        if (kodeKategoriField.getText().equals("")) {
             mainApp.showMessage(Modality.NONE, "Warning", "Kode kategori masih kosong");
-        else{
+        } else {
             Boolean s = true;
-            for(KategoriPiutang k : allKategoriPiutang){
-                if(k.getKodeKategori().equals(kodeKategoriField.getText()))
+            for (KategoriPiutang k : allKategoriPiutang) {
+                if (k.getKodeKategori().equals(kodeKategoriField.getText())) {
                     s = false;
+                }
             }
-            if(kodeKategoriField.getText().equals("Piutang Penjualan"))
+            if (kodeKategoriField.getText().equals("Piutang Penjualan")) {
                 s = false;
-            if(s){
-                try{
+            }
+            if (s) {
+                try {
                     KategoriPiutang k = new KategoriPiutang();
                     k.setKodeKategori(kodeKategoriField.getText());
                     Task<String> task = new Task<String>() {
-                        @Override 
-                        public String call() throws Exception{
-                            try(Connection con = Koneksi.getConnection()){
+                        @Override
+                        public String call() throws Exception {
+                            try (Connection con = Koneksi.getConnection()) {
                                 return Service.newKategoriPiutang(con, k);
                             }
                         }
@@ -195,26 +200,28 @@ public class KategoriPiutangController  {
                         mainApp.closeLoading();
                         getKategoriPiutang();
                         String status = task.getValue();
-                        if(status.equals("true")){
+                        if (status.equals("true")) {
                             mainApp.showMessage(Modality.NONE, "Success", "Kategori Piutang berhasil disimpan");
                             kodeKategoriField.setText("");
-                        }else
+                        } else {
                             mainApp.showMessage(Modality.NONE, "Failed", status);
+                        }
                     });
                     task.setOnFailed((e) -> {
                         mainApp.closeLoading();
                         mainApp.showMessage(Modality.NONE, "Error", task.getException().toString());
                     });
                     new Thread(task).start();
-                }catch(Exception e){
+                } catch (Exception e) {
                     mainApp.showMessage(Modality.NONE, "Error", e.toString());
                 }
-            }else{
+            } else {
                 mainApp.showMessage(Modality.NONE, "Warning", "Kode Kategori sudah terdaftar");
             }
         }
-    }  
-    public void close(){
+    }
+
+    public void close() {
         mainApp.closeDialog(owner, stage);
     }
 }

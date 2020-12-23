@@ -9,9 +9,11 @@ import com.excellentsystem.jagobangunpersadafx.DAO.SistemDAO;
 import static com.excellentsystem.jagobangunpersadafx.Function.createSecretKey;
 import com.excellentsystem.jagobangunpersadafx.Model.Sistem;
 import com.excellentsystem.jagobangunpersadafx.Service.Service;
+import com.excellentsystem.jagobangunpersadafx.View.AddendumController;
 import com.excellentsystem.jagobangunpersadafx.View.AsetTetapController;
 import com.excellentsystem.jagobangunpersadafx.View.DataCustomerController;
 import com.excellentsystem.jagobangunpersadafx.View.DataKaryawanController;
+import com.excellentsystem.jagobangunpersadafx.View.DataKontraktorController;
 import com.excellentsystem.jagobangunpersadafx.View.DataPropertyController;
 import com.excellentsystem.jagobangunpersadafx.View.DataTukangController;
 import com.excellentsystem.jagobangunpersadafx.View.Dialog.DataUserController;
@@ -30,6 +32,7 @@ import com.excellentsystem.jagobangunpersadafx.View.MainController;
 import com.excellentsystem.jagobangunpersadafx.View.ModalController;
 import com.excellentsystem.jagobangunpersadafx.View.PelunasanDownPaymentController;
 import com.excellentsystem.jagobangunpersadafx.View.PembangunanController;
+import com.excellentsystem.jagobangunpersadafx.View.PembangunanKontraktorController;
 import com.excellentsystem.jagobangunpersadafx.View.PembelianTanahController;
 import com.excellentsystem.jagobangunpersadafx.View.PencairanKPRController;
 import com.excellentsystem.jagobangunpersadafx.View.PiutangController;
@@ -240,6 +243,13 @@ public class Main extends Application {
         setTitle("Data Customer");
         return controller;
     }
+    public DataKontraktorController showDataKontraktor(){
+        FXMLLoader loader = changeStage("View/DataKontraktor.fxml");
+        DataKontraktorController controller = loader.getController();
+        controller.setMainApp(this);
+        setTitle("Data Kontraktor");
+        return controller;
+    }
     public DataKaryawanController showDataKaryawan(){
         FXMLLoader loader = changeStage("View/DataKaryawan.fxml");
         DataKaryawanController controller = loader.getController();
@@ -273,6 +283,13 @@ public class Main extends Application {
         PembangunanController controller = loader.getController();
         controller.setMainApp(this);
         setTitle("Pembangunan");
+        return controller;
+    }
+    public PembangunanKontraktorController showPembangunanKontraktor(){
+        FXMLLoader loader = changeStage("View/PembangunanKontraktor.fxml");
+        PembangunanKontraktorController controller = loader.getController();
+        controller.setMainApp(this);
+        setTitle("Pembangunan Kontraktor");
         return controller;
     }
     public RencanaAnggaranProyekController showRencanaAnggaranProyek(){
@@ -315,6 +332,13 @@ public class Main extends Application {
         PencairanKPRController controller = loader.getController();
         controller.setMainApp(this);
         setTitle("Terima Pencairan KPR");
+        return controller;
+    }
+    public AddendumController showAddendum(){
+        FXMLLoader loader = changeStage("View/Addendum.fxml");
+        AddendumController controller = loader.getController();
+        controller.setMainApp(this);
+        setTitle("Addendum");
         return controller;
     }
     public SerahTerimaController showSerahTerima(){

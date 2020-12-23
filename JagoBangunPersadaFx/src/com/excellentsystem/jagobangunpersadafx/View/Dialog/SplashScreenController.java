@@ -17,10 +17,13 @@ import javafx.scene.layout.VBox;
  */
 public class SplashScreenController {
 
-    @FXML VBox vbox;
+    @FXML
+    private VBox vbox;
+
     public void initialize() {
-    }    
-    public void setSplashScreen(ProgressBar p, Label l){
+    }
+
+    public void setSplashScreen(ProgressBar p, Label l) {
         vbox.getChildren().add(l);
         vbox.getChildren().add(p);
     }

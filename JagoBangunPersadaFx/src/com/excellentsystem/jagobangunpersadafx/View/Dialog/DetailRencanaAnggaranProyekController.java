@@ -37,28 +37,39 @@ import javafx.stage.Stage;
  *
  * @author ASUS
  */
-public class DetailRencanaAnggaranProyekController  {
+public class DetailRencanaAnggaranProyekController {
 
-    @FXML private TextField noRAPField;
-    @FXML private TextField tglRAPField;
-    @FXML public ComboBox<String> kategoriCombo;
-    @FXML public TextField keteranganField;
-    @FXML public TextField estimasiField;
-    @FXML public TextField totalAnggaranField;
-    @FXML public TextField totalPropertyField;
-    
-    @FXML public Button saveButton;
-    @FXML public Button cancelButton;
-    
+    @FXML
+    private TextField noRAPField;
+    @FXML
+    private TextField tglRAPField;
+    @FXML
+    public ComboBox<String> kategoriCombo;
+    @FXML
+    public TextField keteranganField;
+    @FXML
+    public TextField estimasiField;
+    @FXML
+    public TextField totalAnggaranField;
+    @FXML
+    public TextField totalPropertyField;
+
+    @FXML
+    public Button saveButton;
+    @FXML
+    public Button cancelButton;
+
     public RAPHead rapHead;
     public String status;
     private Main mainApp;
     private Stage owner;
     private Stage stage;
+
     public void initialize() {
         Function.setNumberField(estimasiField);
-    }    
-    public void setMainApp(Main mainApp,Stage owner, Stage stage){
+    }
+
+    public void setMainApp(Main mainApp, Stage owner, Stage stage) {
         this.mainApp = mainApp;
         this.owner = owner;
         this.stage = stage;
@@ -67,7 +78,7 @@ public class DetailRencanaAnggaranProyekController  {
         });
         stage.setX((mainApp.screenSize.getWidth() - stage.getWidth()) / 2);
         stage.setY((mainApp.screenSize.getHeight() - stage.getHeight()) / 2);
-        
+
         ObservableList<String> x = FXCollections.observableArrayList();
         x.add("PENGURUSAN SERTIFIKAT");
         x.add("INFRASTRUKTUR");
@@ -81,7 +92,8 @@ public class DetailRencanaAnggaranProyekController  {
         kategoriCombo.setItems(x);
         kategoriCombo.getSelectionModel().clearSelection();
     }
-    public void setNewRAP(){
+
+    public void setNewRAP() {
         status = "new";
         rapHead = new RAPHead();
         rapHead.setListRapDetail(new ArrayList<>());
@@ -89,14 +101,15 @@ public class DetailRencanaAnggaranProyekController  {
         noRAPField.setText("-");
         tglRAPField.setText(tglLengkap.format(new Date()));
     }
-    public void setRAP(RAPHead rap){
+
+    public void setRAP(RAPHead rap) {
         Task<RAPHead> task = new Task<RAPHead>() {
-            @Override 
-            public RAPHead call() throws Exception{
+            @Override
+            public RAPHead call() throws Exception {
                 try (Connection con = Koneksi.getConnection()) {
                     rap.setListRapDetail(RAPDetailDAO.getAllByNoRap(con, rap.getNoRap()));
                     rap.setListRapPropertyDetail(RAPDetailPropertyDAO.getAllByNoRap(con, rap.getNoRap()));
-                    for(RAPDetailProperty d : rap.getListRapPropertyDetail()){
+                    for (RAPDetailProperty d : rap.getListRapPropertyDetail()) {
                         d.setStatus(true);
                         d.setProperty(PropertyDAO.get(con, d.getKodeProperty()));
                     }
@@ -108,21 +121,21 @@ public class DetailRencanaAnggaranProyekController  {
             mainApp.showLoadingScreen();
         });
         task.setOnSucceeded((e) -> {
-            try{
+            try {
                 mainApp.closeLoading();
                 rapHead = rap;
                 kategoriCombo.setDisable(true);
                 keteranganField.setDisable(true);
                 estimasiField.setDisable(true);
-                if(sistem.getUser().getLevel().equals("Manager")&& rap.getStatusApproval().equals("On Review")){
+                if (sistem.getUser().getLevel().equals("Manager") && rap.getStatusApproval().equals("On Review")) {
                     saveButton.setText("Approved");
                     cancelButton.setText("Rejected");
-                }else{
+                } else {
                     saveButton.setText("Approved");
                     cancelButton.setText("Rejected");
                     saveButton.setVisible(false);
                     cancelButton.setVisible(false);
-                    stage.setHeight(stage.getHeight()-30);
+                    stage.setHeight(stage.getHeight() - 30);
                 }
 
                 noRAPField.setText(rap.getNoRap());
@@ -132,7 +145,7 @@ public class DetailRencanaAnggaranProyekController  {
                 estimasiField.setText(rp.format(rap.getPerkiraanWaktu()));
                 totalAnggaranField.setText(rp.format(rap.getTotalAnggaran()));
                 totalPropertyField.setText(rp.format(rap.getTotalProperty()));
-            }catch(Exception ex){
+            } catch (Exception ex) {
                 mainApp.showMessage(Modality.NONE, "Error", ex.toString());
             }
         });
@@ -142,16 +155,17 @@ public class DetailRencanaAnggaranProyekController  {
             mainApp.closeLoading();
         });
         new Thread(task).start();
-        
+
     }
-    public void setEditRAP(RAPHead rap){
+
+    public void setEditRAP(RAPHead rap) {
         Task<RAPHead> task = new Task<RAPHead>() {
-            @Override 
-            public RAPHead call() throws Exception{
+            @Override
+            public RAPHead call() throws Exception {
                 try (Connection con = Koneksi.getConnection()) {
                     rap.setListRapDetail(RAPDetailDAO.getAllByNoRap(con, rap.getNoRap()));
                     rap.setListRapPropertyDetail(RAPDetailPropertyDAO.getAllByNoRap(con, rap.getNoRap()));
-                    for(RAPDetailProperty d : rap.getListRapPropertyDetail()){
+                    for (RAPDetailProperty d : rap.getListRapPropertyDetail()) {
                         d.setStatus(true);
                         d.setProperty(PropertyDAO.get(con, d.getKodeProperty()));
                     }
@@ -163,7 +177,7 @@ public class DetailRencanaAnggaranProyekController  {
             mainApp.showLoadingScreen();
         });
         task.setOnSucceeded((e) -> {
-            try{
+            try {
                 mainApp.closeLoading();
                 status = "edit";
                 rapHead = rap;
@@ -175,7 +189,7 @@ public class DetailRencanaAnggaranProyekController  {
                 estimasiField.setText(rp.format(rap.getPerkiraanWaktu()));
                 totalAnggaranField.setText(rp.format(rap.getTotalAnggaran()));
                 totalPropertyField.setText(rp.format(rap.getTotalProperty()));
-            }catch(Exception ex){
+            } catch (Exception ex) {
                 mainApp.showMessage(Modality.NONE, "Error", ex.toString());
             }
         });
@@ -185,50 +199,56 @@ public class DetailRencanaAnggaranProyekController  {
             mainApp.closeLoading();
         });
         new Thread(task).start();
-        
+
     }
+
     @FXML
-    private void setAnggaranDetail(){
+    private void setAnggaranDetail() {
         Stage child = new Stage();
         FXMLLoader loader = mainApp.showDialog(stage, child, "View/Dialog/DetailAnggaran.fxml");
         DetailAnggaranController x = loader.getController();
         x.setMainApp(mainApp, stage, child);
         x.setDetailAnggaran(rapHead.getListRapDetail());
-        if(!saveButton.getText().equals("Save"))
+        if (!saveButton.getText().equals("Save")) {
             x.setViewOnly();
+        }
         x.closeButton.setOnAction((event) -> {
             mainApp.closeDialog(stage, child);
             rapHead.setListRapDetail(x.allAnggaranDetail);
             double total = 0;
-            for(RAPDetail d : rapHead.getListRapDetail()){
+            for (RAPDetail d : rapHead.getListRapDetail()) {
                 total = total + d.getTotal();
             }
             totalAnggaranField.setText(rp.format(total));
         });
     }
+
     @FXML
-    private void setDetailProperty(){
+    private void setDetailProperty() {
         Stage child = new Stage();
         FXMLLoader loader = mainApp.showDialog(stage, child, "View/Dialog/DetailProyekProperty.fxml");
         DetailProyekPropertyController x = loader.getController();
         x.setMainApp(mainApp, stage, child);
         x.setProperty(rapHead.getMetodePembagian(), rapHead.getListRapPropertyDetail());
-        if(!saveButton.getText().equals("Save"))
+        if (!saveButton.getText().equals("Save")) {
             x.setViewOnly();
+        }
         x.closeButton.setOnAction((event) -> {
             mainApp.closeDialog(stage, child);
             rapHead.setMetodePembagian(x.metodeCombo.getSelectionModel().getSelectedItem());
             rapHead.setListRapPropertyDetail(x.allDetail);
             double total = 0;
-            for(RAPDetailProperty d : rapHead.getListRapPropertyDetail()){
-                if(d.isStatus())
+            for (RAPDetailProperty d : rapHead.getListRapPropertyDetail()) {
+                if (d.isStatus()) {
                     total = total + 1;
+                }
             }
             totalPropertyField.setText(rp.format(total));
         });
     }
-    @FXML 
-    private void close(){
+
+    @FXML
+    private void close() {
         mainApp.closeDialog(owner, stage);
     }
 }

@@ -37,32 +37,39 @@ import javafx.stage.Modality;
  */
 public class LoginController {
 
-    @FXML private Label versionLabel;
-    @FXML private Label warning;
-    @FXML private TextField username;
-    @FXML private PasswordField password;
-    @FXML private CheckBox rememberMeCheck;
+    @FXML
+    private Label versionLabel;
+    @FXML
+    private Label warning;
+    @FXML
+    private TextField username;
+    @FXML
+    private PasswordField password;
+    @FXML
+    private CheckBox rememberMeCheck;
     private Main mainApp;
     private int attempt = 0;
     private final List<User> allUser = new ArrayList<>();
-    @FXML 
-    private void handleLoginButton(){
-        if("".equals(username.getText())){
+
+    @FXML
+    private void handleLoginButton() {
+        if ("".equals(username.getText())) {
             warning.setText("Username masih kosong");
-        }else if(password.getText().equals("")){
+        } else if (password.getText().equals("")) {
             warning.setText("Password masih kosong");
-        }else if(attempt>=3){
+        } else if (attempt >= 3) {
             System.exit(0);
-        }else{
-            try{
+        } else {
+            try {
                 User user = null;
-                for(User u : allUser){
-                    if(u.getUsername().equals(username.getText()) && password.getText().equals(decrypt(u.getPassword(), key)))
+                for (User u : allUser) {
+                    if (u.getUsername().equals(username.getText()) && password.getText().equals(decrypt(u.getPassword(), key))) {
                         user = u;
+                    }
                 }
-                if(user!=null){
-                    try{
-                        if(rememberMeCheck.isSelected()){
+                if (user != null) {
+                    try {
+                        if (rememberMeCheck.isSelected()) {
                             try (FileWriter fw = new FileWriter(new File("password"), false)) {
                                 fw.write(user.getUsername());
                                 fw.write(System.lineSeparator());
@@ -70,53 +77,56 @@ public class LoginController {
                                 fw.write(System.lineSeparator());
                                 fw.write(String.valueOf(rememberMeCheck.isSelected()));
                             }
-                        }else{
+                        } else {
                             try (FileWriter fw = new FileWriter(new File("password"), false)) {
                                 fw.write("");
                             }
                         }
                         sistem.setUser(user);
                         mainApp.showMainScene();
-                    }catch(Exception e){
+                    } catch (Exception e) {
                         mainApp.showMessage(Modality.NONE, "Error", e.toString());
                     }
-                }else{
+                } else {
                     warning.setText("Username/Password masih salah");
-                    attempt = attempt +1;
+                    attempt = attempt + 1;
                 }
-            }catch(Exception e){
+            } catch (Exception e) {
                 e.printStackTrace();
                 mainApp.showMessage(Modality.NONE, "Error", e.toString());
             }
         }
     }
-    public void setMainApp(Main mainApp){
+
+    public void setMainApp(Main mainApp) {
         try (Connection con = Koneksi.getConnection()) {
             this.mainApp = mainApp;
-            versionLabel.setText("Ver. "+mainApp.version);
-            
+            versionLabel.setText("Ver. " + mainApp.version);
+
             BufferedReader text = new BufferedReader(new FileReader("password"));
             String user = text.readLine();
-            if(user!=null){
+            if (user != null) {
                 username.setText(user);
                 password.setText(decrypt(text.readLine(), key));
                 rememberMeCheck.setSelected(Boolean.valueOf(text.readLine()));
             }
-            
+
             allUser.addAll(UserDAO.getAll(con));
             List<Otoritas> listOtoritas = OtoritasDAO.getAll(con);
             List<OtoritasKeuangan> listOtoritasKeuangan = OtoritasKeuanganDAO.getAll(con);
-            for(User u : allUser){
+            for (User u : allUser) {
                 List<Otoritas> otoritas = new ArrayList<>();
-                for(Otoritas o : listOtoritas){
-                    if(u.getUsername().equals(o.getUsername()))
+                for (Otoritas o : listOtoritas) {
+                    if (u.getUsername().equals(o.getUsername())) {
                         otoritas.add(o);
+                    }
                 }
                 u.setOtoritas(otoritas);
                 List<OtoritasKeuangan> otoritasKeuangan = new ArrayList<>();
-                for(OtoritasKeuangan o : listOtoritasKeuangan){
-                    if(u.getUsername().equals(o.getUsername()))
+                for (OtoritasKeuangan o : listOtoritasKeuangan) {
+                    if (u.getUsername().equals(o.getUsername())) {
                         otoritasKeuangan.add(o);
+                    }
                 }
                 u.setOtoritasKeuangan(otoritasKeuangan);
             }
@@ -126,6 +136,5 @@ public class LoginController {
             warning.setText(ex.toString());
         }
     }
-   
-    
+
 }

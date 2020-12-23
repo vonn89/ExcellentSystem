@@ -21,6 +21,7 @@ import javafx.stage.Stage;
  * @author Xtreme
  */
 public class DetailCustomerController {
+
     public TextField namaField;
     public ComboBox<String> jenisKelaminCombo;
     public TextArea alamatField;
@@ -34,10 +35,11 @@ public class DetailCustomerController {
     public TextField noNPWPField;
     public TextField noSPTPPHField;
     public Button saveButton;
-    private Main mainApp;  
+    private Main mainApp;
     private Stage owner;
     private Stage stage;
-    public void setMainApp(Main mainApp,Stage owner, Stage stage){
+
+    public void setMainApp(Main mainApp, Stage owner, Stage stage) {
         this.mainApp = mainApp;
         this.owner = owner;
         this.stage = stage;
@@ -54,7 +56,8 @@ public class DetailCustomerController {
             mainApp.closeDialog(owner, stage);
         });
     }
-    public void setViewOnly(){
+
+    public void setViewOnly() {
         saveButton.setVisible(false);
         namaField.setDisable(true);
         jenisKelaminCombo.setDisable(true);
@@ -68,9 +71,10 @@ public class DetailCustomerController {
         noKTPField.setDisable(true);
         noNPWPField.setDisable(true);
         noSPTPPHField.setDisable(true);
-        stage.setHeight(stage.getHeight()-30);
+        stage.setHeight(stage.getHeight() - 30);
     }
-    public void setCustomer(Customer cust){
+
+    public void setCustomer(Customer cust) {
         namaField.setText("");
         jenisKelaminCombo.getSelectionModel().select("");
         alamatField.setText("");
@@ -83,7 +87,7 @@ public class DetailCustomerController {
         noKTPField.setText("");
         noNPWPField.setText("");
         noSPTPPHField.setText("");
-        if(cust.getNama()!=null){
+        if (cust.getNama() != null) {
             namaField.setText(cust.getNama());
             jenisKelaminCombo.getSelectionModel().select(cust.getJenisKelamin());
             alamatField.setText(cust.getAlamat());
@@ -96,12 +100,14 @@ public class DetailCustomerController {
             noKTPField.setText(cust.getNoKTP());
             noNPWPField.setText(cust.getNoNPWP());
             noSPTPPHField.setText(cust.getNoSPTPPH());
-            if(!"Manager".equals(Main.sistem.getUser().getLevel()))
+            if (!"Manager".equals(Main.sistem.getUser().getLevel())) {
                 namaField.setDisable(true);
+            }
         }
     }
-    public void close(){
-        mainApp.closeDialog(owner,stage);
+
+    public void close() {
+        mainApp.closeDialog(owner, stage);
     }
-    
+
 }

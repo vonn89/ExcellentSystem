@@ -18,34 +18,33 @@ import javafx.concurrent.Task;
 import javafx.concurrent.WorkerStateEvent;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
-import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
-import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafx.util.Callback;
 
 /**
  * FXML Controller class
  *
  * @author Xtreme
  */
-public class NewTipeKeuanganController  {
-    @FXML private TableView<TipeKeuangan> tipeKeuanganTable;
-    @FXML private TableColumn<TipeKeuangan, String> kodeKeuanganColumn;
-    @FXML private TextField tipeKeuanganField;
-    private final ObservableList<TipeKeuangan> allTipeKeuangan= FXCollections.observableArrayList();
+public class NewTipeKeuanganController {
+
+    @FXML
+    private TableView<TipeKeuangan> tipeKeuanganTable;
+    @FXML
+    private TableColumn<TipeKeuangan, String> kodeKeuanganColumn;
+    @FXML
+    private TextField tipeKeuanganField;
+    private final ObservableList<TipeKeuangan> allTipeKeuangan = FXCollections.observableArrayList();
     private Main mainApp;
     private Stage owner;
     private Stage stage;
+
     public void initialize() {
         kodeKeuanganColumn.setCellValueFactory(cellData -> cellData.getValue().kodeKeuanganProperty());
 
@@ -57,13 +56,13 @@ public class NewTipeKeuanganController  {
         rm.getItems().addAll(refresh);
         tipeKeuanganTable.setContextMenu(rm);
         tipeKeuanganTable.setRowFactory(table -> {
-            TableRow<TipeKeuangan> row = new TableRow<TipeKeuangan>(){
+            TableRow<TipeKeuangan> row = new TableRow<TipeKeuangan>() {
                 @Override
                 public void updateItem(TipeKeuangan item, boolean empty) {
                     super.updateItem(item, empty);
                     if (empty) {
                         setContextMenu(rm);
-                    }else{
+                    } else {
                         final ContextMenu rm = new ContextMenu();
                         MenuItem hapus = new MenuItem("Delete Tipe Keuangan");
                         hapus.setOnAction((ActionEvent event) -> {
@@ -73,7 +72,7 @@ public class NewTipeKeuanganController  {
                         refresh.setOnAction((ActionEvent event) -> {
                             getTipeKeuangan();
                         });
-                        rm.getItems().addAll(hapus,refresh);
+                        rm.getItems().addAll(hapus, refresh);
                         setContextMenu(rm);
                     }
                 }
@@ -81,6 +80,7 @@ public class NewTipeKeuanganController  {
             return row;
         });
     }
+
     public void setMainApp(Main mainApp, Stage owner, Stage stage) {
         this.mainApp = mainApp;
         this.stage = stage;
@@ -91,11 +91,12 @@ public class NewTipeKeuanganController  {
             mainApp.closeDialog(owner, stage);
         });
     }
-    private void getTipeKeuangan(){
+
+    private void getTipeKeuangan() {
         Task<List<TipeKeuangan>> task = new Task<List<TipeKeuangan>>() {
-            @Override 
-            public List<TipeKeuangan> call() throws Exception{
-                try(Connection con = Koneksi.getConnection()){
+            @Override
+            public List<TipeKeuangan> call() throws Exception {
+                try (Connection con = Koneksi.getConnection()) {
                     return TipeKeuanganDAO.getAll(con);
                 }
             }
@@ -115,10 +116,11 @@ public class NewTipeKeuanganController  {
         });
         new Thread(task).start();
     }
-    private void deleteTipeKeuangan(TipeKeuangan t){
+
+    private void deleteTipeKeuangan(TipeKeuangan t) {
         Task<String> task = new Task<String>() {
-            @Override 
-            public String call() throws Exception{
+            @Override
+            public String call() throws Exception {
                 try (Connection con = Koneksi.getConnection()) {
                     return Service.deleteKategoriKeuangan(con, t);
                 }
@@ -130,10 +132,11 @@ public class NewTipeKeuanganController  {
         task.setOnSucceeded((WorkerStateEvent e) -> {
             mainApp.closeLoading();
             getTipeKeuangan();
-            if(task.getValue().equals("true"))
+            if (task.getValue().equals("true")) {
                 mainApp.showMessage(Modality.NONE, "Success", "Tipe keuangan berhasil dihapus");
-            else
+            } else {
                 mainApp.showMessage(Modality.NONE, "Failed", task.getValue());
+            }
         });
         task.setOnFailed((e) -> {
             mainApp.showMessage(Modality.NONE, "Error", task.getException().toString());
@@ -141,11 +144,12 @@ public class NewTipeKeuanganController  {
         });
         new Thread(task).start();
     }
+
     @FXML
-    private void saveTipeKeuangan(){
+    private void saveTipeKeuangan() {
         Task<String> task = new Task<String>() {
-            @Override 
-            public String call() throws Exception{
+            @Override
+            public String call() throws Exception {
                 try (Connection con = Koneksi.getConnection()) {
                     TipeKeuangan t = new TipeKeuangan();
                     t.setKodeKeuangan(tipeKeuanganField.getText());
@@ -159,19 +163,21 @@ public class NewTipeKeuanganController  {
         task.setOnSucceeded((WorkerStateEvent e) -> {
             mainApp.closeLoading();
             getTipeKeuangan();
-            if(task.getValue().equals("true"))
+            if (task.getValue().equals("true")) {
                 mainApp.showMessage(Modality.NONE, "Success", "Tambah Tipe Keuangan berhasil disimpan");
-            else
+            } else {
                 mainApp.showMessage(Modality.NONE, "Failed", task.getValue());
+            }
         });
         task.setOnFailed((e) -> {
             mainApp.showMessage(Modality.NONE, "Error", task.getException().toString());
             mainApp.closeLoading();
         });
         new Thread(task).start();
-    }   
+    }
+
     @FXML
-    private void close(){
+    private void close() {
         mainApp.closeDialog(owner, stage);
     }
 }

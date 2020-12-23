@@ -9,6 +9,7 @@ import com.excellentsystem.jagobangunpersadafx.Main;
 import com.excellentsystem.jagobangunpersadafx.Model.Karyawan;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextArea;
@@ -22,20 +23,31 @@ import javafx.stage.Stage;
  */
 public class DetailKaryawanController {
 
+    @FXML
     public TextField namaField;
+    @FXML
     public ComboBox<String> jabatanCombo;
+    @FXML
     public TextArea alamatField;
+    @FXML
     public TextField noTelpField;
+    @FXML
     public TextField noHandphoneField;
+    @FXML
     public ComboBox<String> statusNikahCombo;
+    @FXML
     public TextField agamaField;
+    @FXML
     public ComboBox<String> identitasCombo;
+    @FXML
     public TextField noIdentitasField;
+    @FXML
     public Button saveButton;
     private Main mainApp;
     private Stage owner;
     private Stage stage;
-    public void setMainApp(Main mainApp,Stage owner, Stage stage){
+
+    public void setMainApp(Main mainApp, Stage owner, Stage stage) {
         this.mainApp = mainApp;
         this.owner = owner;
         this.stage = stage;
@@ -60,7 +72,8 @@ public class DetailKaryawanController {
             mainApp.closeDialog(owner, stage);
         });
     }
-    public void setViewOnly(){
+
+    public void setViewOnly() {
         saveButton.setVisible(false);
         namaField.setDisable(true);
         alamatField.setDisable(true);
@@ -71,9 +84,10 @@ public class DetailKaryawanController {
         jabatanCombo.setDisable(true);
         identitasCombo.setDisable(true);
         noIdentitasField.setDisable(true);
-        stage.setHeight(stage.getHeight()-30);
+        stage.setHeight(stage.getHeight() - 30);
     }
-    public void setKaryawan(Karyawan value){
+
+    public void setKaryawan(Karyawan value) {
         namaField.setText("");
         jabatanCombo.getSelectionModel().select("");
         alamatField.setText("");
@@ -83,7 +97,7 @@ public class DetailKaryawanController {
         identitasCombo.getSelectionModel().select("");
         agamaField.setText("");
         noIdentitasField.setText("");
-        if(value.getNama()!=null){
+        if (value.getNama() != null) {
             namaField.setText(value.getNama());
             jabatanCombo.getSelectionModel().select(value.getJabatan());
             alamatField.setText(value.getAlamat());
@@ -93,11 +107,13 @@ public class DetailKaryawanController {
             identitasCombo.getSelectionModel().select(value.getIdentitas());
             agamaField.setText(value.getAgama());
             noIdentitasField.setText(value.getNoIdentitas());
-            if(!"Manager".equals(Main.sistem.getUser().getLevel()))
+            if (!"Manager".equals(Main.sistem.getUser().getLevel())) {
                 namaField.setDisable(true);
+            }
         }
     }
-    public void close(){
-        mainApp.closeDialog(owner,stage);
+
+    public void close() {
+        mainApp.closeDialog(owner, stage);
     }
 }

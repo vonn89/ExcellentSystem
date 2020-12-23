@@ -49,17 +49,23 @@ import javafx.stage.Stage;
  *
  * @author Excellent
  */
-public class LaporanUntungRugiController  {
-    @FXML private StackPane pane; 
-    private GridPane gridPane; 
-    @FXML private DatePicker tglAwalPicker;
-    @FXML private DatePicker tglAkhirPicker;
+public class LaporanUntungRugiController {
+
+    @FXML
+    private StackPane pane;
+    @FXML
+    private GridPane gridPane;
+    @FXML
+    private DatePicker tglAwalPicker;
+    @FXML
+    private DatePicker tglAkhirPicker;
     private ObservableList<Keuangan> allPenjualan = FXCollections.observableArrayList();
     private ObservableList<Keuangan> allNilaiTanahDanBangunan = FXCollections.observableArrayList();
     private ObservableList<Keuangan> allPendapatan = FXCollections.observableArrayList();
     private ObservableList<Keuangan> allBeban = FXCollections.observableArrayList();
     private ObservableList<String> kategoriTransaksi = FXCollections.observableArrayList();
-    private Main mainApp;   
+    private Main mainApp;
+
     public void initialize() {
         tglAwalPicker.setConverter(Function.getTglConverter());
         tglAwalPicker.setValue(LocalDate.now().minusMonths(1));
@@ -67,7 +73,7 @@ public class LaporanUntungRugiController  {
         tglAkhirPicker.setConverter(Function.getTglConverter());
         tglAkhirPicker.setValue(LocalDate.now());
         tglAkhirPicker.setDayCellFactory((final DatePicker datePicker) -> getDateCellAkhir(tglAwalPicker));
-        
+
         final ContextMenu rm = new ContextMenu();
         MenuItem print = new MenuItem("Print Laporan");
         print.setOnAction((ActionEvent event) -> {
@@ -86,15 +92,17 @@ public class LaporanUntungRugiController  {
             rm.hide();
         });
     }
+
     public void setMainApp(Main mainApp) {
         this.mainApp = mainApp;
         getKeuangan();
-    }  
+    }
+
     @FXML
-    private void getKeuangan(){
+    private void getKeuangan() {
         Task<Void> task = new Task<Void>() {
-            @Override 
-            public Void call() throws Exception{
+            @Override
+            public Void call() throws Exception {
                 try (Connection con = Koneksi.getConnection()) {
                     List<String> statusProperty = new ArrayList<>();
                     statusProperty.add("Combined");
@@ -109,43 +117,47 @@ public class LaporanUntungRugiController  {
                     allPendapatan.clear();
                     allBeban.clear();
                     allPenjualan.addAll(KeuanganDAO.getAllByTipeKeuanganAndDate(con,
-                            "PENJUALAN",tglAwalPicker.getValue().toString(),tglAkhirPicker.getValue().toString()));
+                            "PENJUALAN", tglAwalPicker.getValue().toString(), tglAkhirPicker.getValue().toString()));
                     List<Keuangan> allHPP = KeuanganDAO.getAllByTipeKeuanganAndDate(con,
-                            "HPP",tglAwalPicker.getValue().toString(),tglAkhirPicker.getValue().toString());
+                            "HPP", tglAwalPicker.getValue().toString(), tglAkhirPicker.getValue().toString());
                     allPendapatan.addAll(KeuanganDAO.getAllByTipeKeuanganAndDate(con,
-                            "PENDAPATAN",tglAwalPicker.getValue().toString(),tglAkhirPicker.getValue().toString()));
+                            "PENDAPATAN", tglAwalPicker.getValue().toString(), tglAkhirPicker.getValue().toString()));
                     allBeban.addAll(KeuanganDAO.getAllByTipeKeuanganAndDate(con,
-                            "BEBAN",tglAwalPicker.getValue().toString(),tglAkhirPicker.getValue().toString()));
-                    for(Keuangan k : allPenjualan){
-                        if(!k.getKodeProperty().equals("")){
-                            for(Property p : listProperty){
-                                if(k.getKodeProperty().equals(p.getKodeProperty()))
+                            "BEBAN", tglAwalPicker.getValue().toString(), tglAkhirPicker.getValue().toString()));
+                    for (Keuangan k : allPenjualan) {
+                        if (!k.getKodeProperty().equals("")) {
+                            for (Property p : listProperty) {
+                                if (k.getKodeProperty().equals(p.getKodeProperty())) {
                                     k.setProperty(p);
+                                }
                             }
                         }
                     }
-                    for(Keuangan k : allHPP){
-                        if(!k.getKodeProperty().equals("")){
-                            for(Property p : listProperty){
-                                if(k.getKodeProperty().equals(p.getKodeProperty()))
+                    for (Keuangan k : allHPP) {
+                        if (!k.getKodeProperty().equals("")) {
+                            for (Property p : listProperty) {
+                                if (k.getKodeProperty().equals(p.getKodeProperty())) {
                                     k.setProperty(p);
+                                }
                             }
                         }
                         allNilaiTanahDanBangunan.add(k);
                     }
-                    for(Keuangan k : allPendapatan){
-                        if(!k.getKodeProperty().equals("")){
-                            for(Property p : listProperty){
-                                if(k.getKodeProperty().equals(p.getKodeProperty()))
+                    for (Keuangan k : allPendapatan) {
+                        if (!k.getKodeProperty().equals("")) {
+                            for (Property p : listProperty) {
+                                if (k.getKodeProperty().equals(p.getKodeProperty())) {
                                     k.setProperty(p);
+                                }
                             }
                         }
                     }
-                    for(Keuangan k : allBeban){
-                        if(!k.getKodeProperty().equals("")){
-                            for(Property p : listProperty){
-                                if(k.getKodeProperty().equals(p.getKodeProperty()))
+                    for (Keuangan k : allBeban) {
+                        if (!k.getKodeProperty().equals("")) {
+                            for (Property p : listProperty) {
+                                if (k.getKodeProperty().equals(p.getKodeProperty())) {
                                     k.setProperty(p);
+                                }
                             }
                         }
                     }
@@ -157,12 +169,12 @@ public class LaporanUntungRugiController  {
             mainApp.showLoadingScreen();
         });
         task.setOnSucceeded((WorkerStateEvent e) -> {
-            try{
+            try {
                 kategoriTransaksi.clear();
                 kategoriTransaksi.addAll(Function.getKategoriTransaksi());
                 setGridPane();
                 mainApp.closeLoading();
-            }catch(Exception ex){
+            } catch (Exception ex) {
                 mainApp.showMessage(Modality.NONE, "Error", ex.toString());
             }
         });
@@ -172,54 +184,56 @@ public class LaporanUntungRugiController  {
         });
         new Thread(task).start();
     }
-    public void setGridPane(){
+
+    public void setGridPane() {
         try {
             pane.getChildren().clear();
             gridPane = new GridPane();
-            
+
             gridPane.getColumnConstraints().add(new ColumnConstraints(10, 100, Double.MAX_VALUE, Priority.ALWAYS, HPos.LEFT, true));
             gridPane.getColumnConstraints().add(new ColumnConstraints(200, 200, 250, Priority.ALWAYS, HPos.RIGHT, true));
             gridPane.getColumnConstraints().add(new ColumnConstraints(200, 200, 250, Priority.ALWAYS, HPos.RIGHT, true));
-            
+
             int row = 10 + kategoriTransaksi.size();
-            for(int i = 0 ; i<row ; i++){
-                gridPane.getRowConstraints().add(new RowConstraints(30,30,30));
-                if(i%2==0)
+            for (int i = 0; i < row; i++) {
+                gridPane.getRowConstraints().add(new RowConstraints(30, 30, 30));
+                if (i % 2 == 0) {
                     addBackground(i);
+                }
             }
-            
+
             double totalPenjualan = 0;
-            for(Keuangan k : allPenjualan){
+            for (Keuangan k : allPenjualan) {
                 totalPenjualan = totalPenjualan + k.getJumlahRp();
             }
             addBoldHyperLinkText("Penjualan", 0, 0, allPenjualan);
             addBoldText(rp.format(totalPenjualan), 2, 0);
-            
+
             double totalHPP = 0;
-            for(Keuangan k : allNilaiTanahDanBangunan){
+            for (Keuangan k : allNilaiTanahDanBangunan) {
                 totalHPP = totalHPP + k.getJumlahRp();
             }
             addBoldHyperLinkText("Harga Pokok Penjualan", 0, 2, allNilaiTanahDanBangunan);
             addBoldText(rp.format(totalHPP), 2, 2);
-                        
+
             addBoldText("Untung-Rugi Kotor", 0, 4);
-            addBoldText(rp.format(totalPenjualan-totalHPP), 2, 4);
-            
+            addBoldText(rp.format(totalPenjualan - totalHPP), 2, 4);
+
             addBoldText("Pendapatan-Beban", 0, 6);
             int i = 7;
             double totalPendapatanBeban = 0;
-            for(String s : kategoriTransaksi){
+            for (String s : kategoriTransaksi) {
                 double pendapatanBeban = 0;
                 List<Keuangan> temp = new ArrayList<>();
-                for(Keuangan k : allPendapatan){
-                    if(k.getKategori().equals(s)){
+                for (Keuangan k : allPendapatan) {
+                    if (k.getKategori().equals(s)) {
                         pendapatanBeban = pendapatanBeban + k.getJumlahRp();
                         totalPendapatanBeban = totalPendapatanBeban + k.getJumlahRp();
                         temp.add(k);
                     }
                 }
-                for(Keuangan k : allBeban){
-                    if(k.getKategori().equals(s)){
+                for (Keuangan k : allBeban) {
+                    if (k.getKategori().equals(s)) {
                         pendapatanBeban = pendapatanBeban + k.getJumlahRp();
                         totalPendapatanBeban = totalPendapatanBeban - k.getJumlahRp();
                         temp.add(k);
@@ -227,15 +241,15 @@ public class LaporanUntungRugiController  {
                 }
                 addHyperLinkText(s, 0, i, temp);
                 addNormalText(rp.format(pendapatanBeban), 1, i);
-                i = i +1;
+                i = i + 1;
             }
             addBoldText("Total Pendapatan-Beban", 0, i);
             addBoldText(rp.format(totalPendapatanBeban), 2, i);
             i = i + 2;
-            
+
             addBoldText("Untung-Rugi Bersih", 0, i);
-            addBoldText(rp.format(totalPenjualan-totalHPP+totalPendapatanBeban), 2, i);
-            
+            addBoldText(rp.format(totalPenjualan - totalHPP + totalPendapatanBeban), 2, i);
+
             gridPane.setHgap(5);
             gridPane.setVgap(5);
             gridPane.setPadding(new Insets(15));
@@ -244,21 +258,25 @@ public class LaporanUntungRugiController  {
             mainApp.showMessage(Modality.NONE, "Error", ex.toString());
         }
     }
-    private void addBackground(int row){
+
+    private void addBackground(int row) {
         AnchorPane x = new AnchorPane();
         x.setStyle("-fx-background-color:seccolor5;");
         gridPane.add(x, 0, row, GridPane.REMAINING, 1);
     }
-    private void addNormalText(String text,int column, int row){
+
+    private void addNormalText(String text, int column, int row) {
         Label label = new Label(text);
         gridPane.add(label, column, row);
     }
-    private void addBoldText(String text,int column, int row){
+
+    private void addBoldText(String text, int column, int row) {
         Label label = new Label(text);
         label.setStyle("-fx-font-weight:bold;");
         gridPane.add(label, column, row);
     }
-    private void addBoldHyperLinkText(String text, int column, int row, List<Keuangan> keuangan){
+
+    private void addBoldHyperLinkText(String text, int column, int row, List<Keuangan> keuangan) {
         Hyperlink hyperlink = new Hyperlink(text);
         hyperlink.setStyle("-fx-font-weight:bold;"
                 + "-fx-text-fill:seccolor3;"
@@ -272,7 +290,8 @@ public class LaporanUntungRugiController  {
         });
         gridPane.add(hyperlink, column, row);
     }
-    private void addHyperLinkText(String text, int column, int row, List<Keuangan> keuangan){
+
+    private void addHyperLinkText(String text, int column, int row, List<Keuangan> keuangan) {
         Hyperlink hyperlink = new Hyperlink(text);
         hyperlink.setStyle("-fx-text-fill:seccolor3;"
                 + "-fx-border-color:transparent;");
@@ -285,59 +304,60 @@ public class LaporanUntungRugiController  {
         });
         gridPane.add(hyperlink, column, row);
     }
+
     @FXML
-    private void print(){
+    private void print() {
         List<UntungRugi> ur = new ArrayList<>();
-        
+
         ur.add(new UntungRugi("", "", ""));
         double totalPenjualan = 0;
-        for(Keuangan k : allPenjualan){
+        for (Keuangan k : allPenjualan) {
             totalPenjualan = totalPenjualan + k.getJumlahRp();
         }
-        ur.add(new UntungRugi(" Penjualan", " "+rp.format(totalPenjualan), ""));
+        ur.add(new UntungRugi(" Penjualan", " " + rp.format(totalPenjualan), ""));
 
         double totalHppPenjualan = 0;
-        for(Keuangan k : allNilaiTanahDanBangunan){
+        for (Keuangan k : allNilaiTanahDanBangunan) {
             totalHppPenjualan = totalHppPenjualan + k.getJumlahRp();
         }
-        ur.add(new UntungRugi(" Harga Pokok Penjualan", " "+rp.format(totalHppPenjualan), ""));
+        ur.add(new UntungRugi(" Harga Pokok Penjualan", " " + rp.format(totalHppPenjualan), ""));
 
         ur.add(new UntungRugi("Untung-Rugi Kotor", "", rp.format(
-            totalPenjualan-totalHppPenjualan
+                totalPenjualan - totalHppPenjualan
         )));
         ur.add(new UntungRugi("", "", ""));
 
         ur.add(new UntungRugi("Pendapatan-Beban", "", ""));
         double totalPendapatanBeban = 0;
-        for(String s : kategoriTransaksi){
+        for (String s : kategoriTransaksi) {
             double pendapatanBeban = 0;
-            for(Keuangan k : allPendapatan){
-                if(k.getKategori().equalsIgnoreCase(s)){
+            for (Keuangan k : allPendapatan) {
+                if (k.getKategori().equalsIgnoreCase(s)) {
                     pendapatanBeban = pendapatanBeban + k.getJumlahRp();
                     totalPendapatanBeban = totalPendapatanBeban + k.getJumlahRp();
                 }
             }
-            for(Keuangan k : allBeban){
-                if(k.getKategori().equalsIgnoreCase(s)){
+            for (Keuangan k : allBeban) {
+                if (k.getKategori().equalsIgnoreCase(s)) {
                     pendapatanBeban = pendapatanBeban + k.getJumlahRp();
                     totalPendapatanBeban = totalPendapatanBeban - k.getJumlahRp();
                 }
             }
-            ur.add(new UntungRugi(" "+s, " "+rp.format(pendapatanBeban), ""));
+            ur.add(new UntungRugi(" " + s, " " + rp.format(pendapatanBeban), ""));
         }
         ur.add(new UntungRugi("Total Pendapatan-Beban", "", rp.format(totalPendapatanBeban)));
         ur.add(new UntungRugi("", "", ""));
         ur.add(new UntungRugi("Untung-Rugi Bersih", "", rp.format(
-            totalPenjualan-totalHppPenjualan+
-            totalPendapatanBeban
+                totalPenjualan - totalHppPenjualan
+                + totalPendapatanBeban
         )));
 
-        try{
+        try {
             PrintOut printOut = new PrintOut();
-            printOut.printLaporanUntungRugi(ur, 
-                tglAwalPicker.getValue().toString(), tglAkhirPicker.getValue().toString()
+            printOut.printLaporanUntungRugi(ur,
+                    tglAwalPicker.getValue().toString(), tglAkhirPicker.getValue().toString()
             );
-        }catch(Exception e){
+        } catch (Exception e) {
             mainApp.showMessage(Modality.NONE, "Error", e.toString());
         }
     }

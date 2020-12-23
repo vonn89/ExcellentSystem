@@ -26,8 +26,21 @@ public class Property {
     private final DoubleProperty nilaiProperty = new SimpleDoubleProperty();
     private final DoubleProperty hargaJual = new SimpleDoubleProperty();
     private final DoubleProperty diskon = new SimpleDoubleProperty();
+    private final DoubleProperty addendum = new SimpleDoubleProperty();
     private final StringProperty keterangan = new SimpleStringProperty();
     private final StringProperty status = new SimpleStringProperty();
+
+    public double getAddendum() {
+        return addendum.get();
+    }
+
+    public void setAddendum(double value) {
+        addendum.set(value);
+    }
+
+    public DoubleProperty addendumProperty() {
+        return addendum;
+    }
 
     public double getNilaiProperty() {
         return nilaiProperty.get();

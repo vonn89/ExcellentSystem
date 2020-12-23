@@ -55,16 +55,22 @@ import javafx.stage.Stage;
  *
  * @author yunaz
  */
-public class LaporanUntungRugiPeriodeController  {
+public class LaporanUntungRugiPeriodeController {
+
     private int rows = 0;
     private int columns = 0;
-    
-    @FXML private GridPane mainGridPane; 
-    @FXML private ScrollPane scrollPane; 
-    @FXML private StackPane stackPane; 
-    private GridPane gridPane; 
-    
-    @FXML private ComboBox<String> periodeCombo;
+
+    @FXML
+    private GridPane mainGridPane;
+    @FXML
+    private ScrollPane scrollPane;
+    @FXML
+    private StackPane stackPane;
+    @FXML
+    private GridPane gridPane;
+
+    @FXML
+    private ComboBox<String> periodeCombo;
     private String tglAwal = "2000-01-01";
     private String tglAkhir = "2000-01-01";
     private LocalDate localDate;
@@ -73,7 +79,8 @@ public class LaporanUntungRugiPeriodeController  {
     private ObservableList<Keuangan> allPendapatan = FXCollections.observableArrayList();
     private ObservableList<Keuangan> allBeban = FXCollections.observableArrayList();
     private ObservableList<String> kategoriTransaksi = FXCollections.observableArrayList();
-    private Main mainApp;   
+    private Main mainApp;
+
     public void initialize() {
         final ContextMenu rm = new ContextMenu();
         MenuItem print = new MenuItem("Print Laporan");
@@ -93,6 +100,7 @@ public class LaporanUntungRugiPeriodeController  {
             rm.hide();
         });
     }
+
     public void setMainApp(Main mainApp) {
         this.mainApp = mainApp;
         ObservableList<String> periode = FXCollections.observableArrayList();
@@ -103,38 +111,39 @@ public class LaporanUntungRugiPeriodeController  {
         periodeCombo.setItems(periode);
         periodeCombo.getSelectionModel().selectFirst();
         getKeuangan();
-    }  
+    }
+
     @FXML
-    private void getKeuangan(){
+    private void getKeuangan() {
         Task<Void> task = new Task<Void>() {
-            @Override 
-            public Void call() throws Exception{
+            @Override
+            public Void call() throws Exception {
                 try (Connection con = Koneksi.getConnection()) {
                     localDate = LocalDate.parse(tglBarang.format(Function.getServerDate(con)), DateTimeFormatter.ISO_DATE);
                     tglAwal = localDate.toString();
                     tglAkhir = localDate.toString();
                     DateTimeFormatter yyyyMMdd = DateTimeFormatter.ofPattern("yyyy-MM-dd");
                     DateTimeFormatter yyyy = DateTimeFormatter.ofPattern("yyyy");
-                    if(periodeCombo.getSelectionModel().getSelectedItem().equals("Last 4 Week")){
+                    if (periodeCombo.getSelectionModel().getSelectedItem().equals("Last 4 Week")) {
                         tglAwal = localDate.minusWeeks(3).minusDays(localDate.getDayOfWeek().getValue()).format(yyyyMMdd);
                         tglAkhir = localDate.format(yyyyMMdd);
                         columns = 5;
-                    }else if(periodeCombo.getSelectionModel().getSelectedItem().equals("This Year")){
-                        tglAwal = localDate.format(yyyy)+"-01-01";
-                        tglAkhir = localDate.format(yyyy)+"-12-31";
+                    } else if (periodeCombo.getSelectionModel().getSelectedItem().equals("This Year")) {
+                        tglAwal = localDate.format(yyyy) + "-01-01";
+                        tglAkhir = localDate.format(yyyy) + "-12-31";
                         columns = 13;
-                    }else if(periodeCombo.getSelectionModel().getSelectedItem().equals("Last Year")){
-                        tglAwal = localDate.minusYears(1).format(yyyy)+"-01-01";
-                        tglAkhir = localDate.minusYears(1).format(yyyy)+"-12-31";
+                    } else if (periodeCombo.getSelectionModel().getSelectedItem().equals("Last Year")) {
+                        tglAwal = localDate.minusYears(1).format(yyyy) + "-01-01";
+                        tglAkhir = localDate.minusYears(1).format(yyyy) + "-12-31";
                         columns = 13;
-                    }else if(periodeCombo.getSelectionModel().getSelectedItem().equals("All")){
+                    } else if (periodeCombo.getSelectionModel().getSelectedItem().equals("All")) {
                         ResultSet rs = con.prepareStatement("select tgl_keuangan from tt_keuangan order by tgl_keuangan limit 1").executeQuery();
-                        while(rs.next()){
-                            tglAwal = rs.getString(1).substring(0,10);
+                        while (rs.next()) {
+                            tglAwal = rs.getString(1).substring(0, 10);
                         }
-                        tglAkhir = localDate.format(yyyy)+"-12-31";
-                        int range = localDate.getYear()-Integer.parseInt(tglAwal.substring(0, 4));
-                        columns = range+2;
+                        tglAkhir = localDate.format(yyyy) + "-12-31";
+                        int range = localDate.getYear() - Integer.parseInt(tglAwal.substring(0, 4));
+                        columns = range + 2;
                     }
                     List<String> statusProperty = new ArrayList<>();
                     statusProperty.add("Combined");
@@ -149,42 +158,46 @@ public class LaporanUntungRugiPeriodeController  {
                     allPendapatan.clear();
                     allBeban.clear();
                     allPenjualan.addAll(KeuanganDAO.getAllByTipeKeuanganAndDate(con,
-                            "PENJUALAN",tglAwal,tglAkhir));
+                            "PENJUALAN", tglAwal, tglAkhir));
                     allNilaiTanahDanBangunan.addAll(KeuanganDAO.getAllByTipeKeuanganAndDate(con,
-                            "HPP",tglAwal,tglAkhir));
+                            "HPP", tglAwal, tglAkhir));
                     allPendapatan.addAll(KeuanganDAO.getAllByTipeKeuanganAndDate(con,
-                            "PENDAPATAN",tglAwal,tglAkhir));
+                            "PENDAPATAN", tglAwal, tglAkhir));
                     allBeban.addAll(KeuanganDAO.getAllByTipeKeuanganAndDate(con,
-                            "BEBAN",tglAwal,tglAkhir));
-                    for(Keuangan k : allPenjualan){
-                        if(!k.getKodeProperty().equals("")){
-                            for(Property p : listProperty){
-                                if(k.getKodeProperty().equals(p.getKodeProperty()))
+                            "BEBAN", tglAwal, tglAkhir));
+                    for (Keuangan k : allPenjualan) {
+                        if (!k.getKodeProperty().equals("")) {
+                            for (Property p : listProperty) {
+                                if (k.getKodeProperty().equals(p.getKodeProperty())) {
                                     k.setProperty(p);
+                                }
                             }
                         }
                     }
-                    for(Keuangan k : allNilaiTanahDanBangunan){
-                        if(!k.getKodeProperty().equals("")){
-                            for(Property p : listProperty){
-                                if(k.getKodeProperty().equals(p.getKodeProperty()))
+                    for (Keuangan k : allNilaiTanahDanBangunan) {
+                        if (!k.getKodeProperty().equals("")) {
+                            for (Property p : listProperty) {
+                                if (k.getKodeProperty().equals(p.getKodeProperty())) {
                                     k.setProperty(p);
+                                }
                             }
                         }
                     }
-                    for(Keuangan k : allPendapatan){
-                        if(!k.getKodeProperty().equals("")){
-                            for(Property p : listProperty){
-                                if(k.getKodeProperty().equals(p.getKodeProperty()))
+                    for (Keuangan k : allPendapatan) {
+                        if (!k.getKodeProperty().equals("")) {
+                            for (Property p : listProperty) {
+                                if (k.getKodeProperty().equals(p.getKodeProperty())) {
                                     k.setProperty(p);
+                                }
                             }
                         }
                     }
-                    for(Keuangan k : allBeban){
-                        if(!k.getKodeProperty().equals("")){
-                            for(Property p : listProperty){
-                                if(k.getKodeProperty().equals(p.getKodeProperty()))
+                    for (Keuangan k : allBeban) {
+                        if (!k.getKodeProperty().equals("")) {
+                            for (Property p : listProperty) {
+                                if (k.getKodeProperty().equals(p.getKodeProperty())) {
                                     k.setProperty(p);
+                                }
                             }
                         }
                     }
@@ -196,13 +209,13 @@ public class LaporanUntungRugiPeriodeController  {
             mainApp.showLoadingScreen();
         });
         task.setOnSucceeded((WorkerStateEvent e) -> {
-            try{
+            try {
                 kategoriTransaksi.clear();
                 kategoriTransaksi.addAll(Function.getKategoriTransaksi());
                 rows = 6 + kategoriTransaksi.size();
                 setGridPane();
                 mainApp.closeLoading();
-            }catch(Exception ex){
+            } catch (Exception ex) {
                 mainApp.showMessage(Modality.NONE, "Error", ex.toString());
             }
         });
@@ -212,16 +225,17 @@ public class LaporanUntungRugiPeriodeController  {
         });
         new Thread(task).start();
     }
-    public void setGridPane(){
+
+    public void setGridPane() {
         try {
             stackPane.getChildren().clear();
             gridPane = new GridPane();
             gridPane.setHgap(1);
             gridPane.setVgap(1);
-                        
+
             setTopHeader();
             setLeftHeader();
-            
+
             AnchorPane ap = new AnchorPane();
             ap.setStyle("-fx-background-color: seccolor6");
             ap.setMaxSize(200, 41);
@@ -237,15 +251,15 @@ public class LaporanUntungRugiPeriodeController  {
             GridPane.setValignment(ap, VPos.TOP);
             GridPane.setMargin(ap, new Insets(1, 0, 1, 12));
             mainGridPane.add(ap, 0, 1);
-            
-            if(periodeCombo.getSelectionModel().getSelectedItem().equals("Last 4 Week")){
+
+            if (periodeCombo.getSelectionModel().getSelectedItem().equals("Last 4 Week")) {
                 DateTimeFormatter yyyyMMdd = DateTimeFormatter.ofPattern("yyyy-MM-dd");
                 LocalDate firstDate = LocalDate.parse(tglAwal, yyyyMMdd);
                 setDetail(tglBarang.parse(firstDate.format(yyyyMMdd)), tglBarang.parse(firstDate.plusDays(7).format(yyyyMMdd)), 1);
                 setDetail(tglBarang.parse(firstDate.plusWeeks(1).format(yyyyMMdd)), tglBarang.parse(firstDate.plusWeeks(1).plusDays(7).format(yyyyMMdd)), 2);
                 setDetail(tglBarang.parse(firstDate.plusWeeks(2).format(yyyyMMdd)), tglBarang.parse(firstDate.plusWeeks(2).plusDays(7).format(yyyyMMdd)), 3);
                 setDetail(tglBarang.parse(firstDate.plusWeeks(3).format(yyyyMMdd)), tglBarang.parse(firstDate.plusWeeks(3).plusDays(7).format(yyyyMMdd)), 4);
-            }else if(periodeCombo.getSelectionModel().getSelectedItem().equals("This Year")||periodeCombo.getSelectionModel().getSelectedItem().equals("Last Year")){
+            } else if (periodeCombo.getSelectionModel().getSelectedItem().equals("This Year") || periodeCombo.getSelectionModel().getSelectedItem().equals("Last Year")) {
                 DateTimeFormatter yyyyMMdd = DateTimeFormatter.ofPattern("yyyy-MM-dd");
                 LocalDate firstDate = LocalDate.parse(tglAwal, yyyyMMdd);
                 setDetail(tglBarang.parse(firstDate.format(yyyyMMdd)), tglBarang.parse(firstDate.plusMonths(1).format(yyyyMMdd)), 1);
@@ -260,47 +274,48 @@ public class LaporanUntungRugiPeriodeController  {
                 setDetail(tglBarang.parse(firstDate.plusMonths(9).format(yyyyMMdd)), tglBarang.parse(firstDate.plusMonths(10).format(yyyyMMdd)), 10);
                 setDetail(tglBarang.parse(firstDate.plusMonths(10).format(yyyyMMdd)), tglBarang.parse(firstDate.plusMonths(11).format(yyyyMMdd)), 11);
                 setDetail(tglBarang.parse(firstDate.plusMonths(11).format(yyyyMMdd)), tglBarang.parse(firstDate.plusMonths(12).format(yyyyMMdd)), 12);
-            }else if(periodeCombo.getSelectionModel().getSelectedItem().equals("All")){
+            } else if (periodeCombo.getSelectionModel().getSelectedItem().equals("All")) {
                 SimpleDateFormat yyyy = new SimpleDateFormat("yyyy");
                 int now = Integer.parseInt(yyyy.format(tglBarang.parse(tglAwal)));
                 int last = Integer.parseInt(yyyy.format(tglBarang.parse(tglAkhir)));
                 int col = 1;
-                for(int i = now ; i <= last ; i++){
-                    Date startDate = tglBarang.parse(String.valueOf(i)+"-01-01");
-                    Date endDate = tglBarang.parse(String.valueOf(i)+"-12-31");
+                for (int i = now; i <= last; i++) {
+                    Date startDate = tglBarang.parse(String.valueOf(i) + "-01-01");
+                    Date endDate = tglBarang.parse(String.valueOf(i) + "-12-31");
                     setDetail(startDate, endDate, col);
                     col++;
                 }
             }
-            
+
             stackPane.getChildren().add(gridPane);
         } catch (Exception ex) {
             mainApp.showMessage(Modality.NONE, "Error", ex.toString());
         }
     }
-    private void setLeftHeader(){
-        for(int i = 0 ; i < rows ; i++){
-            gridPane.getRowConstraints().add(new RowConstraints(30,30,30));
+
+    private void setLeftHeader() {
+        for (int i = 0; i < rows; i++) {
+            gridPane.getRowConstraints().add(new RowConstraints(30, 30, 30));
         }
-        
+
         ScrollPane sp = new ScrollPane();
         sp.setMouseTransparent(true);
         sp.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
         sp.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
         sp.setPadding(new Insets(6, 5, 6, 5));
-        
+
         StackPane st = new StackPane();
         st.setMouseTransparent(true);
         st.setStyle("-fx-background-color: seccolor6;");
         st.setPadding(new Insets(0, 0, 0, 2));
-        
+
         GridPane gp = new GridPane();
         gp.setHgap(1);
         gp.setVgap(1);
         gp.setMaxWidth(200);
         gp.getColumnConstraints().add(new ColumnConstraints(200, 200, 200, Priority.ALWAYS, HPos.LEFT, true));
-        for(int i = 0 ; i < rows ; i++){
-            gp.getRowConstraints().add(new RowConstraints(30,30,30));
+        for (int i = 0; i < rows; i++) {
+            gp.getRowConstraints().add(new RowConstraints(30, 30, 30));
         }
         int i = 1;
         addText(gp, "Penjualan", 0, i, "seccolor3", "seccolor6");
@@ -309,16 +324,16 @@ public class LaporanUntungRugiPeriodeController  {
         i++;
         addText(gp, "Untung-Rugi Kotor", 0, i, "seccolor3", "seccolor6");
         i++;
-        gp.getRowConstraints().add(i, new RowConstraints(3,3,3));
-        gridPane.getRowConstraints().add(i, new RowConstraints(3,3,3));
+        gp.getRowConstraints().add(i, new RowConstraints(3, 3, 3));
+        gridPane.getRowConstraints().add(i, new RowConstraints(3, 3, 3));
         addText(gp, "", 0, i, "seccolor3", "seccolor6");
         i++;
-        for(String s : kategoriTransaksi){
+        for (String s : kategoriTransaksi) {
             addText(gp, s, 0, i, "seccolor3", "seccolor6");
             i++;
         }
-        gp.getRowConstraints().add(i, new RowConstraints(3,3,3));
-        gridPane.getRowConstraints().add(i, new RowConstraints(3,3,3));
+        gp.getRowConstraints().add(i, new RowConstraints(3, 3, 3));
+        gridPane.getRowConstraints().add(i, new RowConstraints(3, 3, 3));
         addText(gp, "", 0, i, "seccolor3", "seccolor6");
         i++;
         addText(gp, "Total Pendapatan-Beban", 0, i, "seccolor3", "seccolor6");
@@ -329,14 +344,15 @@ public class LaporanUntungRugiPeriodeController  {
         st.getChildren().add(gp);
         sp.setContent(st);
         mainGridPane.add(sp, 0, 1);
-        
+
         scrollPane.vvalueProperty().addListener((observable, oldValue, newValue) -> {
             sp.setVvalue(scrollPane.getVvalue());
         });
     }
-    private void setTopHeader() throws ParseException{
+
+    private void setTopHeader() throws ParseException {
         gridPane.getColumnConstraints().add(new ColumnConstraints(200, 200, 200, Priority.ALWAYS, HPos.LEFT, true));
-        for(int i = 1 ; i < columns ; i++){
+        for (int i = 1; i < columns; i++) {
             gridPane.getColumnConstraints().add(new ColumnConstraints(150, 150, Double.MAX_VALUE, Priority.ALWAYS, HPos.RIGHT, true));
         }
         ScrollPane sp = new ScrollPane();
@@ -345,12 +361,12 @@ public class LaporanUntungRugiPeriodeController  {
         sp.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
         sp.setFitToWidth(true);
         sp.setPadding(new Insets(6, 6, 1, 5));
-        
+
         StackPane st = new StackPane();
         st.setMouseTransparent(true);
         st.setStyle("-fx-background-color: seccolor6;");
         st.setPadding(new Insets(0, 0, 0, 1));
-        
+
         GridPane gp = new GridPane();
         gp.setHgap(1);
         gp.setVgap(1);
@@ -358,19 +374,19 @@ public class LaporanUntungRugiPeriodeController  {
         gp.setPrefHeight(30);
         gp.setMaxHeight(30);
         gp.getColumnConstraints().add(new ColumnConstraints(200, 200, 200, Priority.ALWAYS, HPos.LEFT, true));
-        for(int i = 1 ; i < columns ; i++){
+        for (int i = 1; i < columns; i++) {
             gp.getColumnConstraints().add(new ColumnConstraints(150, 150, Double.MAX_VALUE, Priority.ALWAYS, HPos.CENTER, true));
         }
-        gp.getRowConstraints().add(new RowConstraints(30,30,30));
-        if(periodeCombo.getSelectionModel().getSelectedItem().equals("Last 4 Week")){
+        gp.getRowConstraints().add(new RowConstraints(30, 30, 30));
+        if (periodeCombo.getSelectionModel().getSelectedItem().equals("Last 4 Week")) {
             DateTimeFormatter ddMMM = DateTimeFormatter.ofPattern("dd MMM");
             DateTimeFormatter yyyyMMdd = DateTimeFormatter.ofPattern("yyyy-MM-dd");
             LocalDate firstDate = LocalDate.parse(tglAwal, yyyyMMdd);
-            addText(gp, firstDate.format(ddMMM)+"-"+firstDate.plusDays(6).format(ddMMM), 1, 0, "seccolor1", "seccolor6");
-            addText(gp, firstDate.plusWeeks(1).format(ddMMM)+"-"+firstDate.plusWeeks(1).plusDays(6).format(ddMMM), 2, 0, "seccolor1", "seccolor6");
-            addText(gp, firstDate.plusWeeks(2).format(ddMMM)+"-"+firstDate.plusWeeks(2).plusDays(6).format(ddMMM), 3, 0, "seccolor1", "seccolor6");
-            addText(gp, firstDate.plusWeeks(3).format(ddMMM)+"-"+firstDate.plusWeeks(3).plusDays(6).format(ddMMM), 4, 0, "seccolor1", "seccolor6");
-        }else if(periodeCombo.getSelectionModel().getSelectedItem().equals("This Year")||periodeCombo.getSelectionModel().getSelectedItem().equals("Last Year")){
+            addText(gp, firstDate.format(ddMMM) + "-" + firstDate.plusDays(6).format(ddMMM), 1, 0, "seccolor1", "seccolor6");
+            addText(gp, firstDate.plusWeeks(1).format(ddMMM) + "-" + firstDate.plusWeeks(1).plusDays(6).format(ddMMM), 2, 0, "seccolor1", "seccolor6");
+            addText(gp, firstDate.plusWeeks(2).format(ddMMM) + "-" + firstDate.plusWeeks(2).plusDays(6).format(ddMMM), 3, 0, "seccolor1", "seccolor6");
+            addText(gp, firstDate.plusWeeks(3).format(ddMMM) + "-" + firstDate.plusWeeks(3).plusDays(6).format(ddMMM), 4, 0, "seccolor1", "seccolor6");
+        } else if (periodeCombo.getSelectionModel().getSelectedItem().equals("This Year") || periodeCombo.getSelectionModel().getSelectedItem().equals("Last Year")) {
             addText(gp, "January", 1, 0, "seccolor1", "seccolor6");
             addText(gp, "February", 2, 0, "seccolor1", "seccolor6");
             addText(gp, "March", 3, 0, "seccolor1", "seccolor6");
@@ -383,70 +399,73 @@ public class LaporanUntungRugiPeriodeController  {
             addText(gp, "October", 10, 0, "seccolor1", "seccolor6");
             addText(gp, "November", 11, 0, "seccolor1", "seccolor6");
             addText(gp, "December", 12, 0, "seccolor1", "seccolor6");
-        }else if(periodeCombo.getSelectionModel().getSelectedItem().equals("All")){
+        } else if (periodeCombo.getSelectionModel().getSelectedItem().equals("All")) {
             SimpleDateFormat yyyy = new SimpleDateFormat("yyyy");
             int now = Integer.parseInt(yyyy.format(tglBarang.parse(tglAwal)));
             int last = Integer.parseInt(yyyy.format(tglBarang.parse(tglAkhir)));
             int col = 1;
-            for(int i = now ; i <= last ; i++){
+            for (int i = now; i <= last; i++) {
                 addText(gp, String.valueOf(i), col, 0, "seccolor1", "seccolor6");
                 col++;
             }
         }
-        
-        StackPane.setMargin(gp, new Insets(5 , 5 , 1, 5));
+
+        StackPane.setMargin(gp, new Insets(5, 5, 1, 5));
         st.getChildren().add(gp);
         sp.setContent(st);
         mainGridPane.add(sp, 0, 1);
-        
+
         scrollPane.hvalueProperty().addListener((observable, oldValue, newValue) -> {
             sp.setHvalue(scrollPane.getHvalue());
         });
     }
-    private void setDetail(Date startDate, Date endDate, int col) throws ParseException{
+
+    private void setDetail(Date startDate, Date endDate, int col) throws ParseException {
         int i = 1;
-        
+
         double totalPenjualan = 0;
-        for(Keuangan k : allPenjualan){
+        for (Keuangan k : allPenjualan) {
             Date date = tglBarang.parse(k.getTglKeuangan());
-            if(date.after(startDate)&&date.before(endDate))
+            if (date.after(startDate) && date.before(endDate)) {
                 totalPenjualan = totalPenjualan + k.getJumlahRp();
+            }
         }
         addHyperLinkText(gridPane, rp.format(totalPenjualan), col, i, "seccolor5", "seccolor3", allPenjualan);
         i++;
 
         double totalHPP = 0;
-        for(Keuangan k : allNilaiTanahDanBangunan){
+        for (Keuangan k : allNilaiTanahDanBangunan) {
             Date date = tglBarang.parse(k.getTglKeuangan());
-            if(date.after(startDate)&&date.before(endDate))
+            if (date.after(startDate) && date.before(endDate)) {
                 totalHPP = totalHPP - k.getJumlahRp();
+            }
         }
         addHyperLinkText(gridPane, rp.format(totalHPP), col, i, "seccolor5", "seccolor3", allNilaiTanahDanBangunan);
         i++;
 
-        addText(gridPane, rp.format(totalPenjualan+totalHPP), col, i, "seccolor2", "seccolor3");
+        addText(gridPane, rp.format(totalPenjualan + totalHPP), col, i, "seccolor2", "seccolor3");
         i++;
         addText(gridPane, "", col, i, "seccolor1", "seccolor6");
         i++;
 
         double totalPendapatanBeban = 0;
-        for(String s : kategoriTransaksi){
+        for (String s : kategoriTransaksi) {
             double pendapatanBeban = 0;
             List<Keuangan> temp = new ArrayList<>();
-            for(Keuangan k : allPendapatan){
+            for (Keuangan k : allPendapatan) {
                 Date date = tglBarang.parse(k.getTglKeuangan());
-                if(date.after(startDate)&&date.before(endDate)){
-                    if(k.getKategori().equals(s)){
+                if (date.after(startDate) && date.before(endDate)) {
+                    if (k.getKategori().equals(s)) {
                         pendapatanBeban = pendapatanBeban + k.getJumlahRp();
                         totalPendapatanBeban = totalPendapatanBeban + k.getJumlahRp();
                         temp.add(k);
                     }
                 }
             }
-            for(Keuangan k : allBeban){
+            for (Keuangan k : allBeban) {
                 Date date = tglBarang.parse(k.getTglKeuangan());
-                if(date.after(startDate)&&date.before(endDate)){
-                    if(k.getKategori().equals(s)){
+                if (date.after(startDate) && date.before(endDate)) {
+                    if (k.getKategori().equals(s)) {
                         pendapatanBeban = pendapatanBeban - k.getJumlahRp();
                         totalPendapatanBeban = totalPendapatanBeban - k.getJumlahRp();
                         temp.add(k);
@@ -461,27 +480,29 @@ public class LaporanUntungRugiPeriodeController  {
         addText(gridPane, rp.format(totalPendapatanBeban), col, i, "seccolor5", "seccolor3");
         i++;
 
-        addText(gridPane, rp.format(totalPenjualan+totalHPP+totalPendapatanBeban), col, i, "seccolor2", "seccolor3");
+        addText(gridPane, rp.format(totalPenjualan + totalHPP + totalPendapatanBeban), col, i, "seccolor2", "seccolor3");
     }
-    private void addText(GridPane gridPane, String text, int column, int row, String backgroundColor, String textColor){
+
+    private void addText(GridPane gridPane, String text, int column, int row, String backgroundColor, String textColor) {
         AnchorPane anchorPane = new AnchorPane();
-        anchorPane.setStyle("-fx-background-color:"+backgroundColor+";");
+        anchorPane.setStyle("-fx-background-color:" + backgroundColor + ";");
         gridPane.add(anchorPane, column, row, 1, 1);
-        
+
         Label label = new Label(text);
         label.setStyle("-fx-font-weight:bold;"
-                +"-fx-text-fill: "+textColor+";");
+                + "-fx-text-fill: " + textColor + ";");
         label.setPadding(new Insets(0, 5, 0, 5));
         gridPane.add(label, column, row);
     }
-    private void addHyperLinkText(GridPane gridPane, String text, int column, int row, String backgroundColor, String textColor, List<Keuangan> keuangan){
+
+    private void addHyperLinkText(GridPane gridPane, String text, int column, int row, String backgroundColor, String textColor, List<Keuangan> keuangan) {
         AnchorPane anchorPane = new AnchorPane();
-        anchorPane.setStyle("-fx-background-color:"+backgroundColor+";");
+        anchorPane.setStyle("-fx-background-color:" + backgroundColor + ";");
         gridPane.add(anchorPane, column, row, 1, 1);
-        
+
         Hyperlink hyperlink = new Hyperlink(text);
         hyperlink.setStyle("-fx-font-weight:bold;"
-                + "-fx-text-fill:"+textColor+";"
+                + "-fx-text-fill:" + textColor + ";"
                 + "-fx-border-color:transparent;");
         hyperlink.setOnAction((e) -> {
             Stage stage = new Stage();
@@ -492,59 +513,60 @@ public class LaporanUntungRugiPeriodeController  {
         });
         gridPane.add(hyperlink, column, row);
     }
+
     @FXML
-    private void print(){
+    private void print() {
         List<UntungRugi> ur = new ArrayList<>();
-        
+
         ur.add(new UntungRugi("", "", ""));
         double totalPenjualan = 0;
-        for(Keuangan k : allPenjualan){
+        for (Keuangan k : allPenjualan) {
             totalPenjualan = totalPenjualan + k.getJumlahRp();
         }
-        ur.add(new UntungRugi(" Penjualan", " "+rp.format(totalPenjualan), ""));
+        ur.add(new UntungRugi(" Penjualan", " " + rp.format(totalPenjualan), ""));
 
         double totalHppPenjualan = 0;
-        for(Keuangan k : allNilaiTanahDanBangunan){
+        for (Keuangan k : allNilaiTanahDanBangunan) {
             totalHppPenjualan = totalHppPenjualan + k.getJumlahRp();
         }
-        ur.add(new UntungRugi(" Harga Pokok Penjualan", " "+rp.format(totalHppPenjualan), ""));
+        ur.add(new UntungRugi(" Harga Pokok Penjualan", " " + rp.format(totalHppPenjualan), ""));
 
         ur.add(new UntungRugi("Untung-Rugi Kotor", "", rp.format(
-            totalPenjualan-totalHppPenjualan
+                totalPenjualan - totalHppPenjualan
         )));
         ur.add(new UntungRugi("", "", ""));
 
         ur.add(new UntungRugi("Pendapatan-Beban", "", ""));
         double totalPendapatanBeban = 0;
-        for(String s : kategoriTransaksi){
+        for (String s : kategoriTransaksi) {
             double pendapatanBeban = 0;
-            for(Keuangan k : allPendapatan){
-                if(k.getKategori().equalsIgnoreCase(s)){
+            for (Keuangan k : allPendapatan) {
+                if (k.getKategori().equalsIgnoreCase(s)) {
                     pendapatanBeban = pendapatanBeban + k.getJumlahRp();
                     totalPendapatanBeban = totalPendapatanBeban + k.getJumlahRp();
                 }
             }
-            for(Keuangan k : allBeban){
-                if(k.getKategori().equalsIgnoreCase(s)){
+            for (Keuangan k : allBeban) {
+                if (k.getKategori().equalsIgnoreCase(s)) {
                     pendapatanBeban = pendapatanBeban + k.getJumlahRp();
                     totalPendapatanBeban = totalPendapatanBeban - k.getJumlahRp();
                 }
             }
-            ur.add(new UntungRugi(" "+s, " "+rp.format(pendapatanBeban), ""));
+            ur.add(new UntungRugi(" " + s, " " + rp.format(pendapatanBeban), ""));
         }
         ur.add(new UntungRugi("Total Pendapatan-Beban", "", rp.format(totalPendapatanBeban)));
         ur.add(new UntungRugi("", "", ""));
         ur.add(new UntungRugi("Untung-Rugi Bersih", "", rp.format(
-            totalPenjualan-totalHppPenjualan+
-            totalPendapatanBeban
+                totalPenjualan - totalHppPenjualan
+                + totalPendapatanBeban
         )));
 
-        try{
+        try {
             PrintOut printOut = new PrintOut();
 //            printOut.printLaporanUntungRugi(ur, 
 //                tglAwalPicker.getValue().toString(), tglAkhirPicker.getValue().toString()
 //            );
-        }catch(Exception e){
+        } catch (Exception e) {
             mainApp.showMessage(Modality.NONE, "Error", e.toString());
         }
     }

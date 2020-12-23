@@ -35,29 +35,43 @@ import javafx.stage.Stage;
  */
 public class DetailPiutangController {
 
-    @FXML public TableView<TerimaPembayaran> pembayaranPiutangTable;
-    @FXML private TableColumn<TerimaPembayaran, String> noPembayaranColumn;
-    @FXML private TableColumn<TerimaPembayaran, String> tglPembayaranColumn;
-    @FXML private TableColumn<TerimaPembayaran, Number> jumlahPembayaranColumn;
-    @FXML private TableColumn<TerimaPembayaran, String> tipeKeuanganColumn;
-    @FXML private TableColumn<TerimaPembayaran, String> catatanColumn;
-    
-    @FXML private TextField noPiutangField;
-    @FXML private TextField tglPiutangField;
-    @FXML private TextField kategoriField;
-    @FXML private TextField keteranganField;
-    @FXML private TextField jumlahPiutangField;
-    @FXML private Label terbayarLabel;
-    @FXML private Label sisaPiutangLabel;
+    @FXML
+    public TableView<TerimaPembayaran> pembayaranPiutangTable;
+    @FXML
+    private TableColumn<TerimaPembayaran, String> noPembayaranColumn;
+    @FXML
+    private TableColumn<TerimaPembayaran, String> tglPembayaranColumn;
+    @FXML
+    private TableColumn<TerimaPembayaran, Number> jumlahPembayaranColumn;
+    @FXML
+    private TableColumn<TerimaPembayaran, String> tipeKeuanganColumn;
+    @FXML
+    private TableColumn<TerimaPembayaran, String> catatanColumn;
+
+    @FXML
+    private TextField noPiutangField;
+    @FXML
+    private TextField tglPiutangField;
+    @FXML
+    private TextField kategoriField;
+    @FXML
+    private TextField keteranganField;
+    @FXML
+    private TextField jumlahPiutangField;
+    @FXML
+    private Label terbayarLabel;
+    @FXML
+    private Label sisaPiutangLabel;
     private ObservableList<TerimaPembayaran> allPembayaran = FXCollections.observableArrayList();
-    private Main mainApp;   
+    private Main mainApp;
     private Stage stage;
     private Stage owner;
+
     public void initialize() {
         noPembayaranColumn.setCellValueFactory(cellData -> cellData.getValue().noTerimaPembayaranProperty());
         tipeKeuanganColumn.setCellValueFactory(cellData -> cellData.getValue().tipeKeuanganProperty());
-        tglPembayaranColumn.setCellValueFactory(cellData -> { 
-            try{
+        tglPembayaranColumn.setCellValueFactory(cellData -> {
+            try {
                 return new SimpleStringProperty(tglLengkap.format(tglSql.parse(cellData.getValue().getTglTerima())));
             } catch (Exception ex) {
                 return null;
@@ -66,9 +80,10 @@ public class DetailPiutangController {
         jumlahPembayaranColumn.setCellValueFactory(cellData -> cellData.getValue().jumlahPembayaranProperty());
         jumlahPembayaranColumn.setCellFactory(col -> Function.getTableCell(rp));
         catatanColumn.setCellValueFactory(cellData -> cellData.getValue().catatanProperty());
-        
-    }    
-    public void setMainApp(Main mainApp,Stage owner,Stage stage) {
+
+    }
+
+    public void setMainApp(Main mainApp, Stage owner, Stage stage) {
         this.mainApp = mainApp;
         this.owner = owner;
         this.stage = stage;
@@ -76,11 +91,12 @@ public class DetailPiutangController {
         stage.setOnCloseRequest((event) -> {
             mainApp.closeDialog(owner, stage);
         });
-    }   
-    public void setDetail(String noPiutang){
+    }
+
+    public void setDetail(String noPiutang) {
         Task<Piutang> task = new Task<Piutang>() {
-            @Override 
-            public Piutang call() throws Exception{
+            @Override
+            public Piutang call() throws Exception {
                 try (Connection con = Koneksi.getConnection()) {
                     Piutang p = PiutangDAO.get(con, noPiutang);
                     p.setAllTerimaPembayaran(TerimaPembayaranDAO.getAllByNoPiutang(con, p.getNoPiutang(), "true"));
@@ -92,19 +108,19 @@ public class DetailPiutangController {
             mainApp.showLoadingScreen();
         });
         task.setOnSucceeded((e) -> {
-            try{
+            try {
                 mainApp.closeLoading();
                 Piutang p = task.getValue();
                 noPiutangField.setText(p.getNoPiutang());
                 tglPiutangField.setText(tglLengkap.format(tglSql.parse(p.getTglPiutang())));
                 kategoriField.setText(p.getKategori());
                 keteranganField.setText(p.getKeterangan());
-                jumlahPiutangField.setText("Rp "+rp.format(p.getJumlahPiutang()));
+                jumlahPiutangField.setText("Rp " + rp.format(p.getJumlahPiutang()));
                 terbayarLabel.setText(rp.format(p.getPembayaran()));
                 sisaPiutangLabel.setText(rp.format(p.getSisaPiutang()));
                 allPembayaran.clear();
                 allPembayaran.addAll(p.getAllTerimaPembayaran());
-            }catch(Exception ex) {
+            } catch (Exception ex) {
                 mainApp.showMessage(Modality.NONE, "Error", ex.toString());
             }
         });
@@ -114,8 +130,9 @@ public class DetailPiutangController {
         });
         new Thread(task).start();
     }
+
     public void close() {
         mainApp.closeDialog(owner, stage);
     }
-    
+
 }
