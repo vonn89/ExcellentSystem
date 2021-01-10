@@ -984,7 +984,7 @@ public class Service {
                     tglSql.format(new Date()), "true", "2000-01-01 00:00:00", "");
 
             insertKeuangan(con, noKeuangan, tglBarang.format(new Date()), "HUTANG", "Hutang Pembangunan Kontraktor", p.getKodeProperty(),
-                    "Pembangunan Kontraktor - " + p.getNoPembangunan(), -p.getTotalPembangunan(), 0, sistem.getUser().getUsername(),
+                    "Pembangunan Kontraktor - " + p.getNoPembangunan(), p.getTotalPembangunan(), 0, sistem.getUser().getUsername(),
                     tglSql.format(new Date()), "true", "2000-01-01 00:00:00", "");
 
             Hutang h = new Hutang();
@@ -1023,14 +1023,12 @@ public class Service {
             con.setAutoCommit(false);
             String status = "true";
 
-            String noAddendum = AddendumDAO.getId(con, p.getProperty().getKodeKategori());
+            String noAddendum = AddendumDAO.getId(con, p.getProperty().getNamaProperty().substring(0, 3).toUpperCase());
 
             p.setTotalPembangunan(p.getTotalPembangunan() + d.getJumlahRp());
             p.setSisaPembayaran(p.getTotalPembangunan() - p.getPembayaran());
             PembangunanKontraktorHeadDAO.update(con, p);
 
-            d.setAddendum(noAddendum);
-            PembangunanKontraktorDetailDAO.insert(con, d);
 
             Property prop = PropertyDAO.get(con, p.getKodeProperty());
             prop.setNilaiProperty(prop.getNilaiProperty() + d.getJumlahRp());
@@ -1039,15 +1037,19 @@ public class Service {
                 AddendumDAO.insert(con, p.getAddendum());
 
                 prop.setAddendum(prop.getAddendum() + p.getAddendum().getPerubahanHargaProperty());
+                
+                d.setAddendum(noAddendum);
             }
             PropertyDAO.update(con, prop);
 
+            PembangunanKontraktorDetailDAO.insert(con, d);
+            
             Keuangan k = KeuanganDAO.get(con, "ASET LANCAR", "Tanah & Bangunan", p.getKodeProperty(), "Pembangunan Kontraktor - " + p.getNoPembangunan());
             k.setJumlahRp(k.getJumlahRp() + d.getJumlahRp());
             KeuanganDAO.update(con, k);
 
             Keuangan k2 = KeuanganDAO.get(con, "HUTANG", "Hutang Pembangunan Kontraktor", p.getKodeProperty(), "Pembangunan Kontraktor - " + p.getNoPembangunan());
-            k2.setJumlahRp(k2.getJumlahRp() - d.getJumlahRp());
+            k2.setJumlahRp(k2.getJumlahRp() + d.getJumlahRp());
             KeuanganDAO.update(con, k2);
 
             Hutang h = HutangDAO.getByKategoriAndKeteranganAndStatus(con, "Hutang Pembangunan Kontraktor", p.getNoPembangunan(), "%");

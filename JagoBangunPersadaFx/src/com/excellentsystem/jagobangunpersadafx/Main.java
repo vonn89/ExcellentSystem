@@ -103,7 +103,7 @@ public class Main extends Application {
     public static Sistem sistem = null;
     private double x = 0;
     private double y = 0;
-    public final String version = "1.2.3";
+    public final String version = "1.2.4";
     public static SecretKeySpec key;
     @Override
     public void start(Stage stage) {

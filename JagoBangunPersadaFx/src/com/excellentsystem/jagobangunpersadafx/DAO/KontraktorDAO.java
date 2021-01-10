@@ -69,7 +69,7 @@ public class KontraktorDAO {
     public static void update(Connection con, Kontraktor c)throws Exception{
         PreparedStatement ps = con.prepareStatement("update tm_kontraktor set nama_kontraktor=?, alamat=?, kota=?, "
             + " kontak_person=?, no_telp=?, no_handphone=?, email=?, status=? "
-            + " where kode_customer=?");
+            + " where kode_kontraktor=?");
         ps.setString(1, c.getNamaKontraktor());
         ps.setString(2, c.getAlamat());
         ps.setString(3, c.getKota());
