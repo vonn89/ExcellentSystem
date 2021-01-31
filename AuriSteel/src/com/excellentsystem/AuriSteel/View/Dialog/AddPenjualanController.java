@@ -8,7 +8,7 @@ package com.excellentsystem.AuriSteel.View.Dialog;
 
 import com.excellentsystem.AuriSteel.DAO.CustomerDAO;
 import com.excellentsystem.AuriSteel.DAO.PegawaiDAO;
-import com.excellentsystem.AuriSteel.DAO.PenjualanHeadDAO;
+import com.excellentsystem.AuriSteel.DAO.PenjualanBarangHeadDAO;
 import com.excellentsystem.AuriSteel.Function;
 import com.excellentsystem.AuriSteel.Koneksi;
 import com.excellentsystem.AuriSteel.Main;
@@ -17,7 +17,7 @@ import static com.excellentsystem.AuriSteel.Main.tglLengkap;
 import static com.excellentsystem.AuriSteel.Main.tglSql;
 import com.excellentsystem.AuriSteel.Model.Customer;
 import com.excellentsystem.AuriSteel.Model.Pegawai;
-import com.excellentsystem.AuriSteel.Model.PenjualanHead;
+import com.excellentsystem.AuriSteel.Model.PenjualanBarangHead;
 import java.sql.Connection;
 import java.time.LocalDate;
 import java.util.List;
@@ -42,27 +42,27 @@ import javafx.stage.Stage;
  */
 public class AddPenjualanController  {
 
-    @FXML public TableView<PenjualanHead> penjualanHeadTable;
-    @FXML private TableColumn<PenjualanHead, String> noPenjualanHeadColumn;
-    @FXML private TableColumn<PenjualanHead, String> tglPenjualanColumn;
-    @FXML private TableColumn<PenjualanHead, String> kodeCustomerColumn;
-    @FXML private TableColumn<PenjualanHead, String> namaCustomerColumn;
-    @FXML private TableColumn<PenjualanHead, String> alamatCustomerColumn;
-    @FXML private TableColumn<PenjualanHead, String> paymentTermColumn;
-    @FXML private TableColumn<PenjualanHead, Number> totalPenjualanColumn;
-    @FXML private TableColumn<PenjualanHead, Number> totalBebanPenjualanColumn;
-    @FXML private TableColumn<PenjualanHead, Number> pembayaranColumn;
-    @FXML private TableColumn<PenjualanHead, Number> sisaPembayaranColumn;
-    @FXML private TableColumn<PenjualanHead, String> catatanColumn;
-    @FXML private TableColumn<PenjualanHead, String> kodeSalesColumn;
-    @FXML private TableColumn<PenjualanHead, String> namaSalesColumn;
-    @FXML private TableColumn<PenjualanHead, String> kodeUserColumn;
+    @FXML public TableView<PenjualanBarangHead> penjualanHeadTable;
+    @FXML private TableColumn<PenjualanBarangHead, String> noPenjualanHeadColumn;
+    @FXML private TableColumn<PenjualanBarangHead, String> tglPenjualanColumn;
+    @FXML private TableColumn<PenjualanBarangHead, String> kodeCustomerColumn;
+    @FXML private TableColumn<PenjualanBarangHead, String> namaCustomerColumn;
+    @FXML private TableColumn<PenjualanBarangHead, String> alamatCustomerColumn;
+    @FXML private TableColumn<PenjualanBarangHead, String> paymentTermColumn;
+    @FXML private TableColumn<PenjualanBarangHead, Number> totalPenjualanColumn;
+    @FXML private TableColumn<PenjualanBarangHead, Number> totalBebanPenjualanColumn;
+    @FXML private TableColumn<PenjualanBarangHead, Number> pembayaranColumn;
+    @FXML private TableColumn<PenjualanBarangHead, Number> sisaPembayaranColumn;
+    @FXML private TableColumn<PenjualanBarangHead, String> catatanColumn;
+    @FXML private TableColumn<PenjualanBarangHead, String> kodeSalesColumn;
+    @FXML private TableColumn<PenjualanBarangHead, String> namaSalesColumn;
+    @FXML private TableColumn<PenjualanBarangHead, String> kodeUserColumn;
     
     @FXML private TextField searchField;
     @FXML private DatePicker tglMulaiPicker;
     @FXML private DatePicker tglAkhirPicker;
-    private ObservableList<PenjualanHead> allPenjualan = FXCollections.observableArrayList();
-    private ObservableList<PenjualanHead> filterData = FXCollections.observableArrayList();
+    private ObservableList<PenjualanBarangHead> allPenjualan = FXCollections.observableArrayList();
+    private ObservableList<PenjualanBarangHead> filterData = FXCollections.observableArrayList();
     private Main mainApp;  
     private Stage stage;
     private Stage owner;
@@ -98,7 +98,7 @@ public class AddPenjualanController  {
         tglAkhirPicker.setConverter(Function.getTglConverter());
         tglAkhirPicker.setValue(LocalDate.now());
         tglAkhirPicker.setDayCellFactory((final DatePicker datePicker) -> Function.getDateCellAkhir(tglMulaiPicker));
-        allPenjualan.addListener((ListChangeListener.Change<? extends PenjualanHead> change) -> {
+        allPenjualan.addListener((ListChangeListener.Change<? extends PenjualanBarangHead> change) -> {
             searchPenjualan();
         });
         searchField.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
@@ -122,15 +122,15 @@ public class AddPenjualanController  {
     }
     @FXML
     private void getPenjualan(){
-        Task<List<PenjualanHead>> task = new Task<List<PenjualanHead>>() {
+        Task<List<PenjualanBarangHead>> task = new Task<List<PenjualanBarangHead>>() {
             @Override 
-            public List<PenjualanHead> call()throws Exception{
+            public List<PenjualanBarangHead> call()throws Exception{
                 try (Connection con = Koneksi.getConnection()) {
-                    List<PenjualanHead> allPenjualan = PenjualanHeadDAO.getAllByDateAndStatus(con, 
+                    List<PenjualanBarangHead> allPenjualan = PenjualanBarangHeadDAO.getAllByDateAndStatus(con, 
                             tglMulaiPicker.getValue().toString(), tglAkhirPicker.getValue().toString(), "true");
                     List<Customer> allCustomer = CustomerDAO.getAllByStatus(con, "%");
                     List<Pegawai> allSales = PegawaiDAO.getAllByStatus(con, "%");
-                    for(PenjualanHead p : allPenjualan){
+                    for(PenjualanBarangHead p : allPenjualan){
                         for(Customer c: allCustomer){
                             if(p.getKodeCustomer().equals(c.getKodeCustomer()))
                                 p.setCustomer(c);
@@ -172,7 +172,7 @@ public class AddPenjualanController  {
     private void searchPenjualan() {
         try{
             filterData.clear();
-            for (PenjualanHead temp : allPenjualan) {
+            for (PenjualanBarangHead temp : allPenjualan) {
                 if (searchField.getText() == null || searchField.getText().equals(""))
                     filterData.add(temp);
                 else{

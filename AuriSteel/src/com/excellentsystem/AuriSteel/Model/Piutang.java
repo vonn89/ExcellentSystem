@@ -28,10 +28,19 @@ public class Piutang {
     private final StringProperty jatuhTempo = new SimpleStringProperty();
     private final StringProperty kodeUser = new SimpleStringProperty();
     private final StringProperty status = new SimpleStringProperty();
-    private PenjualanCoilHead penjualanCoilHead;
-    private PenjualanHead penjualanHead;
+    private PenjualanBahanHead penjualanBahanHead;
+    private PenjualanBarangHead penjualanHead;
     private List<TerimaPembayaran> listTerimaPembayaran;
+    private PemesananPembelianBahanHead pemesananPembelianBahanHead;
 
+    public PemesananPembelianBahanHead getPemesananPembelianBahanHead() {
+        return pemesananPembelianBahanHead;
+    }
+
+    public void setPemesananPembelianBahanHead(PemesananPembelianBahanHead pemesananPembelianBahanHead) {
+        this.pemesananPembelianBahanHead = pemesananPembelianBahanHead;
+    }
+    
     public List<TerimaPembayaran> getListTerimaPembayaran() {
         return listTerimaPembayaran;
     }
@@ -40,21 +49,22 @@ public class Piutang {
         this.listTerimaPembayaran = listTerimaPembayaran;
     }
     
-    public PenjualanHead getPenjualanHead() {
+    public PenjualanBarangHead getPenjualanHead() {
         return penjualanHead;
     }
 
-    public void setPenjualanHead(PenjualanHead penjualanHead) {
+    public void setPenjualanHead(PenjualanBarangHead penjualanHead) {
         this.penjualanHead = penjualanHead;
     }
-    
-    public PenjualanCoilHead getPenjualanCoilHead() {
-        return penjualanCoilHead;
+
+    public PenjualanBahanHead getPenjualanBahanHead() {
+        return penjualanBahanHead;
     }
 
-    public void setPenjualanCoilHead(PenjualanCoilHead penjualanCoilHead) {
-        this.penjualanCoilHead = penjualanCoilHead;
+    public void setPenjualanBahanHead(PenjualanBahanHead penjualanBahanHead) {
+        this.penjualanBahanHead = penjualanBahanHead;
     }
+    
     
     public String getKodeUser() {
         return kodeUser.get();

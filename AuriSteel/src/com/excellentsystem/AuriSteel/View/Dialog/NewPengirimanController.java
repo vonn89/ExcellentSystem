@@ -8,9 +8,9 @@ package com.excellentsystem.AuriSteel.View.Dialog;
 import com.excellentsystem.AuriSteel.DAO.BarangDAO;
 import com.excellentsystem.AuriSteel.DAO.CustomerDAO;
 import com.excellentsystem.AuriSteel.DAO.LogBarangDAO;
-import com.excellentsystem.AuriSteel.DAO.PemesananHeadDAO;
-import com.excellentsystem.AuriSteel.DAO.PenjualanDetailDAO;
-import com.excellentsystem.AuriSteel.DAO.PenjualanHeadDAO;
+import com.excellentsystem.AuriSteel.DAO.PemesananBarangHeadDAO;
+import com.excellentsystem.AuriSteel.DAO.PenjualanBarangDetailDAO;
+import com.excellentsystem.AuriSteel.DAO.PenjualanBarangHeadDAO;
 import com.excellentsystem.AuriSteel.Function;
 import com.excellentsystem.AuriSteel.Koneksi;
 import com.excellentsystem.AuriSteel.Main;
@@ -20,10 +20,10 @@ import static com.excellentsystem.AuriSteel.Main.tglLengkap;
 import static com.excellentsystem.AuriSteel.Main.tglSql;
 import com.excellentsystem.AuriSteel.Model.Gudang;
 import com.excellentsystem.AuriSteel.Model.LogBarang;
-import com.excellentsystem.AuriSteel.Model.PemesananDetail;
-import com.excellentsystem.AuriSteel.Model.PemesananHead;
-import com.excellentsystem.AuriSteel.Model.PenjualanDetail;
-import com.excellentsystem.AuriSteel.Model.PenjualanHead;
+import com.excellentsystem.AuriSteel.Model.PemesananBarangDetail;
+import com.excellentsystem.AuriSteel.Model.PemesananBarangHead;
+import com.excellentsystem.AuriSteel.Model.PenjualanBarangDetail;
+import com.excellentsystem.AuriSteel.Model.PenjualanBarangHead;
 import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.List;
@@ -55,13 +55,13 @@ import javafx.stage.Stage;
  */
 public class NewPengirimanController  {
 
-    @FXML private TableView<PenjualanDetail> pengirimanDetailTable;
-    @FXML private TableColumn<PenjualanDetail, String> kodeBarangColumn;
-    @FXML private TableColumn<PenjualanDetail, String> namaBarangColumn;
-    @FXML private TableColumn<PenjualanDetail, String> keteranganColumn;
-    @FXML private TableColumn<PenjualanDetail, String> catatanInternColumn;
-    @FXML private TableColumn<PenjualanDetail, String> satuanColumn;
-    @FXML private TableColumn<PenjualanDetail, Number> qtyColumn;
+    @FXML private TableView<PenjualanBarangDetail> pengirimanDetailTable;
+    @FXML private TableColumn<PenjualanBarangDetail, String> kodeBarangColumn;
+    @FXML private TableColumn<PenjualanBarangDetail, String> namaBarangColumn;
+    @FXML private TableColumn<PenjualanBarangDetail, String> keteranganColumn;
+    @FXML private TableColumn<PenjualanBarangDetail, String> catatanInternColumn;
+    @FXML private TableColumn<PenjualanBarangDetail, String> satuanColumn;
+    @FXML private TableColumn<PenjualanBarangDetail, Number> qtyColumn;
     
     @FXML public TextField noPemesananField;
     @FXML private TextField tglPemesananField;
@@ -82,8 +82,8 @@ public class NewPengirimanController  {
     @FXML private Button cancelButton;
     @FXML public Button saveButton;
     
-    public PemesananHead pemesanan;
-    public ObservableList<PenjualanDetail> allPenjualanDetail = FXCollections.observableArrayList();
+    public PemesananBarangHead pemesanan;
+    public ObservableList<PenjualanBarangDetail> allPenjualanDetail = FXCollections.observableArrayList();
     private Main mainApp;   
     private Stage stage;
     private Stage owner;
@@ -108,10 +108,10 @@ public class NewPengirimanController  {
         });
         cm.getItems().addAll(addBarang, refresh);
         pengirimanDetailTable.setContextMenu(cm);
-        pengirimanDetailTable.setRowFactory((TableView<PenjualanDetail> tv) -> {
-            final TableRow<PenjualanDetail> row = new TableRow<PenjualanDetail>(){
+        pengirimanDetailTable.setRowFactory((TableView<PenjualanBarangDetail> tv) -> {
+            final TableRow<PenjualanBarangDetail> row = new TableRow<PenjualanBarangDetail>(){
                 @Override
-                public void updateItem(PenjualanDetail item, boolean empty) {
+                public void updateItem(PenjualanBarangDetail item, boolean empty) {
                     super.updateItem(item, empty);
                     if (empty) {
                         setContextMenu(cm);
@@ -160,7 +160,7 @@ public class NewPengirimanController  {
     private void hitungTotal(){
         double total = 0;
         double totalTonase = 0;
-        for(PenjualanDetail d : allPenjualanDetail){
+        for(PenjualanBarangDetail d : allPenjualanDetail){
             total = total + d.getQty();
             totalTonase = totalTonase + d.getQty()*d.getBarang().getBerat();
         }
@@ -172,16 +172,16 @@ public class NewPengirimanController  {
         tglPengirimanField.setText("");
     }
     public void setDetailPengiriman(String noPenjualan){
-        Task<PenjualanHead> task = new Task<PenjualanHead>() {
+        Task<PenjualanBarangHead> task = new Task<PenjualanBarangHead>() {
             @Override 
-            public PenjualanHead call() throws Exception{
+            public PenjualanBarangHead call() throws Exception{
                 try (Connection con = Koneksi.getConnection()) {
-                    PenjualanHead pengiriman = PenjualanHeadDAO.get(con, noPenjualan);
-                    pengiriman.setPemesananHead(PemesananHeadDAO.get(con, pengiriman.getNoPemesanan()));
-                    pengiriman.getPemesananHead().setCustomerInvoice(CustomerDAO.get(con, pengiriman.getPemesananHead().getKodeCustomerInvoice()));
+                    PenjualanBarangHead pengiriman = PenjualanBarangHeadDAO.get(con, noPenjualan);
+                    pengiriman.setPemesananBarangHead(PemesananBarangHeadDAO.get(con, pengiriman.getNoPemesanan()));
+                    pengiriman.getPemesananBarangHead().setCustomerInvoice(CustomerDAO.get(con, pengiriman.getPemesananBarangHead().getKodeCustomerInvoice()));
                     pengiriman.setCustomer(CustomerDAO.get(con, pengiriman.getKodeCustomer()));
-                    pengiriman.setListPenjualanDetail(PenjualanDetailDAO.getAllPenjualanDetail(con, noPenjualan));
-                    for(PenjualanDetail d : pengiriman.getListPenjualanDetail()){
+                    pengiriman.setListPenjualanBarangDetail(PenjualanBarangDetailDAO.getAllPenjualanDetail(con, noPenjualan));
+                    for(PenjualanBarangDetail d : pengiriman.getListPenjualanBarangDetail()){
                         d.setBarang(BarangDAO.get(con, d.getKodeBarang()));
                     }
                     return pengiriman;
@@ -207,19 +207,19 @@ public class NewPengirimanController  {
                 }
                 pengirimanDetailTable.getContextMenu().getItems().removeAll(removeMenu);
                 
-                PenjualanHead pengiriman = task.getValue();
+                PenjualanBarangHead pengiriman = task.getValue();
                 noPengirimanField.setText(pengiriman.getNoPenjualan());
                 tglPengirimanField.setText(tglLengkap.format(tglSql.parse(pengiriman.getTglPengiriman())));
                 noPemesananField.setText(pengiriman.getNoPemesanan());
-                if(pengiriman.getPemesananHead()!=null)
-                    tglPemesananField.setText(tglLengkap.format(tglSql.parse(pengiriman.getPemesananHead().getTglPemesanan())));
+                if(pengiriman.getPemesananBarangHead()!=null)
+                    tglPemesananField.setText(tglLengkap.format(tglSql.parse(pengiriman.getPemesananBarangHead().getTglPemesanan())));
                 namaField.setText(pengiriman.getCustomer().getNama());
-                namaInvoiceField.setText(pengiriman.getPemesananHead().getCustomerInvoice().getNama());
+                namaInvoiceField.setText(pengiriman.getPemesananBarangHead().getCustomerInvoice().getNama());
                 alamatField.setText(pengiriman.getCustomer().getAlamat());
                 alamatKirimField.setText(pengiriman.getTujuanKirim());
                 namaSupirField.setText(pengiriman.getSupir());
                 gudangCombo.getSelectionModel().select(pengiriman.getKodeGudang());
-                allPenjualanDetail.addAll(pengiriman.getListPenjualanDetail());
+                allPenjualanDetail.addAll(pengiriman.getListPenjualanBarangDetail());
                 hitungTotal();
             }catch(Exception e){
                 e.printStackTrace();
@@ -240,7 +240,7 @@ public class NewPengirimanController  {
         AddPemesananController controller = loader.getController();
         controller.setMainApp(mainApp, stage, child);
         controller.pemesananHeadTable.setRowFactory(table -> {
-            TableRow<PemesananHead> row = new TableRow<PemesananHead>() {};
+            TableRow<PemesananBarangHead> row = new TableRow<PemesananBarangHead>() {};
             row.setOnMouseClicked((MouseEvent mouseEvent) -> {
                 if(mouseEvent.getButton().equals(MouseButton.PRIMARY)&&
                         mouseEvent.getClickCount() == 2){
@@ -284,19 +284,19 @@ public class NewPengirimanController  {
             FXMLLoader loader = mainApp.showDialog(stage, child, "View/Dialog/AddDetailPemesanan.fxml");
             AddDetailPemesananController controller = loader.getController();
             controller.setMainApp(mainApp, stage, child);
-            controller.setPemesananDetail(pemesanan.getListPemesananDetail());
+            controller.setPemesananDetail(pemesanan.getListPemesananBarangDetail());
             controller.addButton.setOnAction((ActionEvent event) -> {
                 if(controller.pemesananDetail!=null){
                     mainApp.closeDialog(stage, child);
                     double qty = 0;
-                    for(PemesananDetail d : controller.allPemesananDetail){
+                    for(PemesananBarangDetail d : controller.allPemesananDetail){
                         if(d.getKodeBarang().equals(controller.pemesananDetail.getKodeBarang())&&
                                 d.getKeterangan().equals(controller.pemesananDetail.getKeterangan())){
                             qty = qty + (d.getQty()-d.getQtyTerkirim());
                         }
                     }
-                    PenjualanDetail d = null;
-                    for(PenjualanDetail temp : allPenjualanDetail){
+                    PenjualanBarangDetail d = null;
+                    for(PenjualanBarangDetail temp : allPenjualanDetail){
                         if(temp.getNoPemesanan().equals(controller.pemesananDetail.getNoPemesanan())&&
                                 temp.getNoUrut()==controller.pemesananDetail.getNoUrut()){
                             qty = qty-temp.getQty();
@@ -307,7 +307,7 @@ public class NewPengirimanController  {
                         if(d==null){
                             try(Connection con = Koneksi.getConnection()){
                                 LogBarang log = LogBarangDAO.getLastByBarangAndGudang(con, controller.pemesananDetail.getKodeBarang(), gudangCombo.getSelectionModel().getSelectedItem());
-                                PenjualanDetail detail = new PenjualanDetail();
+                                PenjualanBarangDetail detail = new PenjualanBarangDetail();
                                 detail.setNoPemesanan(controller.pemesananDetail.getNoPemesanan());
                                 detail.setNoUrut(controller.pemesananDetail.getNoUrut());
                                 detail.setKodeBarang(controller.pemesananDetail.getKodeBarang());

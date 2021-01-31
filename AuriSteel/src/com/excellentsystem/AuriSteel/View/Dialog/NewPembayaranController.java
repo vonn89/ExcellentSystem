@@ -6,23 +6,23 @@
 
 package com.excellentsystem.AuriSteel.View.Dialog;
 
+import com.excellentsystem.AuriSteel.DAO.PembelianBahanHeadDAO;
 import com.excellentsystem.AuriSteel.DAO.PembelianBarangHeadDAO;
-import com.excellentsystem.AuriSteel.DAO.PembelianHeadDAO;
-import com.excellentsystem.AuriSteel.DAO.PenjualanCoilHeadDAO;
-import com.excellentsystem.AuriSteel.DAO.PenjualanHeadDAO;
-import com.excellentsystem.AuriSteel.Function;
+import com.excellentsystem.AuriSteel.DAO.PenjualanBahanHeadDAO;
+import com.excellentsystem.AuriSteel.DAO.PenjualanBarangHeadDAO;
 import com.excellentsystem.AuriSteel.Koneksi;
 import com.excellentsystem.AuriSteel.Main;
 import static com.excellentsystem.AuriSteel.Main.df;
 import static com.excellentsystem.AuriSteel.Main.sistem;
 import com.excellentsystem.AuriSteel.Model.Hutang;
 import com.excellentsystem.AuriSteel.Model.KategoriKeuangan;
+import com.excellentsystem.AuriSteel.Model.PembelianBahanHead;
 import com.excellentsystem.AuriSteel.Model.PembelianBarangHead;
-import com.excellentsystem.AuriSteel.Model.PembelianHead;
-import com.excellentsystem.AuriSteel.Model.PemesananCoilHead;
-import com.excellentsystem.AuriSteel.Model.PemesananHead;
-import com.excellentsystem.AuriSteel.Model.PenjualanCoilHead;
-import com.excellentsystem.AuriSteel.Model.PenjualanHead;
+import com.excellentsystem.AuriSteel.Model.PemesananBahanHead;
+import com.excellentsystem.AuriSteel.Model.PemesananBarangHead;
+import com.excellentsystem.AuriSteel.Model.PemesananPembelianBahanHead;
+import com.excellentsystem.AuriSteel.Model.PenjualanBahanHead;
+import com.excellentsystem.AuriSteel.Model.PenjualanBarangHead;
 import com.excellentsystem.AuriSteel.Model.Piutang;
 import java.sql.Connection;
 import javafx.collections.FXCollections;
@@ -87,7 +87,7 @@ public class NewPembayaranController  {
             }
         });
     }   
-    public void setTerimaPembayaranDownPayment(PemesananHead p){
+    public void setTerimaPembayaranDownPayment(PemesananBarangHead p){
         title.setText("Terima Pembayaran DP");
         noTransaksiLabel.setText("No Pemesanan");
         totalTransaksiLabel.setText("Total Pemesanan");
@@ -97,8 +97,18 @@ public class NewPembayaranController  {
         sudahTerbayarField.setText(df.format(p.getDownPayment()));
         sisaPembayaranField.setText(df.format(p.getTotalPemesanan()-p.getDownPayment()));
     }
-    public void setTerimaPembayaranDownPaymentCoil(PemesananCoilHead p){
+    public void setTerimaPembayaranDownPaymentCoil(PemesananBahanHead p){
         title.setText("Terima Pembayaran DP");
+        noTransaksiLabel.setText("No Pemesanan");
+        totalTransaksiLabel.setText("Total Pemesanan");
+        sudahTerbayarLabel.setText("Down Payment");
+        noTransaksiField.setText(p.getNoPemesanan());
+        totalTransaksiField.setText(df.format(p.getTotalPemesanan()));
+        sudahTerbayarField.setText(df.format(p.getDownPayment()));
+        sisaPembayaranField.setText(df.format(p.getTotalPemesanan()-p.getDownPayment()));
+    }
+    public void setPembayaranDownPayment(PemesananPembelianBahanHead p){
+        title.setText("Pembayaran DP");
         noTransaksiLabel.setText("No Pemesanan");
         totalTransaksiLabel.setText("Total Pemesanan");
         sudahTerbayarLabel.setText("Down Payment");
@@ -108,11 +118,11 @@ public class NewPembayaranController  {
         sisaPembayaranField.setText(df.format(p.getTotalPemesanan()-p.getDownPayment()));
     }
     public void setPembayaranPenjualanCoil(String noPenjualan){
-        Task<PenjualanCoilHead> task = new Task<PenjualanCoilHead>() {
+        Task<PenjualanBahanHead> task = new Task<PenjualanBahanHead>() {
             @Override 
-            public PenjualanCoilHead call() throws Exception{
+            public PenjualanBahanHead call() throws Exception{
                 try (Connection con = Koneksi.getConnection()) {
-                    return PenjualanCoilHeadDAO.get(con, noPenjualan);
+                    return PenjualanBahanHeadDAO.get(con, noPenjualan);
                 }
             }
         };
@@ -122,7 +132,7 @@ public class NewPembayaranController  {
         task.setOnSucceeded((e) -> {
             try{
                 mainApp.closeLoading();
-                PenjualanCoilHead p = task.getValue();
+                PenjualanBahanHead p = task.getValue();
                 title.setText("Pembayaran Penjualan");
                 noTransaksiLabel.setText("No Penjualan");
                 totalTransaksiLabel.setText("Total Penjualan");
@@ -141,11 +151,11 @@ public class NewPembayaranController  {
         new Thread(task).start();
     }
     public void setPembayaranPenjualan(String noPenjualan){
-        Task<PenjualanHead> task = new Task<PenjualanHead>() {
+        Task<PenjualanBarangHead> task = new Task<PenjualanBarangHead>() {
             @Override 
-            public PenjualanHead call() throws Exception{
+            public PenjualanBarangHead call() throws Exception{
                 try (Connection con = Koneksi.getConnection()) {
-                    return PenjualanHeadDAO.get(con, noPenjualan);
+                    return PenjualanBarangHeadDAO.get(con, noPenjualan);
                 }
             }
         };
@@ -155,7 +165,7 @@ public class NewPembayaranController  {
         task.setOnSucceeded((e) -> {
             try{
                 mainApp.closeLoading();
-                PenjualanHead p = task.getValue();
+                PenjualanBarangHead p = task.getValue();
                 title.setText("Pembayaran Penjualan");
                 noTransaksiLabel.setText("No Penjualan");
                 totalTransaksiLabel.setText("Total Penjualan");
@@ -174,11 +184,11 @@ public class NewPembayaranController  {
         new Thread(task).start();
     }
     public void setPembayaranPembelian(String noPembelian){
-        Task<PembelianHead> task = new Task<PembelianHead>() {
+        Task<PembelianBahanHead> task = new Task<PembelianBahanHead>() {
             @Override 
-            public PembelianHead call() throws Exception{
+            public PembelianBahanHead call() throws Exception{
                 try (Connection con = Koneksi.getConnection()) {
-                    return PembelianHeadDAO.get(con, noPembelian);
+                    return PembelianBahanHeadDAO.get(con, noPembelian);
                 }
             }
         };
@@ -188,7 +198,7 @@ public class NewPembayaranController  {
         task.setOnSucceeded((e) -> {
             try{
                 mainApp.closeLoading();
-                PembelianHead p = task.getValue();
+                PembelianBahanHead p = task.getValue();
                 title.setText("Pembayaran Pembelian");
                 noTransaksiLabel.setText("No Pembelian");
                 totalTransaksiLabel.setText("Total Pembelian");

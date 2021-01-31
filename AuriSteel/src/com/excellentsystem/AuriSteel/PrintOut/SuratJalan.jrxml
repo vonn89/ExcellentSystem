@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" pageWidth="648" pageHeight="396" columnWidth="588" leftMargin="30" rightMargin="30" topMargin="20" bottomMargin="20" isIgnorePagination="true" uuid="eda4239d-62e6-4e51-acfb-cc520d3652da">
 	<property name="ireport.zoom" value="1.2100000000000006"/>
-	<property name="ireport.x" value="0"/>
+	<property name="ireport.x" value="60"/>
 	<property name="ireport.y" value="0"/>
 	<parameter name="nama" class="java.lang.String" isForPrompting="false">
 		<defaultValueExpression><![CDATA["PT. Auri Steel Metalindo"]]></defaultValueExpression>
@@ -15,59 +15,125 @@
 	<queryString>
 		<![CDATA[]]>
 	</queryString>
-	<field name="namaBarang" class="java.lang.String">
-		<fieldDescription><![CDATA[namaBarang]]></fieldDescription>
-	</field>
-	<field name="keterangan" class="java.lang.String">
-		<fieldDescription><![CDATA[keterangan]]></fieldDescription>
+	<field name="nilai" class="java.lang.Double">
+		<fieldDescription><![CDATA[nilai]]></fieldDescription>
 	</field>
 	<field name="kodeBarang" class="java.lang.String">
 		<fieldDescription><![CDATA[kodeBarang]]></fieldDescription>
 	</field>
-	<field name="satuan" class="java.lang.String">
-		<fieldDescription><![CDATA[satuan]]></fieldDescription>
+	<field name="noPemesanan" class="java.lang.String">
+		<fieldDescription><![CDATA[noPemesanan]]></fieldDescription>
+	</field>
+	<field name="keterangan" class="java.lang.String">
+		<fieldDescription><![CDATA[keterangan]]></fieldDescription>
+	</field>
+	<field name="noPenjualan" class="java.lang.String">
+		<fieldDescription><![CDATA[noPenjualan]]></fieldDescription>
 	</field>
 	<field name="qty" class="java.lang.Double">
 		<fieldDescription><![CDATA[qty]]></fieldDescription>
 	</field>
-	<field name="alamat" class="java.lang.String">
-		<fieldDescription><![CDATA[penjualanHead.customerInvoice.alamat]]></fieldDescription>
+	<field name="noUrut" class="java.lang.Integer">
+		<fieldDescription><![CDATA[noUrut]]></fieldDescription>
 	</field>
-	<field name="kota" class="java.lang.String">
-		<fieldDescription><![CDATA[penjualanHead.customerInvoice.kota]]></fieldDescription>
+	<field name="namaBarang" class="java.lang.String">
+		<fieldDescription><![CDATA[namaBarang]]></fieldDescription>
 	</field>
-	<field name="nama" class="java.lang.String">
-		<fieldDescription><![CDATA[penjualanHead.customerInvoice.nama]]></fieldDescription>
+	<field name="hargaJual" class="java.lang.Double">
+		<fieldDescription><![CDATA[hargaJual]]></fieldDescription>
 	</field>
-	<field name="kontakPerson" class="java.lang.String">
-		<fieldDescription><![CDATA[penjualanHead.customerInvoice.kontakPerson]]></fieldDescription>
+	<field name="total" class="java.lang.Double">
+		<fieldDescription><![CDATA[total]]></fieldDescription>
 	</field>
-	<field name="noTelp" class="java.lang.String">
-		<fieldDescription><![CDATA[penjualanHead.customerInvoice.noTelp]]></fieldDescription>
+	<field name="satuan" class="java.lang.String">
+		<fieldDescription><![CDATA[satuan]]></fieldDescription>
 	</field>
-	<field name="noHandphone" class="java.lang.String">
-		<fieldDescription><![CDATA[penjualanHead.customerInvoice.noHandphone]]></fieldDescription>
+	<field name="catatanIntern" class="java.lang.String">
+		<fieldDescription><![CDATA[catatanIntern]]></fieldDescription>
 	</field>
-	<field name="noPenjualan" class="java.lang.String">
-		<fieldDescription><![CDATA[penjualanHead.noPenjualan]]></fieldDescription>
+	<field name="status" class="java.lang.String">
+		<fieldDescription><![CDATA[penjualanBarangHead.status]]></fieldDescription>
 	</field>
-	<field name="supir" class="java.lang.String">
-		<fieldDescription><![CDATA[penjualanHead.supir]]></fieldDescription>
+	<field name="noPemesanan_1" class="java.lang.String">
+		<fieldDescription><![CDATA[penjualanBarangHead.noPemesanan]]></fieldDescription>
+	</field>
+	<field name="tglBatal" class="java.lang.String">
+		<fieldDescription><![CDATA[penjualanBarangHead.tglBatal]]></fieldDescription>
+	</field>
+	<field name="noPenjualan_1" class="java.lang.String">
+		<fieldDescription><![CDATA[penjualanBarangHead.noPenjualan]]></fieldDescription>
+	</field>
+	<field name="tglPengiriman" class="java.lang.String">
+		<fieldDescription><![CDATA[penjualanBarangHead.tglPengiriman]]></fieldDescription>
+	</field>
+	<field name="kodeGudang" class="java.lang.String">
+		<fieldDescription><![CDATA[penjualanBarangHead.kodeGudang]]></fieldDescription>
+	</field>
+	<field name="paymentTerm" class="java.lang.String">
+		<fieldDescription><![CDATA[penjualanBarangHead.paymentTerm]]></fieldDescription>
 	</field>
 	<field name="tglPenjualan" class="java.lang.String">
-		<fieldDescription><![CDATA[penjualanHead.tglPenjualan]]></fieldDescription>
+		<fieldDescription><![CDATA[penjualanBarangHead.tglPenjualan]]></fieldDescription>
+	</field>
+	<field name="kodeSales" class="java.lang.String">
+		<fieldDescription><![CDATA[penjualanBarangHead.kodeSales]]></fieldDescription>
+	</field>
+	<field name="userPengiriman" class="java.lang.String">
+		<fieldDescription><![CDATA[penjualanBarangHead.userPengiriman]]></fieldDescription>
+	</field>
+	<field name="catatan" class="java.lang.String">
+		<fieldDescription><![CDATA[penjualanBarangHead.catatan]]></fieldDescription>
+	</field>
+	<field name="kodeCustomer" class="java.lang.String">
+		<fieldDescription><![CDATA[penjualanBarangHead.kodeCustomer]]></fieldDescription>
+	</field>
+	<field name="kodeCustomerInvoice" class="java.lang.String">
+		<fieldDescription><![CDATA[penjualanBarangHead.kodeCustomerInvoice]]></fieldDescription>
+	</field>
+	<field name="userBatal" class="java.lang.String">
+		<fieldDescription><![CDATA[penjualanBarangHead.userBatal]]></fieldDescription>
 	</field>
 	<field name="tujuanKirim" class="java.lang.String">
-		<fieldDescription><![CDATA[penjualanHead.tujuanKirim]]></fieldDescription>
+		<fieldDescription><![CDATA[penjualanBarangHead.tujuanKirim]]></fieldDescription>
+	</field>
+	<field name="kodeUser" class="java.lang.String">
+		<fieldDescription><![CDATA[penjualanBarangHead.kodeUser]]></fieldDescription>
+	</field>
+	<field name="supir" class="java.lang.String">
+		<fieldDescription><![CDATA[penjualanBarangHead.supir]]></fieldDescription>
+	</field>
+	<field name="totalPenjualan" class="java.lang.Double">
+		<fieldDescription><![CDATA[penjualanBarangHead.totalPenjualan]]></fieldDescription>
+	</field>
+	<field name="sisaPembayaran" class="java.lang.Double">
+		<fieldDescription><![CDATA[penjualanBarangHead.sisaPembayaran]]></fieldDescription>
+	</field>
+	<field name="totalBebanPenjualan" class="java.lang.Double">
+		<fieldDescription><![CDATA[penjualanBarangHead.totalBebanPenjualan]]></fieldDescription>
+	</field>
+	<field name="pembayaran" class="java.lang.Double">
+		<fieldDescription><![CDATA[penjualanBarangHead.pembayaran]]></fieldDescription>
+	</field>
+	<field name="alamat" class="java.lang.String">
+		<fieldDescription><![CDATA[penjualanBarangHead.customerInvoice.alamat]]></fieldDescription>
+	</field>
+	<field name="kota" class="java.lang.String">
+		<fieldDescription><![CDATA[penjualanBarangHead.customerInvoice.kota]]></fieldDescription>
+	</field>
+	<field name="nama" class="java.lang.String">
+		<fieldDescription><![CDATA[penjualanBarangHead.customerInvoice.nama]]></fieldDescription>
+	</field>
+	<field name="kontakPerson" class="java.lang.String">
+		<fieldDescription><![CDATA[penjualanBarangHead.customerInvoice.kontakPerson]]></fieldDescription>
 	</field>
 	<field name="berat" class="java.lang.Double">
 		<fieldDescription><![CDATA[barang.berat]]></fieldDescription>
 	</field>
-	<field name="tglPengiriman" class="java.lang.String">
-		<fieldDescription><![CDATA[penjualanHead.tglPengiriman]]></fieldDescription>
+	<field name="noHandphone" class="java.lang.String">
+		<fieldDescription><![CDATA[penjualanBarangHead.customerInvoice.noHandphone]]></fieldDescription>
 	</field>
-	<field name="status" class="java.lang.String">
-		<fieldDescription><![CDATA[penjualanHead.status]]></fieldDescription>
+	<field name="noTelp" class="java.lang.String">
+		<fieldDescription><![CDATA[penjualanBarangHead.customerInvoice.noTelp]]></fieldDescription>
 	</field>
 	<variable name="tonase" class="java.lang.Double" calculation="Sum">
 		<variableExpression><![CDATA[$F{qty}*$F{berat}]]></variableExpression>
@@ -262,15 +328,15 @@ new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").parse($F{tglPengiriman}) )]]></textF
 				<text><![CDATA[:]]></text>
 			</staticText>
 			<textField isBlankWhenNull="true">
-				<reportElement x="80" y="80" width="79" height="15" uuid="4c7457ff-a2cc-49aa-b043-ead7a5fe2c04"/>
+				<reportElement x="80" y="80" width="105" height="15" uuid="4c7457ff-a2cc-49aa-b043-ead7a5fe2c04"/>
 				<textFieldExpression><![CDATA[$F{noTelp}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="169" y="80" width="186" height="15" uuid="8f8b8240-b9a4-4dcb-ab7c-d26feed7a569"/>
+				<reportElement x="208" y="80" width="147" height="15" uuid="48588545-5187-498d-89a1-7f5db3c99ef3"/>
 				<textFieldExpression><![CDATA[$F{noHandphone}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="159" y="80" width="10" height="15" uuid="4c57358e-3ee0-484a-9d41-332b3c153532"/>
+				<reportElement x="185" y="81" width="23" height="14" uuid="21efa1d3-298e-4932-b1b5-ce2c230a76bd"/>
 				<textElement textAlignment="Center"/>
 				<text><![CDATA[/]]></text>
 			</staticText>

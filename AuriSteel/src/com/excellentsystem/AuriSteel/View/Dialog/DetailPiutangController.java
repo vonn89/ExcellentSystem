@@ -13,8 +13,8 @@ import com.excellentsystem.AuriSteel.Main;
 import static com.excellentsystem.AuriSteel.Main.df;
 import static com.excellentsystem.AuriSteel.Main.tglLengkap;
 import static com.excellentsystem.AuriSteel.Main.tglSql;
-import com.excellentsystem.AuriSteel.Model.PenjualanCoilHead;
-import com.excellentsystem.AuriSteel.Model.PenjualanHead;
+import com.excellentsystem.AuriSteel.Model.PenjualanBahanHead;
+import com.excellentsystem.AuriSteel.Model.PenjualanBarangHead;
 import com.excellentsystem.AuriSteel.Model.Piutang;
 import com.excellentsystem.AuriSteel.Model.TerimaPembayaran;
 import java.sql.Connection;
@@ -116,7 +116,7 @@ public class DetailPiutangController {
         });
         new Thread(task).start();
     }
-    public void setDetailPenjualanCoil(PenjualanCoilHead p){
+    public void setDetailPenjualanCoil(PenjualanBahanHead p){
         Task<Piutang> task = new Task<Piutang>() {
             @Override 
             public Piutang call() throws Exception{
@@ -125,7 +125,7 @@ public class DetailPiutangController {
                             con, "Piutang Penjualan", p.getNoPenjualan(), "%");
                     piutang.setListTerimaPembayaran(TerimaPembayaranDAO.getAllByNoPiutangAndStatus(
                             con, piutang.getNoPiutang(), "true"));
-                    piutang.setPenjualanCoilHead(p);
+                    piutang.setPenjualanBahanHead(p);
                     return piutang;
                 }
             }
@@ -156,7 +156,7 @@ public class DetailPiutangController {
         });
         new Thread(task).start();
     }
-    public void setDetailPenjualan(PenjualanHead p){
+    public void setDetailPenjualan(PenjualanBarangHead p){
         Task<Piutang> task = new Task<Piutang>() {
             @Override 
             public Piutang call() throws Exception{

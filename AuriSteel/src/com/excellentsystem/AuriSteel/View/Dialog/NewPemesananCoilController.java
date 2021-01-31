@@ -7,8 +7,8 @@ package com.excellentsystem.AuriSteel.View.Dialog;
 
 import com.excellentsystem.AuriSteel.DAO.CustomerDAO;
 import com.excellentsystem.AuriSteel.DAO.PegawaiDAO;
-import com.excellentsystem.AuriSteel.DAO.PemesananCoilDetailDAO;
-import com.excellentsystem.AuriSteel.DAO.PemesananCoilHeadDAO;
+import com.excellentsystem.AuriSteel.DAO.PemesananBahanDetailDAO;
+import com.excellentsystem.AuriSteel.DAO.PemesananBahanHeadDAO;
 import com.excellentsystem.AuriSteel.Function;
 import com.excellentsystem.AuriSteel.Koneksi;
 import com.excellentsystem.AuriSteel.Main;
@@ -16,8 +16,8 @@ import static com.excellentsystem.AuriSteel.Main.df;
 import static com.excellentsystem.AuriSteel.Main.tglLengkap;
 import static com.excellentsystem.AuriSteel.Main.tglSql;
 import com.excellentsystem.AuriSteel.Model.Customer;
-import com.excellentsystem.AuriSteel.Model.PemesananCoilDetail;
-import com.excellentsystem.AuriSteel.Model.PemesananCoilHead;
+import com.excellentsystem.AuriSteel.Model.PemesananBahanDetail;
+import com.excellentsystem.AuriSteel.Model.PemesananBahanHead;
 import java.sql.Connection;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -52,15 +52,15 @@ import javafx.stage.Stage;
  */
 public class NewPemesananCoilController  {
 
-    @FXML private TableView<PemesananCoilDetail> pemesananDetailTable;
-    @FXML private TableColumn<PemesananCoilDetail, String> kategoriBahanColumn;
-    @FXML private TableColumn<PemesananCoilDetail, String> namaBarangColumn;
-    @FXML private TableColumn<PemesananCoilDetail, String> spesifikasiColumn;
-    @FXML private TableColumn<PemesananCoilDetail, String> keteranganColumn;
-    @FXML private TableColumn<PemesananCoilDetail, Number> qtyColumn;
-    @FXML private TableColumn<PemesananCoilDetail, Number> hargaColumn;
-    @FXML private TableColumn<PemesananCoilDetail, Number> hargaPPNColumn;
-    @FXML private TableColumn<PemesananCoilDetail, Number> totalColumn;
+    @FXML private TableView<PemesananBahanDetail> pemesananDetailTable;
+    @FXML private TableColumn<PemesananBahanDetail, String> kategoriBahanColumn;
+    @FXML private TableColumn<PemesananBahanDetail, String> namaBarangColumn;
+    @FXML private TableColumn<PemesananBahanDetail, String> spesifikasiColumn;
+    @FXML private TableColumn<PemesananBahanDetail, String> keteranganColumn;
+    @FXML private TableColumn<PemesananBahanDetail, Number> qtyColumn;
+    @FXML private TableColumn<PemesananBahanDetail, Number> hargaColumn;
+    @FXML private TableColumn<PemesananBahanDetail, Number> hargaPPNColumn;
+    @FXML private TableColumn<PemesananBahanDetail, Number> totalColumn;
     
     @FXML private Label noPemesananField;
     @FXML private Label tglPemesananField;
@@ -83,7 +83,7 @@ public class NewPemesananCoilController  {
     
     @FXML private GridPane gridPane;
     public Customer customer;
-    public ObservableList<PemesananCoilDetail> allPemesananCoilDetail = FXCollections.observableArrayList();
+    public ObservableList<PemesananBahanDetail> allPemesananCoilDetail = FXCollections.observableArrayList();
     private Main mainApp;  
     private Stage stage;
     private Stage owner; 
@@ -138,10 +138,10 @@ public class NewPemesananCoilController  {
         });
         cm.getItems().addAll(addBarang, refresh);
         pemesananDetailTable.setContextMenu(cm);
-        pemesananDetailTable.setRowFactory((TableView<PemesananCoilDetail> tv) -> {
-            final TableRow<PemesananCoilDetail> row = new TableRow<PemesananCoilDetail>(){
+        pemesananDetailTable.setRowFactory((TableView<PemesananBahanDetail> tv) -> {
+            final TableRow<PemesananBahanDetail> row = new TableRow<PemesananBahanDetail>(){
                 @Override
-                public void updateItem(PemesananCoilDetail item, boolean empty) {
+                public void updateItem(PemesananBahanDetail item, boolean empty) {
                     super.updateItem(item, empty);
                     if (empty) {
                         setContextMenu(cm);
@@ -185,7 +185,7 @@ public class NewPemesananCoilController  {
     @FXML
     private void hitungTotal(){
         double totalPemesanan = 0;
-        for(PemesananCoilDetail temp : allPemesananCoilDetail){
+        for(PemesananBahanDetail temp : allPemesananCoilDetail){
             totalPemesanan = totalPemesanan + temp.getTotal();
         }
         double kurs = Double.parseDouble(kursField.getText().replaceAll(",", ""));
@@ -199,14 +199,14 @@ public class NewPemesananCoilController  {
         tglPemesananField.setText("");
     }
     public void setDetailPemesanan(String noPemesanan){
-        Task<PemesananCoilHead> task = new Task<PemesananCoilHead>() {
+        Task<PemesananBahanHead> task = new Task<PemesananBahanHead>() {
             @Override 
-            public PemesananCoilHead call() throws Exception{
+            public PemesananBahanHead call() throws Exception{
                 try (Connection con = Koneksi.getConnection()) {
-                    PemesananCoilHead pemesanan = PemesananCoilHeadDAO.get(con, noPemesanan);
+                    PemesananBahanHead pemesanan = PemesananBahanHeadDAO.get(con, noPemesanan);
                     pemesanan.setCustomer(CustomerDAO.get(con, pemesanan.getKodeCustomer()));
                     pemesanan.setSales(PegawaiDAO.get(con, pemesanan.getKodeSales()));
-                    pemesanan.setListPemesananCoilDetail(PemesananCoilDetailDAO.getAllByNoPemesanan(con, noPemesanan));
+                    pemesanan.setListPemesananBahanDetail(PemesananBahanDetailDAO.getAllByNoPemesanan(con, noPemesanan));
                     return pemesanan;
                 }
             }
@@ -231,7 +231,7 @@ public class NewPemesananCoilController  {
                 }
                 pemesananDetailTable.getContextMenu().getItems().removeAll(removeMenu);
                 
-                PemesananCoilHead pemesanan = task.getValue();
+                PemesananBahanHead pemesanan = task.getValue();
                 noPemesananField.setText(pemesanan.getNoPemesanan());
                 tglPemesananField.setText(tglLengkap.format(tglSql.parse(pemesanan.getTglPemesanan())));
                 namaField.setText(pemesanan.getCustomer().getNama());
@@ -240,7 +240,7 @@ public class NewPemesananCoilController  {
                 namaSalesField.setText(pemesanan.getSales().getNama());
                 catatanField.setText(pemesanan.getCatatan());
                 kursField.setText(df.format(pemesanan.getKurs()));
-                allPemesananCoilDetail.addAll(pemesanan.getListPemesananCoilDetail());
+                allPemesananCoilDetail.addAll(pemesanan.getListPemesananBahanDetail());
                 hitungTotal();
             }catch(Exception e){
                 mainApp.showMessage(Modality.NONE, "Error", e.toString());
@@ -259,8 +259,8 @@ public class NewPemesananCoilController  {
     @FXML
     private void addBarang(){
         Stage child = new Stage();
-        FXMLLoader loader = mainApp.showDialog(stage, child, "View/Dialog/AddItemPemesananCoil.fxml");
-        AddItemPemesananCoilController controller = loader.getController();
+        FXMLLoader loader = mainApp.showDialog(stage, child, "View/Dialog/AddItemKategoriBahan.fxml");
+        AddItemKategoriBahanController controller = loader.getController();
         controller.setMainApp(mainApp, stage, child);
         controller.addButton.setOnAction((ActionEvent event) -> {
             if(controller.namaBarangField.getText().equals(""))
@@ -273,7 +273,7 @@ public class NewPemesananCoilController  {
                 mainApp.showMessage(Modality.NONE, "Warning", "Total tidak boleh kosong");
             else{
                 mainApp.closeDialog(stage,child);
-                PemesananCoilDetail detail = new PemesananCoilDetail();
+                PemesananBahanDetail detail = new PemesananBahanDetail();
                 detail.setKategoriBahan(controller.kategoriCombo.getSelectionModel().getSelectedItem());   
                 detail.setNamaBarang(controller.namaBarangField.getText());
                 detail.setKeterangan(controller.keteranganField.getText());

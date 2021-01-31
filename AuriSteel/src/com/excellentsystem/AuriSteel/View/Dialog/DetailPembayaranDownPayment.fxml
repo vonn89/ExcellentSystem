@@ -52,10 +52,10 @@
             <TextField fx:id="totalPemesananField" disable="true" prefHeight="35.0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
             <VBox prefHeight="200.0" prefWidth="100.0" GridPane.columnSpan="2147483647" GridPane.rowIndex="5">
                <children>
-                  <TableView fx:id="hutangTable" prefHeight="200.0" prefWidth="200.0" tableMenuButtonVisible="true" VBox.vgrow="ALWAYS">
+                  <TableView fx:id="piutangTable" prefHeight="200.0" prefWidth="200.0" tableMenuButtonVisible="true" VBox.vgrow="ALWAYS">
                     <columns>
-                      <TableColumn fx:id="noHutangColumn" prefWidth="75.0" text="No Pembayaran" />
-                      <TableColumn fx:id="tglHutangColumn" prefWidth="75.0" text="Tgl Pembayaran" />
+                      <TableColumn fx:id="noPiutangColumn" prefWidth="75.0" text="No Pembayaran" />
+                      <TableColumn fx:id="tglPiutangColumn" prefWidth="75.0" text="Tgl Pembayaran" />
                         <TableColumn fx:id="tipeKeuanganColumn" prefWidth="75.0" text="Tipe Keuangan" />
                         <TableColumn fx:id="jumlahPembayaranColumn" prefWidth="75.0" text="Jumlah Pembayaran" />
                     </columns>

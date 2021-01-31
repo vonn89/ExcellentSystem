@@ -7,8 +7,8 @@ package com.excellentsystem.AuriSteel.Model.Helper;
 
 import com.excellentsystem.AuriSteel.Model.Keuangan;
 import com.excellentsystem.AuriSteel.Model.Pegawai;
-import com.excellentsystem.AuriSteel.Model.PenjualanCoilHead;
-import com.excellentsystem.AuriSteel.Model.PenjualanHead;
+import com.excellentsystem.AuriSteel.Model.PenjualanBahanHead;
+import com.excellentsystem.AuriSteel.Model.PenjualanBarangHead;
 import java.util.List;
 
 /**
@@ -16,8 +16,8 @@ import java.util.List;
  * @author excellent
  */
 public class DashboardModel {
-    private List<PenjualanHead> listPenjualanHead;
-    private List<PenjualanCoilHead> listPenjualanCoilHead;
+    private List<PenjualanBarangHead> listPenjualanHead;
+    private List<PenjualanBahanHead> listPenjualanCoilHead;
     private List<TopCustomer> listTopCustomer;
     private List<Pegawai> listSales;
     private List<Keuangan> listKeuangan;
@@ -65,19 +65,19 @@ public class DashboardModel {
         this.listSales = listSales;
     }
     
-    public List<PenjualanHead> getListPenjualanHead() {
+    public List<PenjualanBarangHead> getListPenjualanHead() {
         return listPenjualanHead;
     }
 
-    public void setListPenjualanHead(List<PenjualanHead> listPenjualanHead) {
+    public void setListPenjualanHead(List<PenjualanBarangHead> listPenjualanHead) {
         this.listPenjualanHead = listPenjualanHead;
     }
 
-    public List<PenjualanCoilHead> getListPenjualanCoilHead() {
+    public List<PenjualanBahanHead> getListPenjualanCoilHead() {
         return listPenjualanCoilHead;
     }
 
-    public void setListPenjualanCoilHead(List<PenjualanCoilHead> listPenjualanCoilHead) {
+    public void setListPenjualanCoilHead(List<PenjualanBahanHead> listPenjualanCoilHead) {
         this.listPenjualanCoilHead = listPenjualanCoilHead;
     }
     

@@ -28,6 +28,7 @@ public class ProduksiOperatorDAO {
         if(!status.equals("%"))
             sql = sql + " and status = '"+status+"' ";
         sql = sql + " )";
+        System.out.println(sql);
         PreparedStatement ps = con.prepareStatement(sql);
         ps.setString(1, tglMulai);
         ps.setString(2, tglAkhir);
@@ -36,7 +37,32 @@ public class ProduksiOperatorDAO {
         while(rs.next()){
             ProduksiOperator d = new ProduksiOperator();
             d.setKodeProduksi(rs.getString(1));
-            d.setKodePegawai(rs.getString(2));
+            d.setKodeOperator(rs.getString(2));
+            d.setNamaOperator(rs.getString(3));
+            allDetail.add(d);
+        }
+        return allDetail;
+    }
+    public static List<ProduksiOperator> getAllByTglMulaiAndJenisProduksiAndStatus(
+            Connection con, String tglMulai, String tglAkhir, String jenisProduksi, String status)throws Exception{
+        String sql = "select * from tt_produksi_operator "
+                + " where kode_produksi in (select kode_produksi from tt_produksi_head"
+                + " where left(tgl_mulai,10) between ? and ? ";
+        if(!jenisProduksi.equals("%"))
+            sql = sql + " and jenis_produksi = '"+jenisProduksi+"' ";
+        if(!status.equals("%"))
+            sql = sql + " and status = '"+status+"' ";
+        sql = sql + " )";
+        PreparedStatement ps = con.prepareStatement(sql);
+        ps.setString(1, tglMulai);
+        ps.setString(2, tglAkhir);
+        ResultSet rs = ps.executeQuery();
+        List<ProduksiOperator> allDetail = new ArrayList<>();
+        while(rs.next()){
+            ProduksiOperator d = new ProduksiOperator();
+            d.setKodeProduksi(rs.getString(1));
+            d.setKodeOperator(rs.getString(2));
+            d.setNamaOperator(rs.getString(3));
             allDetail.add(d);
         }
         return allDetail;
@@ -50,15 +76,17 @@ public class ProduksiOperatorDAO {
         while(rs.next()){
             ProduksiOperator d = new ProduksiOperator();
             d.setKodeProduksi(rs.getString(1));
-            d.setKodePegawai(rs.getString(2));
+            d.setKodeOperator(rs.getString(2));
+            d.setNamaOperator(rs.getString(3));
             allDetail.add(d);
         }
         return allDetail;
     }
     public static void insert(Connection con, ProduksiOperator d)throws Exception{
-        PreparedStatement ps = con.prepareStatement("insert into tt_produksi_operator values(?,?)");
+        PreparedStatement ps = con.prepareStatement("insert into tt_produksi_operator values(?,?,?)");
         ps.setString(1, d.getKodeProduksi());
-        ps.setString(2, d.getKodePegawai());
+        ps.setString(2, d.getKodeOperator());
+        ps.setString(3, d.getNamaOperator());
         ps.executeUpdate();
     }
 }

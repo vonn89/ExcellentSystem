@@ -8,8 +8,8 @@ package com.excellentsystem.AuriSteel.View.Report;
 
 import com.excellentsystem.AuriSteel.DAO.CustomerDAO;
 import com.excellentsystem.AuriSteel.DAO.PegawaiDAO;
-import com.excellentsystem.AuriSteel.DAO.PenjualanDetailDAO;
-import com.excellentsystem.AuriSteel.DAO.PenjualanHeadDAO;
+import com.excellentsystem.AuriSteel.DAO.PenjualanBarangDetailDAO;
+import com.excellentsystem.AuriSteel.DAO.PenjualanBarangHeadDAO;
 import com.excellentsystem.AuriSteel.Function;
 import static com.excellentsystem.AuriSteel.Function.createRow;
 import com.excellentsystem.AuriSteel.Koneksi;
@@ -23,8 +23,8 @@ import static com.excellentsystem.AuriSteel.Main.tglSql;
 import com.excellentsystem.AuriSteel.Model.Customer;
 import com.excellentsystem.AuriSteel.Model.Otoritas;
 import com.excellentsystem.AuriSteel.Model.Pegawai;
-import com.excellentsystem.AuriSteel.Model.PenjualanDetail;
-import com.excellentsystem.AuriSteel.Model.PenjualanHead;
+import com.excellentsystem.AuriSteel.Model.PenjualanBarangDetail;
+import com.excellentsystem.AuriSteel.Model.PenjualanBarangHead;
 import com.excellentsystem.AuriSteel.PrintOut.Report;
 import com.excellentsystem.AuriSteel.View.Dialog.DetailPiutangController;
 import com.excellentsystem.AuriSteel.View.Dialog.NewPenjualanController;
@@ -72,21 +72,21 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
  */
 public class LaporanBarangTerjualController  {
 
-    @FXML private TreeTableView<PenjualanDetail> penjualanDetailTable;
-    @FXML private TreeTableColumn<PenjualanDetail, String> noPenjualanColumn;
-    @FXML private TreeTableColumn<PenjualanDetail, String> tglPenjualanColumn;
-    @FXML private TreeTableColumn<PenjualanDetail, String> gudangColumn;
-    @FXML private TreeTableColumn<PenjualanDetail, String> namaCustomerColumn;
-    @FXML private TreeTableColumn<PenjualanDetail, String> namaSalesColumn;
-    @FXML private TreeTableColumn<PenjualanDetail, String> kodeBarangColumn;
-    @FXML private TreeTableColumn<PenjualanDetail, String> namaBarangColumn;
-    @FXML private TreeTableColumn<PenjualanDetail, String> satuanColumn;
-    @FXML private TreeTableColumn<PenjualanDetail, Number> qtyColumn;
-    @FXML private TreeTableColumn<PenjualanDetail, Number> nilaiColumn;
-    @FXML private TreeTableColumn<PenjualanDetail, Number> totalNilaiColumn;
-    @FXML private TreeTableColumn<PenjualanDetail, Number> hargaJualColumn;
-    @FXML private TreeTableColumn<PenjualanDetail, Number> totalColumn;
-    @FXML private TreeTableColumn<PenjualanDetail, Number> persentaseColumn;
+    @FXML private TreeTableView<PenjualanBarangDetail> penjualanDetailTable;
+    @FXML private TreeTableColumn<PenjualanBarangDetail, String> noPenjualanColumn;
+    @FXML private TreeTableColumn<PenjualanBarangDetail, String> tglPenjualanColumn;
+    @FXML private TreeTableColumn<PenjualanBarangDetail, String> gudangColumn;
+    @FXML private TreeTableColumn<PenjualanBarangDetail, String> namaCustomerColumn;
+    @FXML private TreeTableColumn<PenjualanBarangDetail, String> namaSalesColumn;
+    @FXML private TreeTableColumn<PenjualanBarangDetail, String> kodeBarangColumn;
+    @FXML private TreeTableColumn<PenjualanBarangDetail, String> namaBarangColumn;
+    @FXML private TreeTableColumn<PenjualanBarangDetail, String> satuanColumn;
+    @FXML private TreeTableColumn<PenjualanBarangDetail, Number> qtyColumn;
+    @FXML private TreeTableColumn<PenjualanBarangDetail, Number> nilaiColumn;
+    @FXML private TreeTableColumn<PenjualanBarangDetail, Number> totalNilaiColumn;
+    @FXML private TreeTableColumn<PenjualanBarangDetail, Number> hargaJualColumn;
+    @FXML private TreeTableColumn<PenjualanBarangDetail, Number> totalColumn;
+    @FXML private TreeTableColumn<PenjualanBarangDetail, Number> persentaseColumn;
     
     @FXML private ComboBox<String> groupByCombo;
     @FXML private TextField searchField;
@@ -96,9 +96,9 @@ public class LaporanBarangTerjualController  {
     @FXML private DatePicker tglPenjualanMulaiPicker;
     @FXML private DatePicker tglPenjualanAkhirPicker;
     
-    final TreeItem<PenjualanDetail> root = new TreeItem<>();
-    private ObservableList<PenjualanDetail> allPenjualan = FXCollections.observableArrayList();
-    private ObservableList<PenjualanDetail> filterData = FXCollections.observableArrayList();
+    final TreeItem<PenjualanBarangDetail> root = new TreeItem<>();
+    private ObservableList<PenjualanBarangDetail> allPenjualan = FXCollections.observableArrayList();
+    private ObservableList<PenjualanBarangDetail> filterData = FXCollections.observableArrayList();
     private Main mainApp;  
     public void initialize() {
         noPenjualanColumn.setCellValueFactory(cellData -> cellData.getValue().getValue().noPenjualanProperty());
@@ -106,7 +106,7 @@ public class LaporanBarangTerjualController  {
         
         tglPenjualanColumn.setCellValueFactory(cellData -> { 
             try {
-                return new SimpleStringProperty(tglLengkap.format(tglSql.parse(cellData.getValue().getValue().getPenjualanHead().getTglPenjualan())));
+                return new SimpleStringProperty(tglLengkap.format(tglSql.parse(cellData.getValue().getValue().getPenjualanBarangHead().getTglPenjualan())));
             } catch (Exception ex) {
                 return null;
             }
@@ -114,13 +114,13 @@ public class LaporanBarangTerjualController  {
         tglPenjualanColumn.setCellFactory(col -> Function.getWrapTreeTableCell(tglPenjualanColumn));
         tglPenjualanColumn.setComparator(Function.sortDate(tglLengkap));
         
-        gudangColumn.setCellValueFactory(cellData -> cellData.getValue().getValue().getPenjualanHead().kodeGudangProperty());
+        gudangColumn.setCellValueFactory(cellData -> cellData.getValue().getValue().getPenjualanBarangHead().kodeGudangProperty());
         gudangColumn.setCellFactory(col -> Function.getWrapTreeTableCell(gudangColumn));
         
-        namaCustomerColumn.setCellValueFactory(cellData -> cellData.getValue().getValue().getPenjualanHead().getCustomer().namaProperty());
+        namaCustomerColumn.setCellValueFactory(cellData -> cellData.getValue().getValue().getPenjualanBarangHead().getCustomer().namaProperty());
         namaCustomerColumn.setCellFactory(col -> Function.getWrapTreeTableCell(namaCustomerColumn));
         
-        namaSalesColumn.setCellValueFactory(cellData -> cellData.getValue().getValue().getPenjualanHead().getSales().namaProperty());
+        namaSalesColumn.setCellValueFactory(cellData -> cellData.getValue().getValue().getPenjualanBarangHead().getSales().namaProperty());
         namaSalesColumn.setCellFactory(col -> Function.getWrapTreeTableCell(namaSalesColumn));
         
         kodeBarangColumn.setCellValueFactory(cellData -> cellData.getValue().getValue().kodeBarangProperty());
@@ -162,7 +162,7 @@ public class LaporanBarangTerjualController  {
         tglPenjualanAkhirPicker.setValue(LocalDate.now());
         tglPenjualanAkhirPicker.setDayCellFactory((final DatePicker datePicker) -> Function.getDateCellAkhir(tglPenjualanMulaiPicker));
         
-        allPenjualan.addListener((ListChangeListener.Change<? extends PenjualanDetail> change) -> {
+        allPenjualan.addListener((ListChangeListener.Change<? extends PenjualanBarangDetail> change) -> {
             searchPenjualan();
         });
         searchField.textProperty().addListener(
@@ -191,10 +191,10 @@ public class LaporanBarangTerjualController  {
         }
         rm.getItems().addAll(refresh);
         penjualanDetailTable.setContextMenu(rm);
-        penjualanDetailTable.setRowFactory((TreeTableView<PenjualanDetail> tableView) -> {
-            final TreeTableRow<PenjualanDetail> row = new TreeTableRow<PenjualanDetail>(){
+        penjualanDetailTable.setRowFactory((TreeTableView<PenjualanBarangDetail> tableView) -> {
+            final TreeTableRow<PenjualanBarangDetail> row = new TreeTableRow<PenjualanBarangDetail>(){
                 @Override
-                public void updateItem(PenjualanDetail item, boolean empty) {
+                public void updateItem(PenjualanBarangDetail item, boolean empty) {
                     super.updateItem(item, empty);
                     if (empty) {
                         setContextMenu(rm);
@@ -202,11 +202,11 @@ public class LaporanBarangTerjualController  {
                         final ContextMenu rm = new ContextMenu();
                         MenuItem detail = new MenuItem("Detail Penjualan");
                         detail.setOnAction((ActionEvent e)->{
-                            lihatDetailPenjualan(item.getPenjualanHead());
+                            lihatDetailPenjualan(item.getPenjualanBarangHead());
                         });
                         MenuItem pembayaran = new MenuItem("Detail Pembayaran Penjualan");
                         pembayaran.setOnAction((ActionEvent e)->{
-                            showDetailPiutang(item.getPenjualanHead());
+                            showDetailPiutang(item.getPenjualanBarangHead());
                         });
                         MenuItem print = new MenuItem("Print Laporan");
                         print.setOnAction((ActionEvent event) -> {
@@ -222,11 +222,11 @@ public class LaporanBarangTerjualController  {
                         });
                         for(Otoritas o : sistem.getUser().getOtoritas()){
                             if(o.getJenis().equals("Detail Penjualan")&&o.isStatus()
-                                    &&item.getPenjualanHead().getStatus()!=null)
+                                    &&item.getPenjualanBarangHead().getStatus()!=null)
                                 rm.getItems().add(detail);
                             if(o.getJenis().equals("Detail Pembayaran Penjualan")&&o.isStatus()
-                                    &&item.getPenjualanHead().getPembayaran()>0
-                                    &&item.getPenjualanHead().getStatus()!=null)
+                                    &&item.getPenjualanBarangHead().getPembayaran()>0
+                                    &&item.getPenjualanBarangHead().getStatus()!=null)
                                 rm.getItems().add(pembayaran);
                             if(o.getJenis().equals("Print Laporan")&&o.isStatus())
                                 rm.getItems().addAll(print);
@@ -258,28 +258,28 @@ public class LaporanBarangTerjualController  {
     } 
     @FXML
     private void getPenjualan(){
-        Task<List<PenjualanDetail>> task = new Task<List<PenjualanDetail>>() {
+        Task<List<PenjualanBarangDetail>> task = new Task<List<PenjualanBarangDetail>>() {
             @Override 
-            public List<PenjualanDetail> call()throws Exception {
+            public List<PenjualanBarangDetail> call()throws Exception {
                 try(Connection con = Koneksi.getConnection()){
-                    List<PenjualanHead> penjualan = PenjualanHeadDAO.getAllByDateAndStatus(con, 
+                    List<PenjualanBarangHead> penjualan = PenjualanBarangHeadDAO.getAllByDateAndStatus(con, 
                             tglPenjualanMulaiPicker.getValue().toString(),tglPenjualanAkhirPicker.getValue().toString(),"true");
-                    List<PenjualanDetail> temp = PenjualanDetailDAO.getAllByDateAndStatus(con, 
+                    List<PenjualanBarangDetail> temp = PenjualanBarangDetailDAO.getAllByDateAndStatus(con, 
                             tglPenjualanMulaiPicker.getValue().toString(),tglPenjualanAkhirPicker.getValue().toString(),"true");
                     List<Customer> customer = CustomerDAO.getAllByStatus(con, "%");
                     List<Pegawai> sales = PegawaiDAO.getAllByStatus(con, "%");
-                    for(PenjualanDetail d : temp){
-                        for(PenjualanHead h:penjualan){
+                    for(PenjualanBarangDetail d : temp){
+                        for(PenjualanBarangHead h:penjualan){
                             if(d.getNoPenjualan().equals(h.getNoPenjualan()))
-                                d.setPenjualanHead(h);
+                                d.setPenjualanBarangHead(h);
                         }
                         for(Customer c : customer){
-                            if(d.getPenjualanHead().getKodeCustomer().equals(c.getKodeCustomer()))
-                                d.getPenjualanHead().setCustomer(c);
+                            if(d.getPenjualanBarangHead().getKodeCustomer().equals(c.getKodeCustomer()))
+                                d.getPenjualanBarangHead().setCustomer(c);
                         }
                         for(Pegawai s : sales){
-                            if(d.getPenjualanHead().getKodeSales().equals(s.getKodePegawai()))
-                                d.getPenjualanHead().setSales(s);
+                            if(d.getPenjualanBarangHead().getKodeSales().equals(s.getKodePegawai()))
+                                d.getPenjualanBarangHead().setSales(s);
                         }
                     }
                     return temp;
@@ -310,19 +310,19 @@ public class LaporanBarangTerjualController  {
     private void searchPenjualan(){
         try{
             filterData.clear();
-            for (PenjualanDetail temp : allPenjualan) {
+            for (PenjualanBarangDetail temp : allPenjualan) {
                 if (searchField.getText() == null || searchField.getText().equals(""))
                     filterData.add(temp);
                 else{
                     if(checkColumn(temp.getNoPenjualan())||
-                        checkColumn(tglLengkap.format(tglSql.parse(temp.getPenjualanHead().getTglPenjualan())))||
-                        checkColumn(temp.getPenjualanHead().getKodeGudang())||
-                        checkColumn(temp.getPenjualanHead().getKodeCustomer())||
-                        checkColumn(temp.getPenjualanHead().getCustomer().getNama())||
-                        checkColumn(temp.getPenjualanHead().getPaymentTerm())||
-                        checkColumn(temp.getPenjualanHead().getCatatan())||
-                        checkColumn(temp.getPenjualanHead().getKodeSales())||
-                        checkColumn(temp.getPenjualanHead().getSales().getNama())||
+                        checkColumn(tglLengkap.format(tglSql.parse(temp.getPenjualanBarangHead().getTglPenjualan())))||
+                        checkColumn(temp.getPenjualanBarangHead().getKodeGudang())||
+                        checkColumn(temp.getPenjualanBarangHead().getKodeCustomer())||
+                        checkColumn(temp.getPenjualanBarangHead().getCustomer().getNama())||
+                        checkColumn(temp.getPenjualanBarangHead().getPaymentTerm())||
+                        checkColumn(temp.getPenjualanBarangHead().getCatatan())||
+                        checkColumn(temp.getPenjualanBarangHead().getKodeSales())||
+                        checkColumn(temp.getPenjualanBarangHead().getSales().getNama())||
                         checkColumn(temp.getKodeBarang())||
                         checkColumn(df.format(temp.getHargaJual()))||
                         checkColumn(temp.getNamaBarang())||
@@ -345,7 +345,7 @@ public class LaporanBarangTerjualController  {
         double totalNilai=0;
         double totalQty = 0;
         double totalJual = 0;
-        for(PenjualanDetail temp : filterData){
+        for(PenjualanBarangDetail temp : filterData){
             totalNilai = totalNilai + (temp.getNilai()*temp.getQty());
             totalQty = totalQty + temp.getQty();
             totalJual = totalJual + temp.getTotal();
@@ -358,56 +358,56 @@ public class LaporanBarangTerjualController  {
         if(penjualanDetailTable.getRoot()!=null)
             penjualanDetailTable.getRoot().getChildren().clear();
         List<String> groupBy = new ArrayList<>();
-        for(PenjualanDetail temp: filterData){
+        for(PenjualanBarangDetail temp: filterData){
             String group = "";
             if(groupByCombo.getSelectionModel().getSelectedItem().equals("No Penjualan")){
                 group = temp.getNoPenjualan();
             }else if(groupByCombo.getSelectionModel().getSelectedItem().equals("Gudang")){
-                group = temp.getPenjualanHead().getKodeGudang();
+                group = temp.getPenjualanBarangHead().getKodeGudang();
             }else if(groupByCombo.getSelectionModel().getSelectedItem().equals("Sales")){
-                group = temp.getPenjualanHead().getSales().getNama();
+                group = temp.getPenjualanBarangHead().getSales().getNama();
             }else if(groupByCombo.getSelectionModel().getSelectedItem().equals("Customer")){
-                group = temp.getPenjualanHead().getCustomer().getNama();
+                group = temp.getPenjualanBarangHead().getCustomer().getNama();
             }else if(groupByCombo.getSelectionModel().getSelectedItem().equals("Barang")){
                 group = temp.getKodeBarang();
             }else if(groupByCombo.getSelectionModel().getSelectedItem().equals("Tanggal")){
-                group = tgl.format(tglSql.parse(temp.getPenjualanHead().getTglPenjualan()));
+                group = tgl.format(tglSql.parse(temp.getPenjualanBarangHead().getTglPenjualan()));
             }else if(groupByCombo.getSelectionModel().getSelectedItem().equals("Bulan")){
-                group = new SimpleDateFormat("MMM yyyy").format(tglSql.parse(temp.getPenjualanHead().getTglPenjualan()));
+                group = new SimpleDateFormat("MMM yyyy").format(tglSql.parse(temp.getPenjualanBarangHead().getTglPenjualan()));
             }else if(groupByCombo.getSelectionModel().getSelectedItem().equals("Tahun")){
-                group = new SimpleDateFormat("yyyy").format(tglSql.parse(temp.getPenjualanHead().getTglPenjualan()));
+                group = new SimpleDateFormat("yyyy").format(tglSql.parse(temp.getPenjualanBarangHead().getTglPenjualan()));
             }
             if(!groupBy.contains(group))
                 groupBy.add(group);
         }
         for(String temp : groupBy){
-            PenjualanDetail head = new PenjualanDetail();
+            PenjualanBarangDetail head = new PenjualanBarangDetail();
             head.setNoPenjualan(temp);
-            head.setPenjualanHead(new PenjualanHead());
-            head.getPenjualanHead().setCustomer(new Customer());
-            head.getPenjualanHead().setSales(new Pegawai());
-            TreeItem<PenjualanDetail> parent = new TreeItem<>(head);
+            head.setPenjualanBarangHead(new PenjualanBarangHead());
+            head.getPenjualanBarangHead().setCustomer(new Customer());
+            head.getPenjualanBarangHead().setSales(new Pegawai());
+            TreeItem<PenjualanBarangDetail> parent = new TreeItem<>(head);
             double totalQty = 0;
             double totalNilai = 0;
             double totalHarga = 0;
-            for(PenjualanDetail detail: filterData){
+            for(PenjualanBarangDetail detail: filterData){
                 boolean status = false;
                 if(groupByCombo.getSelectionModel().getSelectedItem().equals("No Penjualan") && temp.equals(detail.getNoPenjualan())){
                     status = true;
                 }else if(groupByCombo.getSelectionModel().getSelectedItem().equals("Gudang")&&
-                        temp.equals(detail.getPenjualanHead().getKodeGudang())){
+                        temp.equals(detail.getPenjualanBarangHead().getKodeGudang())){
                 }else if(groupByCombo.getSelectionModel().getSelectedItem().equals("Tanggal")&&
-                        temp.equals(tgl.format(tglSql.parse(detail.getPenjualanHead().getTglPenjualan())))){
+                        temp.equals(tgl.format(tglSql.parse(detail.getPenjualanBarangHead().getTglPenjualan())))){
                     status = true;
                 }else if(groupByCombo.getSelectionModel().getSelectedItem().equals("Bulan")&&
-                        temp.equals(new SimpleDateFormat("MMM yyyy").format(tglSql.parse(detail.getPenjualanHead().getTglPenjualan())))){
+                        temp.equals(new SimpleDateFormat("MMM yyyy").format(tglSql.parse(detail.getPenjualanBarangHead().getTglPenjualan())))){
                     status = true;
                 }else if(groupByCombo.getSelectionModel().getSelectedItem().equals("Tahun")&&
-                        temp.equals(new SimpleDateFormat("yyyy").format(tglSql.parse(detail.getPenjualanHead().getTglPenjualan())))){
+                        temp.equals(new SimpleDateFormat("yyyy").format(tglSql.parse(detail.getPenjualanBarangHead().getTglPenjualan())))){
                     status = true;
-                }else if(groupByCombo.getSelectionModel().getSelectedItem().equals("Sales") && temp.equals(detail.getPenjualanHead().getSales().getNama())){
+                }else if(groupByCombo.getSelectionModel().getSelectedItem().equals("Sales") && temp.equals(detail.getPenjualanBarangHead().getSales().getNama())){
                     status = true;
-                }else if(groupByCombo.getSelectionModel().getSelectedItem().equals("Customer") && temp.equals(detail.getPenjualanHead().getCustomer().getNama())){
+                }else if(groupByCombo.getSelectionModel().getSelectedItem().equals("Customer") && temp.equals(detail.getPenjualanBarangHead().getCustomer().getNama())){
                     status = true;
                 }else if(groupByCombo.getSelectionModel().getSelectedItem().equals("Barang") && temp.equals(detail.getKodeBarang())){
                     status = true;
@@ -427,14 +427,14 @@ public class LaporanBarangTerjualController  {
         }
         penjualanDetailTable.setRoot(root);
     }   
-    private void lihatDetailPenjualan(PenjualanHead p){
+    private void lihatDetailPenjualan(PenjualanBarangHead p){
         Stage stage = new Stage();
         FXMLLoader loader = mainApp.showDialog(mainApp.MainStage, stage, "View/Dialog/NewPenjualan.fxml");
         NewPenjualanController controller = loader.getController();
         controller.setMainApp(mainApp,mainApp.MainStage, stage);
         controller.setDetailPenjualan(p.getNoPenjualan());
     }
-    private void showDetailPiutang(PenjualanHead p){
+    private void showDetailPiutang(PenjualanBarangHead p){
         Stage stage = new Stage();
         FXMLLoader loader = mainApp.showDialog(mainApp.MainStage, stage, "View/Dialog/DetailPiutang.fxml");
         DetailPiutangController x = loader.getController();
@@ -497,24 +497,24 @@ public class LaporanBarangTerjualController  {
                 sheet.getRow(rc).getCell(12).setCellValue("Total Harga"); 
                 rc++;
                 List<String> groupBy = new ArrayList<>();
-                for(PenjualanDetail temp: filterData){
+                for(PenjualanBarangDetail temp: filterData){
                     String group = "";
                     if(groupByCombo.getSelectionModel().getSelectedItem().equals("No Penjualan")){
                         group = temp.getNoPenjualan();
                     }else if(groupByCombo.getSelectionModel().getSelectedItem().equals("Gudang")){
-                        group = temp.getPenjualanHead().getKodeGudang();
+                        group = temp.getPenjualanBarangHead().getKodeGudang();
                     }else if(groupByCombo.getSelectionModel().getSelectedItem().equals("Sales")){
-                        group = temp.getPenjualanHead().getSales().getNama();
+                        group = temp.getPenjualanBarangHead().getSales().getNama();
                     }else if(groupByCombo.getSelectionModel().getSelectedItem().equals("Customer")){
-                        group = temp.getPenjualanHead().getCustomer().getNama();
+                        group = temp.getPenjualanBarangHead().getCustomer().getNama();
                     }else if(groupByCombo.getSelectionModel().getSelectedItem().equals("Barang")){
                         group = temp.getNamaBarang();
                     }else if(groupByCombo.getSelectionModel().getSelectedItem().equals("Tanggal")){
-                        group = tgl.format(tglSql.parse(temp.getPenjualanHead().getTglPenjualan()));
+                        group = tgl.format(tglSql.parse(temp.getPenjualanBarangHead().getTglPenjualan()));
                     }else if(groupByCombo.getSelectionModel().getSelectedItem().equals("Bulan")){
-                        group = new SimpleDateFormat("MMM yyyy").format(tglSql.parse(temp.getPenjualanHead().getTglPenjualan()));
+                        group = new SimpleDateFormat("MMM yyyy").format(tglSql.parse(temp.getPenjualanBarangHead().getTglPenjualan()));
                     }else if(groupByCombo.getSelectionModel().getSelectedItem().equals("Tahun")){
-                        group = new SimpleDateFormat("yyyy").format(tglSql.parse(temp.getPenjualanHead().getTglPenjualan()));
+                        group = new SimpleDateFormat("yyyy").format(tglSql.parse(temp.getPenjualanBarangHead().getTglPenjualan()));
                     }
                     if(!groupBy.contains(group))
                         groupBy.add(group);
@@ -530,28 +530,28 @@ public class LaporanBarangTerjualController  {
                     double totalQty = 0;
                     double totalNilai = 0;
                     double totalHarga = 0;
-                    for(PenjualanDetail detail: filterData){
+                    for(PenjualanBarangDetail detail: filterData){
                         boolean status = false;
                         if(groupByCombo.getSelectionModel().getSelectedItem().equals("No Penjualan")&&
                                 temp.equals(detail.getNoPenjualan())){
                             status = true;
                         }else if(groupByCombo.getSelectionModel().getSelectedItem().equals("Gudang")&&
-                                temp.equals(detail.getPenjualanHead().getKodeGudang())){
+                                temp.equals(detail.getPenjualanBarangHead().getKodeGudang())){
                             status = true;
                         }else if(groupByCombo.getSelectionModel().getSelectedItem().equals("Tanggal")&&
-                                temp.equals(tgl.format(tglSql.parse(detail.getPenjualanHead().getTglPenjualan())))){
+                                temp.equals(tgl.format(tglSql.parse(detail.getPenjualanBarangHead().getTglPenjualan())))){
                             status = true;
                         }else if(groupByCombo.getSelectionModel().getSelectedItem().equals("Bulan")&&
-                                temp.equals(new SimpleDateFormat("MMM yyyy").format(tglSql.parse(detail.getPenjualanHead().getTglPenjualan())))){
+                                temp.equals(new SimpleDateFormat("MMM yyyy").format(tglSql.parse(detail.getPenjualanBarangHead().getTglPenjualan())))){
                             status = true;
                         }else if(groupByCombo.getSelectionModel().getSelectedItem().equals("Tahun")&&
-                                temp.equals(new SimpleDateFormat("yyyy").format(tglSql.parse(detail.getPenjualanHead().getTglPenjualan())))){
+                                temp.equals(new SimpleDateFormat("yyyy").format(tglSql.parse(detail.getPenjualanBarangHead().getTglPenjualan())))){
                             status = true;
                         }else if(groupByCombo.getSelectionModel().getSelectedItem().equals("Sales")&&
-                                temp.equals(detail.getPenjualanHead().getSales().getNama())){
+                                temp.equals(detail.getPenjualanBarangHead().getSales().getNama())){
                             status = true;
                         }else if(groupByCombo.getSelectionModel().getSelectedItem().equals("Customer")&&
-                                temp.equals(detail.getPenjualanHead().getCustomer().getNama())){
+                                temp.equals(detail.getPenjualanBarangHead().getCustomer().getNama())){
                             status = true;
                         }else if(groupByCombo.getSelectionModel().getSelectedItem().equals("Barang")&&
                                 temp.equals(detail.getNamaBarang())){
@@ -559,11 +559,11 @@ public class LaporanBarangTerjualController  {
                         }
                         if(status){
                             createRow(workbook, sheet, rc, c, "Detail");
-                            sheet.getRow(rc).getCell(0).setCellValue(detail.getPenjualanHead().getNoPenjualan());
-                            sheet.getRow(rc).getCell(1).setCellValue(tglLengkap.format(tglSql.parse(detail.getPenjualanHead().getTglPenjualan())));
-                            sheet.getRow(rc).getCell(2).setCellValue(detail.getPenjualanHead().getKodeGudang());
-                            sheet.getRow(rc).getCell(3).setCellValue(detail.getPenjualanHead().getCustomer().getNama());
-                            sheet.getRow(rc).getCell(4).setCellValue(detail.getPenjualanHead().getSales().getNama());
+                            sheet.getRow(rc).getCell(0).setCellValue(detail.getPenjualanBarangHead().getNoPenjualan());
+                            sheet.getRow(rc).getCell(1).setCellValue(tglLengkap.format(tglSql.parse(detail.getPenjualanBarangHead().getTglPenjualan())));
+                            sheet.getRow(rc).getCell(2).setCellValue(detail.getPenjualanBarangHead().getKodeGudang());
+                            sheet.getRow(rc).getCell(3).setCellValue(detail.getPenjualanBarangHead().getCustomer().getNama());
+                            sheet.getRow(rc).getCell(4).setCellValue(detail.getPenjualanBarangHead().getSales().getNama());
                             sheet.getRow(rc).getCell(5).setCellValue(detail.getKodeBarang());
                             sheet.getRow(rc).getCell(6).setCellValue(detail.getNamaBarang());
                             sheet.getRow(rc).getCell(7).setCellValue(detail.getSatuan());

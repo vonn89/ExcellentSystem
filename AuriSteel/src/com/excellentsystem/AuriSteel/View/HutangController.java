@@ -7,7 +7,7 @@
 package com.excellentsystem.AuriSteel.View;
 
 import com.excellentsystem.AuriSteel.DAO.HutangDAO;
-import com.excellentsystem.AuriSteel.DAO.PemesananCoilHeadDAO;
+import com.excellentsystem.AuriSteel.DAO.PemesananBahanHeadDAO;
 import com.excellentsystem.AuriSteel.Function;
 import static com.excellentsystem.AuriSteel.Function.createRow;
 import com.excellentsystem.AuriSteel.Koneksi;
@@ -21,7 +21,7 @@ import static com.excellentsystem.AuriSteel.Main.tglSql;
 import com.excellentsystem.AuriSteel.Model.Hutang;
 import com.excellentsystem.AuriSteel.Model.Otoritas;
 import com.excellentsystem.AuriSteel.Model.Pembayaran;
-import com.excellentsystem.AuriSteel.Model.PemesananCoilHead;
+import com.excellentsystem.AuriSteel.Model.PemesananBahanHead;
 import com.excellentsystem.AuriSteel.Services.Service;
 import com.excellentsystem.AuriSteel.View.Dialog.DetailHutangController;
 import com.excellentsystem.AuriSteel.View.Dialog.JatuhTempoController;
@@ -372,11 +372,11 @@ public class HutangController  {
         controller.setDetailPemesanan(hutang.getKeterangan());
     }
     private void showDetailPemesananCoil(Hutang hutang){
-        Task<PemesananCoilHead> task = new Task<PemesananCoilHead>() {
+        Task<PemesananBahanHead> task = new Task<PemesananBahanHead>() {
             @Override 
-            public PemesananCoilHead call() throws Exception{
+            public PemesananBahanHead call() throws Exception{
                 try (Connection con = Koneksi.getConnection()) {
-                    return PemesananCoilHeadDAO.get(con, hutang.getKeterangan());
+                    return PemesananBahanHeadDAO.get(con, hutang.getKeterangan());
                 }
             }
         };
@@ -385,7 +385,7 @@ public class HutangController  {
         });
         task.setOnSucceeded((WorkerStateEvent e) -> {
             mainApp.closeLoading();
-            PemesananCoilHead p = task.getValue();
+            PemesananBahanHead p = task.getValue();
             if(p.getKurs()!=1){
                 Stage stage = new Stage();
                 FXMLLoader loader = mainApp.showDialog(mainApp.MainStage, stage, "View/Dialog/NewPemesananCoil.fxml");

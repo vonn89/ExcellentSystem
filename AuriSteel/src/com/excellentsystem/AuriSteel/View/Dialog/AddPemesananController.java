@@ -7,8 +7,8 @@ package com.excellentsystem.AuriSteel.View.Dialog;
 
 import com.excellentsystem.AuriSteel.DAO.CustomerDAO;
 import com.excellentsystem.AuriSteel.DAO.PegawaiDAO;
-import com.excellentsystem.AuriSteel.DAO.PemesananDetailDAO;
-import com.excellentsystem.AuriSteel.DAO.PemesananHeadDAO;
+import com.excellentsystem.AuriSteel.DAO.PemesananBarangDetailDAO;
+import com.excellentsystem.AuriSteel.DAO.PemesananBarangHeadDAO;
 import com.excellentsystem.AuriSteel.Function;
 import com.excellentsystem.AuriSteel.Koneksi;
 import com.excellentsystem.AuriSteel.Main;
@@ -17,8 +17,8 @@ import static com.excellentsystem.AuriSteel.Main.tglLengkap;
 import static com.excellentsystem.AuriSteel.Main.tglSql;
 import com.excellentsystem.AuriSteel.Model.Customer;
 import com.excellentsystem.AuriSteel.Model.Pegawai;
-import com.excellentsystem.AuriSteel.Model.PemesananDetail;
-import com.excellentsystem.AuriSteel.Model.PemesananHead;
+import com.excellentsystem.AuriSteel.Model.PemesananBarangDetail;
+import com.excellentsystem.AuriSteel.Model.PemesananBarangHead;
 import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.List;
@@ -42,19 +42,19 @@ import javafx.stage.Stage;
  */
 public class AddPemesananController {
 
-    @FXML public TableView<PemesananHead> pemesananHeadTable;
-    @FXML private TableColumn<PemesananHead, String> noPemesananHeadColumn;
-    @FXML private TableColumn<PemesananHead, String> tglPemesananColumn;
-    @FXML private TableColumn<PemesananHead, String> namaCustomerColumn;
-    @FXML private TableColumn<PemesananHead, String> alamatCustomerColumn;
-    @FXML private TableColumn<PemesananHead, String> namaInvoiceColumn;
-    @FXML private TableColumn<PemesananHead, String> catatanColumn;
-    @FXML private TableColumn<PemesananHead, String> namaSalesColumn;
-    @FXML private TableColumn<PemesananHead, String> kodeUserColumn;
+    @FXML public TableView<PemesananBarangHead> pemesananHeadTable;
+    @FXML private TableColumn<PemesananBarangHead, String> noPemesananHeadColumn;
+    @FXML private TableColumn<PemesananBarangHead, String> tglPemesananColumn;
+    @FXML private TableColumn<PemesananBarangHead, String> namaCustomerColumn;
+    @FXML private TableColumn<PemesananBarangHead, String> alamatCustomerColumn;
+    @FXML private TableColumn<PemesananBarangHead, String> namaInvoiceColumn;
+    @FXML private TableColumn<PemesananBarangHead, String> catatanColumn;
+    @FXML private TableColumn<PemesananBarangHead, String> namaSalesColumn;
+    @FXML private TableColumn<PemesananBarangHead, String> kodeUserColumn;
     
     @FXML private TextField searchField;
-    private ObservableList<PemesananHead> allPemesanan = FXCollections.observableArrayList();
-    private ObservableList<PemesananHead> filterData = FXCollections.observableArrayList();
+    private ObservableList<PemesananBarangHead> allPemesanan = FXCollections.observableArrayList();
+    private ObservableList<PemesananBarangHead> filterData = FXCollections.observableArrayList();
     private Main mainApp;  
     private Stage stage;
     private Stage owner;
@@ -76,7 +76,7 @@ public class AddPemesananController {
                 return null;
             }
         });
-        allPemesanan.addListener((ListChangeListener.Change<? extends PemesananHead> change) -> {
+        allPemesanan.addListener((ListChangeListener.Change<? extends PemesananBarangHead> change) -> {
             searchPemesanan();
         });
         searchField.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
@@ -99,23 +99,23 @@ public class AddPemesananController {
         getPemesanan();
     }
     private void getPemesanan(){
-        Task<List<PemesananHead>> task = new Task<List<PemesananHead>>() {
+        Task<List<PemesananBarangHead>> task = new Task<List<PemesananBarangHead>>() {
             @Override 
-            public List<PemesananHead> call() throws Exception{
+            public List<PemesananBarangHead> call() throws Exception{
                 try(Connection con = Koneksi.getConnection()){
-                    List<PemesananHead> allPemesanan = PemesananHeadDAO.getAllByDateAndStatus(con, 
+                    List<PemesananBarangHead> allPemesanan = PemesananBarangHeadDAO.getAllByDateAndStatus(con, 
                             "2000-01-01", "2050-01-01", "open");
-                    List<PemesananDetail> allDetail = PemesananDetailDAO.getAllByDateAndStatus(con, 
+                    List<PemesananBarangDetail> allDetail = PemesananBarangDetailDAO.getAllByDateAndStatus(con, 
                             "2000-01-01", "2050-01-01", "open");
                     List<Customer> allCustomer = CustomerDAO.getAllByStatus(con, "%");
                     List<Pegawai> allSales = PegawaiDAO.getAllByStatus(con, "%");
-                    for(PemesananHead p : allPemesanan){
-                        List<PemesananDetail> detail = new ArrayList<>();
-                        for(PemesananDetail d : allDetail){
+                    for(PemesananBarangHead p : allPemesanan){
+                        List<PemesananBarangDetail> detail = new ArrayList<>();
+                        for(PemesananBarangDetail d : allDetail){
                             if(d.getNoPemesanan().equals(p.getNoPemesanan()))
                                 detail.add(d);
                         }
-                        p.setListPemesananDetail(detail);
+                        p.setListPemesananBarangDetail(detail);
                         for(Customer c: allCustomer){
                             if(p.getKodeCustomer().equals(c.getKodeCustomer()))
                                 p.setCustomer(c);
@@ -158,7 +158,7 @@ public class AddPemesananController {
     private void searchPemesanan() {
         try{
             filterData.clear();
-            for (PemesananHead temp : allPemesanan) {
+            for (PemesananBarangHead temp : allPemesanan) {
                 if (searchField.getText() == null || searchField.getText().equals(""))
                     filterData.add(temp);
                 else{

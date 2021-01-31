@@ -74,8 +74,9 @@ public class MainAppController {
     
     @FXML private TitledPane pembelianPane;
     @FXML private VBox pembelianVbox;
+    @FXML private MenuButton menuPemesananPembelianBahan;
+    @FXML private MenuButton menuPembelianBahan;
     @FXML private MenuButton menuPembelianBarang;
-    @FXML private MenuButton menuPembelian;
     
     @FXML private TitledPane barangPane;
     @FXML private VBox barangVbox;
@@ -83,6 +84,7 @@ public class MainAppController {
     @FXML private MenuButton menuProduksiBarang;
     @FXML private MenuButton menuPengirimanBarang;
     @FXML private MenuButton menuPengirimanCoil;
+    @FXML private MenuButton menuPenerimaanBahan;
     @FXML private MenuButton menuPindahBarang;
     @FXML private MenuButton menuPindahBahan;
     
@@ -171,13 +173,15 @@ public class MainAppController {
         menuPemesananCoil.setVisible(false);
         menuPenjualanCoil.setVisible(false);
 
-        menuPembelian.setVisible(false);
+        menuPemesananPembelianBahan.setVisible(false);
+        menuPembelianBahan.setVisible(false);
         menuPembelianBarang.setVisible(false);
 
         menuPermintaanBarang.setVisible(false);
         menuProduksiBarang.setVisible(false);
         menuPengirimanBarang.setVisible(false);
         menuPengirimanCoil.setVisible(false);
+        menuPenerimaanBahan.setVisible(false);
         menuPindahBahan.setVisible(false);
         menuPindahBarang.setVisible(false);
 
@@ -234,8 +238,10 @@ public class MainAppController {
                     menuPemesananCoil.setVisible(o.isStatus());
                 }else if(o.getJenis().equals("Penjualan Coil")){
                     menuPenjualanCoil.setVisible(o.isStatus());
-                }else if(o.getJenis().equals("Pembelian")){
-                    menuPembelian.setVisible(o.isStatus());
+                }else if(o.getJenis().equals("Pemesanan Pembelian Bahan")){
+                    menuPemesananPembelianBahan.setVisible(o.isStatus());
+                }else if(o.getJenis().equals("Pembelian Bahan")){
+                    menuPembelianBahan.setVisible(o.isStatus());
                 }else if(o.getJenis().equals("Pembelian Barang")){
                     menuPembelianBarang.setVisible(o.isStatus());
                 }else if(o.getJenis().equals("Permintaan Barang")){
@@ -246,6 +252,8 @@ public class MainAppController {
                     menuPengirimanBarang.setVisible(o.isStatus());
                 }else if(o.getJenis().equals("Pengiriman Coil")){
                     menuPengirimanCoil.setVisible(o.isStatus());
+                }else if(o.getJenis().equals("Penerimaan Bahan")){
+                    menuPenerimaanBahan.setVisible(o.isStatus());
                 }else if(o.getJenis().equals("Pindah Bahan")){
                     menuPindahBahan.setVisible(o.isStatus());
                 }else if(o.getJenis().equals("Pindah Barang")){
@@ -303,14 +311,16 @@ public class MainAppController {
                     menuPenjualanCoil.isVisible()==false){
                 accordion.getPanes().remove(penjualanPane);
             }
-            if(menuPembelian.isVisible()==false &&
-                    menuPembelianBarang.isVisible()==false){
+            if(menuPembelianBahan.isVisible()==false &&
+                    menuPembelianBarang.isVisible()==false &&
+                    menuPemesananPembelianBahan.isVisible()==false){
                 accordion.getPanes().remove(pembelianPane);
             }
             if(menuPermintaanBarang.isVisible()==false &&
                     menuProduksiBarang.isVisible()==false &&
                     menuPengirimanBarang.isVisible()==false &&
                     menuPengirimanCoil.isVisible()==false &&
+                    menuPenerimaanBahan.isVisible()==false &&
                     menuPindahBahan.isVisible()==false &&
                     menuPindahBarang.isVisible()==false){
                 accordion.getPanes().remove(barangPane);
@@ -507,8 +517,12 @@ public class MainAppController {
         mainApp.showPemesananCoil();
     }
     @FXML
+    public void menuPemesananPembelian() {
+        mainApp.showPemesananPembelian();
+    }
+    @FXML
     public void menuPembelian() {
-        mainApp.showPembelian();
+        mainApp.showPembelianBahan();
     }
     @FXML
     public void menuPembelianBarang() {
@@ -529,6 +543,10 @@ public class MainAppController {
     @FXML
     public void menuPengirimanCoil() {
         mainApp.showPengirimanCoil();
+    }
+    @FXML
+    public void menuPenerimaanBahan() {
+        mainApp.showPenerimaanBahan();
     }
     @FXML
     public void menuPindahBarang() {

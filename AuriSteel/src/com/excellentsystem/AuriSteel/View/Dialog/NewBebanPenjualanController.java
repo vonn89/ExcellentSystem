@@ -17,7 +17,7 @@ import static com.excellentsystem.AuriSteel.Main.tglSql;
 import com.excellentsystem.AuriSteel.Model.BebanPenjualanDetail;
 import com.excellentsystem.AuriSteel.Model.BebanPenjualanHead;
 import com.excellentsystem.AuriSteel.Model.KategoriKeuangan;
-import com.excellentsystem.AuriSteel.Model.PenjualanHead;
+import com.excellentsystem.AuriSteel.Model.PenjualanBarangHead;
 import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.List;
@@ -139,9 +139,9 @@ public class NewBebanPenjualanController  {
         AddPenjualanController x = loader.getController();
         x.setMainApp(mainApp, stage, child);
         x.penjualanHeadTable.setRowFactory(table -> {
-            final TableRow<PenjualanHead> row = new TableRow<PenjualanHead>(){
+            final TableRow<PenjualanBarangHead> row = new TableRow<PenjualanBarangHead>(){
                 @Override
-                public void updateItem(PenjualanHead item, boolean empty) {
+                public void updateItem(PenjualanBarangHead item, boolean empty) {
                     super.updateItem(item, empty);
                     if (empty) {
                         setContextMenu(null);
@@ -166,7 +166,7 @@ public class NewBebanPenjualanController  {
                     if(row.getItem()!=null){
                         try{
                             mainApp.closeDialog(stage, child);
-                            PenjualanHead p = row.getItem();
+                            PenjualanBarangHead p = row.getItem();
                             boolean status = true;
                             for(BebanPenjualanDetail d : listDetail){
                                 if(d.getNoPenjualan().equals(p.getNoPenjualan()))
@@ -195,14 +195,14 @@ public class NewBebanPenjualanController  {
         penjualanField.setText("");
         listDetail.clear();
     }
-    private void detailPenjualan(PenjualanHead p, Stage owner){
+    private void detailPenjualan(PenjualanBarangHead p, Stage owner){
         Stage child = new Stage();
         FXMLLoader loader = mainApp.showDialog(owner, child, "View/Dialog/NewPenjualan.fxml");
         NewPenjualanController controller = loader.getController();
         controller.setMainApp(mainApp, owner, child);
         controller.setDetailPenjualan(p.getNoPenjualan());
     }
-    private void detailBebanPenjualan(PenjualanHead p, Stage owner){
+    private void detailBebanPenjualan(PenjualanBarangHead p, Stage owner){
         Stage child = new Stage();
         FXMLLoader loader = mainApp.showDialog(owner, child, "View/Dialog/DetailBebanPenjualan.fxml");
         DetailBebanPenjualanController controller = loader.getController();

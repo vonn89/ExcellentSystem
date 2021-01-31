@@ -21,6 +21,7 @@ import static com.excellentsystem.AuriSteel.Main.tglLengkap;
 import static com.excellentsystem.AuriSteel.Main.tglSql;
 import com.excellentsystem.AuriSteel.Model.Bahan;
 import com.excellentsystem.AuriSteel.Model.Gudang;
+import com.excellentsystem.AuriSteel.Model.Mesin;
 import com.excellentsystem.AuriSteel.Model.Pegawai;
 import com.excellentsystem.AuriSteel.Model.ProduksiDetailBahan;
 import com.excellentsystem.AuriSteel.Model.ProduksiDetailBarang;
@@ -90,6 +91,7 @@ public class NewProduksiBarangController  {
     @FXML private Button addOperatorButton;
     @FXML private Button resetOperatorButton;
     @FXML private TextArea operatorField;
+    @FXML public ComboBox<String> mesinCombo;
     @FXML public ComboBox<String> gudangCombo;
     @FXML public ComboBox<String> jenisCombo;
     
@@ -257,6 +259,11 @@ public class NewProduksiBarangController  {
             listGudang.add(g.getKodeGudang());
         }
         gudangCombo.setItems(listGudang);
+        ObservableList<String> listMesin = FXCollections.observableArrayList();
+        for(Mesin m : sistem.getListMesin()){
+            listMesin.add(m.getKodeMesin());
+        }
+        mesinCombo.setItems(listMesin);
         ObservableList<String> listJenis = FXCollections.observableArrayList();
         listJenis.add("Bahan - Barang");
         listJenis.add("Barang - Barang");
@@ -339,6 +346,7 @@ public class NewProduksiBarangController  {
                 tglProduksiField.setText(tglLengkap.format(tglSql.parse(produksi.getTglProduksi())));
                 gudangCombo.getSelectionModel().select(produksi.getKodeGudang());
                 jenisCombo.getSelectionModel().select(produksi.getJenisProduksi());
+                mesinCombo.getSelectionModel().select(produksi.getKodeMesin());
                 catatanField.setText(produksi.getCatatan());
                 changeJenis();
                 
@@ -352,6 +360,7 @@ public class NewProduksiBarangController  {
                 sisaBeratColumn.setVisible(false);
                 gudangCombo.setDisable(true);
                 jenisCombo.setDisable(true);
+                mesinCombo.setDisable(true);
                 List<MenuItem> removeBarangProduksi = new ArrayList<>();
                 for(MenuItem m : barangProduksiTable.getContextMenu().getItems()){
                     if(m.getText().equals("Add Barang Produksi"))

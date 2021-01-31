@@ -8,17 +8,17 @@ package com.excellentsystem.AuriSteel.View.Dialog;
 
 import com.excellentsystem.AuriSteel.DAO.CustomerDAO;
 import com.excellentsystem.AuriSteel.DAO.PegawaiDAO;
-import com.excellentsystem.AuriSteel.DAO.PemesananHeadDAO;
-import com.excellentsystem.AuriSteel.DAO.PenjualanDetailDAO;
-import com.excellentsystem.AuriSteel.DAO.PenjualanHeadDAO;
+import com.excellentsystem.AuriSteel.DAO.PemesananBarangHeadDAO;
+import com.excellentsystem.AuriSteel.DAO.PenjualanBarangDetailDAO;
+import com.excellentsystem.AuriSteel.DAO.PenjualanBarangHeadDAO;
 import com.excellentsystem.AuriSteel.Function;
 import com.excellentsystem.AuriSteel.Koneksi;
 import com.excellentsystem.AuriSteel.Main;
 import static com.excellentsystem.AuriSteel.Main.df;
 import static com.excellentsystem.AuriSteel.Main.tglLengkap;
 import static com.excellentsystem.AuriSteel.Main.tglSql;
-import com.excellentsystem.AuriSteel.Model.PenjualanDetail;
-import com.excellentsystem.AuriSteel.Model.PenjualanHead;
+import com.excellentsystem.AuriSteel.Model.PenjualanBarangDetail;
+import com.excellentsystem.AuriSteel.Model.PenjualanBarangHead;
 import java.sql.Connection;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.collections.FXCollections;
@@ -45,15 +45,15 @@ import javafx.stage.Stage;
  */
 public class NewPenjualanController {
 
-    @FXML private TableView<PenjualanDetail> penjualanDetailTable;
-    @FXML private TableColumn<PenjualanDetail, String> kodeBarangColumn;
-    @FXML private TableColumn<PenjualanDetail, String> namaBarangColumn;
-    @FXML private TableColumn<PenjualanDetail, String> keteranganColumn;
-    @FXML private TableColumn<PenjualanDetail, String> satuanColumn;
-    @FXML private TableColumn<PenjualanDetail, Number> qtyColumn;
-    @FXML private TableColumn<PenjualanDetail, Number> hargaJualColumn;
-    @FXML private TableColumn<PenjualanDetail, Number> hargaJualPPNColumn;
-    @FXML private TableColumn<PenjualanDetail, Number> subTotalColumn;
+    @FXML private TableView<PenjualanBarangDetail> penjualanDetailTable;
+    @FXML private TableColumn<PenjualanBarangDetail, String> kodeBarangColumn;
+    @FXML private TableColumn<PenjualanBarangDetail, String> namaBarangColumn;
+    @FXML private TableColumn<PenjualanBarangDetail, String> keteranganColumn;
+    @FXML private TableColumn<PenjualanBarangDetail, String> satuanColumn;
+    @FXML private TableColumn<PenjualanBarangDetail, Number> qtyColumn;
+    @FXML private TableColumn<PenjualanBarangDetail, Number> hargaJualColumn;
+    @FXML private TableColumn<PenjualanBarangDetail, Number> hargaJualPPNColumn;
+    @FXML private TableColumn<PenjualanBarangDetail, Number> subTotalColumn;
     
     @FXML private Label noPenjualanField;
     @FXML private Label tglPenjualanField;
@@ -72,8 +72,8 @@ public class NewPenjualanController {
     @FXML private TextField ppnField;
     @FXML private TextField grandtotalField;
     
-    private PenjualanHead penjualan;
-    private ObservableList<PenjualanDetail> allPenjualanDetail = FXCollections.observableArrayList();
+    private PenjualanBarangHead penjualan;
+    private ObservableList<PenjualanBarangDetail> allPenjualanDetail = FXCollections.observableArrayList();
     private Main mainApp;   
     private Stage stage;
     private Stage owner;
@@ -99,10 +99,10 @@ public class NewPenjualanController {
         });
         cm.getItems().addAll(refresh);
         penjualanDetailTable.setContextMenu(cm);
-        penjualanDetailTable.setRowFactory((TableView<PenjualanDetail> tv) -> {
-            final TableRow<PenjualanDetail> row = new TableRow<PenjualanDetail>(){
+        penjualanDetailTable.setRowFactory((TableView<PenjualanBarangDetail> tv) -> {
+            final TableRow<PenjualanBarangDetail> row = new TableRow<PenjualanBarangDetail>(){
                 @Override
-                public void updateItem(PenjualanDetail item, boolean empty) {
+                public void updateItem(PenjualanBarangDetail item, boolean empty) {
                     super.updateItem(item, empty);
                     if (empty) {
                         setContextMenu(cm);
@@ -137,12 +137,12 @@ public class NewPenjualanController {
             @Override 
             public String call() throws Exception{
                 try (Connection con = Koneksi.getConnection()) {
-                    penjualan = PenjualanHeadDAO.get(con, noPenjualan);
-                    penjualan.setPemesananHead(PemesananHeadDAO.get(con, penjualan.getNoPemesanan()));
+                    penjualan = PenjualanBarangHeadDAO.get(con, noPenjualan);
+                    penjualan.setPemesananBarangHead(PemesananBarangHeadDAO.get(con, penjualan.getNoPemesanan()));
                     penjualan.setCustomer(CustomerDAO.get(con, penjualan.getKodeCustomer()));
                     penjualan.setCustomerInvoice(CustomerDAO.get(con, penjualan.getKodeCustomerInvoice()));
                     penjualan.setSales(PegawaiDAO.get(con, penjualan.getKodeSales()));
-                    penjualan.setListPenjualanDetail(PenjualanDetailDAO.getAllPenjualanDetail(con, noPenjualan));
+                    penjualan.setListPenjualanBarangDetail(PenjualanBarangDetailDAO.getAllPenjualanDetail(con, noPenjualan));
                     return "true";
                 }
             }
@@ -161,12 +161,12 @@ public class NewPenjualanController {
                 paymentTermField.setText(penjualan.getPaymentTerm());
                 namaSalesField.setText(penjualan.getSales().getNama());
                 catatanField.setText(penjualan.getCatatan());
-                allPenjualanDetail.addAll(penjualan.getListPenjualanDetail());
+                allPenjualanDetail.addAll(penjualan.getListPenjualanBarangDetail());
                 totalPenjualanField.setText(df.format(penjualan.getTotalPenjualan()/1.1));
                 ppnField.setText(df.format(penjualan.getTotalPenjualan()/1.1*0.1));
                 grandtotalField.setText(df.format(penjualan.getTotalPenjualan()));
                 double qty = 0;
-                for(PenjualanDetail d : allPenjualanDetail){
+                for(PenjualanBarangDetail d : allPenjualanDetail){
                     qty = qty + d.getQty();
                 }
                 totalQtyField.setText(df.format(qty));

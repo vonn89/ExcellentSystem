@@ -32,11 +32,14 @@
 	<queryString>
 		<![CDATA[]]>
 	</queryString>
-	<field name="keterangan" class="java.lang.String">
-		<fieldDescription><![CDATA[keterangan]]></fieldDescription>
+	<field name="noPemesanan" class="java.lang.String">
+		<fieldDescription><![CDATA[noPemesanan]]></fieldDescription>
 	</field>
 	<field name="namaBarang" class="java.lang.String">
 		<fieldDescription><![CDATA[namaBarang]]></fieldDescription>
+	</field>
+	<field name="total" class="java.lang.Double">
+		<fieldDescription><![CDATA[total]]></fieldDescription>
 	</field>
 	<field name="kategoriBahan" class="java.lang.String">
 		<fieldDescription><![CDATA[kategoriBahan]]></fieldDescription>
@@ -44,53 +47,68 @@
 	<field name="harga" class="java.lang.Double">
 		<fieldDescription><![CDATA[harga]]></fieldDescription>
 	</field>
-	<field name="qty" class="java.lang.Double">
-		<fieldDescription><![CDATA[qty]]></fieldDescription>
-	</field>
 	<field name="spesifikasi" class="java.lang.String">
 		<fieldDescription><![CDATA[spesifikasi]]></fieldDescription>
 	</field>
-	<field name="total" class="java.lang.Double">
-		<fieldDescription><![CDATA[total]]></fieldDescription>
+	<field name="keterangan" class="java.lang.String">
+		<fieldDescription><![CDATA[keterangan]]></fieldDescription>
 	</field>
-	<field name="kurs" class="java.lang.Double">
-		<fieldDescription><![CDATA[pemesananCoilHead.kurs]]></fieldDescription>
-	</field>
-	<field name="downPayment" class="java.lang.Double">
-		<fieldDescription><![CDATA[pemesananCoilHead.downPayment]]></fieldDescription>
-	</field>
-	<field name="catatan" class="java.lang.String">
-		<fieldDescription><![CDATA[pemesananCoilHead.catatan]]></fieldDescription>
-	</field>
-	<field name="sisaDownPayment" class="java.lang.Double">
-		<fieldDescription><![CDATA[pemesananCoilHead.sisaDownPayment]]></fieldDescription>
-	</field>
-	<field name="paymentTerm" class="java.lang.String">
-		<fieldDescription><![CDATA[pemesananCoilHead.paymentTerm]]></fieldDescription>
-	</field>
-	<field name="noPemesanan" class="java.lang.String">
-		<fieldDescription><![CDATA[pemesananCoilHead.noPemesanan]]></fieldDescription>
-	</field>
-	<field name="tglPemesanan" class="java.lang.String">
-		<fieldDescription><![CDATA[pemesananCoilHead.tglPemesanan]]></fieldDescription>
+	<field name="qty" class="java.lang.Double">
+		<fieldDescription><![CDATA[qty]]></fieldDescription>
 	</field>
 	<field name="totalPemesanan" class="java.lang.Double">
-		<fieldDescription><![CDATA[pemesananCoilHead.totalPemesanan]]></fieldDescription>
+		<fieldDescription><![CDATA[pemesananBahanHead.totalPemesanan]]></fieldDescription>
+	</field>
+	<field name="tglPemesanan" class="java.lang.String">
+		<fieldDescription><![CDATA[pemesananBahanHead.tglPemesanan]]></fieldDescription>
+	</field>
+	<field name="kurs" class="java.lang.Double">
+		<fieldDescription><![CDATA[pemesananBahanHead.kurs]]></fieldDescription>
+	</field>
+	<field name="kodeCustomer" class="java.lang.String">
+		<fieldDescription><![CDATA[pemesananBahanHead.kodeCustomer]]></fieldDescription>
+	</field>
+	<field name="downPayment" class="java.lang.Double">
+		<fieldDescription><![CDATA[pemesananBahanHead.downPayment]]></fieldDescription>
+	</field>
+	<field name="kodeUser" class="java.lang.String">
+		<fieldDescription><![CDATA[pemesananBahanHead.kodeUser]]></fieldDescription>
+	</field>
+	<field name="userBatal" class="java.lang.String">
+		<fieldDescription><![CDATA[pemesananBahanHead.userBatal]]></fieldDescription>
+	</field>
+	<field name="status" class="java.lang.String">
+		<fieldDescription><![CDATA[pemesananBahanHead.status]]></fieldDescription>
+	</field>
+	<field name="paymentTerm" class="java.lang.String">
+		<fieldDescription><![CDATA[pemesananBahanHead.paymentTerm]]></fieldDescription>
+	</field>
+	<field name="kodeSales" class="java.lang.String">
+		<fieldDescription><![CDATA[pemesananBahanHead.kodeSales]]></fieldDescription>
+	</field>
+	<field name="catatan" class="java.lang.String">
+		<fieldDescription><![CDATA[pemesananBahanHead.catatan]]></fieldDescription>
+	</field>
+	<field name="tglBatal" class="java.lang.String">
+		<fieldDescription><![CDATA[pemesananBahanHead.tglBatal]]></fieldDescription>
+	</field>
+	<field name="noPemesanan_1" class="java.lang.String">
+		<fieldDescription><![CDATA[pemesananBahanHead.noPemesanan]]></fieldDescription>
+	</field>
+	<field name="sisaDownPayment" class="java.lang.Double">
+		<fieldDescription><![CDATA[pemesananBahanHead.sisaDownPayment]]></fieldDescription>
 	</field>
 	<field name="alamat" class="java.lang.String">
-		<fieldDescription><![CDATA[pemesananCoilHead.customer.alamat]]></fieldDescription>
-	</field>
-	<field name="kontakPerson" class="java.lang.String">
-		<fieldDescription><![CDATA[pemesananCoilHead.customer.kontakPerson]]></fieldDescription>
+		<fieldDescription><![CDATA[pemesananBahanHead.customer.alamat]]></fieldDescription>
 	</field>
 	<field name="kota" class="java.lang.String">
-		<fieldDescription><![CDATA[pemesananCoilHead.customer.kota]]></fieldDescription>
+		<fieldDescription><![CDATA[pemesananBahanHead.customer.kota]]></fieldDescription>
 	</field>
 	<field name="nama" class="java.lang.String">
-		<fieldDescription><![CDATA[pemesananCoilHead.customer.nama]]></fieldDescription>
+		<fieldDescription><![CDATA[pemesananBahanHead.customer.nama]]></fieldDescription>
 	</field>
-	<field name="satuan" class="java.lang.String">
-		<fieldDescription><![CDATA[bahan.kategoriBahan.satuan]]></fieldDescription>
+	<field name="kontakPerson" class="java.lang.String">
+		<fieldDescription><![CDATA[pemesananBahanHead.customer.kontakPerson]]></fieldDescription>
 	</field>
 	<background>
 		<band splitType="Stretch"/>
@@ -317,7 +335,7 @@
 				<textElement textAlignment="Center">
 					<font fontName="Times New Roman"/>
 				</textElement>
-				<textFieldExpression><![CDATA[($F{satuan}.equals("Berat") ? "kg" : "meter" )]]></textFieldExpression>
+				<textFieldExpression><![CDATA["meter"]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>

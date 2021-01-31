@@ -20,7 +20,7 @@ public class BebanPenjualanDetail {
     private final StringProperty noPenjualan = new SimpleStringProperty();
     private final DoubleProperty jumlahRp = new SimpleDoubleProperty();
     private final StringProperty status = new SimpleStringProperty();
-    private PenjualanHead penjualanHead;
+    private PenjualanBarangHead penjualanHead;
     private BebanPenjualanHead bebanPenjualanHead;
 
     public BebanPenjualanHead getBebanPenjualanHead() {
@@ -31,11 +31,11 @@ public class BebanPenjualanDetail {
         this.bebanPenjualanHead = bebanPenjualanHead;
     }
     
-    public PenjualanHead getPenjualanHead() {
+    public PenjualanBarangHead getPenjualanHead() {
         return penjualanHead;
     }
 
-    public void setPenjualanHead(PenjualanHead penjualanHead) {
+    public void setPenjualanHead(PenjualanBarangHead penjualanHead) {
         this.penjualanHead = penjualanHead;
     }
     

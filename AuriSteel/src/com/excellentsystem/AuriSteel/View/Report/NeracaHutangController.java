@@ -9,9 +9,9 @@ import com.excellentsystem.AuriSteel.DAO.CustomerDAO;
 import com.excellentsystem.AuriSteel.DAO.HutangDAO;
 import com.excellentsystem.AuriSteel.DAO.PembayaranDAO;
 import com.excellentsystem.AuriSteel.DAO.PembelianBarangHeadDAO;
-import com.excellentsystem.AuriSteel.DAO.PembelianHeadDAO;
-import com.excellentsystem.AuriSteel.DAO.PemesananCoilHeadDAO;
-import com.excellentsystem.AuriSteel.DAO.PemesananHeadDAO;
+import com.excellentsystem.AuriSteel.DAO.PembelianBahanHeadDAO;
+import com.excellentsystem.AuriSteel.DAO.PemesananBahanHeadDAO;
+import com.excellentsystem.AuriSteel.DAO.PemesananBarangHeadDAO;
 import com.excellentsystem.AuriSteel.DAO.SupplierDAO;
 import com.excellentsystem.AuriSteel.Function;
 import static com.excellentsystem.AuriSteel.Function.createRow;
@@ -25,10 +25,10 @@ import com.excellentsystem.AuriSteel.Model.Customer;
 import com.excellentsystem.AuriSteel.Model.Hutang;
 import com.excellentsystem.AuriSteel.Model.Otoritas;
 import com.excellentsystem.AuriSteel.Model.Pembayaran;
+import com.excellentsystem.AuriSteel.Model.PembelianBahanHead;
 import com.excellentsystem.AuriSteel.Model.PembelianBarangHead;
-import com.excellentsystem.AuriSteel.Model.PembelianHead;
-import com.excellentsystem.AuriSteel.Model.PemesananCoilHead;
-import com.excellentsystem.AuriSteel.Model.PemesananHead;
+import com.excellentsystem.AuriSteel.Model.PemesananBahanHead;
+import com.excellentsystem.AuriSteel.Model.PemesananBarangHead;
 import com.excellentsystem.AuriSteel.Model.Supplier;
 import com.excellentsystem.AuriSteel.PrintOut.Report;
 import com.excellentsystem.AuriSteel.View.Dialog.DetailHutangController;
@@ -210,26 +210,26 @@ public class NeracaHutangController  {
                     con, "2000-01-01", tglAkhir, "true");
             double saldoAkhir = 0;
             if(kategori.equals("Hutang Pembelian")){
-                List<PembelianHead> listPembelian = PembelianHeadDAO.getAllByDateAndStatus(con, "2000-01-01", tglAkhir,"true");
+                List<PembelianBahanHead> listPembelian = PembelianBahanHeadDAO.getAllByDateAndStatus(con, "2000-01-01", tglAkhir,"true");
                 List<PembelianBarangHead> listPembelianBarang = PembelianBarangHeadDAO.getAllByDateAndStatus(con, "2000-01-01", tglAkhir, "true");
                 List<Supplier> listSupplier = SupplierDAO.getAllByStatus(con, "%");
                 List<String> groupBySupplier = new ArrayList<>();
                 for(Hutang h : allHutang){
-                    for(PembelianHead pb : listPembelian){
+                    for(PembelianBahanHead pb : listPembelian){
                         if(pb.getNoPembelian().equals(h.getKeterangan()))
-                            h.setPembelianCoilHead(pb);
+                            h.setPembelianBahanHead(pb);
                     }
                     for(PembelianBarangHead pb : listPembelianBarang){
                         if(pb.getNoPembelian().equals(h.getKeterangan()))
                             h.setPembelianBarangHead(pb);
                     }
-                    if(h.getPembelianCoilHead()!=null){
+                    if(h.getPembelianBahanHead()!=null){
                         for(Supplier s : listSupplier){
-                            if(h.getPembelianCoilHead().getKodeSupplier().equals(s.getKodeSupplier()))
-                                h.getPembelianCoilHead().setSupplier(s);
+                            if(h.getPembelianBahanHead().getKodeSupplier().equals(s.getKodeSupplier()))
+                                h.getPembelianBahanHead().setSupplier(s);
                         }
-                        if(!groupBySupplier.contains(h.getPembelianCoilHead().getSupplier().getNama()))
-                            groupBySupplier.add(h.getPembelianCoilHead().getSupplier().getNama());
+                        if(!groupBySupplier.contains(h.getPembelianBahanHead().getSupplier().getNama()))
+                            groupBySupplier.add(h.getPembelianBahanHead().getSupplier().getNama());
                     }
                     if(h.getPembelianBarangHead()!=null){
                         for(Supplier s : listSupplier){
@@ -250,8 +250,8 @@ public class NeracaHutangController  {
                     double totalPembayaranSupplier = 0;
                     double totalSisaHutangSupplier = 0;
                     for(Hutang h : allHutang){
-                        if(h.getPembelianCoilHead()!=null){
-                            if(h.getPembelianCoilHead().getSupplier().getNama().equals(s)){
+                        if(h.getPembelianBahanHead()!=null){
+                            if(h.getPembelianBahanHead().getSupplier().getNama().equals(s)){
                                 h.setPembayaran(0);
                                 h.setSisaHutang(h.getJumlahHutang());
                                 for(Pembayaran p : listPembayaran){
@@ -298,15 +298,15 @@ public class NeracaHutangController  {
                     }
                 }
             }else if(kategori.equals("Terima Pembayaran Down Payment")){
-                List<PemesananHead> listPemesanan = PemesananHeadDAO.getAllByDateAndStatus(
+                List<PemesananBarangHead> listPemesanan = PemesananBarangHeadDAO.getAllByDateAndStatus(
                         con, "2000-01-01", tglAkhir, "%");
-                List<PemesananCoilHead> listPemesananCoil = PemesananCoilHeadDAO.getAllByDateAndStatus(
+                List<PemesananBahanHead> listPemesananCoil = PemesananBahanHeadDAO.getAllByDateAndStatus(
                         con, "2000-01-01", tglAkhir, "%");
                 List<Customer> listCustomer = CustomerDAO.getAllByStatus(con, "%");
                 List<String> groupByCustomer = new ArrayList<>();
                 for(Hutang h : allHutang){
                     if(h.getKeterangan().startsWith("PI")){
-                        for(PemesananHead p : listPemesanan){
+                        for(PemesananBarangHead p : listPemesanan){
                             if(h.getKeterangan().equals(p.getNoPemesanan()))
                                 h.setPemesananHead(p);
                         }
@@ -317,16 +317,16 @@ public class NeracaHutangController  {
                         if(!groupByCustomer.contains(h.getPemesananHead().getCustomer().getNama()))
                             groupByCustomer.add(h.getPemesananHead().getCustomer().getNama());
                     }else if(h.getKeterangan().startsWith("PC")){
-                        for(PemesananCoilHead p : listPemesananCoil){
+                        for(PemesananBahanHead p : listPemesananCoil){
                             if(h.getKeterangan().equals(p.getNoPemesanan()))
-                                h.setPemesananCoilHead(p);
+                                h.setPemesananBahanHead(p);
                         }
                         for(Customer c : listCustomer){
-                            if(h.getPemesananCoilHead().getKodeCustomer().equals(c.getKodeCustomer()))
-                                h.getPemesananCoilHead().setCustomer(c);
+                            if(h.getPemesananBahanHead().getKodeCustomer().equals(c.getKodeCustomer()))
+                                h.getPemesananBahanHead().setCustomer(c);
                         }
-                        if(!groupByCustomer.contains(h.getPemesananCoilHead().getCustomer().getNama()))
-                            groupByCustomer.add(h.getPemesananCoilHead().getCustomer().getNama());
+                        if(!groupByCustomer.contains(h.getPemesananBahanHead().getCustomer().getNama()))
+                            groupByCustomer.add(h.getPemesananBahanHead().getCustomer().getNama());
                     }
                 }
                 for(String s : groupByCustomer){
@@ -358,7 +358,7 @@ public class NeracaHutangController  {
                                 }
                             }
                         }else if(h.getKeterangan().startsWith("PC")){
-                            if(h.getPemesananCoilHead().getCustomer().getNama().equals(s)){
+                            if(h.getPemesananBahanHead().getCustomer().getNama().equals(s)){
                                 h.setPembayaran(0);
                                 h.setSisaHutang(h.getJumlahHutang());
                                 for(Pembayaran p : listPembayaran){
@@ -425,7 +425,7 @@ public class NeracaHutangController  {
     }
     private void showDetailPemesananCoil(Hutang hutang){
         try(Connection con = Koneksi.getConnection()){
-            PemesananCoilHead p = PemesananCoilHeadDAO.get(con, hutang.getKeterangan());
+            PemesananBahanHead p = PemesananBahanHeadDAO.get(con, hutang.getKeterangan());
             if(p.getKurs()!=1){
                 Stage child = new Stage();
                 FXMLLoader loader = mainApp.showDialog(stage, child, "View/Dialog/NewPemesananCoil.fxml");
@@ -501,9 +501,9 @@ public class NeracaHutangController  {
                 if(kategori.equals("Hutang Pembelian")){
                     List<String> groupBy = new ArrayList<>();
                     for(Hutang h : listHutang){
-                        if(h.getPembelianCoilHead()!=null)
-                            if(!groupBy.contains(h.getPembelianCoilHead().getSupplier().getNama()))
-                                groupBy.add(h.getPembelianCoilHead().getSupplier().getNama());
+                        if(h.getPembelianBahanHead()!=null)
+                            if(!groupBy.contains(h.getPembelianBahanHead().getSupplier().getNama()))
+                                groupBy.add(h.getPembelianBahanHead().getSupplier().getNama());
                         if(h.getPembelianBarangHead()!=null)
                             if(!groupBy.contains(h.getPembelianBarangHead().getSupplier().getNama()))
                                 groupBy.add(h.getPembelianBarangHead().getSupplier().getNama());
@@ -517,7 +517,7 @@ public class NeracaHutangController  {
                         double totalPembayaranGroup = 0;
                         double totalSisaHutangGroup = 0;
                         for(Hutang h : listHutang){
-                            if(h.getPembelianCoilHead()!=null && h.getPembelianCoilHead().getSupplier().getNama().equals(s)){
+                            if(h.getPembelianBahanHead()!=null && h.getPembelianBahanHead().getSupplier().getNama().equals(s)){
                                 createRow(workbook, sheet, rc, c, "Detail");
                                 sheet.getRow(rc).getCell(0).setCellValue(h.getNoHutang());
                                 sheet.getRow(rc).getCell(1).setCellValue(tglLengkap.format(tglSql.parse(h.getTglHutang())));
@@ -562,9 +562,9 @@ public class NeracaHutangController  {
                         if(h.getPemesananHead()!=null)
                             if(!groupBy.contains(h.getPemesananHead().getCustomer().getNama()))
                                 groupBy.add(h.getPemesananHead().getCustomer().getNama());
-                        if(h.getPemesananCoilHead()!=null)
-                            if(!groupBy.contains(h.getPemesananCoilHead().getCustomer().getNama()))
-                                groupBy.add(h.getPemesananCoilHead().getCustomer().getNama());
+                        if(h.getPemesananBahanHead()!=null)
+                            if(!groupBy.contains(h.getPemesananBahanHead().getCustomer().getNama()))
+                                groupBy.add(h.getPemesananBahanHead().getCustomer().getNama());
                     }
                     for(String s : groupBy){
                         rc++;
@@ -589,7 +589,7 @@ public class NeracaHutangController  {
                                 totalPembayaranGroup = totalPembayaranGroup + h.getPembayaran();
                                 totalSisaHutangGroup = totalSisaHutangGroup + h.getSisaHutang();
                             }
-                            if(h.getPemesananCoilHead()!=null && h.getPemesananCoilHead().getCustomer().getNama().equals(s)){
+                            if(h.getPemesananBahanHead()!=null && h.getPemesananBahanHead().getCustomer().getNama().equals(s)){
                                 createRow(workbook, sheet, rc, c, "Detail");
                                 sheet.getRow(rc).getCell(0).setCellValue(h.getNoHutang());
                                 sheet.getRow(rc).getCell(1).setCellValue(tglLengkap.format(tglSql.parse(h.getTglHutang())));

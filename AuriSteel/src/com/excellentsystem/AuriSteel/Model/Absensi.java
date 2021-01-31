@@ -12,10 +12,10 @@ import javafx.beans.property.StringProperty;
 
 /**
  *
- * @author Excellent
+ * @author ASUS
  */
 public class Absensi {
-
+    
     private final StringProperty tanggal = new SimpleStringProperty();
     private final StringProperty nama = new SimpleStringProperty();
     private final LongProperty jamMasuk = new SimpleLongProperty();

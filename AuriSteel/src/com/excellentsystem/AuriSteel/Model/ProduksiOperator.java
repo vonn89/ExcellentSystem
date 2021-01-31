@@ -15,8 +15,33 @@ import javafx.beans.property.StringProperty;
 public class ProduksiOperator {
 
     private final StringProperty kodeProduksi = new SimpleStringProperty();
-    private final StringProperty kodePegawai = new SimpleStringProperty();
+    private final StringProperty kodeOperator = new SimpleStringProperty();
+    private final StringProperty namaOperator = new SimpleStringProperty();
     private Pegawai pegawai;
+
+    public String getKodeOperator() {
+        return kodeOperator.get();
+    }
+
+    public void setKodeOperator(String value) {
+        kodeOperator.set(value);
+    }
+
+    public StringProperty kodeOperatorProperty() {
+        return kodeOperator;
+    }
+
+    public String getNamaOperator() {
+        return namaOperator.get();
+    }
+
+    public void setNamaOperator(String value) {
+        namaOperator.set(value);
+    }
+
+    public StringProperty namaOperatorProperty() {
+        return namaOperator;
+    }
 
     public Pegawai getPegawai() {
         return pegawai;
@@ -26,17 +51,6 @@ public class ProduksiOperator {
         this.pegawai = pegawai;
     }
     
-    public String getKodePegawai() {
-        return kodePegawai.get();
-    }
-
-    public void setKodePegawai(String value) {
-        kodePegawai.set(value);
-    }
-
-    public StringProperty kodePegawaiProperty() {
-        return kodePegawai;
-    }
 
     public String getKodeProduksi() {
         return kodeProduksi.get();

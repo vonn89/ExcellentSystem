@@ -8,8 +8,8 @@ package com.excellentsystem.AuriSteel.View.Report;
 
 import com.excellentsystem.AuriSteel.DAO.CustomerDAO;
 import com.excellentsystem.AuriSteel.DAO.PegawaiDAO;
-import com.excellentsystem.AuriSteel.DAO.PenjualanDetailDAO;
-import com.excellentsystem.AuriSteel.DAO.PenjualanHeadDAO;
+import com.excellentsystem.AuriSteel.DAO.PenjualanBarangDetailDAO;
+import com.excellentsystem.AuriSteel.DAO.PenjualanBarangHeadDAO;
 import com.excellentsystem.AuriSteel.Function;
 import static com.excellentsystem.AuriSteel.Function.createRow;
 import com.excellentsystem.AuriSteel.Koneksi;
@@ -21,8 +21,8 @@ import static com.excellentsystem.AuriSteel.Main.tglSql;
 import com.excellentsystem.AuriSteel.Model.Customer;
 import com.excellentsystem.AuriSteel.Model.Otoritas;
 import com.excellentsystem.AuriSteel.Model.Pegawai;
-import com.excellentsystem.AuriSteel.Model.PenjualanDetail;
-import com.excellentsystem.AuriSteel.Model.PenjualanHead;
+import com.excellentsystem.AuriSteel.Model.PenjualanBarangDetail;
+import com.excellentsystem.AuriSteel.Model.PenjualanBarangHead;
 import com.excellentsystem.AuriSteel.PrintOut.Report;
 import com.excellentsystem.AuriSteel.View.Dialog.DetailPiutangController;
 import com.excellentsystem.AuriSteel.View.Dialog.NewPenjualanController;
@@ -61,22 +61,22 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
  */
 public class UntungRugiPenjualanController  {
     
-    @FXML private TreeTableView<PenjualanHead> penjualanTable;
-    @FXML private TreeTableColumn<PenjualanHead, String> noPenjualanColumn;
-    @FXML private TreeTableColumn<PenjualanHead, String> tglPenjualanColumn;
-    @FXML private TreeTableColumn<PenjualanHead, String> namaCustomerColumn;
-    @FXML private TreeTableColumn<PenjualanHead, Number> totalPenjualanColumn;
-    @FXML private TreeTableColumn<PenjualanHead, Number> pembayaranColumn;
-    @FXML private TreeTableColumn<PenjualanHead, Number> sisaPembayaranColumn;
-    @FXML private TreeTableColumn<PenjualanHead, String> namaSalesColumn;
+    @FXML private TreeTableView<PenjualanBarangHead> penjualanTable;
+    @FXML private TreeTableColumn<PenjualanBarangHead, String> noPenjualanColumn;
+    @FXML private TreeTableColumn<PenjualanBarangHead, String> tglPenjualanColumn;
+    @FXML private TreeTableColumn<PenjualanBarangHead, String> namaCustomerColumn;
+    @FXML private TreeTableColumn<PenjualanBarangHead, Number> totalPenjualanColumn;
+    @FXML private TreeTableColumn<PenjualanBarangHead, Number> pembayaranColumn;
+    @FXML private TreeTableColumn<PenjualanBarangHead, Number> sisaPembayaranColumn;
+    @FXML private TreeTableColumn<PenjualanBarangHead, String> namaSalesColumn;
     
     @FXML private Label totalPenjualanField;
     @FXML private Label totalPembayaranField;
     @FXML private Label sisaPembayaranField;
     private String tglAwal;
     private String tglAkhir;
-    final TreeItem<PenjualanHead> root = new TreeItem<>();
-    private ObservableList<PenjualanHead> allPenjualan = FXCollections.observableArrayList();
+    final TreeItem<PenjualanBarangHead> root = new TreeItem<>();
+    private ObservableList<PenjualanBarangHead> allPenjualan = FXCollections.observableArrayList();
     private Main mainApp;  
     private Stage owner;
     private Stage stage;
@@ -114,10 +114,10 @@ public class UntungRugiPenjualanController  {
         });
         rm.getItems().addAll(print, export, refresh);
         penjualanTable.setContextMenu(rm);
-        penjualanTable.setRowFactory((TreeTableView<PenjualanHead> tableView) -> {
-            final TreeTableRow<PenjualanHead> row = new TreeTableRow<PenjualanHead>(){
+        penjualanTable.setRowFactory((TreeTableView<PenjualanBarangHead> tableView) -> {
+            final TreeTableRow<PenjualanBarangHead> row = new TreeTableRow<PenjualanBarangHead>(){
                 @Override
-                public void updateItem(PenjualanHead item, boolean empty) {
+                public void updateItem(PenjualanBarangHead item, boolean empty) {
                     super.updateItem(item, empty);
                     if (empty) {
                         setContextMenu(rm);
@@ -172,17 +172,17 @@ public class UntungRugiPenjualanController  {
         stage.setY((mainApp.screenSize.getHeight() - stage.getHeight()) / 2);
     }
     public void getPenjualan(String tglAwal,String tglAkhir){
-        Task<List<PenjualanHead>> task = new Task<List<PenjualanHead>>() {
+        Task<List<PenjualanBarangHead>> task = new Task<List<PenjualanBarangHead>>() {
             @Override 
-            public List<PenjualanHead> call() throws Exception{
+            public List<PenjualanBarangHead> call() throws Exception{
                 try(Connection con = Koneksi.getConnection()){
-                    List<PenjualanHead> allPenjualan = PenjualanHeadDAO.getAllByDateAndStatus(con, 
+                    List<PenjualanBarangHead> allPenjualan = PenjualanBarangHeadDAO.getAllByDateAndStatus(con, 
                             tglAwal, tglAkhir,"true");
-                    List<PenjualanDetail> allDetail = PenjualanDetailDAO.getAllByDateAndStatus(con, 
+                    List<PenjualanBarangDetail> allDetail = PenjualanBarangDetailDAO.getAllByDateAndStatus(con, 
                             tglAwal, tglAkhir, "true");
                     List<Customer> allCustomer = CustomerDAO.getAllByStatus(con, "%");
                     List<Pegawai> allSales = PegawaiDAO.getAllByStatus(con, "%");
-                    for(PenjualanHead p : allPenjualan){
+                    for(PenjualanBarangHead p : allPenjualan){
                         for(Customer c: allCustomer){
                             if(p.getKodeCustomer().equals(c.getKodeCustomer()))
                                 p.setCustomer(c);
@@ -191,12 +191,12 @@ public class UntungRugiPenjualanController  {
                             if(p.getKodeSales().equals(s.getKodePegawai()))
                                 p.setSales(s);
                         }
-                        List<PenjualanDetail> detail = new ArrayList<>();
-                        for(PenjualanDetail d: allDetail){
+                        List<PenjualanBarangDetail> detail = new ArrayList<>();
+                        for(PenjualanBarangDetail d: allDetail){
                             if(p.getNoPenjualan().equals(d.getNoPenjualan()))
                                 detail.add(d);
                         }
-                        p.setListPenjualanDetail(detail);
+                        p.setListPenjualanBarangDetail(detail);
                     }
                     return allPenjualan;
                 }
@@ -228,20 +228,20 @@ public class UntungRugiPenjualanController  {
         if(penjualanTable.getRoot()!=null)
             penjualanTable.getRoot().getChildren().clear();
         List<String> groupBy = new ArrayList<>();
-        for(PenjualanHead temp : allPenjualan){
+        for(PenjualanBarangHead temp : allPenjualan){
             if(!groupBy.contains(temp.getCustomer().getNama()))
                 groupBy.add(temp.getCustomer().getNama());
         }
         for(String temp : groupBy){
-            PenjualanHead head = new PenjualanHead();
+            PenjualanBarangHead head = new PenjualanBarangHead();
             head.setNoPenjualan(temp);
             head.setCustomer(new Customer());
             head.setSales(new Pegawai());
-            TreeItem<PenjualanHead> parent = new TreeItem<>(head);
+            TreeItem<PenjualanBarangHead> parent = new TreeItem<>(head);
             double totalPenjualan = 0;
             double totalPembayaran = 0;
             double sisaPembayaran = 0;
-            for(PenjualanHead pj: allPenjualan){
+            for(PenjualanBarangHead pj: allPenjualan){
                 if(temp.equals(pj.getCustomer().getNama())){
                     totalPenjualan = totalPenjualan + pj.getTotalPenjualan();
                     totalPembayaran = totalPembayaran + pj.getPembayaran();
@@ -260,7 +260,7 @@ public class UntungRugiPenjualanController  {
         double totalPenjualan=0;
         double totalPembayaran=0;
         double sisaPembayaran=0;
-        for(PenjualanHead temp : allPenjualan){
+        for(PenjualanBarangHead temp : allPenjualan){
             totalPenjualan = totalPenjualan + temp.getTotalPenjualan();
             totalPembayaran = totalPembayaran + temp.getPembayaran();
             sisaPembayaran = sisaPembayaran + temp.getSisaPembayaran();
@@ -269,14 +269,14 @@ public class UntungRugiPenjualanController  {
         totalPembayaranField.setText(df.format(totalPembayaran));
         sisaPembayaranField.setText(df.format(sisaPembayaran));
     }
-    private void lihatDetailPenjualan(PenjualanHead p){
+    private void lihatDetailPenjualan(PenjualanBarangHead p){
         Stage child = new Stage();
         FXMLLoader loader = mainApp.showDialog(stage, child, "View/Dialog/NewPenjualan.fxml");
         NewPenjualanController controller = loader.getController();
         controller.setMainApp(mainApp, stage, child);
         controller.setDetailPenjualan(p.getNoPenjualan());
     }
-    private void showDetailPiutang(PenjualanHead p){
+    private void showDetailPiutang(PenjualanBarangHead p){
         Stage child = new Stage();
         FXMLLoader loader = mainApp.showDialog(stage, child, "View/Dialog/DetailPiutang.fxml");
         DetailPiutangController x = loader.getController();
@@ -330,7 +330,7 @@ public class UntungRugiPenjualanController  {
                 rc++;
                 
                 List<String> groupBy = new ArrayList<>();
-                for(PenjualanHead temp : allPenjualan){
+                for(PenjualanBarangHead temp : allPenjualan){
                     if(!groupBy.contains(temp.getCustomer().getNama()))
                         groupBy.add(temp.getCustomer().getNama());
                 }
@@ -345,7 +345,7 @@ public class UntungRugiPenjualanController  {
                     double totalPenjualan = 0;
                     double totalPembayaran = 0;
                     double sisaPembayaran = 0;
-                    for(PenjualanHead p: allPenjualan){
+                    for(PenjualanBarangHead p: allPenjualan){
                         if(temp.equals(p.getCustomer().getNama())){
                             createRow(workbook, sheet, rc, c, "Detail");
                             sheet.getRow(rc).getCell(0).setCellValue(p.getNoPenjualan());  

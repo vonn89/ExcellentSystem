@@ -28,7 +28,16 @@ public class Sistem {
     private List<KategoriBahan> listKategoriBahan;
     private List<KategoriHutang> listKategoriHutang;
     private List<KategoriPiutang> listKategoriPiutang;
+    private List<Mesin> listMesin;
 
+    public List<Mesin> getListMesin() {
+        return listMesin;
+    }
+
+    public void setListMesin(List<Mesin> listMesin) {
+        this.listMesin = listMesin;
+    }
+    
     public List<KategoriPiutang> getListKategoriPiutang() {
         return listKategoriPiutang;
     }

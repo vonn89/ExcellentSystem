@@ -268,7 +268,8 @@ public class DataUserController  {
             ));
             root.getChildren().add(createTreeItem("Data Bahan",
                 Arrays.asList(
-                    "Edit Bahan"
+                    "Edit Bahan",
+                    "Cetak Barcode"
                 )
             ));
             root.getChildren().add(createTreeItem("Data Barang",
@@ -332,15 +333,25 @@ public class DataUserController  {
                     "Print Invoice Coil"
                 )
             ));
-            root.getChildren().add(createTreeItem("Pembelian",
+            root.getChildren().add(createTreeItem("Pemesanan Pembelian Bahan",
                 Arrays.asList(                    
-                    "Add New Pembelian",
-                    "Detail Pembelian",
-                    "Batal Pembelian",
-                    "Detail Pembayaran Pembelian",
-                    "Pembayaran Pembelian",
-                    "Batal Pembayaran Pembelian",
-                    "Set Jatuh Tempo Pembelian"
+                    "Add New Pemesanan Pembelian Bahan",
+                    "Detail Pemesanan Pembelian Bahan",
+                    "Batal Pemesanan Pembelian Bahan",
+                    "Detail Pembayaran DP Pembelian Bahan",
+                    "Pembayaran DP Pembelian Bahan",
+                    "Batal Pembayaran DP Pembelian Bahan"
+                )
+            ));
+            root.getChildren().add(createTreeItem("Pembelian Bahan",
+                Arrays.asList(                    
+                    "Add New Pembelian Bahan",
+                    "Detail Pembelian Bahan",
+                    "Batal Pembelian Bahan",
+                    "Detail Pembayaran Pembelian Bahan",
+                    "Pembayaran Pembelian Bahan",
+                    "Batal Pembayaran Pembelian Bahan",
+                    "Set Jatuh Tempo Pembelian Bahan"
                 )
             ));
             root.getChildren().add(createTreeItem("Pembelian Barang",
@@ -363,6 +374,7 @@ public class DataUserController  {
                 Arrays.asList(          
                     "Add New Produksi",
                     "Detail Produksi",
+                    "Verifikasi Produksi",
                     "Batal Produksi"
                 )
             ));
@@ -381,6 +393,12 @@ public class DataUserController  {
                     "Detail Pengiriman Coil",
                     "Batal Pengiriman Coil",
                     "Print Surat Jalan Coil"
+                )
+            ));
+            root.getChildren().add(createTreeItem("Penerimaan Bahan",
+                Arrays.asList(                    
+                    "Add New Penerimaan Bahan", 
+                    "Batal Penerimaan Bahan"
                 )
             ));
             root.getChildren().add(createTreeItem("Pindah Bahan",

@@ -108,6 +108,35 @@ public class PiutangDAO {
         }
         return p;
     }
+    public static List<Piutang> getAllByKategoriAndKeteranganAndStatus(Connection con, String kategori, String keterangan, String status)throws Exception{
+        String sql = "select * from tm_piutang where no_piutang!='' ";
+        if(!kategori.equals("%"))
+            sql = sql + " and kategori = '"+kategori+"' ";
+        if(!keterangan.equals("%"))
+            sql = sql + " and keterangan = '"+keterangan+"' ";
+        if(!status.equals("%"))
+            sql = sql + " and status = '"+status+"' ";
+        else
+            sql = sql + " and status != 'false'";
+        PreparedStatement ps = con.prepareStatement(sql);
+        ResultSet rs = ps.executeQuery();
+        List<Piutang> listPiutang = new ArrayList<>();
+        while(rs.next()){
+            Piutang p = new Piutang();
+            p.setNoPiutang(rs.getString(1));
+            p.setTglPiutang(rs.getDate(2).toString()+" "+rs.getTime(2).toString());
+            p.setKategori(rs.getString(3));
+            p.setKeterangan(rs.getString(4));
+            p.setTipeKeuangan(rs.getString(5));
+            p.setJumlahPiutang(rs.getDouble(6));
+            p.setPembayaran(rs.getDouble(7));
+            p.setSisaPiutang(rs.getDouble(8));
+            p.setJatuhTempo(rs.getString(9));
+            p.setKodeUser(rs.getString(10));
+            p.setStatus(rs.getString(11));
+        }
+        return listPiutang;
+    }
     public static Piutang get(Connection con, String noPiutang)throws Exception{
         PreparedStatement ps = con.prepareStatement("select * from tm_piutang where no_piutang=?");
         ps.setString(1, noPiutang);

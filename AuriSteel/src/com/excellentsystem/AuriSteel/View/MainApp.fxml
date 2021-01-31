@@ -161,7 +161,12 @@
                      <content>
                         <VBox fx:id="pembelianVbox" style="-fx-padding: 0 -1 0 0;">
                            <children>
-                              <MenuButton fx:id="menuPembelian" mnemonicParsing="false" onMouseClicked="#menuPembelian" prefHeight="35.0" prefWidth="270.0" text="Pembelian">
+                              <MenuButton fx:id="menuPemesananPembelianBahan" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" onMouseClicked="#menuPemesananPembelian" prefHeight="35.0" prefWidth="270.0" text="Pemesanan Pembelian Bahan">
+                                 <padding>
+                                    <Insets left="50.0" />
+                                 </padding>
+                              </MenuButton>
+                              <MenuButton fx:id="menuPembelianBahan" mnemonicParsing="false" onMouseClicked="#menuPembelian" prefHeight="35.0" prefWidth="270.0" text="Pembelian Bahan">
                                  <padding>
                                     <Insets left="50.0" />
                                  </padding>
@@ -202,6 +207,11 @@
                                  </padding>
                               </MenuButton>
                               <MenuButton fx:id="menuPengirimanCoil" layoutX="10.0" layoutY="70.0" mnemonicParsing="false" onMouseClicked="#menuPengirimanCoil" prefHeight="35.0" prefWidth="270.0" text="Pengiriman Coil">
+                                 <padding>
+                                    <Insets left="50.0" />
+                                 </padding>
+                              </MenuButton>
+                              <MenuButton fx:id="menuPenerimaanBahan" layoutX="10.0" layoutY="150.0" mnemonicParsing="false" onMouseClicked="#menuPenerimaanBahan" prefHeight="35.0" prefWidth="270.0" text="Penerimaan Bahan">
                                  <padding>
                                     <Insets left="50.0" />
                                  </padding>

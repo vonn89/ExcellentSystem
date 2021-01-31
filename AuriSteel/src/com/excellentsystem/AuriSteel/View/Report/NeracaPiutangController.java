@@ -6,8 +6,8 @@
 package com.excellentsystem.AuriSteel.View.Report;
 
 import com.excellentsystem.AuriSteel.DAO.CustomerDAO;
-import com.excellentsystem.AuriSteel.DAO.PenjualanCoilHeadDAO;
-import com.excellentsystem.AuriSteel.DAO.PenjualanHeadDAO;
+import com.excellentsystem.AuriSteel.DAO.PenjualanBahanHeadDAO;
+import com.excellentsystem.AuriSteel.DAO.PenjualanBarangHeadDAO;
 import com.excellentsystem.AuriSteel.DAO.PiutangDAO;
 import com.excellentsystem.AuriSteel.DAO.TerimaPembayaranDAO;
 import com.excellentsystem.AuriSteel.Function;
@@ -20,8 +20,8 @@ import static com.excellentsystem.AuriSteel.Main.tglLengkap;
 import static com.excellentsystem.AuriSteel.Main.tglSql;
 import com.excellentsystem.AuriSteel.Model.Customer;
 import com.excellentsystem.AuriSteel.Model.Otoritas;
-import com.excellentsystem.AuriSteel.Model.PenjualanCoilHead;
-import com.excellentsystem.AuriSteel.Model.PenjualanHead;
+import com.excellentsystem.AuriSteel.Model.PenjualanBahanHead;
+import com.excellentsystem.AuriSteel.Model.PenjualanBarangHead;
 import com.excellentsystem.AuriSteel.Model.Piutang;
 import com.excellentsystem.AuriSteel.Model.TerimaPembayaran;
 import com.excellentsystem.AuriSteel.PrintOut.Report;
@@ -196,14 +196,14 @@ public class NeracaPiutangController  {
                     con, "2000-01-01", tglAkhir, "true");
             double saldoAkhir = 0;
             if(kategori.equals("Piutang Penjualan")){
-                List<PenjualanHead> listPenjualan = PenjualanHeadDAO.getAllByDateAndStatus(con, "2000-01-01", tglAkhir, "true");
-                List<PenjualanCoilHead> listPenjualanCoil = PenjualanCoilHeadDAO.getAllByDateAndStatus(
+                List<PenjualanBarangHead> listPenjualan = PenjualanBarangHeadDAO.getAllByDateAndStatus(con, "2000-01-01", tglAkhir, "true");
+                List<PenjualanBahanHead> listPenjualanCoil = PenjualanBahanHeadDAO.getAllByDateAndStatus(
                         con, "2000-01-01", tglAkhir, "true");
                 List<Customer> listCustomer = CustomerDAO.getAllByStatus(con, "%");
                 List<String> groupByCustomer = new ArrayList<>();
                 for(Piutang pt : allPiutang){
                     if(pt.getKeterangan().startsWith("PJ")){
-                        for(PenjualanHead p : listPenjualan){
+                        for(PenjualanBarangHead p : listPenjualan){
                             if(pt.getKeterangan().equals(p.getNoPenjualan()))
                                 pt.setPenjualanHead(p);
                         }
@@ -214,16 +214,16 @@ public class NeracaPiutangController  {
                         if(!groupByCustomer.contains(pt.getPenjualanHead().getCustomer().getNama()))
                             groupByCustomer.add(pt.getPenjualanHead().getCustomer().getNama());
                     }else if(pt.getKeterangan().startsWith("PE")){
-                        for(PenjualanCoilHead p : listPenjualanCoil){
+                        for(PenjualanBahanHead p : listPenjualanCoil){
                             if(pt.getKeterangan().equals(p.getNoPenjualan()))
-                                pt.setPenjualanCoilHead(p);
+                                pt.setPenjualanBahanHead(p);
                         }
                         for(Customer c : listCustomer){
-                            if(pt.getPenjualanCoilHead().getKodeCustomer().equals(c.getKodeCustomer()))
-                                pt.getPenjualanCoilHead().setCustomer(c);
+                            if(pt.getPenjualanBahanHead().getKodeCustomer().equals(c.getKodeCustomer()))
+                                pt.getPenjualanBahanHead().setCustomer(c);
                         }
-                        if(!groupByCustomer.contains(pt.getPenjualanCoilHead().getCustomer().getNama()))
-                            groupByCustomer.add(pt.getPenjualanCoilHead().getCustomer().getNama());
+                        if(!groupByCustomer.contains(pt.getPenjualanBahanHead().getCustomer().getNama()))
+                            groupByCustomer.add(pt.getPenjualanBahanHead().getCustomer().getNama());
                     }
                 }
                 for(String s : groupByCustomer){
@@ -255,7 +255,7 @@ public class NeracaPiutangController  {
                                 }
                             }
                         }else if(p.getKeterangan().startsWith("PE")){
-                            if(p.getPenjualanCoilHead().getCustomer().getNama().equals(s)){
+                            if(p.getPenjualanBahanHead().getCustomer().getNama().equals(s)){
                                 p.setPembayaran(0);
                                 p.setSisaPiutang(p.getJumlahPiutang());
                                 for(TerimaPembayaran tp : listPembayaran){
@@ -315,7 +315,7 @@ public class NeracaPiutangController  {
     }
     private void showDetailPenjualanCoil(Piutang piutang){
         try(Connection con = Koneksi.getConnection()){
-            PenjualanCoilHead p = PenjualanCoilHeadDAO.get(con, piutang.getKeterangan());
+            PenjualanBahanHead p = PenjualanBahanHeadDAO.get(con, piutang.getKeterangan());
             if(p.getKurs()!=1){
                 Stage child = new Stage();
                 FXMLLoader loader = mainApp.showDialog(stage, child, "View/Dialog/NewPenjualanCoil.fxml");
@@ -395,9 +395,9 @@ public class NeracaPiutangController  {
                             if(!groupBy.contains(h.getPenjualanHead().getCustomer().getNama()))
                                 groupBy.add(h.getPenjualanHead().getCustomer().getNama());
                         }
-                        if(h.getPenjualanCoilHead()!=null){
-                            if(!groupBy.contains(h.getPenjualanCoilHead().getCustomer().getNama()))
-                                groupBy.add(h.getPenjualanCoilHead().getCustomer().getNama());
+                        if(h.getPenjualanBahanHead()!=null){
+                            if(!groupBy.contains(h.getPenjualanBahanHead().getCustomer().getNama()))
+                                groupBy.add(h.getPenjualanBahanHead().getCustomer().getNama());
                         }
                     }
                     for(String s : groupBy){
@@ -425,8 +425,8 @@ public class NeracaPiutangController  {
                                     totalSisaPiutangGroup = totalSisaPiutangGroup + h.getSisaPiutang();
                                 }
                             }
-                            if(h.getPenjualanCoilHead()!=null){
-                                if(h.getPenjualanCoilHead().getCustomer().getNama().equals(s)){
+                            if(h.getPenjualanBahanHead()!=null){
+                                if(h.getPenjualanBahanHead().getCustomer().getNama().equals(s)){
                                     createRow(workbook, sheet, rc, c, "Detail");
                                     sheet.getRow(rc).getCell(0).setCellValue(h.getNoPiutang());
                                     sheet.getRow(rc).getCell(1).setCellValue(tglLengkap.format(tglSql.parse(h.getTglPiutang())));

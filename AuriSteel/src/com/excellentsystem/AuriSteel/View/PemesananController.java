@@ -7,8 +7,8 @@ package com.excellentsystem.AuriSteel.View;
 
 import com.excellentsystem.AuriSteel.DAO.CustomerDAO;
 import com.excellentsystem.AuriSteel.DAO.PegawaiDAO;
-import com.excellentsystem.AuriSteel.DAO.PemesananDetailDAO;
-import com.excellentsystem.AuriSteel.DAO.PemesananHeadDAO;
+import com.excellentsystem.AuriSteel.DAO.PemesananBarangDetailDAO;
+import com.excellentsystem.AuriSteel.DAO.PemesananBarangHeadDAO;
 import com.excellentsystem.AuriSteel.Function;
 import static com.excellentsystem.AuriSteel.Function.createRow;
 import com.excellentsystem.AuriSteel.Koneksi;
@@ -23,11 +23,11 @@ import com.excellentsystem.AuriSteel.Model.Customer;
 import com.excellentsystem.AuriSteel.Model.Hutang;
 import com.excellentsystem.AuriSteel.Model.Otoritas;
 import com.excellentsystem.AuriSteel.Model.Pegawai;
-import com.excellentsystem.AuriSteel.Model.PemesananDetail;
-import com.excellentsystem.AuriSteel.Model.PemesananHead;
+import com.excellentsystem.AuriSteel.Model.PemesananBarangDetail;
+import com.excellentsystem.AuriSteel.Model.PemesananBarangHead;
 import com.excellentsystem.AuriSteel.PrintOut.Report;
 import com.excellentsystem.AuriSteel.Services.Service;
-import com.excellentsystem.AuriSteel.View.Dialog.DetailPembayaranDownPaymentController;
+import com.excellentsystem.AuriSteel.View.Dialog.DetailTerimaPembayaranDownPaymentController;
 import com.excellentsystem.AuriSteel.View.Dialog.MessageController;
 import com.excellentsystem.AuriSteel.View.Dialog.NewPembayaranController;
 import com.excellentsystem.AuriSteel.View.Dialog.NewPemesananController;
@@ -73,73 +73,99 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
  * @author Xtreme
  */
 public class PemesananController {
-    @FXML private TableView<PemesananHead> pemesananTable;
-    @FXML private TableColumn<PemesananHead, String> noPemesananColumn;
-    @FXML private TableColumn<PemesananHead, String> tglPemesananColumn;
-    @FXML private TableColumn<PemesananHead, String> namaCustomerColumn;
-    @FXML private TableColumn<PemesananHead, String> alamatCustomerColumn;
-    @FXML private TableColumn<PemesananHead, String> namaInvoiceColumn;
-    @FXML private TableColumn<PemesananHead, String> paymentTermColumn;
-    @FXML private TableColumn<PemesananHead, Number> totalPemesananColumn;
-    @FXML private TableColumn<PemesananHead, Number> sisaPemesananColumn;
-    @FXML private TableColumn<PemesananHead, Number> downPaymentColumn;
-    @FXML private TableColumn<PemesananHead, Number> sisaDownPaymentColumn;
-    @FXML private TableColumn<PemesananHead, String> statusColumn;
-    @FXML private TableColumn<PemesananHead, String> catatanColumn;
-    @FXML private TableColumn<PemesananHead, String> namaSalesColumn;
-    @FXML private TableColumn<PemesananHead, String> kodeUserColumn;
-    
-    @FXML private TextField searchField;
-    @FXML private Label totalPemesananField;
-    @FXML private Label sisaPemesananField;
-    @FXML private Label totalDownPaymentField;
-    @FXML private Label totalSisaDownPaymentField;
-    @FXML private DatePicker tglMulaiPicker;
-    @FXML private DatePicker tglAkhirPicker;
-    @FXML private ComboBox<String> groupByCombo;
-    private ObservableList<PemesananHead> allPemesanan = FXCollections.observableArrayList();
-    private ObservableList<PemesananHead> filterData = FXCollections.observableArrayList();
-    private Main mainApp;   
+
+    @FXML
+    private TableView<PemesananBarangHead> pemesananTable;
+    @FXML
+    private TableColumn<PemesananBarangHead, String> noPemesananColumn;
+    @FXML
+    private TableColumn<PemesananBarangHead, String> tglPemesananColumn;
+    @FXML
+    private TableColumn<PemesananBarangHead, String> namaCustomerColumn;
+    @FXML
+    private TableColumn<PemesananBarangHead, String> alamatCustomerColumn;
+    @FXML
+    private TableColumn<PemesananBarangHead, String> namaInvoiceColumn;
+    @FXML
+    private TableColumn<PemesananBarangHead, String> paymentTermColumn;
+    @FXML
+    private TableColumn<PemesananBarangHead, Number> totalPemesananColumn;
+    @FXML
+    private TableColumn<PemesananBarangHead, Number> sisaPemesananColumn;
+    @FXML
+    private TableColumn<PemesananBarangHead, Number> downPaymentColumn;
+    @FXML
+    private TableColumn<PemesananBarangHead, Number> sisaDownPaymentColumn;
+    @FXML
+    private TableColumn<PemesananBarangHead, String> statusColumn;
+    @FXML
+    private TableColumn<PemesananBarangHead, String> catatanColumn;
+    @FXML
+    private TableColumn<PemesananBarangHead, String> namaSalesColumn;
+    @FXML
+    private TableColumn<PemesananBarangHead, String> kodeUserColumn;
+
+    @FXML
+    private TextField searchField;
+    @FXML
+    private Label totalPemesananField;
+    @FXML
+    private Label sisaPemesananField;
+    @FXML
+    private Label totalDownPaymentField;
+    @FXML
+    private Label totalSisaDownPaymentField;
+    @FXML
+    private DatePicker tglMulaiPicker;
+    @FXML
+    private DatePicker tglAkhirPicker;
+    @FXML
+    private ComboBox<String> groupByCombo;
+    private ObservableList<PemesananBarangHead> allPemesanan = FXCollections.observableArrayList();
+    private ObservableList<PemesananBarangHead> filterData = FXCollections.observableArrayList();
+    private Main mainApp;
+
     public void initialize() {
         noPemesananColumn.setCellValueFactory(cellData -> cellData.getValue().noPemesananProperty());
         noPemesananColumn.setCellFactory(col -> Function.getWrapTableCell(noPemesananColumn));
-        
+
         namaCustomerColumn.setCellValueFactory(cellData -> cellData.getValue().getCustomer().namaProperty());
         namaCustomerColumn.setCellFactory(col -> Function.getWrapTableCell(namaCustomerColumn));
-        
+
         alamatCustomerColumn.setCellValueFactory(cellData -> cellData.getValue().getCustomer().alamatProperty());
         alamatCustomerColumn.setCellFactory(col -> Function.getWrapTableCell(alamatCustomerColumn));
-        
+
         namaInvoiceColumn.setCellValueFactory(cellData -> cellData.getValue().getCustomerInvoice().namaProperty());
         namaInvoiceColumn.setCellFactory(col -> Function.getWrapTableCell(namaInvoiceColumn));
-        
+
         paymentTermColumn.setCellValueFactory(cellData -> cellData.getValue().paymentTermProperty());
         paymentTermColumn.setCellFactory(col -> Function.getWrapTableCell(paymentTermColumn));
-        
+
         catatanColumn.setCellValueFactory(cellData -> cellData.getValue().catatanProperty());
         catatanColumn.setCellFactory(col -> Function.getWrapTableCell(catatanColumn));
-        
+
         namaSalesColumn.setCellValueFactory(cellData -> cellData.getValue().getSales().namaProperty());
         namaSalesColumn.setCellFactory(col -> Function.getWrapTableCell(namaSalesColumn));
-        
+
         kodeUserColumn.setCellValueFactory(cellData -> cellData.getValue().kodeUserProperty());
         kodeUserColumn.setCellFactory(col -> Function.getWrapTableCell(kodeUserColumn));
-        
+
         statusColumn.setCellValueFactory(cellData -> {
-            if(cellData.getValue().getStatus().equals("close"))
+            if (cellData.getValue().getStatus().equals("close")) {
                 return new SimpleStringProperty("Done");
-            else if(cellData.getValue().getStatus().equals("open"))
+            } else if (cellData.getValue().getStatus().equals("open")) {
                 return new SimpleStringProperty("Wait");
-            else if(cellData.getValue().getStatus().equals("false"))
+            } else if (cellData.getValue().getStatus().equals("false")) {
                 return new SimpleStringProperty("Cancel");
-            else if(cellData.getValue().getStatus().equals("wait"))
+            } else if (cellData.getValue().getStatus().equals("wait")) {
                 return new SimpleStringProperty("On Review");
-            else
+            } else {
                 return null;
+            }
         });
         statusColumn.setCellFactory(col -> Function.getWrapTableCell(statusColumn));
-        
-        tglPemesananColumn.setCellValueFactory(cellData -> { 
+
+        tglPemesananColumn.setCellValueFactory(cellData -> {
             try {
                 return new SimpleStringProperty(tglLengkap.format(tglSql.parse(cellData.getValue().getTglPemesanan())));
             } catch (Exception ex) {
@@ -148,136 +174,148 @@ public class PemesananController {
         });
         tglPemesananColumn.setCellFactory(col -> Function.getWrapTableCell(tglPemesananColumn));
         tglPemesananColumn.setComparator(Function.sortDate(tglLengkap));
-        
+
         totalPemesananColumn.setCellValueFactory(celldata -> celldata.getValue().totalPemesananProperty());
         totalPemesananColumn.setCellFactory(col -> Function.getTableCell());
-        
+
         sisaPemesananColumn.setCellValueFactory(celldata -> {
             double sisaPemesanan = 0;
-            for(PemesananDetail d : celldata.getValue().getListPemesananDetail()){
-                sisaPemesanan = sisaPemesanan + ((d.getQty()-d.getQtyTerkirim()) * d.getHargaJual());
+            for (PemesananBarangDetail d : celldata.getValue().getListPemesananBarangDetail()) {
+                sisaPemesanan = sisaPemesanan + ((d.getQty() - d.getQtyTerkirim()) * d.getHargaJual());
             }
             return new SimpleDoubleProperty(sisaPemesanan);
         });
         sisaPemesananColumn.setCellFactory(col -> Function.getTableCell());
-        
+
         downPaymentColumn.setCellValueFactory(celldata -> celldata.getValue().downPaymentProperty());
         downPaymentColumn.setCellFactory(col -> Function.getTableCell());
-        
+
         sisaDownPaymentColumn.setCellValueFactory(celldata -> celldata.getValue().sisaDownPaymentProperty());
         sisaDownPaymentColumn.setCellFactory(col -> Function.getTableCell());
-        
+
         tglMulaiPicker.setConverter(Function.getTglConverter());
         tglMulaiPicker.setValue(LocalDate.now().minusYears(1));
         tglMulaiPicker.setDayCellFactory((final DatePicker datePicker) -> Function.getDateCellMulai(tglAkhirPicker));
         tglAkhirPicker.setConverter(Function.getTglConverter());
         tglAkhirPicker.setValue(LocalDate.now());
         tglAkhirPicker.setDayCellFactory((final DatePicker datePicker) -> Function.getDateCellAkhir(tglMulaiPicker));
-        
+
         final ContextMenu rm = new ContextMenu();
         MenuItem addNew = new MenuItem("Add New Pemesanan");
-        addNew.setOnAction((ActionEvent e)->{
+        addNew.setOnAction((ActionEvent e) -> {
             newPemesanan();
         });
         MenuItem export = new MenuItem("Export Excel");
-        export.setOnAction((ActionEvent e)->{
+        export.setOnAction((ActionEvent e) -> {
             exportExcel();
         });
         MenuItem refresh = new MenuItem("Refresh");
-        refresh.setOnAction((ActionEvent e)->{
+        refresh.setOnAction((ActionEvent e) -> {
             getPemesanan();
         });
-        for(Otoritas o : sistem.getUser().getOtoritas()){
-            if(o.getJenis().equals("Add New Pemesanan")&&o.isStatus())
+        for (Otoritas o : sistem.getUser().getOtoritas()) {
+            if (o.getJenis().equals("Add New Pemesanan") && o.isStatus()) {
                 rm.getItems().add(addNew);
-            if(o.getJenis().equals("Export Excel")&&o.isStatus())
+            }
+            if (o.getJenis().equals("Export Excel") && o.isStatus()) {
                 rm.getItems().add(export);
+            }
         }
         rm.getItems().addAll(refresh);
         pemesananTable.setContextMenu(rm);
-        pemesananTable.setRowFactory((TableView<PemesananHead> tableView) -> {
-            final TableRow<PemesananHead> row = new TableRow<PemesananHead>(){
+        pemesananTable.setRowFactory((TableView<PemesananBarangHead> tableView) -> {
+            final TableRow<PemesananBarangHead> row = new TableRow<PemesananBarangHead>() {
                 @Override
-                public void updateItem(PemesananHead item, boolean empty) {
+                public void updateItem(PemesananBarangHead item, boolean empty) {
                     super.updateItem(item, empty);
                     if (empty) {
                         setContextMenu(rm);
-                    } else{
+                    } else {
                         final ContextMenu rm = new ContextMenu();
                         MenuItem addNew = new MenuItem("Add New Pemesanan");
-                        addNew.setOnAction((ActionEvent e)->{
+                        addNew.setOnAction((ActionEvent e) -> {
                             newPemesanan();
                         });
                         MenuItem detail = new MenuItem("Detail Pemesanan");
-                        detail.setOnAction((ActionEvent e)->{
+                        detail.setOnAction((ActionEvent e) -> {
                             lihatDetailPemesanan(item);
                         });
                         MenuItem approve = new MenuItem("Approve Pemesanan");
-                        approve.setOnAction((ActionEvent e)->{
+                        approve.setOnAction((ActionEvent e) -> {
                             approvePemesanan(item);
                         });
                         MenuItem edit = new MenuItem("Edit Pemesanan");
-                        edit.setOnAction((ActionEvent e)->{
+                        edit.setOnAction((ActionEvent e) -> {
                             editPemesanan(item);
                         });
                         MenuItem batal = new MenuItem("Batal Pemesanan");
-                        batal.setOnAction((ActionEvent e)->{
+                        batal.setOnAction((ActionEvent e) -> {
                             batalPemesanan(item);
                         });
                         MenuItem selesai = new MenuItem("Pemesanan Selesai");
-                        selesai.setOnAction((ActionEvent e)->{
+                        selesai.setOnAction((ActionEvent e) -> {
                             selesaiPemesanan(item);
                         });
                         MenuItem bayar = new MenuItem("Terima Pembayaran DP");
-                        bayar.setOnAction((ActionEvent e)->{
+                        bayar.setOnAction((ActionEvent e) -> {
                             terimaPembayaranDownPayment(item);
                         });
                         MenuItem detailBayar = new MenuItem("Detail Terima Pembayaran DP");
-                        detailBayar.setOnAction((ActionEvent e)->{
+                        detailBayar.setOnAction((ActionEvent e) -> {
                             lihatTerimaPembayaranDownPayment(item);
                         });
                         MenuItem invoice = new MenuItem("Print Order Confirmation");
-                        invoice.setOnAction((ActionEvent e)->{
+                        invoice.setOnAction((ActionEvent e) -> {
                             printProformaInvoice(item);
                         });
                         MenuItem invoiceSoftcopy = new MenuItem("Print Order Confirmation Softcopy");
-                        invoiceSoftcopy.setOnAction((ActionEvent e)->{
+                        invoiceSoftcopy.setOnAction((ActionEvent e) -> {
                             printProformaInvoiceSoftcopy(item);
                         });
                         MenuItem export = new MenuItem("Export Excel");
-                        export.setOnAction((ActionEvent e)->{
+                        export.setOnAction((ActionEvent e) -> {
                             exportExcel();
                         });
                         MenuItem refresh = new MenuItem("Refresh");
-                        refresh.setOnAction((ActionEvent e)->{
+                        refresh.setOnAction((ActionEvent e) -> {
                             getPemesanan();
                         });
-                        for(Otoritas o : sistem.getUser().getOtoritas()){
-                            if(o.getJenis().equals("Add New Pemesanan")&&o.isStatus())
+                        for (Otoritas o : sistem.getUser().getOtoritas()) {
+                            if (o.getJenis().equals("Add New Pemesanan") && o.isStatus()) {
                                 rm.getItems().add(addNew);
-                            if(o.getJenis().equals("Detail Pemesanan")&&o.isStatus())
+                            }
+                            if (o.getJenis().equals("Detail Pemesanan") && o.isStatus()) {
                                 rm.getItems().add(detail);
-                            if(o.getJenis().equals("Edit Pemesanan")&&o.isStatus())
+                            }
+                            if (o.getJenis().equals("Edit Pemesanan") && o.isStatus()) {
                                 rm.getItems().add(edit);
-                            if(o.getJenis().equals("Approve Pemesanan")&&o.isStatus()&&
-                                    item.getStatus().equals("wait"))
+                            }
+                            if (o.getJenis().equals("Approve Pemesanan") && o.isStatus()
+                                    && item.getStatus().equals("wait")) {
                                 rm.getItems().add(approve);
-                            if(o.getJenis().equals("Batal Pemesanan")&&o.isStatus()&&
-                                    (item.getStatus().equals("open")||item.getStatus().equals("wait"))&&item.getDownPayment()==0)
+                            }
+                            if (o.getJenis().equals("Batal Pemesanan") && o.isStatus()
+                                    && (item.getStatus().equals("open") || item.getStatus().equals("wait")) && item.getDownPayment() == 0) {
                                 rm.getItems().add(batal);
-                            if(o.getJenis().equals("Pemesanan Selesai")&&o.isStatus()&&
-                                    item.getStatus().equals("open")&&item.getSisaDownPayment()==0)
+                            }
+                            if (o.getJenis().equals("Pemesanan Selesai") && o.isStatus()
+                                    && item.getStatus().equals("open") && item.getSisaDownPayment() == 0) {
                                 rm.getItems().add(selesai);
-                            if(o.getJenis().equals("Terima Pembayaran DP")&&o.isStatus()&&
-                                    item.getStatus().equals("open"))
+                            }
+                            if (o.getJenis().equals("Terima Pembayaran DP") && o.isStatus()
+                                    && item.getStatus().equals("open")) {
                                 rm.getItems().add(bayar);
-                            if(o.getJenis().equals("Detail Terima Pembayaran DP")&&o.isStatus())
+                            }
+                            if (o.getJenis().equals("Detail Terima Pembayaran DP") && o.isStatus()) {
                                 rm.getItems().add(detailBayar);
-                            if(o.getJenis().equals("Print Order Confirmation")&&o.isStatus()&&
-                                    item.getStatus().equals("open"))
+                            }
+                            if (o.getJenis().equals("Print Order Confirmation") && o.isStatus()
+                                    && item.getStatus().equals("open")) {
                                 rm.getItems().addAll(invoice, invoiceSoftcopy);
-                            if(o.getJenis().equals("Export Excel")&&o.isStatus())
+                            }
+                            if (o.getJenis().equals("Export Excel") && o.isStatus()) {
                                 rm.getItems().add(export);
+                            }
                         }
                         rm.getItems().addAll(refresh);
                         setContextMenu(rm);
@@ -285,44 +323,48 @@ public class PemesananController {
                 }
             };
             row.itemProperty().addListener((observable, oldValue, newValue) -> {
-                if(newValue!=null){
+                if (newValue != null) {
                     double hutang = newValue.getCustomer().getHutang();
                     double limitHutang = newValue.getCustomer().getLimitHutang();
                     double sisaPemesanan = 0;
                     double dp = newValue.getSisaDownPayment();
-                    for(PemesananDetail d : newValue.getListPemesananDetail()){
-                        sisaPemesanan = sisaPemesanan + ((d.getQty()-d.getQtyTerkirim()) * d.getHargaJual());
+                    for (PemesananBarangDetail d : newValue.getListPemesananBarangDetail()) {
+                        sisaPemesanan = sisaPemesanan + ((d.getQty() - d.getQtyTerkirim()) * d.getHargaJual());
                     }
-                    if (limitHutang-hutang-sisaPemesanan+dp<0)
+                    if (limitHutang - hutang - sisaPemesanan + dp < 0) {
                         row.setStyle("-fx-background-color: #FFD8D1");//red
-                    else
+                    } else {
                         row.setStyle("");
-                }else
+                    }
+                } else {
                     row.setStyle("");
+                }
             });
-            
+
             row.setOnMouseClicked((MouseEvent mouseEvent) -> {
-                if(mouseEvent.getButton().equals(MouseButton.PRIMARY)&&mouseEvent.getClickCount() == 2){
-                    if(row.getItem()!=null){
-                        for(Otoritas o : sistem.getUser().getOtoritas()){
-                            if(o.getJenis().equals("Detail Pemesanan")&&o.isStatus())
+                if (mouseEvent.getButton().equals(MouseButton.PRIMARY) && mouseEvent.getClickCount() == 2) {
+                    if (row.getItem() != null) {
+                        for (Otoritas o : sistem.getUser().getOtoritas()) {
+                            if (o.getJenis().equals("Detail Pemesanan") && o.isStatus()) {
                                 lihatDetailPemesanan(row.getItem());
+                            }
                         }
                     }
                 }
             });
             return row;
         });
-        allPemesanan.addListener((ListChangeListener.Change<? extends PemesananHead> change) -> {
+        allPemesanan.addListener((ListChangeListener.Change<? extends PemesananBarangHead> change) -> {
             searchPemesanan();
         });
         searchField.textProperty().addListener(
-            (ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
-            searchPemesanan();
-        });
+                (ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
+                    searchPemesanan();
+                });
         filterData.addAll(allPemesanan);
         pemesananTable.setItems(filterData);
     }
+
     public void setMainApp(Main mainApp) {
         this.mainApp = mainApp;
         ObservableList<String> groupBy = FXCollections.observableArrayList();
@@ -336,47 +378,52 @@ public class PemesananController {
         groupByCombo.getSelectionModel().select("Wait");
         getPemesanan();
     }
+
     @FXML
-    private void getPemesanan(){
-        Task<List<PemesananHead>> task = new Task<List<PemesananHead>>() {
-            @Override 
-            public List<PemesananHead> call() throws Exception {
+    private void getPemesanan() {
+        Task<List<PemesananBarangHead>> task = new Task<List<PemesananBarangHead>>() {
+            @Override
+            public List<PemesananBarangHead> call() throws Exception {
                 try (Connection con = Koneksi.getConnection()) {
                     String status = "%";
-                    if(groupByCombo.getSelectionModel().getSelectedItem().equals("Done")){
+                    if (groupByCombo.getSelectionModel().getSelectedItem().equals("Done")) {
                         status = "close";
-                    }else if(groupByCombo.getSelectionModel().getSelectedItem().equals("Wait")){
+                    } else if (groupByCombo.getSelectionModel().getSelectedItem().equals("Wait")) {
                         status = "open";
-                    }else if(groupByCombo.getSelectionModel().getSelectedItem().equals("Cancel")){
+                    } else if (groupByCombo.getSelectionModel().getSelectedItem().equals("Cancel")) {
                         status = "false";
-                    }else if(groupByCombo.getSelectionModel().getSelectedItem().equals("On Review")){
+                    } else if (groupByCombo.getSelectionModel().getSelectedItem().equals("On Review")) {
                         status = "wait";
                     }
                     List<Customer> allCustomer = CustomerDAO.getAllByStatus(con, "%");
                     List<Pegawai> allSales = PegawaiDAO.getAllByStatus(con, "%");
-                    List<PemesananHead> allPemesanan = PemesananHeadDAO.getAllByDateAndStatus(
-                        con, tglMulaiPicker.getValue().toString(), tglAkhirPicker.getValue().toString(), status);
-                    List<PemesananDetail> listPemesananDetail = PemesananDetailDAO.getAllByDateAndStatus(
-                        con, tglMulaiPicker.getValue().toString(), tglAkhirPicker.getValue().toString(), status);
-                    for(PemesananHead p : allPemesanan){
-                        for(Customer c: allCustomer){
-                            if(p.getKodeCustomer().equals(c.getKodeCustomer()))
+                    List<PemesananBarangHead> allPemesanan = PemesananBarangHeadDAO.getAllByDateAndStatus(
+                            con, tglMulaiPicker.getValue().toString(), tglAkhirPicker.getValue().toString(), status);
+                    List<PemesananBarangDetail> listPemesananDetail = PemesananBarangDetailDAO.getAllByDateAndStatus(
+                            con, tglMulaiPicker.getValue().toString(), tglAkhirPicker.getValue().toString(), status);
+                    for (PemesananBarangHead p : allPemesanan) {
+                        for (Customer c : allCustomer) {
+                            if (p.getKodeCustomer().equals(c.getKodeCustomer())) {
                                 p.setCustomer(c);
+                            }
                         }
-                        for(Customer c: allCustomer){
-                            if(p.getKodeCustomerInvoice().equals(c.getKodeCustomer()))
+                        for (Customer c : allCustomer) {
+                            if (p.getKodeCustomerInvoice().equals(c.getKodeCustomer())) {
                                 p.setCustomerInvoice(c);
+                            }
                         }
-                        for(Pegawai s : allSales){
-                            if(p.getKodeSales().equals(s.getKodePegawai()))
+                        for (Pegawai s : allSales) {
+                            if (p.getKodeSales().equals(s.getKodePegawai())) {
                                 p.setSales(s);
+                            }
                         }
-                        List<PemesananDetail> detail = new ArrayList<>();
-                        for(PemesananDetail d : listPemesananDetail){
-                            if(p.getNoPemesanan().equals(d.getNoPemesanan()))
+                        List<PemesananBarangDetail> detail = new ArrayList<>();
+                        for (PemesananBarangDetail d : listPemesananDetail) {
+                            if (p.getNoPemesanan().equals(d.getNoPemesanan())) {
                                 detail.add(d);
+                            }
                         }
-                        p.setListPemesananDetail(detail);
+                        p.setListPemesananBarangDetail(detail);
                     }
                     return allPemesanan;
                 }
@@ -397,51 +444,56 @@ public class PemesananController {
         });
         new Thread(task).start();
     }
-    private Boolean checkColumn(String column){
-        if(column!=null){
-            if(column.toLowerCase().contains(searchField.getText().toLowerCase()))
+
+    private Boolean checkColumn(String column) {
+        if (column != null) {
+            if (column.toLowerCase().contains(searchField.getText().toLowerCase())) {
                 return true;
+            }
         }
         return false;
     }
+
     private void searchPemesanan() {
-        try{
+        try {
             filterData.clear();
-            for (PemesananHead temp : allPemesanan) {
-                if (searchField.getText() == null || searchField.getText().equals(""))
+            for (PemesananBarangHead temp : allPemesanan) {
+                if (searchField.getText() == null || searchField.getText().equals("")) {
                     filterData.add(temp);
-                else{
-                    if(checkColumn(temp.getNoPemesanan())||
-                        checkColumn(tglLengkap.format(tglSql.parse(temp.getTglPemesanan())))||
-                        checkColumn(temp.getCustomerInvoice().getNama())||
-                        checkColumn(temp.getCustomerInvoice().getAlamat())||
-                        checkColumn(temp.getCustomer().getNama())||
-                        checkColumn(temp.getCustomer().getAlamat())||
-                        checkColumn(temp.getPaymentTerm())||
-                        checkColumn(df.format(temp.getTotalPemesanan()))||
-                        checkColumn(df.format(temp.getDownPayment()))||
-                        checkColumn(df.format(temp.getSisaDownPayment()))||
-                        checkColumn(temp.getCatatan())||
-                        checkColumn(temp.getSales().getNama())||
-                        checkColumn(temp.getStatus()))
+                } else {
+                    if (checkColumn(temp.getNoPemesanan())
+                            || checkColumn(tglLengkap.format(tglSql.parse(temp.getTglPemesanan())))
+                            || checkColumn(temp.getCustomerInvoice().getNama())
+                            || checkColumn(temp.getCustomerInvoice().getAlamat())
+                            || checkColumn(temp.getCustomer().getNama())
+                            || checkColumn(temp.getCustomer().getAlamat())
+                            || checkColumn(temp.getPaymentTerm())
+                            || checkColumn(df.format(temp.getTotalPemesanan()))
+                            || checkColumn(df.format(temp.getDownPayment()))
+                            || checkColumn(df.format(temp.getSisaDownPayment()))
+                            || checkColumn(temp.getCatatan())
+                            || checkColumn(temp.getSales().getNama())
+                            || checkColumn(temp.getStatus())) {
                         filterData.add(temp);
+                    }
                 }
             }
             hitungTotal();
-        }catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             mainApp.showMessage(Modality.NONE, "Error", e.toString());
         }
     }
-    private void hitungTotal(){
+
+    private void hitungTotal() {
         double total = 0;
         double sisa = 0;
         double dp = 0;
         double sisaDp = 0;
-        for(PemesananHead temp : filterData){
+        for (PemesananBarangHead temp : filterData) {
             total = total + temp.getTotalPemesanan();
-            for(PemesananDetail d : temp.getListPemesananDetail()){
-                sisa = sisa + ((d.getQty()-d.getQtyTerkirim()) * d.getHargaJual());
+            for (PemesananBarangDetail d : temp.getListPemesananBarangDetail()) {
+                sisa = sisa + ((d.getQty() - d.getQtyTerkirim()) * d.getHargaJual());
             }
             dp = dp + temp.getDownPayment();
             sisaDp = sisaDp + temp.getSisaDownPayment();
@@ -451,28 +503,29 @@ public class PemesananController {
         totalDownPaymentField.setText(df.format(dp));
         totalSisaDownPaymentField.setText(df.format(sisaDp));
     }
-    private void newPemesanan(){
+
+    private void newPemesanan() {
         Stage stage = new Stage();
         FXMLLoader loader = mainApp.showDialog(mainApp.MainStage, stage, "View/Dialog/NewPemesanan.fxml");
         NewPemesananController controller = loader.getController();
-        controller.setMainApp(mainApp,mainApp.MainStage, stage);
+        controller.setMainApp(mainApp, mainApp.MainStage, stage);
         controller.setNewPemesanan();
         controller.saveButton.setOnAction((event) -> {
-            if(controller.customer==null)
+            if (controller.customer == null) {
                 mainApp.showMessage(Modality.NONE, "Warning", "Customer belum dipilih");
-            else if(controller.customer.getLimitHutang()<controller.customer.getHutang()+
-                    Double.parseDouble(controller.grandtotalField.getText().replaceAll(",", ""))){
+            } else if (controller.customer.getLimitHutang() < controller.customer.getHutang()
+                    + Double.parseDouble(controller.grandtotalField.getText().replaceAll(",", ""))) {
                 mainApp.showMessage(Modality.NONE, "Warning", "Pemesanan melebihi limit hutang customer");
-            }else if(controller.paymentTermCombo.getSelectionModel().getSelectedItem()==null)
+            } else if (controller.paymentTermCombo.getSelectionModel().getSelectedItem() == null) {
                 mainApp.showMessage(Modality.NONE, "Warning", "Payment term belum dipilih");
-            else if(controller.allPemesananDetail.isEmpty())
+            } else if (controller.allPemesananDetail.isEmpty()) {
                 mainApp.showMessage(Modality.NONE, "Warning", "Barang tidak ada");
-            else{
+            } else {
                 Task<String> task = new Task<String>() {
-                    @Override 
-                    public String call() throws Exception{
+                    @Override
+                    public String call() throws Exception {
                         try (Connection con = Koneksi.getConnection()) {
-                            PemesananHead pemesanan = new PemesananHead();
+                            PemesananBarangHead pemesanan = new PemesananBarangHead();
                             pemesanan.setKodeCustomer(controller.customer.getKodeCustomer());
                             pemesanan.setKodeCustomerInvoice(controller.customerInvoice.getKodeCustomer());
                             pemesanan.setPaymentTerm(controller.paymentTermCombo.getSelectionModel().getSelectedItem());
@@ -485,7 +538,7 @@ public class PemesananController {
                             pemesanan.setTglBatal("2000-01-01 00:00:00");
                             pemesanan.setUserBatal("");
                             pemesanan.setStatus("open");
-                            pemesanan.setListPemesananDetail(controller.allPemesananDetail);
+                            pemesanan.setListPemesananBarangDetail(controller.allPemesananDetail);
                             return Service.newPemesanan(con, pemesanan);
                         }
                     }
@@ -496,10 +549,10 @@ public class PemesananController {
                 task.setOnSucceeded((WorkerStateEvent ex) -> {
                     mainApp.closeLoading();
                     getPemesanan();
-                    if(task.getValue().equals("true")){
+                    if (task.getValue().equals("true")) {
                         mainApp.closeDialog(mainApp.MainStage, stage);
                         mainApp.showMessage(Modality.NONE, "Success", "Data pemesanan berhasil disimpan");
-                    }else{
+                    } else {
                         mainApp.showMessage(Modality.NONE, "Error", task.getValue());
                     }
                 });
@@ -511,32 +564,34 @@ public class PemesananController {
             }
         });
     }
-    private void lihatDetailPemesanan(PemesananHead p){
+
+    private void lihatDetailPemesanan(PemesananBarangHead p) {
         Stage stage = new Stage();
         FXMLLoader loader = mainApp.showDialog(mainApp.MainStage, stage, "View/Dialog/NewPemesanan.fxml");
         NewPemesananController controller = loader.getController();
-        controller.setMainApp(mainApp,mainApp.MainStage, stage);
+        controller.setMainApp(mainApp, mainApp.MainStage, stage);
         controller.setDetailPemesanan(p.getNoPemesanan());
     }
-    private void editPemesanan(PemesananHead p){
+
+    private void editPemesanan(PemesananBarangHead p) {
         Stage stage = new Stage();
         FXMLLoader loader = mainApp.showDialog(mainApp.MainStage, stage, "View/Dialog/NewPemesanan.fxml");
         NewPemesananController controller = loader.getController();
-        controller.setMainApp(mainApp,mainApp.MainStage, stage);
+        controller.setMainApp(mainApp, mainApp.MainStage, stage);
         controller.editPemesanan(p.getNoPemesanan());
         controller.saveButton.setOnAction((event) -> {
-            if(controller.customer==null)
+            if (controller.customer == null) {
                 mainApp.showMessage(Modality.NONE, "Warning", "Customer belum dipilih");
-            else if(controller.paymentTermCombo.getSelectionModel().getSelectedItem()==null)
+            } else if (controller.paymentTermCombo.getSelectionModel().getSelectedItem() == null) {
                 mainApp.showMessage(Modality.NONE, "Warning", "Payment term belum dipilih");
-            else if(controller.allPemesananDetail.isEmpty())
+            } else if (controller.allPemesananDetail.isEmpty()) {
                 mainApp.showMessage(Modality.NONE, "Warning", "Barang tidak ada");
-            else if(Double.parseDouble(controller.grandtotalField.getText().replaceAll(",", ""))<p.getSisaDownPayment())
+            } else if (Double.parseDouble(controller.grandtotalField.getText().replaceAll(",", "")) < p.getSisaDownPayment()) {
                 mainApp.showMessage(Modality.NONE, "Warning", "Tidak dapat disimpan karena jumlah dp lebih besar dari total penjualan");
-            else{
+            } else {
                 Task<String> task = new Task<String>() {
-                    @Override 
-                    public String call() throws Exception{
+                    @Override
+                    public String call() throws Exception {
                         try (Connection con = Koneksi.getConnection()) {
                             p.setKodeCustomer(controller.customer.getKodeCustomer());
                             p.setKodeCustomerInvoice(controller.customerInvoice.getKodeCustomer());
@@ -549,12 +604,12 @@ public class PemesananController {
                             p.setUserBatal("");
                             p.setStatus("open");
                             int noUrut = 1;
-                            for(PemesananDetail temp : controller.allPemesananDetail){
+                            for (PemesananBarangDetail temp : controller.allPemesananDetail) {
                                 temp.setNoPemesanan(p.getNoPemesanan());
                                 temp.setNoUrut(noUrut);
                                 noUrut = noUrut + 1;
                             }
-                            p.setListPemesananDetail(controller.allPemesananDetail);
+                            p.setListPemesananBarangDetail(controller.allPemesananDetail);
                             return Service.editPemesanan(con, p);
                         }
                     }
@@ -565,10 +620,10 @@ public class PemesananController {
                 task.setOnSucceeded((WorkerStateEvent ex) -> {
                     mainApp.closeLoading();
                     getPemesanan();
-                    if(task.getValue().equals("true")){
+                    if (task.getValue().equals("true")) {
                         mainApp.closeDialog(mainApp.MainStage, stage);
                         mainApp.showMessage(Modality.NONE, "Success", "Data pemesanan berhasil disimpan");
-                    }else{
+                    } else {
                         mainApp.showMessage(Modality.NONE, "Error", task.getValue());
                     }
                 });
@@ -580,21 +635,23 @@ public class PemesananController {
             }
         });
     }
-    private void batalPemesanan(PemesananHead p){
+
+    private void batalPemesanan(PemesananBarangHead p) {
         boolean statusBarang = false;
-        for(PemesananDetail d : p.getListPemesananDetail()){
-            if(d.getQtyTerkirim()>0)
+        for (PemesananBarangDetail d : p.getListPemesananBarangDetail()) {
+            if (d.getQtyTerkirim() > 0) {
                 statusBarang = true;
+            }
         }
-        if(statusBarang)
+        if (statusBarang) {
             mainApp.showMessage(Modality.NONE, "Warning", "Pemesanan tidak dapat dibatalkan, karena sudah ada pengiriman barang");
-        else{
+        } else {
             MessageController controller = mainApp.showMessage(Modality.WINDOW_MODAL, "Confirmation",
-                    "Batal pemesanan "+p.getNoPemesanan()+" , anda yakin ?");
+                    "Batal pemesanan " + p.getNoPemesanan() + " , anda yakin ?");
             controller.OK.setOnAction((ActionEvent evt) -> {
                 Task<String> task = new Task<String>() {
-                    @Override 
-                    public String call() throws Exception{
+                    @Override
+                    public String call() throws Exception {
                         try (Connection con = Koneksi.getConnection()) {
                             return Service.batalPemesanan(con, p);
                         }
@@ -606,9 +663,9 @@ public class PemesananController {
                 task.setOnSucceeded((we) -> {
                     mainApp.closeLoading();
                     getPemesanan();
-                    if(task.getValue().equals("true")){
+                    if (task.getValue().equals("true")) {
                         mainApp.showMessage(Modality.NONE, "Success", "Data pemesanan berhasil dibatal");
-                    }else{
+                    } else {
                         mainApp.showMessage(Modality.NONE, "Error", task.getValue());
                     }
                 });
@@ -620,13 +677,14 @@ public class PemesananController {
             });
         }
     }
-    private void selesaiPemesanan(PemesananHead p){
+
+    private void selesaiPemesanan(PemesananBarangHead p) {
         MessageController controller = mainApp.showMessage(Modality.WINDOW_MODAL, "Confirmation",
-            "Pemesanan "+p.getNoPemesanan()+" telah selesai , anda yakin ?");
+                "Pemesanan " + p.getNoPemesanan() + " telah selesai , anda yakin ?");
         controller.OK.setOnAction((ActionEvent evt) -> {
             Task<String> task = new Task<String>() {
-                @Override 
-                public String call() throws Exception{
+                @Override
+                public String call() throws Exception {
                     try (Connection con = Koneksi.getConnection()) {
                         p.setStatus("close");
                         return Service.selesaiApprovePemesanan(con, p);
@@ -639,9 +697,9 @@ public class PemesananController {
             task.setOnSucceeded((we) -> {
                 mainApp.closeLoading();
                 getPemesanan();
-                if(task.getValue().equals("true")){
+                if (task.getValue().equals("true")) {
                     mainApp.showMessage(Modality.NONE, "Success", "Data pemesanan berhasil disimpan");
-                }else{
+                } else {
                     mainApp.showMessage(Modality.NONE, "Error", task.getValue());
                 }
             });
@@ -652,13 +710,14 @@ public class PemesananController {
             new Thread(task).start();
         });
     }
-    private void approvePemesanan(PemesananHead p){
+
+    private void approvePemesanan(PemesananBarangHead p) {
         MessageController controller = mainApp.showMessage(Modality.WINDOW_MODAL, "Confirmation",
-            "Menyetujui pemesanan "+p.getNoPemesanan()+" , anda yakin ?");
+                "Menyetujui pemesanan " + p.getNoPemesanan() + " , anda yakin ?");
         controller.OK.setOnAction((ActionEvent evt) -> {
             Task<String> task = new Task<String>() {
-                @Override 
-                public String call() throws Exception{
+                @Override
+                public String call() throws Exception {
                     try (Connection con = Koneksi.getConnection()) {
                         p.setStatus("open");
                         return Service.selesaiApprovePemesanan(con, p);
@@ -671,9 +730,9 @@ public class PemesananController {
             task.setOnSucceeded((we) -> {
                 mainApp.closeLoading();
                 getPemesanan();
-                if(task.getValue().equals("true")){
+                if (task.getValue().equals("true")) {
                     mainApp.showMessage(Modality.NONE, "Success", "Data pemesanan berhasil disimpan");
-                }else{
+                } else {
                     mainApp.showMessage(Modality.NONE, "Error", task.getValue());
                 }
             });
@@ -684,32 +743,33 @@ public class PemesananController {
             new Thread(task).start();
         });
     }
-    private void terimaPembayaranDownPayment(PemesananHead p){
+
+    private void terimaPembayaranDownPayment(PemesananBarangHead p) {
         Stage stage = new Stage();
         FXMLLoader loader = mainApp.showDialog(mainApp.MainStage, stage, "View/Dialog/NewPembayaran.fxml");
         NewPembayaranController controller = loader.getController();
-        controller.setMainApp(mainApp,mainApp.MainStage, stage);
+        controller.setMainApp(mainApp, mainApp.MainStage, stage);
         controller.setTerimaPembayaranDownPayment(p);
         controller.saveButton.setOnAction((event) -> {
-            if(controller.tipeKeuanganCombo.getSelectionModel().getSelectedItem()==null)
+            if (controller.tipeKeuanganCombo.getSelectionModel().getSelectedItem() == null) {
                 mainApp.showMessage(Modality.NONE, "Warning", "Kategori keuangan belum dipilih");
-            else{
+            } else {
                 Task<String> task = new Task<String>() {
-                    @Override 
-                    public String call() throws Exception{
+                    @Override
+                    public String call() throws Exception {
                         try (Connection con = Koneksi.getConnection()) {
-                            p.setListPemesananDetail(PemesananDetailDAO.getAllByNoPemesanan(con, p.getNoPemesanan()));
+                            p.setListPemesananBarangDetail(PemesananBarangDetailDAO.getAllByNoPemesanan(con, p.getNoPemesanan()));
                             double totalDikirim = 0;
-                            for(PemesananDetail d : p.getListPemesananDetail()){
-                                totalDikirim = totalDikirim + (d.getQtyTerkirim()*d.getHargaJual());
+                            for (PemesananBarangDetail d : p.getListPemesananBarangDetail()) {
+                                totalDikirim = totalDikirim + (d.getQtyTerkirim() * d.getHargaJual());
                             }
                             double jumlahBayar = Double.parseDouble(controller.jumlahPembayaranField.getText().replaceAll(",", ""));
-                            double sisaPembayaran = p.getTotalPemesanan()-totalDikirim-p.getSisaDownPayment();
-                            if(jumlahBayar>sisaPembayaran)
+                            double sisaPembayaran = p.getTotalPemesanan() - totalDikirim - p.getSisaDownPayment();
+                            if (jumlahBayar > sisaPembayaran) {
                                 return "Jumlah yang dibayar melebihi dari sisa pembayaran";
-                            else{
-                                p.setDownPayment(p.getDownPayment()+jumlahBayar);
-                                p.setSisaDownPayment(p.getSisaDownPayment()+jumlahBayar);
+                            } else {
+                                p.setDownPayment(p.getDownPayment() + jumlahBayar);
+                                p.setSisaDownPayment(p.getSisaDownPayment() + jumlahBayar);
                                 return Service.newTerimaDownPayment(con, p, jumlahBayar,
                                         controller.tipeKeuanganCombo.getSelectionModel().getSelectedItem());
                             }
@@ -722,11 +782,12 @@ public class PemesananController {
                 task.setOnSucceeded((e) -> {
                     mainApp.closeLoading();
                     getPemesanan();
-                    if(task.getValue().equals("true")){
+                    if (task.getValue().equals("true")) {
                         mainApp.closeDialog(mainApp.MainStage, stage);
                         mainApp.showMessage(Modality.NONE, "Success", "Terima pembayaran DP berhasil disimpan");
-                    }else
+                    } else {
                         mainApp.showMessage(Modality.NONE, "Failed", task.getValue());
+                    }
                 });
                 task.setOnFailed((e) -> {
                     mainApp.closeLoading();
@@ -736,29 +797,31 @@ public class PemesananController {
             }
         });
     }
-    private void lihatTerimaPembayaranDownPayment(PemesananHead p){
+
+    private void lihatTerimaPembayaranDownPayment(PemesananBarangHead p) {
         Stage stage = new Stage();
-        FXMLLoader loader = mainApp.showDialog(mainApp.MainStage, stage, "View/Dialog/DetailPembayaranDownPayment.fxml");
-        DetailPembayaranDownPaymentController controller = loader.getController();
-        controller.setMainApp(mainApp,mainApp.MainStage, stage);
+        FXMLLoader loader = mainApp.showDialog(mainApp.MainStage, stage, "View/Dialog/DetailTerimaPembayaranDownPayment.fxml");
+        DetailTerimaPembayaranDownPaymentController controller = loader.getController();
+        controller.setMainApp(mainApp, mainApp.MainStage, stage);
         controller.setDetailPemesanan(p);
         controller.hutangTable.setRowFactory((TableView<Hutang> tv) -> {
-            final TableRow<Hutang> row = new TableRow<Hutang>(){
+            final TableRow<Hutang> row = new TableRow<Hutang>() {
                 @Override
                 public void updateItem(Hutang item, boolean empty) {
                     super.updateItem(item, empty);
                     if (empty) {
                         setContextMenu(null);
-                    } else{
+                    } else {
                         final ContextMenu rm = new ContextMenu();
                         MenuItem batal = new MenuItem("Batal Terima Pembayaran DP");
-                        batal.setOnAction((ActionEvent e)->{
+                        batal.setOnAction((ActionEvent e) -> {
                             batalPembayaran(p, item, stage);
                         });
-                        for(Otoritas o : sistem.getUser().getOtoritas()){
-                            if(o.getJenis().equals("Batal Terima Pembayaran DP")&&o.isStatus()&&
-                                    item.getStatus().equals("open")&&p.getSisaDownPayment()>=item.getJumlahHutang())
+                        for (Otoritas o : sistem.getUser().getOtoritas()) {
+                            if (o.getJenis().equals("Batal Terima Pembayaran DP") && o.isStatus()
+                                    && item.getStatus().equals("open") && p.getSisaDownPayment() >= item.getJumlahHutang()) {
                                 rm.getItems().add(batal);
+                            }
                         }
                         setContextMenu(rm);
                     }
@@ -766,15 +829,16 @@ public class PemesananController {
             };
             return row;
         });
-    } 
-    private void batalPembayaran(PemesananHead p, Hutang h,Stage stage){                      
+    }
+
+    private void batalPembayaran(PemesananBarangHead p, Hutang h, Stage stage) {
         MessageController controller = mainApp.showMessage(Modality.WINDOW_MODAL, "Confirmation",
-            "Batal pembayaran "+h.getNoHutang()+" ?");
+                "Batal pembayaran " + h.getNoHutang() + " ?");
         controller.OK.setOnAction((ActionEvent e) -> {
             mainApp.closeMessage();
             Task<String> task = new Task<String>() {
-                @Override 
-                public String call()throws Exception {
+                @Override
+                public String call() throws Exception {
                     try (Connection con = Koneksi.getConnection()) {
                         return Service.batalTerimaDownPayment(con, h);
                     }
@@ -786,10 +850,10 @@ public class PemesananController {
             task.setOnSucceeded((WorkerStateEvent ex) -> {
                 mainApp.closeLoading();
                 getPemesanan();
-                if(task.getValue().equals("true")){
+                if (task.getValue().equals("true")) {
                     mainApp.closeDialog(mainApp.MainStage, stage);
                     mainApp.showMessage(Modality.NONE, "Success", "Data pembayaran berhasil dibatal");
-                }else{
+                } else {
                     mainApp.showMessage(Modality.NONE, "Error", task.getValue());
                 }
             });
@@ -800,32 +864,35 @@ public class PemesananController {
             new Thread(task).start();
         });
     }
-    private void printProformaInvoice(PemesananHead p){
-        try{
-            List<PemesananDetail> listPemesanan = p.getListPemesananDetail();
-            for(PemesananDetail d : listPemesanan){
-                d.setPemesananHead(p);
+
+    private void printProformaInvoice(PemesananBarangHead p) {
+        try {
+            List<PemesananBarangDetail> listPemesanan = p.getListPemesananBarangDetail();
+            for (PemesananBarangDetail d : listPemesanan) {
+                d.setPemesananBarangHead(p);
             }
             Report report = new Report();
-            report.printProformaInvoice(listPemesanan,p.getTotalPemesanan());
-        }catch (Exception e){
+            report.printProformaInvoice(listPemesanan, p.getTotalPemesanan());
+        } catch (Exception e) {
             mainApp.showMessage(Modality.NONE, "Error", e.toString());
         }
     }
-    private void printProformaInvoiceSoftcopy(PemesananHead p){
-        try{
-            List<PemesananDetail> listPemesanan = p.getListPemesananDetail();
-            for(PemesananDetail d : listPemesanan){
-                d.setPemesananHead(p);
+
+    private void printProformaInvoiceSoftcopy(PemesananBarangHead p) {
+        try {
+            List<PemesananBarangDetail> listPemesanan = p.getListPemesananBarangDetail();
+            for (PemesananBarangDetail d : listPemesanan) {
+                d.setPemesananBarangHead(p);
             }
             Report report = new Report();
-            report.printProformaInvoiceSoftcopy(listPemesanan,p.getTotalPemesanan());
-        }catch (Exception e){
+            report.printProformaInvoiceSoftcopy(listPemesanan, p.getTotalPemesanan());
+        } catch (Exception e) {
             mainApp.showMessage(Modality.NONE, "Error", e.toString());
         }
     }
-    private void exportExcel(){
-        try{
+
+    private void exportExcel() {
+        try {
             FileChooser fileChooser = new FileChooser();
             fileChooser.setTitle("Select location to export");
             fileChooser.getExtensionFilters().addAll(
@@ -846,34 +913,34 @@ public class PemesananController {
                 int rc = 0;
                 int c = 8;
                 createRow(workbook, sheet, rc, c, "Bold");
-                sheet.getRow(rc).getCell(0).setCellValue("Tanggal : "+
-                        tgl.format(tglBarang.parse(tglMulaiPicker.getValue().toString()))+"-"+
-                        tgl.format(tglBarang.parse(tglAkhirPicker.getValue().toString())));
+                sheet.getRow(rc).getCell(0).setCellValue("Tanggal : "
+                        + tgl.format(tglBarang.parse(tglMulaiPicker.getValue().toString())) + "-"
+                        + tgl.format(tglBarang.parse(tglAkhirPicker.getValue().toString())));
                 rc++;
                 createRow(workbook, sheet, rc, c, "Bold");
-                sheet.getRow(rc).getCell(0).setCellValue("Gudang : "+groupByCombo.getSelectionModel().getSelectedItem());
+                sheet.getRow(rc).getCell(0).setCellValue("Gudang : " + groupByCombo.getSelectionModel().getSelectedItem());
                 rc++;
                 createRow(workbook, sheet, rc, c, "Bold");
-                sheet.getRow(rc).getCell(0).setCellValue("Status : "+groupByCombo.getSelectionModel().getSelectedItem());
+                sheet.getRow(rc).getCell(0).setCellValue("Status : " + groupByCombo.getSelectionModel().getSelectedItem());
                 rc++;
                 createRow(workbook, sheet, rc, c, "Bold");
-                sheet.getRow(rc).getCell(0).setCellValue("Filter : "+searchField.getText());
+                sheet.getRow(rc).getCell(0).setCellValue("Filter : " + searchField.getText());
                 rc++;
                 createRow(workbook, sheet, rc, c, "Header");
-                sheet.getRow(rc).getCell(0).setCellValue("No Pemesanan"); 
-                sheet.getRow(rc).getCell(1).setCellValue("Tgl Pemesanan");  
-                sheet.getRow(rc).getCell(2).setCellValue("Customer"); 
-                sheet.getRow(rc).getCell(3).setCellValue("Sales"); 
-                sheet.getRow(rc).getCell(4).setCellValue("Total Pemesanan"); 
-                sheet.getRow(rc).getCell(5).setCellValue("Sisa Pemesanan"); 
-                sheet.getRow(rc).getCell(6).setCellValue("Pembayaran Down Payment"); 
-                sheet.getRow(rc).getCell(7).setCellValue("Sisa Pembayaran Down Payment"); 
+                sheet.getRow(rc).getCell(0).setCellValue("No Pemesanan");
+                sheet.getRow(rc).getCell(1).setCellValue("Tgl Pemesanan");
+                sheet.getRow(rc).getCell(2).setCellValue("Customer");
+                sheet.getRow(rc).getCell(3).setCellValue("Sales");
+                sheet.getRow(rc).getCell(4).setCellValue("Total Pemesanan");
+                sheet.getRow(rc).getCell(5).setCellValue("Sisa Pemesanan");
+                sheet.getRow(rc).getCell(6).setCellValue("Pembayaran Down Payment");
+                sheet.getRow(rc).getCell(7).setCellValue("Sisa Pembayaran Down Payment");
                 rc++;
                 double pemesanan = 0;
                 double sisaPemesanan = 0;
                 double pembayaran = 0;
                 double sisaPembayaran = 0;
-                for (PemesananHead b : filterData) {
+                for (PemesananBarangHead b : filterData) {
                     createRow(workbook, sheet, rc, c, "Detail");
                     sheet.getRow(rc).getCell(0).setCellValue(b.getNoPemesanan());
                     sheet.getRow(rc).getCell(1).setCellValue(tglLengkap.format(tglSql.parse(b.getTglPemesanan())));
@@ -881,8 +948,8 @@ public class PemesananController {
                     sheet.getRow(rc).getCell(3).setCellValue(b.getSales().getNama());
                     sheet.getRow(rc).getCell(4).setCellValue(b.getTotalPemesanan());
                     double x = 0;
-                    for(PemesananDetail d : b.getListPemesananDetail()){
-                        x = x + ((d.getQty()-d.getQtyTerkirim()) * d.getHargaJual());
+                    for (PemesananBarangDetail d : b.getListPemesananBarangDetail()) {
+                        x = x + ((d.getQty() - d.getQtyTerkirim()) * d.getHargaJual());
                     }
                     sheet.getRow(rc).getCell(5).setCellValue(x);
                     sheet.getRow(rc).getCell(6).setCellValue(b.getDownPayment());
@@ -899,12 +966,14 @@ public class PemesananController {
                 sheet.getRow(rc).getCell(6).setCellValue(sisaPemesanan);
                 sheet.getRow(rc).getCell(7).setCellValue(pembayaran);
                 sheet.getRow(rc).getCell(8).setCellValue(sisaPembayaran);
-                for(int i=0 ; i<c ; i++){ sheet.autoSizeColumn(i);}
+                for (int i = 0; i < c; i++) {
+                    sheet.autoSizeColumn(i);
+                }
                 try (FileOutputStream outputStream = new FileOutputStream(file)) {
                     workbook.write(outputStream);
                 }
             }
-        }catch(Exception e){
+        } catch (Exception e) {
             mainApp.showMessage(Modality.NONE, "Error", e.toString());
             e.printStackTrace();
         }

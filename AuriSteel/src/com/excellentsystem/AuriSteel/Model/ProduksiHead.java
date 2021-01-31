@@ -19,8 +19,13 @@ import javafx.beans.property.StringProperty;
 public class ProduksiHead {
     private final StringProperty kodeProduksi = new SimpleStringProperty();
     private final StringProperty tglProduksi = new SimpleStringProperty();
+    private final StringProperty tglMulai = new SimpleStringProperty();
+    private final StringProperty userMulai = new SimpleStringProperty();
+    private final StringProperty tglSelesai = new SimpleStringProperty();
+    private final StringProperty userSelesai = new SimpleStringProperty();
     private final StringProperty kodeGudang = new SimpleStringProperty();
     private final StringProperty jenisProduksi = new SimpleStringProperty();
+    private final StringProperty kodeMesin = new SimpleStringProperty();
     private final DoubleProperty materialCost = new SimpleDoubleProperty();
     private final DoubleProperty biayaProduksi = new SimpleDoubleProperty();
     private final StringProperty catatan = new SimpleStringProperty();
@@ -31,6 +36,66 @@ public class ProduksiHead {
     private List<ProduksiDetailBarang> listProduksiDetailBarang;
     private List<ProduksiDetailBahan> listProduksiDetailBahan;
     private List<ProduksiOperator> listProduksiOperator;
+
+    public String getKodeMesin() {
+        return kodeMesin.get();
+    }
+
+    public void setKodeMesin(String value) {
+        kodeMesin.set(value);
+    }
+
+    public StringProperty kodeMesinProperty() {
+        return kodeMesin;
+    }
+
+    public String getUserSelesai() {
+        return userSelesai.get();
+    }
+
+    public void setUserSelesai(String value) {
+        userSelesai.set(value);
+    }
+
+    public StringProperty userSelesaiProperty() {
+        return userSelesai;
+    }
+
+    public String getTglSelesai() {
+        return tglSelesai.get();
+    }
+
+    public void setTglSelesai(String value) {
+        tglSelesai.set(value);
+    }
+
+    public StringProperty tglSelesaiProperty() {
+        return tglSelesai;
+    }
+
+    public String getUserMulai() {
+        return userMulai.get();
+    }
+
+    public void setUserMulai(String value) {
+        userMulai.set(value);
+    }
+
+    public StringProperty userMulaiProperty() {
+        return userMulai;
+    }
+
+    public String getTglMulai() {
+        return tglMulai.get();
+    }
+
+    public void setTglMulai(String value) {
+        tglMulai.set(value);
+    }
+
+    public StringProperty tglMulaiProperty() {
+        return tglMulai;
+    }
 
     public List<ProduksiOperator> getListProduksiOperator() {
         return listProduksiOperator;

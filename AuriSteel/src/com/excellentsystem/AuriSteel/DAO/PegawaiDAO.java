@@ -43,6 +43,32 @@ public class PegawaiDAO {
         }
         return allPegawai;
     }
+    public static List<Pegawai> getAllByJabatanAndStatus(Connection con, String jabatan, String status)throws Exception{
+        String sql = "select * from tm_pegawai where kode_pegawai !='' ";
+        if(!jabatan.equals("%"))
+            sql = sql + " and jabatan = '"+jabatan+"' ";
+        if(!status.equals("%"))
+            sql = sql + " and status = '"+status+"' ";
+        PreparedStatement ps = con.prepareStatement(sql);
+        ResultSet rs = ps.executeQuery();
+        List<Pegawai> allPegawai = new ArrayList<>();
+        while(rs.next()){
+            Pegawai pegawai = new Pegawai();
+            pegawai.setKodePegawai(rs.getString(1));
+            pegawai.setNama(rs.getString(2));
+            pegawai.setJabatan(rs.getString(3));
+            pegawai.setAlamat(rs.getString(4));
+            pegawai.setKota(rs.getString(5));
+            pegawai.setIdentitas(rs.getString(6));
+            pegawai.setNoIdentitas(rs.getString(7));
+            pegawai.setEmail(rs.getString(8));
+            pegawai.setNoTelp(rs.getString(9));
+            pegawai.setNoHandphone(rs.getString(10));
+            pegawai.setStatus(rs.getString(11));
+            allPegawai.add(pegawai);
+        }
+        return allPegawai;
+    }
     public static Pegawai get(Connection con, String kodePegawai)throws Exception{
         PreparedStatement ps = con.prepareStatement("select * from tm_pegawai where kode_pegawai=?");
         ps.setString(1, kodePegawai);

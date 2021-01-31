@@ -8,8 +8,8 @@ package com.excellentsystem.AuriSteel.View.Report;
 
 import com.excellentsystem.AuriSteel.DAO.CustomerDAO;
 import com.excellentsystem.AuriSteel.DAO.PegawaiDAO;
-import com.excellentsystem.AuriSteel.DAO.PenjualanCoilDetailDAO;
-import com.excellentsystem.AuriSteel.DAO.PenjualanCoilHeadDAO;
+import com.excellentsystem.AuriSteel.DAO.PenjualanBahanDetailDAO;
+import com.excellentsystem.AuriSteel.DAO.PenjualanBahanHeadDAO;
 import com.excellentsystem.AuriSteel.Function;
 import static com.excellentsystem.AuriSteel.Function.createRow;
 import com.excellentsystem.AuriSteel.Koneksi;
@@ -23,8 +23,8 @@ import static com.excellentsystem.AuriSteel.Main.tglSql;
 import com.excellentsystem.AuriSteel.Model.Customer;
 import com.excellentsystem.AuriSteel.Model.Otoritas;
 import com.excellentsystem.AuriSteel.Model.Pegawai;
-import com.excellentsystem.AuriSteel.Model.PenjualanCoilDetail;
-import com.excellentsystem.AuriSteel.Model.PenjualanCoilHead;
+import com.excellentsystem.AuriSteel.Model.PenjualanBahanDetail;
+import com.excellentsystem.AuriSteel.Model.PenjualanBahanHead;
 import com.excellentsystem.AuriSteel.PrintOut.Report;
 import com.excellentsystem.AuriSteel.View.Dialog.DetailPiutangController;
 import com.excellentsystem.AuriSteel.View.Dialog.NewPenjualanCoilController;
@@ -72,17 +72,17 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 public class LaporanPenjualanCoilController  {
 
     
-    @FXML private TreeTableView<PenjualanCoilHead> penjualanTable;
-    @FXML private TreeTableColumn<PenjualanCoilHead, String> noPenjualanColumn;
-    @FXML private TreeTableColumn<PenjualanCoilHead, String> tglPenjualanColumn;
-    @FXML private TreeTableColumn<PenjualanCoilHead, String> gudangColumn;
-    @FXML private TreeTableColumn<PenjualanCoilHead, String> namaCustomerColumn;
-    @FXML private TreeTableColumn<PenjualanCoilHead, String> namaSalesColumn;
-    @FXML private TreeTableColumn<PenjualanCoilHead, String> totalPenjualanColumn;
-    @FXML private TreeTableColumn<PenjualanCoilHead, String> kursColumn;
-    @FXML private TreeTableColumn<PenjualanCoilHead, Number> totalPenjualanRpColumn;
-    @FXML private TreeTableColumn<PenjualanCoilHead, Number> pembayaranColumn;
-    @FXML private TreeTableColumn<PenjualanCoilHead, Number> sisaPembayaranColumn;
+    @FXML private TreeTableView<PenjualanBahanHead> penjualanTable;
+    @FXML private TreeTableColumn<PenjualanBahanHead, String> noPenjualanColumn;
+    @FXML private TreeTableColumn<PenjualanBahanHead, String> tglPenjualanColumn;
+    @FXML private TreeTableColumn<PenjualanBahanHead, String> gudangColumn;
+    @FXML private TreeTableColumn<PenjualanBahanHead, String> namaCustomerColumn;
+    @FXML private TreeTableColumn<PenjualanBahanHead, String> namaSalesColumn;
+    @FXML private TreeTableColumn<PenjualanBahanHead, String> totalPenjualanColumn;
+    @FXML private TreeTableColumn<PenjualanBahanHead, String> kursColumn;
+    @FXML private TreeTableColumn<PenjualanBahanHead, Number> totalPenjualanRpColumn;
+    @FXML private TreeTableColumn<PenjualanBahanHead, Number> pembayaranColumn;
+    @FXML private TreeTableColumn<PenjualanBahanHead, Number> sisaPembayaranColumn;
     
     @FXML private ComboBox<String> groupByCombo;
     @FXML private TextField searchField;
@@ -92,9 +92,9 @@ public class LaporanPenjualanCoilController  {
     @FXML private DatePicker tglMulaiPenjualanPicker;
     @FXML private DatePicker tglAkhirPenjualanPicker;
     
-    private final TreeItem<PenjualanCoilHead> root = new TreeItem<>();
-    private ObservableList<PenjualanCoilHead> allPenjualan = FXCollections.observableArrayList();
-    private ObservableList<PenjualanCoilHead> filterData = FXCollections.observableArrayList();
+    private final TreeItem<PenjualanBahanHead> root = new TreeItem<>();
+    private ObservableList<PenjualanBahanHead> allPenjualan = FXCollections.observableArrayList();
+    private ObservableList<PenjualanBahanHead> filterData = FXCollections.observableArrayList();
     private Main mainApp;  
     public void initialize() {
         gudangColumn.setCellValueFactory(cellData -> cellData.getValue().getValue().kodeGudangProperty());
@@ -152,7 +152,7 @@ public class LaporanPenjualanCoilController  {
         tglAkhirPenjualanPicker.setValue(LocalDate.now());
         tglAkhirPenjualanPicker.setDayCellFactory((final DatePicker datePicker) -> Function.getDateCellAkhir(tglMulaiPenjualanPicker));
         
-        allPenjualan.addListener((ListChangeListener.Change<? extends PenjualanCoilHead> change) -> {
+        allPenjualan.addListener((ListChangeListener.Change<? extends PenjualanBahanHead> change) -> {
             searchPenjualan();
         });
         searchField.textProperty().addListener(
@@ -181,10 +181,10 @@ public class LaporanPenjualanCoilController  {
         }
         rm.getItems().addAll(refresh);
         penjualanTable.setContextMenu(rm);
-        penjualanTable.setRowFactory((TreeTableView<PenjualanCoilHead> tableView) -> {
-            final TreeTableRow<PenjualanCoilHead> row = new TreeTableRow<PenjualanCoilHead>(){
+        penjualanTable.setRowFactory((TreeTableView<PenjualanBahanHead> tableView) -> {
+            final TreeTableRow<PenjualanBahanHead> row = new TreeTableRow<PenjualanBahanHead>(){
                 @Override
-                public void updateItem(PenjualanCoilHead item, boolean empty) {
+                public void updateItem(PenjualanBahanHead item, boolean empty) {
                     super.updateItem(item, empty);
                     if (empty) {
                         setContextMenu(rm);
@@ -245,17 +245,17 @@ public class LaporanPenjualanCoilController  {
     }
     @FXML
     private void getPenjualan(){
-        Task<List<PenjualanCoilHead>> task = new Task<List<PenjualanCoilHead>>() {
+        Task<List<PenjualanBahanHead>> task = new Task<List<PenjualanBahanHead>>() {
             @Override 
-            public List<PenjualanCoilHead> call() throws Exception{
+            public List<PenjualanBahanHead> call() throws Exception{
                 try(Connection con = Koneksi.getConnection()){
-                    List<PenjualanCoilHead> allPenjualan = PenjualanCoilHeadDAO.getAllByDateAndStatus(con, 
+                    List<PenjualanBahanHead> allPenjualan = PenjualanBahanHeadDAO.getAllByDateAndStatus(con, 
                             tglMulaiPenjualanPicker.getValue().toString(), tglAkhirPenjualanPicker.getValue().toString(),"true");
-                    List<PenjualanCoilDetail> allDetail = PenjualanCoilDetailDAO.getAllByDateAndStatus(con, 
+                    List<PenjualanBahanDetail> allDetail = PenjualanBahanDetailDAO.getAllByDateAndStatus(con, 
                             tglMulaiPenjualanPicker.getValue().toString(), tglAkhirPenjualanPicker.getValue().toString(),"true");
                     List<Customer> allCustomer = CustomerDAO.getAllByStatus(con, "%");
                     List<Pegawai> allSales = PegawaiDAO.getAllByStatus(con, "%");
-                    for(PenjualanCoilHead p : allPenjualan){
+                    for(PenjualanBahanHead p : allPenjualan){
                         for(Customer c: allCustomer){
                             if(p.getKodeCustomer().equals(c.getKodeCustomer()))
                                 p.setCustomer(c);
@@ -264,12 +264,12 @@ public class LaporanPenjualanCoilController  {
                             if(p.getKodeSales().equals(s.getKodePegawai()))
                                 p.setSales(s);
                         }
-                        List<PenjualanCoilDetail> detail = new ArrayList<>();
-                        for(PenjualanCoilDetail d: allDetail){
+                        List<PenjualanBahanDetail> detail = new ArrayList<>();
+                        for(PenjualanBahanDetail d: allDetail){
                             if(p.getNoPenjualan().equals(d.getNoPenjualan()))
                                 detail.add(d);
                         }
-                        p.setListPenjualanDetail(detail);
+                        p.setListPenjualanBahanDetail(detail);
                     }
                     return allPenjualan;
                 }
@@ -299,7 +299,7 @@ public class LaporanPenjualanCoilController  {
     private void searchPenjualan() {
         try{
             filterData.clear();
-            for (PenjualanCoilHead temp : allPenjualan) {
+            for (PenjualanBahanHead temp : allPenjualan) {
                 if (searchField.getText() == null || searchField.getText().equals(""))
                     filterData.add(temp);
                 else{
@@ -330,7 +330,7 @@ public class LaporanPenjualanCoilController  {
         if(penjualanTable.getRoot()!=null)
             penjualanTable.getRoot().getChildren().clear();
         List<String> groupBy = new ArrayList<>();
-        for(PenjualanCoilHead temp : filterData){
+        for(PenjualanBahanHead temp : filterData){
             String group = "";
             if(groupByCombo.getSelectionModel().getSelectedItem().equals("Tanggal")){
                 group = tgl.format(tglSql.parse(temp.getTglPenjualan()));
@@ -349,15 +349,15 @@ public class LaporanPenjualanCoilController  {
                 groupBy.add(group);
         }
         for(String temp : groupBy){
-            PenjualanCoilHead head = new PenjualanCoilHead();
+            PenjualanBahanHead head = new PenjualanBahanHead();
             head.setNoPenjualan(temp);
             head.setCustomer(new Customer());
             head.setSales(new Pegawai());
-            TreeItem<PenjualanCoilHead> parent = new TreeItem<>(head);
+            TreeItem<PenjualanBahanHead> parent = new TreeItem<>(head);
             double totalPenjualan = 0;
             double totalPembayaran = 0;
             double sisaPembayaran = 0;
-            for(PenjualanCoilHead pj: filterData){
+            for(PenjualanBahanHead pj: filterData){
                 boolean status = false;
                 if(groupByCombo.getSelectionModel().getSelectedItem().equals("Tanggal")&&
                         temp.equals(tgl.format(tglSql.parse(pj.getTglPenjualan())))){
@@ -397,7 +397,7 @@ public class LaporanPenjualanCoilController  {
         double totalPenjualan=0;
         double totalPembayaran=0;
         double sisaPembayaran=0;
-        for(PenjualanCoilHead temp : filterData){
+        for(PenjualanBahanHead temp : filterData){
             totalPenjualan = totalPenjualan + temp.getTotalPenjualan();
             totalPembayaran = totalPembayaran + temp.getPembayaran();
             sisaPembayaran = sisaPembayaran + temp.getSisaPembayaran();
@@ -406,7 +406,7 @@ public class LaporanPenjualanCoilController  {
         totalPembayaranField.setText(df.format(totalPembayaran));
         sisaPembayaranField.setText(df.format(sisaPembayaran));
     }
-    private void lihatDetailPenjualan(PenjualanCoilHead p){
+    private void lihatDetailPenjualan(PenjualanBahanHead p){
         if(p.getKurs()!=1){
             Stage stage = new Stage();
             FXMLLoader loader = mainApp.showDialog(mainApp.MainStage, stage, "View/Dialog/NewPenjualanCoil.fxml");
@@ -421,7 +421,7 @@ public class LaporanPenjualanCoilController  {
             controller.setDetailPenjualan(p.getNoPenjualan());
         }
     }
-    private void showDetailPiutang(PenjualanCoilHead p){
+    private void showDetailPiutang(PenjualanBahanHead p){
         Stage stage = new Stage();
         FXMLLoader loader = mainApp.showDialog(mainApp.MainStage, stage, "View/Dialog/DetailPiutang.fxml");
         DetailPiutangController x = loader.getController();
@@ -486,7 +486,7 @@ public class LaporanPenjualanCoilController  {
                 rc++;
                 
                 List<String> groupBy = new ArrayList<>();
-                for(PenjualanCoilHead temp : filterData){
+                for(PenjualanBahanHead temp : filterData){
                     String group = "";
                     if(groupByCombo.getSelectionModel().getSelectedItem().equals("Tanggal")){
                         group = tgl.format(tglSql.parse(temp.getTglPenjualan()));
@@ -515,7 +515,7 @@ public class LaporanPenjualanCoilController  {
                     double totalPenjualanRp = 0;
                     double totalPembayaran = 0;
                     double sisaPembayaran = 0;
-                    for(PenjualanCoilHead p: filterData){
+                    for(PenjualanBahanHead p: filterData){
                         boolean status = false;
                         if(groupByCombo.getSelectionModel().getSelectedItem().equals("Tanggal")&&
                                 temp.equals(tgl.format(tglSql.parse(p.getTglPenjualan())))){

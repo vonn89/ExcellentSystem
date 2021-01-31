@@ -12,6 +12,7 @@ import com.excellentsystem.AuriSteel.DAO.KategoriHutangDAO;
 import com.excellentsystem.AuriSteel.DAO.KategoriKeuanganDAO;
 import com.excellentsystem.AuriSteel.DAO.KategoriPiutangDAO;
 import com.excellentsystem.AuriSteel.DAO.KategoriTransaksiDAO;
+import com.excellentsystem.AuriSteel.DAO.MesinDAO;
 import com.excellentsystem.AuriSteel.DAO.OtoritasDAO;
 import com.excellentsystem.AuriSteel.DAO.SistemDAO;
 import com.excellentsystem.AuriSteel.DAO.UserDAO;
@@ -43,10 +44,12 @@ import com.excellentsystem.AuriSteel.View.KeuanganController;
 import com.excellentsystem.AuriSteel.View.LoginController;
 import com.excellentsystem.AuriSteel.View.MainAppController;
 import com.excellentsystem.AuriSteel.View.ModalController;
+import com.excellentsystem.AuriSteel.View.PembelianBahanController;
 import com.excellentsystem.AuriSteel.View.PembelianBarangController;
-import com.excellentsystem.AuriSteel.View.PembelianController;
 import com.excellentsystem.AuriSteel.View.PemesananCoilController;
 import com.excellentsystem.AuriSteel.View.PemesananController;
+import com.excellentsystem.AuriSteel.View.PemesananPembelianBahanController;
+import com.excellentsystem.AuriSteel.View.PenerimaanBahanController;
 import com.excellentsystem.AuriSteel.View.PengirimanBarangController;
 import com.excellentsystem.AuriSteel.View.PengirimanCoilController;
 import com.excellentsystem.AuriSteel.View.PenjualanCoilController;
@@ -133,7 +136,7 @@ public class Main extends Application {
     public static Sistem sistem;
     private double x = 0;
     private double y = 0;
-    public final String version = "2.2.9";
+    public final String version = "2.4.5";
     public static SecretKeySpec key;
     @Override
     public void start(Stage stage)  {
@@ -163,6 +166,7 @@ public class Main extends Application {
                     sistem.setListKategoriKeuangan(KategoriKeuanganDAO.getAll(con));
                     sistem.setListKategoriTransaksi(KategoriTransaksiDAO.getAllByStatus(con, "true"));
                     sistem.setListGudang(GudangDAO.getAll(con));
+                    sistem.setListMesin(MesinDAO.getAll(con));
                     sistem.setListKategoriBahan(KategoriBahanDAO.getAllByStatus(con, "true"));
                     sistem.setListKategoriHutang(KategoriHutangDAO.getAll(con));
                     sistem.setListKategoriPiutang(KategoriPiutangDAO.getAll(con));
@@ -285,7 +289,7 @@ public class Main extends Application {
                 if(sistem.getUser().getLevel().equals("Penjualan"))
                     showPenjualan();
                 if(sistem.getUser().getLevel().equals("Pembelian"))
-                    showPembelian();
+                    showPembelianBahan();
                 if(sistem.getUser().getLevel().equals("Keuangan"))
                     showKeuangan();
                 if(sistem.getUser().getLevel().equals("Manager"))
@@ -387,11 +391,18 @@ public class Main extends Application {
         setTitle("Penjualan Coil");
         return controller;
     }
-    public PembelianController showPembelian(){
-        FXMLLoader loader = changeStage("View/Pembelian.fxml");
-        PembelianController controller = loader.getController();
+    public PemesananPembelianBahanController showPemesananPembelian(){
+        FXMLLoader loader = changeStage("View/PemesananPembelianBahan.fxml");
+        PemesananPembelianBahanController controller = loader.getController();
         controller.setMainApp(this);
-        setTitle("Pembelian");
+        setTitle("Pemesanan Pembelian Bahan");
+        return controller;
+    }
+    public PembelianBahanController showPembelianBahan(){
+        FXMLLoader loader = changeStage("View/PembelianBahan.fxml");
+        PembelianBahanController controller = loader.getController();
+        controller.setMainApp(this);
+        setTitle("Pembelian Bahan");
         return controller;
     }
     public PembelianBarangController showPembelianBarang(){
@@ -427,6 +438,13 @@ public class Main extends Application {
         PengirimanCoilController controller = loader.getController();
         controller.setMainApp(this);
         setTitle("Pengiriman Coil");
+        return controller;
+    }
+    public PenerimaanBahanController showPenerimaanBahan(){
+        FXMLLoader loader = changeStage("View/PenerimaanBahan.fxml");
+        PenerimaanBahanController controller = loader.getController();
+        controller.setMainApp(this);
+        setTitle("Penerimaan Bahan");
         return controller;
     }
     public PindahBahanController showPindahBahan(){

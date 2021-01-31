@@ -8,8 +8,8 @@ package com.excellentsystem.AuriSteel.View;
 import com.excellentsystem.AuriSteel.DAO.BarangDAO;
 import com.excellentsystem.AuriSteel.DAO.CustomerDAO;
 import com.excellentsystem.AuriSteel.DAO.PegawaiDAO;
-import com.excellentsystem.AuriSteel.DAO.PemesananDetailDAO;
-import com.excellentsystem.AuriSteel.DAO.PemesananHeadDAO;
+import com.excellentsystem.AuriSteel.DAO.PemesananBarangDetailDAO;
+import com.excellentsystem.AuriSteel.DAO.PemesananBarangHeadDAO;
 import com.excellentsystem.AuriSteel.Function;
 import static com.excellentsystem.AuriSteel.Function.createRow;
 import com.excellentsystem.AuriSteel.Koneksi;
@@ -24,8 +24,8 @@ import com.excellentsystem.AuriSteel.Model.Barang;
 import com.excellentsystem.AuriSteel.Model.Customer;
 import com.excellentsystem.AuriSteel.Model.Otoritas;
 import com.excellentsystem.AuriSteel.Model.Pegawai;
-import com.excellentsystem.AuriSteel.Model.PemesananDetail;
-import com.excellentsystem.AuriSteel.Model.PemesananHead;
+import com.excellentsystem.AuriSteel.Model.PemesananBarangDetail;
+import com.excellentsystem.AuriSteel.Model.PemesananBarangHead;
 import com.excellentsystem.AuriSteel.PrintOut.Report;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -70,22 +70,22 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
  */
 public class PermintaanBarangController  {
 
-    @FXML private TableView<PemesananDetail> permintaanTable;
-    @FXML private TableColumn<PemesananDetail,Boolean> checkColumn;
-    @FXML private TableColumn<PemesananDetail, String> noPemesananColumn;
-    @FXML private TableColumn<PemesananDetail, String> tglPemesananColumn;
-    @FXML private TableColumn<PemesananDetail, String> namaCustomerColumn;
-    @FXML private TableColumn<PemesananDetail, String> alamatCustomerColumn;
-    @FXML private TableColumn<PemesananDetail, String> kodeBarangColumn;
-    @FXML private TableColumn<PemesananDetail, String> namaBarangColumn;
-    @FXML private TableColumn<PemesananDetail, String> keteranganColumn;
-    @FXML private TableColumn<PemesananDetail, String> catatanInternColumn;
-    @FXML private TableColumn<PemesananDetail, String> satuanColumn;
-    @FXML private TableColumn<PemesananDetail, Number> qtyColumn;
-    @FXML private TableColumn<PemesananDetail, Number> qtyTerkirimColumn;
-    @FXML private TableColumn<PemesananDetail, Number> qtySisaColumn;
-    @FXML private TableColumn<PemesananDetail, Number> tonaseColumn;
-    @FXML private TableColumn<PemesananDetail, String> salesColumn;
+    @FXML private TableView<PemesananBarangDetail> permintaanTable;
+    @FXML private TableColumn<PemesananBarangDetail,Boolean> checkColumn;
+    @FXML private TableColumn<PemesananBarangDetail, String> noPemesananColumn;
+    @FXML private TableColumn<PemesananBarangDetail, String> tglPemesananColumn;
+    @FXML private TableColumn<PemesananBarangDetail, String> namaCustomerColumn;
+    @FXML private TableColumn<PemesananBarangDetail, String> alamatCustomerColumn;
+    @FXML private TableColumn<PemesananBarangDetail, String> kodeBarangColumn;
+    @FXML private TableColumn<PemesananBarangDetail, String> namaBarangColumn;
+    @FXML private TableColumn<PemesananBarangDetail, String> keteranganColumn;
+    @FXML private TableColumn<PemesananBarangDetail, String> catatanInternColumn;
+    @FXML private TableColumn<PemesananBarangDetail, String> satuanColumn;
+    @FXML private TableColumn<PemesananBarangDetail, Number> qtyColumn;
+    @FXML private TableColumn<PemesananBarangDetail, Number> qtyTerkirimColumn;
+    @FXML private TableColumn<PemesananBarangDetail, Number> qtySisaColumn;
+    @FXML private TableColumn<PemesananBarangDetail, Number> tonaseColumn;
+    @FXML private TableColumn<PemesananBarangDetail, String> salesColumn;
     
     @FXML private CheckBox checkAll;
     @FXML private Label totalQtyLabel;
@@ -94,8 +94,8 @@ public class PermintaanBarangController  {
     @FXML private DatePicker tglMulaiPicker;
     @FXML private DatePicker tglAkhirPicker;
     @FXML private ComboBox<String> groupByCombo;
-    private ObservableList<PemesananDetail> allPermintaan = FXCollections.observableArrayList();
-    private ObservableList<PemesananDetail> filterData = FXCollections.observableArrayList();
+    private ObservableList<PemesananBarangDetail> allPermintaan = FXCollections.observableArrayList();
+    private ObservableList<PemesananBarangDetail> filterData = FXCollections.observableArrayList();
     private Main mainApp;   
     public void initialize() {
         noPemesananColumn.setCellValueFactory(cellData -> cellData.getValue().noPemesananProperty());
@@ -103,7 +103,7 @@ public class PermintaanBarangController  {
         
         tglPemesananColumn.setCellValueFactory(cellData -> { 
             try {
-                return  new SimpleStringProperty(tglLengkap.format(tglSql.parse(cellData.getValue().getPemesananHead().getTglPemesanan())));
+                return  new SimpleStringProperty(tglLengkap.format(tglSql.parse(cellData.getValue().getPemesananBarangHead().getTglPemesanan())));
             } catch (Exception ex) {
                 return null;
             }
@@ -111,10 +111,10 @@ public class PermintaanBarangController  {
         tglPemesananColumn.setCellFactory(col -> Function.getWrapTableCell(tglPemesananColumn));
         tglPemesananColumn.setComparator(Function.sortDate(tglLengkap));
         
-        namaCustomerColumn.setCellValueFactory(cellData -> cellData.getValue().getPemesananHead().getCustomer().namaProperty());
+        namaCustomerColumn.setCellValueFactory(cellData -> cellData.getValue().getPemesananBarangHead().getCustomer().namaProperty());
         namaCustomerColumn.setCellFactory(col -> Function.getWrapTableCell(namaCustomerColumn));
         
-        alamatCustomerColumn.setCellValueFactory(cellData -> cellData.getValue().getPemesananHead().getCustomer().alamatProperty());
+        alamatCustomerColumn.setCellValueFactory(cellData -> cellData.getValue().getPemesananBarangHead().getCustomer().alamatProperty());
         alamatCustomerColumn.setCellFactory(col -> Function.getWrapTableCell(alamatCustomerColumn));
         
         kodeBarangColumn.setCellValueFactory(cellData -> cellData.getValue().kodeBarangProperty());
@@ -123,7 +123,7 @@ public class PermintaanBarangController  {
         namaBarangColumn.setCellValueFactory(cellData -> cellData.getValue().namaBarangProperty());
         namaBarangColumn.setCellFactory(col -> Function.getWrapTableCell(namaBarangColumn));
         
-        salesColumn.setCellValueFactory(cellData -> cellData.getValue().getPemesananHead().getSales().namaProperty());
+        salesColumn.setCellValueFactory(cellData -> cellData.getValue().getPemesananBarangHead().getSales().namaProperty());
         salesColumn.setCellFactory(col -> Function.getWrapTableCell(salesColumn));
         
         keteranganColumn.setCellValueFactory(cellData -> cellData.getValue().keteranganProperty());
@@ -183,15 +183,15 @@ public class PermintaanBarangController  {
         }
         rm.getItems().addAll(refresh);
         permintaanTable.setContextMenu(rm);
-        permintaanTable.setRowFactory((TableView<PemesananDetail> tableView) -> {
-            final TableRow<PemesananDetail> row = new TableRow<PemesananDetail>(){};
+        permintaanTable.setRowFactory((TableView<PemesananBarangDetail> tableView) -> {
+            final TableRow<PemesananBarangDetail> row = new TableRow<PemesananBarangDetail>(){};
             row.itemProperty().addListener((observable, oldValue, newValue) -> {
                 if(newValue!=null){
-                    double hutang = newValue.getPemesananHead().getCustomer().getHutang();
-                    double limitHutang = newValue.getPemesananHead().getCustomer().getLimitHutang();
+                    double hutang = newValue.getPemesananBarangHead().getCustomer().getHutang();
+                    double limitHutang = newValue.getPemesananBarangHead().getCustomer().getLimitHutang();
                     double sisaPemesanan = 0;
-                    double downpayment = newValue.getPemesananHead().getSisaDownPayment();
-                    for(PemesananDetail d : newValue.getPemesananHead().getListPemesananDetail()){
+                    double downpayment = newValue.getPemesananBarangHead().getSisaDownPayment();
+                    for(PemesananBarangDetail d : newValue.getPemesananBarangHead().getListPemesananBarangDetail()){
                         sisaPemesanan = sisaPemesanan + ((d.getQty()-d.getQtyTerkirim()) * d.getHargaJual());
                     }
                     if (limitHutang-hutang-sisaPemesanan+downpayment<0)
@@ -215,7 +215,7 @@ public class PermintaanBarangController  {
             });
             return row;
         });
-        allPermintaan.addListener((ListChangeListener.Change<? extends PemesananDetail> change) -> {
+        allPermintaan.addListener((ListChangeListener.Change<? extends PemesananBarangDetail> change) -> {
             searchPermintaan();
         });
         searchField.textProperty().addListener(
@@ -239,7 +239,7 @@ public class PermintaanBarangController  {
     private void hitungTotal(){
         double qty = 0;
         double berat = 0;
-        for(PemesananDetail d : filterData){
+        for(PemesananBarangDetail d : filterData){
             if(d.isStatus()){
                 qty = qty + d.getQty()-d.getQtyTerkirim();
                 berat = berat + (d.getQty()-d.getQtyTerkirim())*d.getBarang().getBerat();
@@ -250,38 +250,38 @@ public class PermintaanBarangController  {
     }
     @FXML
     private void getPermintaan(){
-        Task<List<PemesananDetail>> task = new Task<List<PemesananDetail>>() {
+        Task<List<PemesananBarangDetail>> task = new Task<List<PemesananBarangDetail>>() {
             @Override 
-            public List<PemesananDetail> call() throws Exception {
+            public List<PemesananBarangDetail> call() throws Exception {
                 try (Connection con = Koneksi.getConnection()) {
                     List<Customer> allCustomer = CustomerDAO.getAllByStatus(con, "%");
                     List<Pegawai> allPegawai = PegawaiDAO.getAllByStatus(con, "%");
                     List<Barang> allBarang = BarangDAO.getAllByStatus(con, "%");
-                    List<PemesananDetail> allPemesananDetail = PemesananDetailDAO.getAllByDateAndStatus(con, 
+                    List<PemesananBarangDetail> allPemesananDetail = PemesananBarangDetailDAO.getAllByDateAndStatus(con, 
                             tglMulaiPicker.getValue().toString(), tglAkhirPicker.getValue().toString(), "open");
-                    List<PemesananHead> allPemesanan = PemesananHeadDAO.getAllByDateAndStatus(con, 
+                    List<PemesananBarangHead> allPemesanan = PemesananBarangHeadDAO.getAllByDateAndStatus(con, 
                             tglMulaiPicker.getValue().toString(), tglAkhirPicker.getValue().toString(), "open");
-                    for(PemesananHead p : allPemesanan){
-                        List<PemesananDetail> detail = new ArrayList<>();
-                        for(PemesananDetail d : allPemesananDetail){
+                    for(PemesananBarangHead p : allPemesanan){
+                        List<PemesananBarangDetail> detail = new ArrayList<>();
+                        for(PemesananBarangDetail d : allPemesananDetail){
                             if(d.getNoPemesanan().equals(p.getNoPemesanan()))
                                 detail.add(d);
                         }
-                        p.setListPemesananDetail(detail);
+                        p.setListPemesananBarangDetail(detail);
                     }
-                    List<PemesananDetail> listPemesananDetail = new ArrayList<>();
-                    for(PemesananDetail d : allPemesananDetail){
-                        for(PemesananHead h : allPemesanan){
+                    List<PemesananBarangDetail> listPemesananDetail = new ArrayList<>();
+                    for(PemesananBarangDetail d : allPemesananDetail){
+                        for(PemesananBarangHead h : allPemesanan){
                             if(d.getNoPemesanan().equals(h.getNoPemesanan()))
-                                d.setPemesananHead(h);
+                                d.setPemesananBarangHead(h);
                         }
                         for(Customer c: allCustomer){
-                            if(d.getPemesananHead().getKodeCustomer().equals(c.getKodeCustomer()))
-                                d.getPemesananHead().setCustomer(c);
+                            if(d.getPemesananBarangHead().getKodeCustomer().equals(c.getKodeCustomer()))
+                                d.getPemesananBarangHead().setCustomer(c);
                         }
                         for(Pegawai p : allPegawai){
-                            if(d.getPemesananHead().getKodeSales().equals(p.getKodePegawai()))
-                                d.getPemesananHead().setSales(p);
+                            if(d.getPemesananBarangHead().getKodeSales().equals(p.getKodePegawai()))
+                                d.getPemesananBarangHead().setSales(p);
                         }
                         for(Barang b : allBarang){
                             if(d.getKodeBarang().equals(b.getKodeBarang()))
@@ -315,7 +315,7 @@ public class PermintaanBarangController  {
     }
     @FXML
     private void checkAllHandle(){
-        for(PemesananDetail d: allPermintaan){
+        for(PemesananBarangDetail d: allPermintaan){
             d.setStatus(checkAll.isSelected());
         }
         hitungTotal();
@@ -331,23 +331,23 @@ public class PermintaanBarangController  {
     private void searchPermintaan() {
         try{
             filterData.clear();
-            for (PemesananDetail temp : allPermintaan) {
+            for (PemesananBarangDetail temp : allPermintaan) {
                 if (searchField.getText() == null || searchField.getText().equals(""))
                     filterData.add(temp);
                 else{
                     if(checkColumn(temp.getNoPemesanan())||
-                        checkColumn(tglLengkap.format(tglSql.parse(temp.getPemesananHead().getTglPemesanan())))||
-                        checkColumn(temp.getPemesananHead().getKodeCustomer())||
-                        checkColumn(temp.getPemesananHead().getCustomer().getNama())||
-                        checkColumn(temp.getPemesananHead().getSales().getNama())||
-                        checkColumn(temp.getPemesananHead().getCustomer().getAlamat())||
-                        checkColumn(temp.getPemesananHead().getPaymentTerm())||
-                        checkColumn(df.format(temp.getPemesananHead().getTotalPemesanan()))||
-                        checkColumn(df.format(temp.getPemesananHead().getDownPayment()))||
-                        checkColumn(temp.getPemesananHead().getCatatan())||
-                        checkColumn(temp.getPemesananHead().getKodeSales())||
-                        checkColumn(temp.getPemesananHead().getStatus())||
-                        checkColumn(temp.getPemesananHead().getKodeUser())||
+                        checkColumn(tglLengkap.format(tglSql.parse(temp.getPemesananBarangHead().getTglPemesanan())))||
+                        checkColumn(temp.getPemesananBarangHead().getKodeCustomer())||
+                        checkColumn(temp.getPemesananBarangHead().getCustomer().getNama())||
+                        checkColumn(temp.getPemesananBarangHead().getSales().getNama())||
+                        checkColumn(temp.getPemesananBarangHead().getCustomer().getAlamat())||
+                        checkColumn(temp.getPemesananBarangHead().getPaymentTerm())||
+                        checkColumn(df.format(temp.getPemesananBarangHead().getTotalPemesanan()))||
+                        checkColumn(df.format(temp.getPemesananBarangHead().getDownPayment()))||
+                        checkColumn(temp.getPemesananBarangHead().getCatatan())||
+                        checkColumn(temp.getPemesananBarangHead().getKodeSales())||
+                        checkColumn(temp.getPemesananBarangHead().getStatus())||
+                        checkColumn(temp.getPemesananBarangHead().getKodeUser())||
                         checkColumn(temp.getKodeBarang())||
                         checkColumn(temp.getNamaBarang())||
                         checkColumn(temp.getKeterangan())||
@@ -365,8 +365,8 @@ public class PermintaanBarangController  {
     }
     private void printSPK(){
         try{
-            List<PemesananDetail> spk = new ArrayList<>();
-            for(PemesananDetail b : filterData){
+            List<PemesananBarangDetail> spk = new ArrayList<>();
+            for(PemesananBarangDetail b : filterData){
                 if(b.isStatus())
                     spk.add(b);
             }
@@ -430,17 +430,17 @@ public class PermintaanBarangController  {
                 double qty = 0;
                 double qtyTerkirim = 0;
                 double berat = 0;
-                for (PemesananDetail b : filterData) {
+                for (PemesananBarangDetail b : filterData) {
                     createRow(workbook, sheet, rc, c, "Detail");
                     sheet.getRow(rc).getCell(0).setCellValue(b.getNoPemesanan());
-                    sheet.getRow(rc).getCell(1).setCellValue(tglLengkap.format(tglSql.parse(b.getPemesananHead().getTglPemesanan())));
-                    sheet.getRow(rc).getCell(2).setCellValue(b.getPemesananHead().getCustomer().getNama());
+                    sheet.getRow(rc).getCell(1).setCellValue(tglLengkap.format(tglSql.parse(b.getPemesananBarangHead().getTglPemesanan())));
+                    sheet.getRow(rc).getCell(2).setCellValue(b.getPemesananBarangHead().getCustomer().getNama());
                     sheet.getRow(rc).getCell(3).setCellValue(b.getKodeBarang());
                     sheet.getRow(rc).getCell(4).setCellValue(b.getNamaBarang());
                     sheet.getRow(rc).getCell(5).setCellValue(b.getSatuan());
                     sheet.getRow(rc).getCell(6).setCellValue(b.getKeterangan());
                     sheet.getRow(rc).getCell(7).setCellValue(b.getKeterangan());
-                    sheet.getRow(rc).getCell(8).setCellValue(b.getPemesananHead().getSales().getNama());
+                    sheet.getRow(rc).getCell(8).setCellValue(b.getPemesananBarangHead().getSales().getNama());
                     sheet.getRow(rc).getCell(9).setCellValue(b.getQty());
                     sheet.getRow(rc).getCell(10).setCellValue(b.getQtyTerkirim());
                     sheet.getRow(rc).getCell(11).setCellValue(b.getQty()-b.getQtyTerkirim());

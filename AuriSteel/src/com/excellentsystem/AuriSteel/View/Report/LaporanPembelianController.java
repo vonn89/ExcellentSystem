@@ -6,8 +6,8 @@
 
 package com.excellentsystem.AuriSteel.View.Report;
 
-import com.excellentsystem.AuriSteel.DAO.PembelianDetailDAO;
-import com.excellentsystem.AuriSteel.DAO.PembelianHeadDAO;
+import com.excellentsystem.AuriSteel.DAO.PembelianBahanDetailDAO;
+import com.excellentsystem.AuriSteel.DAO.PembelianBahanHeadDAO;
 import com.excellentsystem.AuriSteel.DAO.SupplierDAO;
 import com.excellentsystem.AuriSteel.Function;
 import static com.excellentsystem.AuriSteel.Function.createRow;
@@ -20,8 +20,8 @@ import static com.excellentsystem.AuriSteel.Main.tglBarang;
 import static com.excellentsystem.AuriSteel.Main.tglLengkap;
 import static com.excellentsystem.AuriSteel.Main.tglSql;
 import com.excellentsystem.AuriSteel.Model.Otoritas;
-import com.excellentsystem.AuriSteel.Model.PembelianDetail;
-import com.excellentsystem.AuriSteel.Model.PembelianHead;
+import com.excellentsystem.AuriSteel.Model.PembelianBahanDetail;
+import com.excellentsystem.AuriSteel.Model.PembelianBahanHead;
 import com.excellentsystem.AuriSteel.Model.Supplier;
 import com.excellentsystem.AuriSteel.PrintOut.Report;
 import com.excellentsystem.AuriSteel.View.Dialog.DetailHutangController;
@@ -68,18 +68,18 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
  */
 public class LaporanPembelianController  {
 
-    @FXML private TreeTableView<PembelianHead> pembelianTable;
-    @FXML private TreeTableColumn<PembelianHead, String> noPembelianColumn;
-    @FXML private TreeTableColumn<PembelianHead, String> tglPembelianColumn;
-    @FXML private TreeTableColumn<PembelianHead, String> gudangColumn;
-    @FXML private TreeTableColumn<PembelianHead, String> namaSupplierColumn;
-    @FXML private TreeTableColumn<PembelianHead, Number> totalPembelianColumn;
-    @FXML private TreeTableColumn<PembelianHead, Number> totalBebanPembelianColumn;
-    @FXML private TreeTableColumn<PembelianHead, Number> grandTotalColumn;
-    @FXML private TreeTableColumn<PembelianHead, Number> pembayaranColumn;
-    @FXML private TreeTableColumn<PembelianHead, Number> sisaPembayaranColumn;
-    @FXML private TreeTableColumn<PembelianHead, String> catatanColumn;
-    @FXML private TreeTableColumn<PembelianHead, String> kodeUserColumn;
+    @FXML private TreeTableView<PembelianBahanHead> pembelianTable;
+    @FXML private TreeTableColumn<PembelianBahanHead, String> noPembelianColumn;
+    @FXML private TreeTableColumn<PembelianBahanHead, String> tglPembelianColumn;
+    @FXML private TreeTableColumn<PembelianBahanHead, String> gudangColumn;
+    @FXML private TreeTableColumn<PembelianBahanHead, String> namaSupplierColumn;
+    @FXML private TreeTableColumn<PembelianBahanHead, Number> totalPembelianColumn;
+    @FXML private TreeTableColumn<PembelianBahanHead, Number> totalBebanPembelianColumn;
+    @FXML private TreeTableColumn<PembelianBahanHead, Number> grandTotalColumn;
+    @FXML private TreeTableColumn<PembelianBahanHead, Number> pembayaranColumn;
+    @FXML private TreeTableColumn<PembelianBahanHead, Number> sisaPembayaranColumn;
+    @FXML private TreeTableColumn<PembelianBahanHead, String> catatanColumn;
+    @FXML private TreeTableColumn<PembelianBahanHead, String> kodeUserColumn;
     
     @FXML private ComboBox<String> groupByCombo;
     @FXML private TextField searchField;
@@ -90,9 +90,9 @@ public class LaporanPembelianController  {
     @FXML private DatePicker tglMulaiPembelianPicker;
     @FXML private DatePicker tglAkhirPembelianPicker;
     
-    final TreeItem<PembelianHead> root = new TreeItem<>();
-    private ObservableList<PembelianHead> allPembelian = FXCollections.observableArrayList();
-    private ObservableList<PembelianHead> filterData = FXCollections.observableArrayList();
+    final TreeItem<PembelianBahanHead> root = new TreeItem<>();
+    private ObservableList<PembelianBahanHead> allPembelian = FXCollections.observableArrayList();
+    private ObservableList<PembelianBahanHead> filterData = FXCollections.observableArrayList();
     private Main mainApp;  
     public void initialize() {
         noPembelianColumn.setCellValueFactory(cellData -> cellData.getValue().getValue().noPembelianProperty());
@@ -142,7 +142,7 @@ public class LaporanPembelianController  {
         tglAkhirPembelianPicker.setValue(LocalDate.now());
         tglAkhirPembelianPicker.setDayCellFactory((final DatePicker datePicker) -> Function.getDateCellAkhir(tglMulaiPembelianPicker));
         
-        allPembelian.addListener((ListChangeListener.Change<? extends PembelianHead> change) -> {
+        allPembelian.addListener((ListChangeListener.Change<? extends PembelianBahanHead> change) -> {
             searchPembelian();
         });
         searchField.textProperty().addListener(
@@ -172,10 +172,10 @@ public class LaporanPembelianController  {
         }
         rm.getItems().addAll(refresh);
         pembelianTable.setContextMenu(rm);
-        pembelianTable.setRowFactory((TreeTableView<PembelianHead> tableView) -> {
-            final TreeTableRow<PembelianHead> row = new TreeTableRow<PembelianHead>(){
+        pembelianTable.setRowFactory((TreeTableView<PembelianBahanHead> tableView) -> {
+            final TreeTableRow<PembelianBahanHead> row = new TreeTableRow<PembelianBahanHead>(){
                 @Override
-                public void updateItem(PembelianHead item, boolean empty) {
+                public void updateItem(PembelianBahanHead item, boolean empty) {
                     super.updateItem(item, empty);
                     if (empty) {
                         setContextMenu(rm);
@@ -234,28 +234,28 @@ public class LaporanPembelianController  {
     }
     @FXML
     private void getPembelian(){
-        Task<List<PembelianHead>> task = new Task<List<PembelianHead>>() {
+        Task<List<PembelianBahanHead>> task = new Task<List<PembelianBahanHead>>() {
             @Override 
-            public List<PembelianHead> call() throws Exception{
+            public List<PembelianBahanHead> call() throws Exception{
                 try(Connection con = Koneksi.getConnection()){
                     String tglMulai = tglMulaiPembelianPicker.getValue().toString();
                     String tglAkhir = tglAkhirPembelianPicker.getValue().toString();
                     List<Supplier> allSupplier = SupplierDAO.getAllByStatus(con, "%");
-                    List<PembelianDetail> allDetail = PembelianDetailDAO.getAllByDateAndStatus(
+                    List<PembelianBahanDetail> allDetail = PembelianBahanDetailDAO.getAllByDateAndStatus(
                             con, tglMulai, tglAkhir,"true");
-                    List<PembelianHead> temp = PembelianHeadDAO.getAllByDateAndStatus(
+                    List<PembelianBahanHead> temp = PembelianBahanHeadDAO.getAllByDateAndStatus(
                             con, tglMulai,tglAkhir,"true");
-                    for(PembelianHead p : temp){
+                    for(PembelianBahanHead p : temp){
                         for(Supplier s : allSupplier){
                             if(p.getKodeSupplier().equals(s.getKodeSupplier()))
                                 p.setSupplier(s);
                         }
-                        List<PembelianDetail> detail = new ArrayList<>();
-                        for(PembelianDetail d :allDetail){
+                        List<PembelianBahanDetail> detail = new ArrayList<>();
+                        for(PembelianBahanDetail d :allDetail){
                             if(p.getNoPembelian().equals(d.getNoPembelian()))
                                 detail.add(d);
                         }
-                        p.setListPembelianCoilDetail(detail);
+                        p.setListPembelianBahanDetail(detail);
                     }
                     return temp;
                 }
@@ -285,7 +285,7 @@ public class LaporanPembelianController  {
     private void searchPembelian() {
         try{
             filterData.clear();
-            for (PembelianHead temp : allPembelian) {
+            for (PembelianBahanHead temp : allPembelian) {
                 if (searchField.getText() == null || searchField.getText().equals(""))
                     filterData.add(temp);
                 else{
@@ -315,7 +315,7 @@ public class LaporanPembelianController  {
         if(pembelianTable.getRoot()!=null)
             pembelianTable.getRoot().getChildren().clear();
         List<String> groupBy = new ArrayList<>();
-        for(PembelianHead temp : filterData){
+        for(PembelianBahanHead temp : filterData){
             String group = "";
             if(groupByCombo.getSelectionModel().getSelectedItem().equals("Tanggal")){
                 group = tgl.format(tglSql.parse(temp.getTglPembelian()));
@@ -332,15 +332,15 @@ public class LaporanPembelianController  {
                 groupBy.add(group);
         }
         for(String temp : groupBy){
-            PembelianHead head = new PembelianHead();
+            PembelianBahanHead head = new PembelianBahanHead();
             head.setNoPembelian(temp);
             head.setSupplier(new Supplier());
-            TreeItem<PembelianHead> parent = new TreeItem<>(head);
+            TreeItem<PembelianBahanHead> parent = new TreeItem<>(head);
             double totalPembelian = 0;
             double totalBebanPembelian = 0;
             double totalPembayaran = 0;
             double sisaPembayaran = 0;
-            for(PembelianHead pj: filterData){
+            for(PembelianBahanHead pj: filterData){
                 boolean status = false;
                 if(groupByCombo.getSelectionModel().getSelectedItem().equals("Tanggal")&&
                         temp.equals(tgl.format(tglSql.parse(pj.getTglPembelian())))){
@@ -380,7 +380,7 @@ public class LaporanPembelianController  {
         double sisaPembayaran=0;
         double totalBebanPembelian=0;
         double totalPembayaran=0;
-        for(PembelianHead temp : filterData){
+        for(PembelianBahanHead temp : filterData){
             totalPembelian = totalPembelian + temp.getTotalPembelian();
             sisaPembayaran = sisaPembayaran + temp.getSisaPembayaran();
             totalBebanPembelian = totalBebanPembelian + temp.getTotalBebanPembelian();
@@ -391,14 +391,14 @@ public class LaporanPembelianController  {
         totalBebanPembelianField.setText(df.format(totalBebanPembelian));
         totalPembayaranField.setText(df.format(totalPembayaran));
     }
-    private void lihatDetailPembelian(PembelianHead p){
+    private void lihatDetailPembelian(PembelianBahanHead p){
         Stage stage = new Stage();
         FXMLLoader loader = mainApp.showDialog(mainApp.MainStage, stage, "View/Dialog/NewPembelian.fxml");
         NewPembelianController controller = loader.getController();
         controller.setMainApp(mainApp,mainApp.MainStage, stage);
         controller.setDetailPembelian(p.getNoPembelian());
     }
-    private void showDetailHutang(PembelianHead p){
+    private void showDetailHutang(PembelianBahanHead p){
         Stage stage = new Stage();
         FXMLLoader loader = mainApp.showDialog(mainApp.MainStage, stage, "View/Dialog/DetailHutang.fxml");
         DetailHutangController x = loader.getController();
@@ -462,7 +462,7 @@ public class LaporanPembelianController  {
                 rc++;
                 
                 List<String> groupBy = new ArrayList<>();
-                for(PembelianHead temp : filterData){
+                for(PembelianBahanHead temp : filterData){
                     String group = "";
                     if(groupByCombo.getSelectionModel().getSelectedItem().equals("Tanggal")){
                         group = tgl.format(tglSql.parse(temp.getTglPembelian()));
@@ -491,7 +491,7 @@ public class LaporanPembelianController  {
                     double totalBebanPembelian = 0;
                     double totalPembayaran = 0;
                     double sisaPembayaran = 0;
-                    for(PembelianHead p: filterData){
+                    for(PembelianBahanHead p: filterData){
                         boolean status = false;
                         if(groupByCombo.getSelectionModel().getSelectedItem().equals("Tanggal")&&
                                 temp.equals(tgl.format(tglSql.parse(p.getTglPembelian())))){

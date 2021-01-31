@@ -8,8 +8,8 @@ package com.excellentsystem.AuriSteel.View.Report;
 
 import com.excellentsystem.AuriSteel.DAO.CustomerDAO;
 import com.excellentsystem.AuriSteel.DAO.PegawaiDAO;
-import com.excellentsystem.AuriSteel.DAO.PenjualanDetailDAO;
-import com.excellentsystem.AuriSteel.DAO.PenjualanHeadDAO;
+import com.excellentsystem.AuriSteel.DAO.PenjualanBarangDetailDAO;
+import com.excellentsystem.AuriSteel.DAO.PenjualanBarangHeadDAO;
 import com.excellentsystem.AuriSteel.Function;
 import static com.excellentsystem.AuriSteel.Function.createRow;
 import com.excellentsystem.AuriSteel.Koneksi;
@@ -21,8 +21,8 @@ import static com.excellentsystem.AuriSteel.Main.tglSql;
 import com.excellentsystem.AuriSteel.Model.Customer;
 import com.excellentsystem.AuriSteel.Model.Otoritas;
 import com.excellentsystem.AuriSteel.Model.Pegawai;
-import com.excellentsystem.AuriSteel.Model.PenjualanDetail;
-import com.excellentsystem.AuriSteel.Model.PenjualanHead;
+import com.excellentsystem.AuriSteel.Model.PenjualanBarangDetail;
+import com.excellentsystem.AuriSteel.Model.PenjualanBarangHead;
 import com.excellentsystem.AuriSteel.PrintOut.Report;
 import com.excellentsystem.AuriSteel.View.Dialog.DetailPiutangController;
 import com.excellentsystem.AuriSteel.View.Dialog.NewPenjualanController;
@@ -63,27 +63,27 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
  */
 public class UntungRugiHPPPenjualanController  {
 
-    @FXML private TreeTableView<PenjualanDetail> penjualanDetailTable;
-    @FXML private TreeTableColumn<PenjualanDetail, String> noPenjualanColumn;
-    @FXML private TreeTableColumn<PenjualanDetail, String> tglPenjualanColumn;
-    @FXML private TreeTableColumn<PenjualanDetail, String> namaCustomerColumn;
-    @FXML private TreeTableColumn<PenjualanDetail, String> namaSalesColumn;
-    @FXML private TreeTableColumn<PenjualanDetail, String> kodeBarangColumn;
-    @FXML private TreeTableColumn<PenjualanDetail, String> namaBarangColumn;
-    @FXML private TreeTableColumn<PenjualanDetail, String> satuanColumn;
-    @FXML private TreeTableColumn<PenjualanDetail, Number> qtyColumn;
-    @FXML private TreeTableColumn<PenjualanDetail, Number> nilaiColumn;
-    @FXML private TreeTableColumn<PenjualanDetail, Number> totalNilaiColumn;
-    @FXML private TreeTableColumn<PenjualanDetail, Number> hargaJualColumn;
-    @FXML private TreeTableColumn<PenjualanDetail, Number> totalColumn;
+    @FXML private TreeTableView<PenjualanBarangDetail> penjualanDetailTable;
+    @FXML private TreeTableColumn<PenjualanBarangDetail, String> noPenjualanColumn;
+    @FXML private TreeTableColumn<PenjualanBarangDetail, String> tglPenjualanColumn;
+    @FXML private TreeTableColumn<PenjualanBarangDetail, String> namaCustomerColumn;
+    @FXML private TreeTableColumn<PenjualanBarangDetail, String> namaSalesColumn;
+    @FXML private TreeTableColumn<PenjualanBarangDetail, String> kodeBarangColumn;
+    @FXML private TreeTableColumn<PenjualanBarangDetail, String> namaBarangColumn;
+    @FXML private TreeTableColumn<PenjualanBarangDetail, String> satuanColumn;
+    @FXML private TreeTableColumn<PenjualanBarangDetail, Number> qtyColumn;
+    @FXML private TreeTableColumn<PenjualanBarangDetail, Number> nilaiColumn;
+    @FXML private TreeTableColumn<PenjualanBarangDetail, Number> totalNilaiColumn;
+    @FXML private TreeTableColumn<PenjualanBarangDetail, Number> hargaJualColumn;
+    @FXML private TreeTableColumn<PenjualanBarangDetail, Number> totalColumn;
     
     @FXML private Label totalQtyField;
     @FXML private Label totalNilaiField;
     
     private String tglAwal;
     private String tglAkhir;
-    final TreeItem<PenjualanDetail> root = new TreeItem<>();
-    private ObservableList<PenjualanDetail> allPenjualan = FXCollections.observableArrayList();
+    final TreeItem<PenjualanBarangDetail> root = new TreeItem<>();
+    private ObservableList<PenjualanBarangDetail> allPenjualan = FXCollections.observableArrayList();
     private Main mainApp;  
     private Stage owner;
     private Stage stage;
@@ -91,14 +91,14 @@ public class UntungRugiHPPPenjualanController  {
         noPenjualanColumn.setCellValueFactory(cellData -> cellData.getValue().getValue().noPenjualanProperty());
         tglPenjualanColumn.setCellValueFactory(cellData -> { 
             try {
-                return new SimpleStringProperty(tglLengkap.format(tglSql.parse(cellData.getValue().getValue().getPenjualanHead().getTglPenjualan())));
+                return new SimpleStringProperty(tglLengkap.format(tglSql.parse(cellData.getValue().getValue().getPenjualanBarangHead().getTglPenjualan())));
             } catch (Exception ex) {
                 return null;
             }
         });
         tglPenjualanColumn.setComparator(Function.sortDate(tglLengkap));
-        namaCustomerColumn.setCellValueFactory(cellData -> cellData.getValue().getValue().getPenjualanHead().getCustomer().namaProperty());
-        namaSalesColumn.setCellValueFactory(cellData -> cellData.getValue().getValue().getPenjualanHead().getSales().namaProperty());
+        namaCustomerColumn.setCellValueFactory(cellData -> cellData.getValue().getValue().getPenjualanBarangHead().getCustomer().namaProperty());
+        namaSalesColumn.setCellValueFactory(cellData -> cellData.getValue().getValue().getPenjualanBarangHead().getSales().namaProperty());
         
         kodeBarangColumn.setCellValueFactory(cellData -> cellData.getValue().getValue().kodeBarangProperty());
         namaBarangColumn.setCellValueFactory(cellData -> cellData.getValue().getValue().namaBarangProperty());
@@ -132,10 +132,10 @@ public class UntungRugiHPPPenjualanController  {
         });
         rm.getItems().addAll(print, export, refresh);
         penjualanDetailTable.setContextMenu(rm);
-        penjualanDetailTable.setRowFactory((TreeTableView<PenjualanDetail> tableView) -> {
-            final TreeTableRow<PenjualanDetail> row = new TreeTableRow<PenjualanDetail>(){
+        penjualanDetailTable.setRowFactory((TreeTableView<PenjualanBarangDetail> tableView) -> {
+            final TreeTableRow<PenjualanBarangDetail> row = new TreeTableRow<PenjualanBarangDetail>(){
                 @Override
-                public void updateItem(PenjualanDetail item, boolean empty) {
+                public void updateItem(PenjualanBarangDetail item, boolean empty) {
                     super.updateItem(item, empty);
                     if (empty) {
                         setContextMenu(rm);
@@ -143,11 +143,11 @@ public class UntungRugiHPPPenjualanController  {
                         final ContextMenu rm = new ContextMenu();
                         MenuItem detail = new MenuItem("Detail Penjualan");
                         detail.setOnAction((ActionEvent e)->{
-                            lihatDetailPenjualan(item.getPenjualanHead());
+                            lihatDetailPenjualan(item.getPenjualanBarangHead());
                         });
                         MenuItem pembayaran = new MenuItem("Detail Pembayaran Penjualan");
                         pembayaran.setOnAction((ActionEvent e)->{
-                            showDetailPiutang(item.getPenjualanHead());
+                            showDetailPiutang(item.getPenjualanBarangHead());
                         });
                         MenuItem print = new MenuItem("Print Laporan");
                         print.setOnAction((ActionEvent event) -> {
@@ -163,11 +163,11 @@ public class UntungRugiHPPPenjualanController  {
                         });
                         for(Otoritas o : sistem.getUser().getOtoritas()){
                             if(o.getJenis().equals("Detail Penjualan")&&o.isStatus()
-                                    &&item.getPenjualanHead().getStatus()!=null)
+                                    &&item.getPenjualanBarangHead().getStatus()!=null)
                                 rm.getItems().add(detail);
                             if(o.getJenis().equals("Detail Pembayaran Penjualan")&&o.isStatus()
-                                    &&item.getPenjualanHead().getPembayaran()>0
-                                    &&item.getPenjualanHead().getStatus()!=null)
+                                    &&item.getPenjualanBarangHead().getPembayaran()>0
+                                    &&item.getPenjualanBarangHead().getStatus()!=null)
                                 rm.getItems().add(pembayaran);
                         }
                         rm.getItems().addAll(print, export, refresh);
@@ -191,26 +191,26 @@ public class UntungRugiHPPPenjualanController  {
         stage.setY((mainApp.screenSize.getHeight() - stage.getHeight()) / 2);
     }
     public void getPenjualan(String tglAwal, String tglAkhir){
-        Task<List<PenjualanDetail>> task = new Task<List<PenjualanDetail>>() {
+        Task<List<PenjualanBarangDetail>> task = new Task<List<PenjualanBarangDetail>>() {
             @Override 
-            public List<PenjualanDetail> call()throws Exception {
+            public List<PenjualanBarangDetail> call()throws Exception {
                 try(Connection con = Koneksi.getConnection()){
-                    List<PenjualanHead> penjualan = PenjualanHeadDAO.getAllByDateAndStatus(con, tglAwal, tglAkhir, "true");
-                    List<PenjualanDetail> temp = PenjualanDetailDAO.getAllByDateAndStatus(con, tglAwal, tglAkhir, "true");
+                    List<PenjualanBarangHead> penjualan = PenjualanBarangHeadDAO.getAllByDateAndStatus(con, tglAwal, tglAkhir, "true");
+                    List<PenjualanBarangDetail> temp = PenjualanBarangDetailDAO.getAllByDateAndStatus(con, tglAwal, tglAkhir, "true");
                     List<Customer> customer = CustomerDAO.getAllByStatus(con, "%");
                     List<Pegawai> sales = PegawaiDAO.getAllByStatus(con, "%");
-                    for(PenjualanDetail d : temp){
-                        for(PenjualanHead h:penjualan){
+                    for(PenjualanBarangDetail d : temp){
+                        for(PenjualanBarangHead h:penjualan){
                             if(d.getNoPenjualan().equals(h.getNoPenjualan()))
-                                d.setPenjualanHead(h);
+                                d.setPenjualanBarangHead(h);
                         }
                         for(Customer c : customer){
-                            if(d.getPenjualanHead().getKodeCustomer().equals(c.getKodeCustomer()))
-                                d.getPenjualanHead().setCustomer(c);
+                            if(d.getPenjualanBarangHead().getKodeCustomer().equals(c.getKodeCustomer()))
+                                d.getPenjualanBarangHead().setCustomer(c);
                         }
                         for(Pegawai s : sales){
-                            if(d.getPenjualanHead().getKodeSales().equals(s.getKodePegawai()))
-                                d.getPenjualanHead().setSales(s);
+                            if(d.getPenjualanBarangHead().getKodeSales().equals(s.getKodePegawai()))
+                                d.getPenjualanBarangHead().setSales(s);
                         }
                     }
                     return temp;
@@ -242,7 +242,7 @@ public class UntungRugiHPPPenjualanController  {
     private void hitungTotal(){
         double totalNilai=0;
         double totalQty = 0;
-        for(PenjualanDetail temp : allPenjualan){
+        for(PenjualanBarangDetail temp : allPenjualan){
             totalNilai = totalNilai + (temp.getNilai()*temp.getQty());
             totalQty = totalQty + temp.getQty();
         }
@@ -253,22 +253,22 @@ public class UntungRugiHPPPenjualanController  {
         if(penjualanDetailTable.getRoot()!=null)
             penjualanDetailTable.getRoot().getChildren().clear();
         List<String> groupBy = new ArrayList<>();
-        for(PenjualanDetail temp: allPenjualan){
-            if(!groupBy.contains(temp.getPenjualanHead().getCustomer().getNama()))
-                groupBy.add(temp.getPenjualanHead().getCustomer().getNama());
+        for(PenjualanBarangDetail temp: allPenjualan){
+            if(!groupBy.contains(temp.getPenjualanBarangHead().getCustomer().getNama()))
+                groupBy.add(temp.getPenjualanBarangHead().getCustomer().getNama());
         }
         for(String temp : groupBy){
-            PenjualanDetail head = new PenjualanDetail();
+            PenjualanBarangDetail head = new PenjualanBarangDetail();
             head.setNoPenjualan(temp);
-            head.setPenjualanHead(new PenjualanHead());
-            head.getPenjualanHead().setCustomer(new Customer());
-            head.getPenjualanHead().setSales(new Pegawai());
-            TreeItem<PenjualanDetail> parent = new TreeItem<>(head);
+            head.setPenjualanBarangHead(new PenjualanBarangHead());
+            head.getPenjualanBarangHead().setCustomer(new Customer());
+            head.getPenjualanBarangHead().setSales(new Pegawai());
+            TreeItem<PenjualanBarangDetail> parent = new TreeItem<>(head);
             double totalQty = 0;
             double totalNilai = 0;
             double totalHarga = 0;
-            for(PenjualanDetail detail: allPenjualan){
-                if(temp.equals(detail.getPenjualanHead().getCustomer().getNama())){
+            for(PenjualanBarangDetail detail: allPenjualan){
+                if(temp.equals(detail.getPenjualanBarangHead().getCustomer().getNama())){
                     totalQty = totalQty + detail.getQty();
                     totalNilai = totalNilai + (detail.getNilai()*detail.getQty());
                     totalHarga = totalHarga + detail.getTotal();
@@ -283,14 +283,14 @@ public class UntungRugiHPPPenjualanController  {
         }
         penjualanDetailTable.setRoot(root);
     }   
-    private void lihatDetailPenjualan(PenjualanHead p){
+    private void lihatDetailPenjualan(PenjualanBarangHead p){
         Stage child = new Stage();
         FXMLLoader loader = mainApp.showDialog(stage, child, "View/Dialog/NewPenjualan.fxml");
         NewPenjualanController controller = loader.getController();
         controller.setMainApp(mainApp, stage, child);
         controller.setDetailPenjualan(p.getNoPenjualan());
     }
-    private void showDetailPiutang(PenjualanHead p){
+    private void showDetailPiutang(PenjualanBarangHead p){
         Stage child = new Stage();
         FXMLLoader loader = mainApp.showDialog(stage, child, "View/Dialog/DetailPiutang.fxml");
         DetailPiutangController x = loader.getController();
@@ -347,9 +347,9 @@ public class UntungRugiHPPPenjualanController  {
                 sheet.getRow(rc).getCell(11).setCellValue("Total Harga"); 
                 rc++;
                 List<String> groupBy = new ArrayList<>();
-                for(PenjualanDetail temp: allPenjualan){
-                    if(!groupBy.contains(temp.getPenjualanHead().getCustomer().getNama()))
-                        groupBy.add(temp.getPenjualanHead().getCustomer().getNama());
+                for(PenjualanBarangDetail temp: allPenjualan){
+                    if(!groupBy.contains(temp.getPenjualanBarangHead().getCustomer().getNama()))
+                        groupBy.add(temp.getPenjualanBarangHead().getCustomer().getNama());
                 }
                 double grandtotalQty = 0;
                 double grandtotalNilai = 0;
@@ -362,13 +362,13 @@ public class UntungRugiHPPPenjualanController  {
                     double totalQty = 0;
                     double totalNilai = 0;
                     double totalHarga = 0;
-                    for(PenjualanDetail detail: allPenjualan){
-                        if(temp.equals(detail.getPenjualanHead().getCustomer().getNama())){
+                    for(PenjualanBarangDetail detail: allPenjualan){
+                        if(temp.equals(detail.getPenjualanBarangHead().getCustomer().getNama())){
                             createRow(workbook, sheet, rc, c, "Detail");
-                            sheet.getRow(rc).getCell(0).setCellValue(detail.getPenjualanHead().getNoPenjualan());
-                            sheet.getRow(rc).getCell(1).setCellValue(tglLengkap.format(tglSql.parse(detail.getPenjualanHead().getTglPenjualan())));
-                            sheet.getRow(rc).getCell(2).setCellValue(detail.getPenjualanHead().getCustomer().getNama());
-                            sheet.getRow(rc).getCell(3).setCellValue(detail.getPenjualanHead().getSales().getNama());
+                            sheet.getRow(rc).getCell(0).setCellValue(detail.getPenjualanBarangHead().getNoPenjualan());
+                            sheet.getRow(rc).getCell(1).setCellValue(tglLengkap.format(tglSql.parse(detail.getPenjualanBarangHead().getTglPenjualan())));
+                            sheet.getRow(rc).getCell(2).setCellValue(detail.getPenjualanBarangHead().getCustomer().getNama());
+                            sheet.getRow(rc).getCell(3).setCellValue(detail.getPenjualanBarangHead().getSales().getNama());
                             sheet.getRow(rc).getCell(4).setCellValue(detail.getKodeBarang());
                             sheet.getRow(rc).getCell(5).setCellValue(detail.getNamaBarang());
                             sheet.getRow(rc).getCell(6).setCellValue(detail.getSatuan());

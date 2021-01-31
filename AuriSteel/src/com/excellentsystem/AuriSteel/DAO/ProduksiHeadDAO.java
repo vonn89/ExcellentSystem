@@ -37,15 +37,55 @@ public class ProduksiHeadDAO {
             ProduksiHead p = new ProduksiHead();
             p.setKodeProduksi(rs.getString(1));
             p.setTglProduksi(rs.getDate(2).toString()+" "+rs.getTime(2).toString());
-            p.setKodeGudang(rs.getString(3));
-            p.setJenisProduksi(rs.getString(4));
-            p.setMaterialCost(rs.getDouble(5));
-            p.setBiayaProduksi(rs.getDouble(6));
-            p.setCatatan(rs.getString(7));
-            p.setKodeUser(rs.getString(8));
-            p.setTglBatal(rs.getDate(9).toString()+" "+rs.getTime(9).toString());
-            p.setUserBatal(rs.getString(10));
-            p.setStatus(rs.getString(11));
+            p.setTglMulai(rs.getDate(3).toString()+" "+rs.getTime(3).toString());
+            p.setUserMulai(rs.getString(4));
+            p.setTglSelesai(rs.getDate(5).toString()+" "+rs.getTime(5).toString());
+            p.setUserSelesai(rs.getString(6));
+            p.setKodeGudang(rs.getString(7));
+            p.setJenisProduksi(rs.getString(8));
+            p.setKodeMesin(rs.getString(9));
+            p.setMaterialCost(rs.getDouble(10));
+            p.setBiayaProduksi(rs.getDouble(11));
+            p.setCatatan(rs.getString(12));
+            p.setKodeUser(rs.getString(13));
+            p.setTglBatal(rs.getDate(14).toString()+" "+rs.getTime(14).toString());
+            p.setUserBatal(rs.getString(15));
+            p.setStatus(rs.getString(16));
+            allProduksi.add(p);
+        }
+        return allProduksi;
+        
+    }
+    public static List<ProduksiHead> getAllByTglMulaiAndJenisProduksiAndStatus(
+            Connection con, String tglMulai, String tglAkhir, String jenisProduksi, String status)throws Exception{
+        String sql = "select * from tt_produksi_head where left(tgl_mulai,10) between ? and ? ";
+        if(!jenisProduksi.equals("%"))
+            sql = sql + " and jenis_produksi = '"+jenisProduksi+"' ";
+        if(!status.equals("%"))
+            sql = sql + " and status = '"+status+"' ";
+        PreparedStatement ps = con.prepareStatement(sql);
+        ps.setString(1, tglMulai);
+        ps.setString(2, tglAkhir);
+        List<ProduksiHead> allProduksi = new ArrayList<>();
+        ResultSet rs = ps.executeQuery();
+        while(rs.next()){
+            ProduksiHead p = new ProduksiHead();
+            p.setKodeProduksi(rs.getString(1));
+            p.setTglProduksi(rs.getDate(2).toString()+" "+rs.getTime(2).toString());
+            p.setTglMulai(rs.getDate(3).toString()+" "+rs.getTime(3).toString());
+            p.setUserMulai(rs.getString(4));
+            p.setTglSelesai(rs.getDate(5).toString()+" "+rs.getTime(5).toString());
+            p.setUserSelesai(rs.getString(6));
+            p.setKodeGudang(rs.getString(7));
+            p.setJenisProduksi(rs.getString(8));
+            p.setKodeMesin(rs.getString(9));
+            p.setMaterialCost(rs.getDouble(10));
+            p.setBiayaProduksi(rs.getDouble(11));
+            p.setCatatan(rs.getString(12));
+            p.setKodeUser(rs.getString(13));
+            p.setTglBatal(rs.getDate(14).toString()+" "+rs.getTime(14).toString());
+            p.setUserBatal(rs.getString(15));
+            p.setStatus(rs.getString(16));
             allProduksi.add(p);
         }
         return allProduksi;
@@ -61,15 +101,20 @@ public class ProduksiHeadDAO {
             p = new ProduksiHead();
             p.setKodeProduksi(rs.getString(1));
             p.setTglProduksi(rs.getDate(2).toString()+" "+rs.getTime(2).toString());
-            p.setKodeGudang(rs.getString(3));
-            p.setJenisProduksi(rs.getString(4));
-            p.setMaterialCost(rs.getDouble(5));
-            p.setBiayaProduksi(rs.getDouble(6));
-            p.setCatatan(rs.getString(7));
-            p.setKodeUser(rs.getString(8));
-            p.setTglBatal(rs.getDate(9).toString()+" "+rs.getTime(9).toString());
-            p.setUserBatal(rs.getString(10));
-            p.setStatus(rs.getString(11));
+            p.setTglMulai(rs.getDate(3).toString()+" "+rs.getTime(3).toString());
+            p.setUserMulai(rs.getString(4));
+            p.setTglSelesai(rs.getDate(5).toString()+" "+rs.getTime(5).toString());
+            p.setUserSelesai(rs.getString(6));
+            p.setKodeGudang(rs.getString(7));
+            p.setJenisProduksi(rs.getString(8));
+            p.setKodeMesin(rs.getString(9));
+            p.setMaterialCost(rs.getDouble(10));
+            p.setBiayaProduksi(rs.getDouble(11));
+            p.setCatatan(rs.getString(12));
+            p.setKodeUser(rs.getString(13));
+            p.setTglBatal(rs.getDate(14).toString()+" "+rs.getTime(14).toString());
+            p.setUserBatal(rs.getString(15));
+            p.setStatus(rs.getString(16));
         }
         return p;
     }
@@ -84,36 +129,47 @@ public class ProduksiHeadDAO {
             return "PR-"+yymm.format(date)+new DecimalFormat("000").format(1);
     }
     public static void insert(Connection con, ProduksiHead p)throws Exception{
-        PreparedStatement ps = con.prepareStatement("insert into tt_produksi_head values(?,?,?,?,?,?,?,?,?,?,?)");
+        PreparedStatement ps = con.prepareStatement("insert into tt_produksi_head values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
         ps.setString(1, p.getKodeProduksi());
         ps.setString(2, p.getTglProduksi());
-        ps.setString(3, p.getKodeGudang());
-        ps.setString(4, p.getJenisProduksi());
-        ps.setDouble(5, p.getMaterialCost());
-        ps.setDouble(6, p.getBiayaProduksi());
-        ps.setString(7, p.getCatatan());
-        ps.setString(8, p.getKodeUser());
-        ps.setString(9, p.getTglBatal());
-        ps.setString(10, p.getUserBatal());
-        ps.setString(11, p.getStatus());
+        ps.setString(3, p.getTglMulai());
+        ps.setString(4, p.getUserMulai());
+        ps.setString(5, p.getTglSelesai());
+        ps.setString(6, p.getUserSelesai());
+        ps.setString(7, p.getKodeGudang());
+        ps.setString(8, p.getJenisProduksi());
+        ps.setString(9, p.getKodeMesin());
+        ps.setDouble(10, p.getMaterialCost());
+        ps.setDouble(11, p.getBiayaProduksi());
+        ps.setString(12, p.getCatatan());
+        ps.setString(13, p.getKodeUser());
+        ps.setString(14, p.getTglBatal());
+        ps.setString(15, p.getUserBatal());
+        ps.setString(16, p.getStatus());
         ps.executeUpdate();
     }
     public static void update(Connection con, ProduksiHead p)throws Exception{
         PreparedStatement ps = con.prepareStatement("update tt_produksi_head set "
-                + " tgl_produksi=?, kode_gudang=?, jenis_produksi=?, material_cost=?, beban_produksi=?, "
+                + " tgl_produksi=?, tgl_mulai=?, user_mulai=?, tgl_selesai=?, user_selesai=?, "
+                + " kode_gudang=?, jenis_produksi=?, kode_mesin=?, material_cost=?, beban_produksi=?, "
                 + " catatan=?, kode_user=?, tgl_batal=?, user_batal=?, status=? "
                 + " where kode_produksi=? ");
         ps.setString(1, p.getTglProduksi());
-        ps.setString(2, p.getKodeGudang());
-        ps.setString(3, p.getJenisProduksi());
-        ps.setDouble(4, p.getMaterialCost());
-        ps.setDouble(5, p.getBiayaProduksi());
-        ps.setString(6, p.getCatatan());
-        ps.setString(7, p.getKodeUser());
-        ps.setString(8, p.getTglBatal());
-        ps.setString(9, p.getUserBatal());
-        ps.setString(10, p.getStatus());
-        ps.setString(11, p.getKodeProduksi());
+        ps.setString(2, p.getTglMulai());
+        ps.setString(3, p.getUserMulai());
+        ps.setString(4, p.getTglSelesai());
+        ps.setString(5, p.getUserSelesai());
+        ps.setString(6, p.getKodeGudang());
+        ps.setString(7, p.getJenisProduksi());
+        ps.setString(8, p.getKodeMesin());
+        ps.setDouble(9, p.getMaterialCost());
+        ps.setDouble(10, p.getBiayaProduksi());
+        ps.setString(11, p.getCatatan());
+        ps.setString(12, p.getKodeUser());
+        ps.setString(13, p.getTglBatal());
+        ps.setString(14, p.getUserBatal());
+        ps.setString(15, p.getStatus());
+        ps.setString(16, p.getKodeProduksi());
         ps.executeUpdate();
     }
 }

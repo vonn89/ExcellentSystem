@@ -16,7 +16,7 @@ import static com.excellentsystem.AuriSteel.Main.tglSql;
 import com.excellentsystem.AuriSteel.Model.Hutang;
 import com.excellentsystem.AuriSteel.Model.Pembayaran;
 import com.excellentsystem.AuriSteel.Model.PembelianBarangHead;
-import com.excellentsystem.AuriSteel.Model.PembelianHead;
+import com.excellentsystem.AuriSteel.Model.PembelianBahanHead;
 import java.sql.Connection;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -103,7 +103,7 @@ public class DetailHutangController {
         });
         new Thread(task).start();
     }
-    public void setDetailPembelian(PembelianHead p){
+    public void setDetailPembelian(PembelianBahanHead p){
         Task<Hutang> task = new Task<Hutang>() {
             @Override 
             public Hutang call() throws Exception{

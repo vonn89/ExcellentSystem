@@ -7,8 +7,8 @@ package com.excellentsystem.AuriSteel.View.Dialog;
 
 import com.excellentsystem.AuriSteel.DAO.CustomerDAO;
 import com.excellentsystem.AuriSteel.DAO.PegawaiDAO;
-import com.excellentsystem.AuriSteel.DAO.PemesananCoilDetailDAO;
-import com.excellentsystem.AuriSteel.DAO.PemesananCoilHeadDAO;
+import com.excellentsystem.AuriSteel.DAO.PemesananBahanDetailDAO;
+import com.excellentsystem.AuriSteel.DAO.PemesananBahanHeadDAO;
 import com.excellentsystem.AuriSteel.Koneksi;
 import com.excellentsystem.AuriSteel.Main;
 import static com.excellentsystem.AuriSteel.Main.df;
@@ -16,8 +16,8 @@ import static com.excellentsystem.AuriSteel.Main.tglLengkap;
 import static com.excellentsystem.AuriSteel.Main.tglSql;
 import com.excellentsystem.AuriSteel.Model.Customer;
 import com.excellentsystem.AuriSteel.Model.Pegawai;
-import com.excellentsystem.AuriSteel.Model.PemesananCoilDetail;
-import com.excellentsystem.AuriSteel.Model.PemesananCoilHead;
+import com.excellentsystem.AuriSteel.Model.PemesananBahanDetail;
+import com.excellentsystem.AuriSteel.Model.PemesananBahanHead;
 import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.List;
@@ -41,18 +41,18 @@ import javafx.stage.Stage;
  */
 public class AddPemesananCoilController {
 
-    @FXML public TableView<PemesananCoilHead> pemesananHeadTable;
-    @FXML private TableColumn<PemesananCoilHead, String> noPemesananCoilHeadColumn;
-    @FXML private TableColumn<PemesananCoilHead, String> tglPemesananColumn;
-    @FXML private TableColumn<PemesananCoilHead, String> namaCustomerColumn;
-    @FXML private TableColumn<PemesananCoilHead, String> alamatCustomerColumn;
-    @FXML private TableColumn<PemesananCoilHead, String> catatanColumn;
-    @FXML private TableColumn<PemesananCoilHead, String> namaSalesColumn;
-    @FXML private TableColumn<PemesananCoilHead, String> kodeUserColumn;
+    @FXML public TableView<PemesananBahanHead> pemesananHeadTable;
+    @FXML private TableColumn<PemesananBahanHead, String> noPemesananCoilHeadColumn;
+    @FXML private TableColumn<PemesananBahanHead, String> tglPemesananColumn;
+    @FXML private TableColumn<PemesananBahanHead, String> namaCustomerColumn;
+    @FXML private TableColumn<PemesananBahanHead, String> alamatCustomerColumn;
+    @FXML private TableColumn<PemesananBahanHead, String> catatanColumn;
+    @FXML private TableColumn<PemesananBahanHead, String> namaSalesColumn;
+    @FXML private TableColumn<PemesananBahanHead, String> kodeUserColumn;
     
     @FXML private TextField searchField;
-    private ObservableList<PemesananCoilHead> allPemesanan = FXCollections.observableArrayList();
-    private ObservableList<PemesananCoilHead> filterData = FXCollections.observableArrayList();
+    private ObservableList<PemesananBahanHead> allPemesanan = FXCollections.observableArrayList();
+    private ObservableList<PemesananBahanHead> filterData = FXCollections.observableArrayList();
     private Main mainApp;  
     private Stage stage;
     private Stage owner;
@@ -70,7 +70,7 @@ public class AddPemesananCoilController {
                 return null;
             }
         });
-        allPemesanan.addListener((ListChangeListener.Change<? extends PemesananCoilHead> change) -> {
+        allPemesanan.addListener((ListChangeListener.Change<? extends PemesananBahanHead> change) -> {
             searchPemesanan();
         });
         searchField.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
@@ -93,23 +93,23 @@ public class AddPemesananCoilController {
         getPemesanan();
     }
     private void getPemesanan(){
-        Task<List<PemesananCoilHead>> task = new Task<List<PemesananCoilHead>>() {
+        Task<List<PemesananBahanHead>> task = new Task<List<PemesananBahanHead>>() {
             @Override 
-            public List<PemesananCoilHead> call() throws Exception{
+            public List<PemesananBahanHead> call() throws Exception{
                 try (Connection con = Koneksi.getConnection()) {
-                    List<PemesananCoilHead> allPemesanan = PemesananCoilHeadDAO.getAllByDateAndStatus(con, 
+                    List<PemesananBahanHead> allPemesanan = PemesananBahanHeadDAO.getAllByDateAndStatus(con, 
                             "2000-01-01", "2050-01-01","open");
-                    List<PemesananCoilDetail> allDetail = PemesananCoilDetailDAO.getAllByDateAndStatus(con, 
+                    List<PemesananBahanDetail> allDetail = PemesananBahanDetailDAO.getAllByDateAndStatus(con, 
                             "2000-01-01", "2050-01-01","open");
                     List<Customer> allCustomer = CustomerDAO.getAllByStatus(con, "%");
                     List<Pegawai> allSales = PegawaiDAO.getAllByStatus(con, "%");
-                    for(PemesananCoilHead p : allPemesanan){
-                        List<PemesananCoilDetail> detail = new ArrayList<>();
-                        for(PemesananCoilDetail d : allDetail){
+                    for(PemesananBahanHead p : allPemesanan){
+                        List<PemesananBahanDetail> detail = new ArrayList<>();
+                        for(PemesananBahanDetail d : allDetail){
                             if(d.getNoPemesanan().equals(p.getNoPemesanan()))
                                 detail.add(d);
                         }
-                        p.setListPemesananCoilDetail(detail);
+                        p.setListPemesananBahanDetail(detail);
                         for(Customer c: allCustomer){
                             if(p.getKodeCustomer().equals(c.getKodeCustomer()))
                                 p.setCustomer(c);
@@ -147,7 +147,7 @@ public class AddPemesananCoilController {
     private void searchPemesanan() {
         try{
             filterData.clear();
-            for (PemesananCoilHead temp : allPemesanan) {
+            for (PemesananBahanHead temp : allPemesanan) {
                 if (searchField.getText() == null || searchField.getText().equals(""))
                     filterData.add(temp);
                 else{

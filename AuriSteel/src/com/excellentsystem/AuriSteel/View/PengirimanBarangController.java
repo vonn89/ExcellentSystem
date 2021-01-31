@@ -8,8 +8,8 @@ package com.excellentsystem.AuriSteel.View;
 import com.excellentsystem.AuriSteel.DAO.BarangDAO;
 import com.excellentsystem.AuriSteel.DAO.CustomerDAO;
 import com.excellentsystem.AuriSteel.DAO.PegawaiDAO;
-import com.excellentsystem.AuriSteel.DAO.PenjualanDetailDAO;
-import com.excellentsystem.AuriSteel.DAO.PenjualanHeadDAO;
+import com.excellentsystem.AuriSteel.DAO.PenjualanBarangDetailDAO;
+import com.excellentsystem.AuriSteel.DAO.PenjualanBarangHeadDAO;
 import com.excellentsystem.AuriSteel.Function;
 import static com.excellentsystem.AuriSteel.Function.createRow;
 import com.excellentsystem.AuriSteel.Koneksi;
@@ -23,8 +23,8 @@ import com.excellentsystem.AuriSteel.Model.Barang;
 import com.excellentsystem.AuriSteel.Model.Customer;
 import com.excellentsystem.AuriSteel.Model.Otoritas;
 import com.excellentsystem.AuriSteel.Model.Pegawai;
-import com.excellentsystem.AuriSteel.Model.PenjualanDetail;
-import com.excellentsystem.AuriSteel.Model.PenjualanHead;
+import com.excellentsystem.AuriSteel.Model.PenjualanBarangDetail;
+import com.excellentsystem.AuriSteel.Model.PenjualanBarangHead;
 import com.excellentsystem.AuriSteel.PrintOut.Report;
 import com.excellentsystem.AuriSteel.Services.Service;
 import com.excellentsystem.AuriSteel.View.Dialog.MessageController;
@@ -71,25 +71,25 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
  */
 public class PengirimanBarangController  {
 
-    @FXML private TableView<PenjualanHead> pengirimanTable;
-    @FXML private TableColumn<PenjualanHead, String> noPengirimanColumn;
-    @FXML private TableColumn<PenjualanHead, String> tglPengirimanColumn;
-    @FXML private TableColumn<PenjualanHead, String> noPemesananColumn;
-    @FXML private TableColumn<PenjualanHead, String> gudangColumn;
-    @FXML private TableColumn<PenjualanHead, String> namaCustomerColumn;
-    @FXML private TableColumn<PenjualanHead, String> alamatCustomerColumn;
-    @FXML private TableColumn<PenjualanHead, String> tujuanKirimColumn;
-    @FXML private TableColumn<PenjualanHead, String> supirColumn;
-    @FXML private TableColumn<PenjualanHead, String> salesColumn;
-    @FXML private TableColumn<PenjualanHead, Number> tonaseColumn;
+    @FXML private TableView<PenjualanBarangHead> pengirimanTable;
+    @FXML private TableColumn<PenjualanBarangHead, String> noPengirimanColumn;
+    @FXML private TableColumn<PenjualanBarangHead, String> tglPengirimanColumn;
+    @FXML private TableColumn<PenjualanBarangHead, String> noPemesananColumn;
+    @FXML private TableColumn<PenjualanBarangHead, String> gudangColumn;
+    @FXML private TableColumn<PenjualanBarangHead, String> namaCustomerColumn;
+    @FXML private TableColumn<PenjualanBarangHead, String> alamatCustomerColumn;
+    @FXML private TableColumn<PenjualanBarangHead, String> tujuanKirimColumn;
+    @FXML private TableColumn<PenjualanBarangHead, String> supirColumn;
+    @FXML private TableColumn<PenjualanBarangHead, String> salesColumn;
+    @FXML private TableColumn<PenjualanBarangHead, Number> tonaseColumn;
     
     @FXML private TextField searchField;
     @FXML private DatePicker tglMulaiPicker;
     @FXML private DatePicker tglAkhirPicker;
     @FXML private ComboBox<String> groupByCombo;
     
-    private ObservableList<PenjualanHead> allPengiriman = FXCollections.observableArrayList();
-    private ObservableList<PenjualanHead> filterData = FXCollections.observableArrayList();
+    private ObservableList<PenjualanBarangHead> allPengiriman = FXCollections.observableArrayList();
+    private ObservableList<PenjualanBarangHead> filterData = FXCollections.observableArrayList();
     private Main mainApp;   
     public void initialize() {
         noPengirimanColumn.setCellValueFactory(cellData -> cellData.getValue().noPenjualanProperty());
@@ -128,8 +128,9 @@ public class PengirimanBarangController  {
         
         tonaseColumn.setCellValueFactory(cellData -> {
             double tonase = 0;
-            for(PenjualanDetail d : cellData.getValue().getListPenjualanDetail()){
+            for(PenjualanBarangDetail d : cellData.getValue().getListPenjualanBarangDetail()){
                 tonase = tonase + (d.getQty()*d.getBarang().getBerat());
+                System.out.println(d.getNoPenjualan()+" - "+tonase);
             }
             return new SimpleDoubleProperty(tonase);
         });
@@ -162,10 +163,10 @@ public class PengirimanBarangController  {
         }
         rm.getItems().addAll(refresh);
         pengirimanTable.setContextMenu(rm);
-        pengirimanTable.setRowFactory((TableView<PenjualanHead> tableView) -> {
-            final TableRow<PenjualanHead> row = new TableRow<PenjualanHead>(){
+        pengirimanTable.setRowFactory((TableView<PenjualanBarangHead> tableView) -> {
+            final TableRow<PenjualanBarangHead> row = new TableRow<PenjualanBarangHead>(){
                 @Override
-                public void updateItem(PenjualanHead item, boolean empty) {
+                public void updateItem(PenjualanBarangHead item, boolean empty) {
                     super.updateItem(item, empty);
                     if (empty) {
                         setContextMenu(rm);
@@ -236,7 +237,7 @@ public class PengirimanBarangController  {
             });
             return row;
         });
-        allPengiriman.addListener((ListChangeListener.Change<? extends PenjualanHead> change) -> {
+        allPengiriman.addListener((ListChangeListener.Change<? extends PenjualanBarangHead> change) -> {
             searchPengiriman();
         });
         searchField.textProperty().addListener(
@@ -260,9 +261,9 @@ public class PengirimanBarangController  {
     }
     @FXML
     private void getPengiriman(){
-        Task<List<PenjualanHead>> task = new Task<List<PenjualanHead>>() {
+        Task<List<PenjualanBarangHead>> task = new Task<List<PenjualanBarangHead>>() {
             @Override 
-            public List<PenjualanHead> call() throws Exception {
+            public List<PenjualanBarangHead> call() throws Exception {
                 try (Connection con = Koneksi.getConnection()) {
                     String status = "%";
                     if(groupByCombo.getSelectionModel().getSelectedItem().equals("Done")){
@@ -275,11 +276,11 @@ public class PengirimanBarangController  {
                     List<Customer> allCustomer = CustomerDAO.getAllByStatus(con, "%");
                     List<Pegawai> allSales = PegawaiDAO.getAllByStatus(con, "%");
                     List<Barang> allBarang = BarangDAO.getAllByStatus(con, "%");
-                    List<PenjualanDetail> allPengirimanDetail = PenjualanDetailDAO.getAllByTglKirimAndStatus(con, 
+                    List<PenjualanBarangDetail> allPengirimanDetail = PenjualanBarangDetailDAO.getAllByTglKirimAndStatus(con, 
                             tglMulaiPicker.getValue().toString(), tglAkhirPicker.getValue().toString(), status);
-                    List<PenjualanHead> allPengiriman = PenjualanHeadDAO.getAllByTglKirimAndStatus(con, 
+                    List<PenjualanBarangHead> allPengiriman = PenjualanBarangHeadDAO.getAllByTglKirimAndStatus(con, 
                             tglMulaiPicker.getValue().toString(), tglAkhirPicker.getValue().toString(), status);
-                    for(PenjualanHead h : allPengiriman){
+                    for(PenjualanBarangHead h : allPengiriman){
                         for(Customer c : allCustomer){
                             if(h.getKodeCustomer().equals(c.getKodeCustomer()))
                                 h.setCustomer(c);
@@ -292,17 +293,17 @@ public class PengirimanBarangController  {
                             if(h.getKodeSales().equals(p.getKodePegawai()))
                                 h.setSales(p);
                         }
-                        List<PenjualanDetail> listDetail = new ArrayList<>();
-                        for(PenjualanDetail d : allPengirimanDetail){
+                        List<PenjualanBarangDetail> listDetail = new ArrayList<>();
+                        for(PenjualanBarangDetail d : allPengirimanDetail){
                             if(d.getNoPenjualan().equals(h.getNoPenjualan())){
-                                for(Barang b: allBarang){
+                                for(Barang b : allBarang){
                                     if(b.getKodeBarang().equals(d.getKodeBarang()))
                                         d.setBarang(b);
                                 }
                                 listDetail.add(d);
                             }
                         }
-                        h.setListPenjualanDetail(listDetail);
+                        h.setListPenjualanBarangDetail(listDetail);
                     }
                     return allPengiriman;
                 }
@@ -333,7 +334,7 @@ public class PengirimanBarangController  {
     private void searchPengiriman() {
         try{
             filterData.clear();
-            for (PenjualanHead temp : allPengiriman) {
+            for (PenjualanBarangHead temp : allPengiriman) {
                 if (searchField.getText() == null || searchField.getText().equals(""))
                     filterData.add(temp);
                 else{
@@ -374,8 +375,8 @@ public class PengirimanBarangController  {
                     @Override 
                     public String call()throws Exception {
                         try (Connection con = Koneksi.getConnection()) {
-                            PenjualanHead pengiriman = new PenjualanHead();
-                            pengiriman.setPemesananHead(controller.pemesanan);
+                            PenjualanBarangHead pengiriman = new PenjualanBarangHead();
+                            pengiriman.setPemesananBarangHead(controller.pemesanan);
                             pengiriman.setTglPenjualan("2000-01-01 00:00:00");
                             pengiriman.setNoPemesanan(controller.noPemesananField.getText());
                             pengiriman.setKodeCustomer(controller.pemesanan.getKodeCustomer());
@@ -394,7 +395,7 @@ public class PengirimanBarangController  {
                             pengiriman.setStatus("open");
                             pengiriman.setTotalBebanPenjualan(0);
                             double total = 0;
-                            for(PenjualanDetail temp : controller.allPenjualanDetail){
+                            for(PenjualanBarangDetail temp : controller.allPenjualanDetail){
                                 total = total + temp.getTotal();
                             }
                             pengiriman.setTotalPenjualan(total);
@@ -408,7 +409,7 @@ public class PengirimanBarangController  {
 //                                pengiriman.setPembayaran(total);
 //                            pengiriman.setSisaPembayaran(pengiriman.getTotalPenjualan()-pengiriman.getPembayaran());
                             
-                            pengiriman.setListPenjualanDetail(controller.allPenjualanDetail); 
+                            pengiriman.setListPenjualanBarangDetail(controller.allPenjualanDetail); 
                             return Service.newPengiriman(con, pengiriman);
                         }
                     }
@@ -434,7 +435,7 @@ public class PengirimanBarangController  {
             }
         });
     }
-    private void verifikasiPengiriman(PenjualanHead pengiriman){
+    private void verifikasiPengiriman(PenjualanBarangHead pengiriman){
         MessageController controller = mainApp.showMessage(Modality.WINDOW_MODAL, "Confirmation",
             "Verifikasi pengiriman barang "+pengiriman.getNoPenjualan()+" ?");
         controller.OK.setOnAction((ActionEvent e) -> {
@@ -466,7 +467,7 @@ public class PengirimanBarangController  {
             new Thread(task).start();
         });
     }
-    private void batalPengiriman(PenjualanHead pengiriman){
+    private void batalPengiriman(PenjualanBarangHead pengiriman){
         MessageController controller = mainApp.showMessage(Modality.WINDOW_MODAL, "Confirmation",
             "Batal pengiriman barang "+pengiriman.getNoPenjualan()+" ?");
         controller.OK.setOnAction((ActionEvent e) -> {
@@ -503,18 +504,18 @@ public class PengirimanBarangController  {
             new Thread(task).start();
         });
     }
-    private void lihatDetailPengiriman(PenjualanHead p){
+    private void lihatDetailPengiriman(PenjualanBarangHead p){
         Stage stage = new Stage();
         FXMLLoader loader = mainApp.showDialog(mainApp.MainStage, stage, "View/Dialog/NewPengiriman.fxml");
         NewPengirimanController controller = loader.getController();
         controller.setMainApp(mainApp, mainApp.MainStage, stage);
         controller.setDetailPengiriman(p.getNoPenjualan());
     }
-    private void printInvoice(PenjualanHead p){
+    private void printInvoice(PenjualanBarangHead p){
         try(Connection con = Koneksi.getConnection()){
-            List<PenjualanDetail> listPenjualan = PenjualanDetailDAO.getAllPenjualanDetail(con, p.getNoPenjualan());
-            for(PenjualanDetail d : listPenjualan){
-                d.setPenjualanHead(p);
+            List<PenjualanBarangDetail> listPenjualan = PenjualanBarangDetailDAO.getAllPenjualanDetail(con, p.getNoPenjualan());
+            for(PenjualanBarangDetail d : listPenjualan){
+                d.setPenjualanBarangHead(p);
             }
             Report report = new Report();
             report.printInvoiceSoftcopy(listPenjualan, p.getTotalPenjualan());
@@ -523,11 +524,11 @@ public class PengirimanBarangController  {
             mainApp.showMessage(Modality.NONE, "Error", e.toString());
         }
     }
-    private void printSuratJalan(PenjualanHead p){
+    private void printSuratJalan(PenjualanBarangHead p){
         try(Connection con = Koneksi.getConnection()){
-            List<PenjualanDetail> listPenjualan = PenjualanDetailDAO.getAllPenjualanDetail(con, p.getNoPenjualan());
-            for(PenjualanDetail d : listPenjualan){
-                d.setPenjualanHead(p);
+            List<PenjualanBarangDetail> listPenjualan = PenjualanBarangDetailDAO.getAllPenjualanDetail(con, p.getNoPenjualan());
+            for(PenjualanBarangDetail d : listPenjualan){
+                d.setPenjualanBarangHead(p);
                 d.setBarang(BarangDAO.get(con, d.getKodeBarang()));
             }
             Report report = new Report();
@@ -576,7 +577,7 @@ public class PengirimanBarangController  {
                 sheet.getRow(rc).getCell(7).setCellValue("Supir"); 
                 sheet.getRow(rc).getCell(8).setCellValue("Tonase"); 
                 rc++;
-                for (PenjualanHead b : filterData) {
+                for (PenjualanBarangHead b : filterData) {
                     createRow(workbook, sheet, rc, c, "Detail");
                     sheet.getRow(rc).getCell(0).setCellValue(b.getNoPenjualan());
                     sheet.getRow(rc).getCell(1).setCellValue(tglLengkap.format(tglSql.parse(b.getTglPengiriman())));
@@ -587,7 +588,7 @@ public class PengirimanBarangController  {
                     sheet.getRow(rc).getCell(6).setCellValue(b.getTujuanKirim());
                     sheet.getRow(rc).getCell(7).setCellValue(b.getSupir());
                     double tonase = 0;
-                    for(PenjualanDetail d : b.getListPenjualanDetail()){
+                    for(PenjualanBarangDetail d : b.getListPenjualanBarangDetail()){
                         tonase = tonase + (d.getQty()*d.getBarang().getBerat());
                     }
                     sheet.getRow(rc).getCell(8).setCellValue(tonase);

@@ -9,10 +9,10 @@ import com.excellentsystem.AuriSteel.DAO.BarangDAO;
 import com.excellentsystem.AuriSteel.DAO.CustomerDAO;
 import com.excellentsystem.AuriSteel.DAO.KeuanganDAO;
 import com.excellentsystem.AuriSteel.DAO.PegawaiDAO;
-import com.excellentsystem.AuriSteel.DAO.PemesananDetailDAO;
-import com.excellentsystem.AuriSteel.DAO.PenjualanCoilHeadDAO;
-import com.excellentsystem.AuriSteel.DAO.PenjualanDetailDAO;
-import com.excellentsystem.AuriSteel.DAO.PenjualanHeadDAO;
+import com.excellentsystem.AuriSteel.DAO.PemesananBarangDetailDAO;
+import com.excellentsystem.AuriSteel.DAO.PenjualanBahanHeadDAO;
+import com.excellentsystem.AuriSteel.DAO.PenjualanBarangDetailDAO;
+import com.excellentsystem.AuriSteel.DAO.PenjualanBarangHeadDAO;
 import com.excellentsystem.AuriSteel.Function;
 import com.excellentsystem.AuriSteel.Koneksi;
 import com.excellentsystem.AuriSteel.Main;
@@ -25,10 +25,10 @@ import com.excellentsystem.AuriSteel.Model.Helper.PendingItems;
 import com.excellentsystem.AuriSteel.Model.Helper.TopCustomer;
 import com.excellentsystem.AuriSteel.Model.Keuangan;
 import com.excellentsystem.AuriSteel.Model.Pegawai;
-import com.excellentsystem.AuriSteel.Model.PemesananDetail;
-import com.excellentsystem.AuriSteel.Model.PenjualanCoilHead;
-import com.excellentsystem.AuriSteel.Model.PenjualanDetail;
-import com.excellentsystem.AuriSteel.Model.PenjualanHead;
+import com.excellentsystem.AuriSteel.Model.PemesananBarangDetail;
+import com.excellentsystem.AuriSteel.Model.PenjualanBahanHead;
+import com.excellentsystem.AuriSteel.Model.PenjualanBarangDetail;
+import com.excellentsystem.AuriSteel.Model.PenjualanBarangHead;
 import java.sql.Connection;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
@@ -221,9 +221,9 @@ public class DashboardController {
                     dashboard.setListTopCustomer(listTopCustomer);
                     
                     if(penjualanCheckBox.isSelected()){
-                        dashboard.setListPenjualanHead(PenjualanHeadDAO.getAllByDateAndStatus(
+                        dashboard.setListPenjualanHead(PenjualanBarangHeadDAO.getAllByDateAndStatus(
                                 con, tglMulai, tglAkhir, "true"));
-                        for(PenjualanHead p : dashboard.getListPenjualanHead()){
+                        for(PenjualanBarangHead p : dashboard.getListPenjualanHead()){
                             for(Customer c : listCustomer){
                                 if(p.getKodeCustomer().equals(c.getKodeCustomer()))
                                     p.setCustomer(c);
@@ -236,9 +236,9 @@ public class DashboardController {
                         System.out.println("getPenjualan "+new Date());
                     }
                     if(penjualanCoilCheckBox.isSelected()){
-                        dashboard.setListPenjualanCoilHead(PenjualanCoilHeadDAO.getAllByDateAndStatus(
+                        dashboard.setListPenjualanCoilHead(PenjualanBahanHeadDAO.getAllByDateAndStatus(
                                 con, tglMulai, tglAkhir, "true"));
-                        for(PenjualanCoilHead p : dashboard.getListPenjualanCoilHead()){
+                        for(PenjualanBahanHead p : dashboard.getListPenjualanCoilHead()){
                             for(Customer c : listCustomer){
                                 if(p.getKodeCustomer().equals(c.getKodeCustomer()))
                                     p.setCustomer(c);
@@ -253,13 +253,13 @@ public class DashboardController {
                     
                     List<Barang> listBarang = BarangDAO.getAllByStatus(con, "%");
                     System.out.println("getBarang "+new Date());
-                    List<PenjualanDetail> listPenjualanDetail = PenjualanDetailDAO.getAllByDateAndStatus(con, tglMulai, tglAkhir, "true");
+                    List<PenjualanBarangDetail> listPenjualanDetail = PenjualanBarangDetailDAO.getAllByDateAndStatus(con, tglMulai, tglAkhir, "true");
                     System.out.println("getPenjualanDetail "+new Date());
                     List<BestSellingItems> listBestSellingItems = new ArrayList<>();
                     double totalQty = 0;
                     double totalBerat = 0;
                     double totalRp = 0;
-                    for(PenjualanDetail p : listPenjualanDetail){
+                    for(PenjualanBarangDetail p : listPenjualanDetail){
                         double berat = 0;
                         for(Barang b : listBarang){
                             if(b.getKodeBarang().equals(p.getKodeBarang()))
@@ -296,14 +296,14 @@ public class DashboardController {
                     }
                     dashboard.setListBestSellingItems(listBestSellingItems);
                     
-                    List<PemesananDetail> listPemesananDetail = PemesananDetailDAO.getAllByDateAndStatus(con, 
+                    List<PemesananBarangDetail> listPemesananDetail = PemesananBarangDetailDAO.getAllByDateAndStatus(con, 
                             LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy"))+"-01-01", tglAkhir, "open");
                     System.out.println("getPemesananDetail "+new Date());
                     List<PendingItems> listPendingItems = new ArrayList<>();
                     double totalQtyPendingItems = 0;
                     double totalBeratPendingItems = 0;
                     double totalRpPendingItems = 0;
-                    for(PemesananDetail p : listPemesananDetail){
+                    for(PemesananBarangDetail p : listPemesananDetail){
                         double qty = p.getQty()-p.getQtyTerkirim();
                         double berat = 0;
                         for(Barang b : listBarang){
@@ -425,17 +425,17 @@ public class DashboardController {
         pendapatanBebanLabel.setText(c);
         keuntunganBersihLabel.setText(d);
     }
-    private void setTopCustomer(List<PenjualanHead> listPenjualan, List<PenjualanCoilHead> listPenjualanCoil, List<TopCustomer> listCustomer)throws Exception{
+    private void setTopCustomer(List<PenjualanBarangHead> listPenjualan, List<PenjualanBahanHead> listPenjualanCoil, List<TopCustomer> listCustomer)throws Exception{
         customer.clear();
         double grandtotal = 0;
         for(TopCustomer c : listCustomer){
-            for(PenjualanHead p : listPenjualan){
+            for(PenjualanBarangHead p : listPenjualan){
                 if(c.getKodeCustomer().equals(p.getKodeCustomer())){
                     c.setTotalPenjualan(c.getTotalPenjualan()+p.getTotalPenjualan());
                     grandtotal = grandtotal + p.getTotalPenjualan();
                 }
             }
-            for(PenjualanCoilHead p : listPenjualanCoil){
+            for(PenjualanBahanHead p : listPenjualanCoil){
                 if(c.getKodeCustomer().equals(p.getKodeCustomer())){
                     c.setTotalPenjualan(c.getTotalPenjualan()+p.getTotalPenjualan());
                     grandtotal = grandtotal + p.getTotalPenjualan();
@@ -524,15 +524,15 @@ public class DashboardController {
             return label;
         }
     }
-    private void setSalesPerformance(List<PenjualanHead> listPenjualan, List<PenjualanCoilHead> listPenjualanCoil) throws Exception{
+    private void setSalesPerformance(List<PenjualanBarangHead> listPenjualan, List<PenjualanBahanHead> listPenjualanCoil) throws Exception{
         salesPerformanceChart.getData().clear();
         salesAxis.getCategories().clear();
-        for(PenjualanHead p : listPenjualan){
+        for(PenjualanBarangHead p : listPenjualan){
             if(!salesAxis.getCategories().contains(p.getSales().getNama())){
                 salesAxis.getCategories().add(p.getSales().getNama());
             }
         }
-        for(PenjualanCoilHead p : listPenjualanCoil){
+        for(PenjualanBahanHead p : listPenjualanCoil){
             if(!salesAxis.getCategories().contains(p.getSales().getNama()))
                 salesAxis.getCategories().add(p.getSales().getNama());
         }
@@ -540,7 +540,7 @@ public class DashboardController {
         series1.setName("Penjualan");  
         for(String s : salesAxis.getCategories()){
             double totalPenjualan = 0;
-            for(PenjualanHead p : listPenjualan){
+            for(PenjualanBarangHead p : listPenjualan){
                 if(s.equals(p.getSales().getNama()))
                     totalPenjualan = totalPenjualan + p.getTotalPenjualan();
             }
@@ -558,7 +558,7 @@ public class DashboardController {
         series2.setName("Penjualan Coil");  
         for(String s : salesAxis.getCategories()){
             double totalPenjualan = 0;
-            for(PenjualanCoilHead p : listPenjualanCoil){
+            for(PenjualanBahanHead p : listPenjualanCoil){
                 if(s.equals(p.getSales().getNama()))
                     totalPenjualan = totalPenjualan + p.getTotalPenjualan();
             }

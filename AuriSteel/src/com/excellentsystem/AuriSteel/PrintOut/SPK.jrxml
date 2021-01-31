@@ -41,10 +41,10 @@
 		<fieldDescription><![CDATA[qtyTerkirim]]></fieldDescription>
 	</field>
 	<field name="tglPemesanan" class="java.lang.String">
-		<fieldDescription><![CDATA[pemesananHead.tglPemesanan]]></fieldDescription>
+		<fieldDescription><![CDATA[pemesananBarangHead.tglPemesanan]]></fieldDescription>
 	</field>
 	<field name="nama" class="java.lang.String">
-		<fieldDescription><![CDATA[pemesananHead.customer.nama]]></fieldDescription>
+		<fieldDescription><![CDATA[pemesananBarangHead.customer.nama]]></fieldDescription>
 	</field>
 	<variable name="sumQty" class="java.lang.Double" calculation="Sum">
 		<variableExpression><![CDATA[$F{qty}-$F{qtyTerkirim}]]></variableExpression>

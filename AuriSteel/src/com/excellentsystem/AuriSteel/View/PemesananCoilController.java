@@ -8,8 +8,8 @@ package com.excellentsystem.AuriSteel.View;
 import com.excellentsystem.AuriSteel.DAO.CustomerDAO;
 import com.excellentsystem.AuriSteel.DAO.KategoriBahanDAO;
 import com.excellentsystem.AuriSteel.DAO.PegawaiDAO;
-import com.excellentsystem.AuriSteel.DAO.PemesananCoilDetailDAO;
-import com.excellentsystem.AuriSteel.DAO.PemesananCoilHeadDAO;
+import com.excellentsystem.AuriSteel.DAO.PemesananBahanDetailDAO;
+import com.excellentsystem.AuriSteel.DAO.PemesananBahanHeadDAO;
 import com.excellentsystem.AuriSteel.Function;
 import static com.excellentsystem.AuriSteel.Function.createRow;
 import com.excellentsystem.AuriSteel.Koneksi;
@@ -26,11 +26,11 @@ import com.excellentsystem.AuriSteel.Model.Hutang;
 import com.excellentsystem.AuriSteel.Model.KategoriBahan;
 import com.excellentsystem.AuriSteel.Model.Otoritas;
 import com.excellentsystem.AuriSteel.Model.Pegawai;
-import com.excellentsystem.AuriSteel.Model.PemesananCoilDetail;
-import com.excellentsystem.AuriSteel.Model.PemesananCoilHead;
+import com.excellentsystem.AuriSteel.Model.PemesananBahanDetail;
+import com.excellentsystem.AuriSteel.Model.PemesananBahanHead;
 import com.excellentsystem.AuriSteel.PrintOut.Report;
 import com.excellentsystem.AuriSteel.Services.Service;
-import com.excellentsystem.AuriSteel.View.Dialog.DetailPembayaranDownPaymentController;
+import com.excellentsystem.AuriSteel.View.Dialog.DetailTerimaPembayaranDownPaymentController;
 import com.excellentsystem.AuriSteel.View.Dialog.MessageController;
 import com.excellentsystem.AuriSteel.View.Dialog.NewPembayaranController;
 import com.excellentsystem.AuriSteel.View.Dialog.NewPemesananCoilController;
@@ -76,20 +76,20 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
  * @author Xtreme
  */
 public class PemesananCoilController {
-    @FXML private TableView<PemesananCoilHead> pemesananTable;
-    @FXML private TableColumn<PemesananCoilHead, String> noPemesananColumn;
-    @FXML private TableColumn<PemesananCoilHead, String> tglPemesananColumn;
-    @FXML private TableColumn<PemesananCoilHead, String> namaCustomerColumn;
-    @FXML private TableColumn<PemesananCoilHead, String> paymentTermColumn;
-    @FXML private TableColumn<PemesananCoilHead, String> totalPemesananColumn;
-    @FXML private TableColumn<PemesananCoilHead, String> kursColumn;
-    @FXML private TableColumn<PemesananCoilHead, Number> totalPemesananRpColumn;
-    @FXML private TableColumn<PemesananCoilHead, Number> downPaymentColumn;
-    @FXML private TableColumn<PemesananCoilHead, Number> sisaDownPaymentColumn;
-    @FXML private TableColumn<PemesananCoilHead, String> statusColumn;
-    @FXML private TableColumn<PemesananCoilHead, String> catatanColumn;
-    @FXML private TableColumn<PemesananCoilHead, String> namaSalesColumn;
-    @FXML private TableColumn<PemesananCoilHead, String> kodeUserColumn;
+    @FXML private TableView<PemesananBahanHead> pemesananTable;
+    @FXML private TableColumn<PemesananBahanHead, String> noPemesananColumn;
+    @FXML private TableColumn<PemesananBahanHead, String> tglPemesananColumn;
+    @FXML private TableColumn<PemesananBahanHead, String> namaCustomerColumn;
+    @FXML private TableColumn<PemesananBahanHead, String> paymentTermColumn;
+    @FXML private TableColumn<PemesananBahanHead, String> totalPemesananColumn;
+    @FXML private TableColumn<PemesananBahanHead, String> kursColumn;
+    @FXML private TableColumn<PemesananBahanHead, Number> totalPemesananRpColumn;
+    @FXML private TableColumn<PemesananBahanHead, Number> downPaymentColumn;
+    @FXML private TableColumn<PemesananBahanHead, Number> sisaDownPaymentColumn;
+    @FXML private TableColumn<PemesananBahanHead, String> statusColumn;
+    @FXML private TableColumn<PemesananBahanHead, String> catatanColumn;
+    @FXML private TableColumn<PemesananBahanHead, String> namaSalesColumn;
+    @FXML private TableColumn<PemesananBahanHead, String> kodeUserColumn;
     
     @FXML private TextField searchField;
     @FXML private Label totalPemesananField;
@@ -98,8 +98,8 @@ public class PemesananCoilController {
     @FXML private DatePicker tglMulaiPicker;
     @FXML private DatePicker tglAkhirPicker;
     @FXML private ComboBox<String> groupByCombo;
-    private ObservableList<PemesananCoilHead> allPemesanan = FXCollections.observableArrayList();
-    private ObservableList<PemesananCoilHead> filterData = FXCollections.observableArrayList();
+    private ObservableList<PemesananBahanHead> allPemesanan = FXCollections.observableArrayList();
+    private ObservableList<PemesananBahanHead> filterData = FXCollections.observableArrayList();
     private Main mainApp;   
     public void initialize() {
         noPemesananColumn.setCellValueFactory(cellData -> cellData.getValue().noPemesananProperty());
@@ -198,10 +198,10 @@ public class PemesananCoilController {
         }
         rm.getItems().addAll(export, refresh);
         pemesananTable.setContextMenu(rm);
-        pemesananTable.setRowFactory((TableView<PemesananCoilHead> tableView) -> {
-            final TableRow<PemesananCoilHead> row = new TableRow<PemesananCoilHead>(){
+        pemesananTable.setRowFactory((TableView<PemesananBahanHead> tableView) -> {
+            final TableRow<PemesananBahanHead> row = new TableRow<PemesananBahanHead>(){
                 @Override
-                public void updateItem(PemesananCoilHead item, boolean empty) {
+                public void updateItem(PemesananBahanHead item, boolean empty) {
                     super.updateItem(item, empty);
                     if (empty) {
                         setContextMenu(rm);
@@ -282,7 +282,7 @@ public class PemesananCoilController {
             });
             return row;
         });
-        allPemesanan.addListener((ListChangeListener.Change<? extends PemesananCoilHead> change) -> {
+        allPemesanan.addListener((ListChangeListener.Change<? extends PemesananBahanHead> change) -> {
             searchPemesanan();
         });
         searchField.textProperty().addListener(
@@ -306,9 +306,9 @@ public class PemesananCoilController {
     }
     @FXML
     private void getPemesanan(){
-        Task<List<PemesananCoilHead>> task = new Task<List<PemesananCoilHead>>() {
+        Task<List<PemesananBahanHead>> task = new Task<List<PemesananBahanHead>>() {
             @Override 
-            public List<PemesananCoilHead> call() throws Exception {
+            public List<PemesananBahanHead> call() throws Exception {
                 try (Connection con = Koneksi.getConnection()) {
                     String status = "%";
                     if(groupByCombo.getSelectionModel().getSelectedItem().equals("Done")){
@@ -320,11 +320,11 @@ public class PemesananCoilController {
                     }
                     List<Customer> allCustomer = CustomerDAO.getAllByStatus(con, "%");
                     List<Pegawai> allSales = PegawaiDAO.getAllByStatus(con, "%");
-                    List<PemesananCoilHead> allPemesanan = PemesananCoilHeadDAO.getAllByDateAndStatus(
+                    List<PemesananBahanHead> allPemesanan = PemesananBahanHeadDAO.getAllByDateAndStatus(
                         con, tglMulaiPicker.getValue().toString(), tglAkhirPicker.getValue().toString(), status);
-                    List<PemesananCoilDetail> listPemesananCoilDetail = PemesananCoilDetailDAO.getAllByDateAndStatus(
+                    List<PemesananBahanDetail> listPemesananCoilDetail = PemesananBahanDetailDAO.getAllByDateAndStatus(
                         con, tglMulaiPicker.getValue().toString(), tglAkhirPicker.getValue().toString(), status);
-                    for(PemesananCoilHead p : allPemesanan){
+                    for(PemesananBahanHead p : allPemesanan){
                         for(Customer c : allCustomer){
                             if(p.getKodeCustomer().equals(c.getKodeCustomer()))
                                 p.setCustomer(c);
@@ -333,12 +333,12 @@ public class PemesananCoilController {
                             if(p.getKodeSales().equals(s.getKodePegawai()))
                                 p.setSales(s);
                         }
-                        List<PemesananCoilDetail> detail = new ArrayList<>();
-                        for(PemesananCoilDetail d : listPemesananCoilDetail){
+                        List<PemesananBahanDetail> detail = new ArrayList<>();
+                        for(PemesananBahanDetail d : listPemesananCoilDetail){
                             if(p.getNoPemesanan().equals(d.getNoPemesanan()))
                                 detail.add(d);
                         }
-                        p.setListPemesananCoilDetail(detail);
+                        p.setListPemesananBahanDetail(detail);
                     }
                     return allPemesanan;
                 }
@@ -368,7 +368,7 @@ public class PemesananCoilController {
     private void searchPemesanan() {
         try{
             filterData.clear();
-            for (PemesananCoilHead temp : allPemesanan) {
+            for (PemesananBahanHead temp : allPemesanan) {
                 if (searchField.getText() == null || searchField.getText().equals(""))
                     filterData.add(temp);
                 else{
@@ -398,7 +398,7 @@ public class PemesananCoilController {
         double total = 0;
         double dp = 0;
         double sisaDp = 0;
-        for(PemesananCoilHead temp : filterData){
+        for(PemesananBahanHead temp : filterData){
             total = total + temp.getTotalPemesanan();
             dp = dp + temp.getDownPayment();
             sisaDp = sisaDp + temp.getSisaDownPayment();
@@ -423,7 +423,7 @@ public class PemesananCoilController {
                     @Override 
                     public String call() throws Exception{
                         try (Connection con = Koneksi.getConnection()) {
-                            PemesananCoilHead pemesanan = new PemesananCoilHead();
+                            PemesananBahanHead pemesanan = new PemesananBahanHead();
                             pemesanan.setKodeCustomer(controller.customer.getKodeCustomer());
                             pemesanan.setPaymentTerm(controller.paymentTermField.getText());
                             pemesanan.setKurs(Double.parseDouble(controller.kursField.getText().replaceAll(",", "")));
@@ -436,7 +436,7 @@ public class PemesananCoilController {
                             pemesanan.setTglBatal("2000-01-01 00:00:00");
                             pemesanan.setUserBatal("");
                             pemesanan.setStatus("open");
-                            pemesanan.setListPemesananCoilDetail(controller.allPemesananCoilDetail);
+                            pemesanan.setListPemesananBahanDetail(controller.allPemesananCoilDetail);
                             return Service.newPemesananCoil(con, pemesanan);
                         }
                     }
@@ -478,7 +478,7 @@ public class PemesananCoilController {
                     @Override 
                     public String call() throws Exception{
                         try (Connection con = Koneksi.getConnection()) {
-                            PemesananCoilHead pemesanan = new PemesananCoilHead();
+                            PemesananBahanHead pemesanan = new PemesananBahanHead();
                             pemesanan.setKodeCustomer(controller.customer.getKodeCustomer());
                             pemesanan.setPaymentTerm(controller.paymentTermField.getText());
                             pemesanan.setKurs(1);
@@ -491,7 +491,7 @@ public class PemesananCoilController {
                             pemesanan.setTglBatal("2000-01-01 00:00:00");
                             pemesanan.setUserBatal("");
                             pemesanan.setStatus("open");
-                            pemesanan.setListPemesananCoilDetail(controller.allPemesananCoilDetail);
+                            pemesanan.setListPemesananBahanDetail(controller.allPemesananCoilDetail);
                             return Service.newPemesananCoil(con, pemesanan);
                         }
                     }
@@ -517,7 +517,7 @@ public class PemesananCoilController {
             }
         });
     }
-    private void lihatDetailPemesanan(PemesananCoilHead p){
+    private void lihatDetailPemesanan(PemesananBahanHead p){
         if(p.getKurs()!=1){
             Stage stage = new Stage();
             FXMLLoader loader = mainApp.showDialog(mainApp.MainStage, stage, "View/Dialog/NewPemesananCoil.fxml");
@@ -532,7 +532,7 @@ public class PemesananCoilController {
             controller.setDetailPemesanan(p.getNoPemesanan());
         }
     }
-    private void batalPemesanan(PemesananCoilHead p){
+    private void batalPemesanan(PemesananBahanHead p){
         MessageController controller = mainApp.showMessage(Modality.WINDOW_MODAL, "Confirmation",
                 "Batal pemesanan "+p.getNoPemesanan()+" , anda yakin ?");
         controller.OK.setOnAction((ActionEvent evt) -> {
@@ -563,7 +563,7 @@ public class PemesananCoilController {
             new Thread(task).start();
         });
     }
-    private void selesaiPemesananCoil(PemesananCoilHead p){
+    private void selesaiPemesananCoil(PemesananBahanHead p){
         MessageController controller = mainApp.showMessage(Modality.WINDOW_MODAL, "Confirmation",
             "Pemesanan "+p.getNoPemesanan()+" telah selesai , anda yakin ?");
         controller.OK.setOnAction((ActionEvent evt) -> {
@@ -595,7 +595,7 @@ public class PemesananCoilController {
             new Thread(task).start();
         });
     }
-    private void terimaPembayaranDownPayment(PemesananCoilHead p){
+    private void terimaPembayaranDownPayment(PemesananBahanHead p){
         Stage stage = new Stage();
         FXMLLoader loader = mainApp.showDialog(mainApp.MainStage, stage, "View/Dialog/NewPembayaran.fxml");
         NewPembayaranController controller = loader.getController();
@@ -609,7 +609,7 @@ public class PemesananCoilController {
                     @Override 
                     public String call() throws Exception{
                         try (Connection con = Koneksi.getConnection()) {
-                            p.setListPemesananCoilDetail(PemesananCoilDetailDAO.getAllByNoPemesanan(con, p.getNoPemesanan()));
+                            p.setListPemesananBahanDetail(PemesananBahanDetailDAO.getAllByNoPemesanan(con, p.getNoPemesanan()));
                             double jumlahBayar = Double.parseDouble(controller.jumlahPembayaranField.getText().replaceAll(",", ""));
                             double sisaPembayaran = p.getTotalPemesanan()-p.getSisaDownPayment();
                             if(jumlahBayar>sisaPembayaran)
@@ -643,10 +643,10 @@ public class PemesananCoilController {
             }
         });
     }
-    private void lihatTerimaPembayaranDownPayment(PemesananCoilHead p){
+    private void lihatTerimaPembayaranDownPayment(PemesananBahanHead p){
         Stage stage = new Stage();
-        FXMLLoader loader = mainApp.showDialog(mainApp.MainStage, stage, "View/Dialog/DetailPembayaranDownPayment.fxml");
-        DetailPembayaranDownPaymentController controller = loader.getController();
+        FXMLLoader loader = mainApp.showDialog(mainApp.MainStage, stage, "View/Dialog/DetailTerimaPembayaranDownPayment.fxml");
+        DetailTerimaPembayaranDownPaymentController controller = loader.getController();
         controller.setMainApp(mainApp,mainApp.MainStage, stage);
         controller.setDetailPemesananCoil(p);
         controller.hutangTable.setRowFactory((TableView<Hutang> tv) -> {
@@ -674,7 +674,7 @@ public class PemesananCoilController {
             return row;
         });
     } 
-    private void batalPembayaran(PemesananCoilHead p, Hutang h,Stage stage){
+    private void batalPembayaran(PemesananBahanHead p, Hutang h,Stage stage){
         MessageController controller = mainApp.showMessage(Modality.WINDOW_MODAL, "Confirmation",
             "Batal pembayaran "+h.getNoHutang()+" ?");
         controller.OK.setOnAction((ActionEvent e) -> {
@@ -707,12 +707,12 @@ public class PemesananCoilController {
             new Thread(task).start();
         });
     }
-    private void printProformaInvoice(PemesananCoilHead p){
+    private void printProformaInvoice(PemesananBahanHead p){
         try(Connection con = Koneksi.getConnection()){
             List<KategoriBahan> listKategori = KategoriBahanDAO.getAllByStatus(con, "%");
-            List<PemesananCoilDetail> listPemesanan = PemesananCoilDetailDAO.getAllByNoPemesanan(con, p.getNoPemesanan());
-            for(PemesananCoilDetail d : listPemesanan){
-                d.setPemesananCoilHead(p);
+            List<PemesananBahanDetail> listPemesanan = PemesananBahanDetailDAO.getAllByNoPemesanan(con, p.getNoPemesanan());
+            for(PemesananBahanDetail d : listPemesanan){
+                d.setPemesananBahanHead(p);
                 d.setBahan(new Bahan());
                 for(KategoriBahan k : listKategori){
                     if(d.getKategoriBahan().equals(k.getKodeKategori()))
@@ -772,7 +772,7 @@ public class PemesananCoilController {
                 double pemesananRp = 0;
                 double pembayaran = 0;
                 double sisaPembayaran = 0;
-                for (PemesananCoilHead b : filterData) {
+                for (PemesananBahanHead b : filterData) {
                     createRow(workbook, sheet, rc, c, "Detail");
                     sheet.getRow(rc).getCell(0).setCellValue(b.getNoPemesanan());
                     sheet.getRow(rc).getCell(1).setCellValue(tglLengkap.format(tglSql.parse(b.getTglPemesanan())));

@@ -6,7 +6,7 @@
 package com.excellentsystem.AuriSteel.View.Report;
 
 import com.excellentsystem.AuriSteel.DAO.LogBahanDAO;
-import com.excellentsystem.AuriSteel.DAO.PenjualanCoilHeadDAO;
+import com.excellentsystem.AuriSteel.DAO.PenjualanBahanHeadDAO;
 import com.excellentsystem.AuriSteel.Function;
 import static com.excellentsystem.AuriSteel.Function.createRow;
 import com.excellentsystem.AuriSteel.Koneksi;
@@ -16,7 +16,7 @@ import static com.excellentsystem.AuriSteel.Main.tglLengkap;
 import static com.excellentsystem.AuriSteel.Main.tglSql;
 import com.excellentsystem.AuriSteel.Model.LogBahan;
 import com.excellentsystem.AuriSteel.Model.Otoritas;
-import com.excellentsystem.AuriSteel.Model.PenjualanCoilHead;
+import com.excellentsystem.AuriSteel.Model.PenjualanBahanHead;
 import com.excellentsystem.AuriSteel.Model.StokBahan;
 import com.excellentsystem.AuriSteel.PrintOut.Report;
 import com.excellentsystem.AuriSteel.View.Dialog.NewPembelianController;
@@ -248,7 +248,7 @@ public class LogBahanController  {
     }
     private void lihatDetailPenjualan(LogBahan log){
         try(Connection con = Koneksi.getConnection()){
-            PenjualanCoilHead p = PenjualanCoilHeadDAO.get(con, log.getKeterangan());
+            PenjualanBahanHead p = PenjualanBahanHeadDAO.get(con, log.getKeterangan());
             if(p.getKurs()!=1){
                 Stage child = new Stage();
                 FXMLLoader loader = mainApp.showDialog(stage, child, "View/Dialog/NewPenjualanCoil.fxml");

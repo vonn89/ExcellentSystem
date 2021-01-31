@@ -7,8 +7,8 @@ package com.excellentsystem.AuriSteel.View;
 
 import com.excellentsystem.AuriSteel.DAO.CustomerDAO;
 import com.excellentsystem.AuriSteel.DAO.PegawaiDAO;
-import com.excellentsystem.AuriSteel.DAO.PenjualanDetailDAO;
-import com.excellentsystem.AuriSteel.DAO.PenjualanHeadDAO;
+import com.excellentsystem.AuriSteel.DAO.PenjualanBarangDetailDAO;
+import com.excellentsystem.AuriSteel.DAO.PenjualanBarangHeadDAO;
 import com.excellentsystem.AuriSteel.DAO.PiutangDAO;
 import com.excellentsystem.AuriSteel.Function;
 import static com.excellentsystem.AuriSteel.Function.createRow;
@@ -23,8 +23,8 @@ import static com.excellentsystem.AuriSteel.Main.tglSql;
 import com.excellentsystem.AuriSteel.Model.Customer;
 import com.excellentsystem.AuriSteel.Model.Otoritas;
 import com.excellentsystem.AuriSteel.Model.Pegawai;
-import com.excellentsystem.AuriSteel.Model.PenjualanDetail;
-import com.excellentsystem.AuriSteel.Model.PenjualanHead;
+import com.excellentsystem.AuriSteel.Model.PenjualanBarangDetail;
+import com.excellentsystem.AuriSteel.Model.PenjualanBarangHead;
 import com.excellentsystem.AuriSteel.Model.Piutang;
 import com.excellentsystem.AuriSteel.Model.TerimaPembayaran;
 import com.excellentsystem.AuriSteel.PrintOut.Report;
@@ -79,35 +79,37 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 public class PenjualanController {
 
     @FXML
-    private TableView<PenjualanHead> penjualanTable;
+    private TableView<PenjualanBarangHead> penjualanTable;
     @FXML
-    private TableColumn<PenjualanHead, String> noPenjualanColumn;
+    private TableColumn<PenjualanBarangHead, String> noPenjualanColumn;
     @FXML
-    private TableColumn<PenjualanHead, String> tglPenjualanColumn;
+    private TableColumn<PenjualanBarangHead, String> tglPengirimanColumn;
     @FXML
-    private TableColumn<PenjualanHead, String> gudangColumn;
+    private TableColumn<PenjualanBarangHead, String> tglPenjualanColumn;
     @FXML
-    private TableColumn<PenjualanHead, String> namaCustomerColumn;
+    private TableColumn<PenjualanBarangHead, String> gudangColumn;
     @FXML
-    private TableColumn<PenjualanHead, String> alamatCustomerColumn;
+    private TableColumn<PenjualanBarangHead, String> namaCustomerColumn;
     @FXML
-    private TableColumn<PenjualanHead, String> namaInvoiceColumn;
+    private TableColumn<PenjualanBarangHead, String> alamatCustomerColumn;
     @FXML
-    private TableColumn<PenjualanHead, String> paymentTermColumn;
+    private TableColumn<PenjualanBarangHead, String> namaInvoiceColumn;
     @FXML
-    private TableColumn<PenjualanHead, Number> totalPenjualanColumn;
+    private TableColumn<PenjualanBarangHead, String> paymentTermColumn;
     @FXML
-    private TableColumn<PenjualanHead, Number> totalBebanPenjualanColumn;
+    private TableColumn<PenjualanBarangHead, Number> totalPenjualanColumn;
     @FXML
-    private TableColumn<PenjualanHead, Number> pembayaranColumn;
+    private TableColumn<PenjualanBarangHead, Number> totalBebanPenjualanColumn;
     @FXML
-    private TableColumn<PenjualanHead, Number> sisaPembayaranColumn;
+    private TableColumn<PenjualanBarangHead, Number> pembayaranColumn;
     @FXML
-    private TableColumn<PenjualanHead, String> catatanColumn;
+    private TableColumn<PenjualanBarangHead, Number> sisaPembayaranColumn;
     @FXML
-    private TableColumn<PenjualanHead, String> namaSalesColumn;
+    private TableColumn<PenjualanBarangHead, String> catatanColumn;
     @FXML
-    private TableColumn<PenjualanHead, String> kodeUserColumn;
+    private TableColumn<PenjualanBarangHead, String> namaSalesColumn;
+    @FXML
+    private TableColumn<PenjualanBarangHead, String> kodeUserColumn;
 
     @FXML
     private TextField searchField;
@@ -123,8 +125,8 @@ public class PenjualanController {
     private DatePicker tglAkhirPicker;
     @FXML
     private ComboBox<String> groupByCombo;
-    private ObservableList<PenjualanHead> allPenjualan = FXCollections.observableArrayList();
-    private ObservableList<PenjualanHead> filterData = FXCollections.observableArrayList();
+    private ObservableList<PenjualanBarangHead> allPenjualan = FXCollections.observableArrayList();
+    private ObservableList<PenjualanBarangHead> filterData = FXCollections.observableArrayList();
     private Main mainApp;
 
     public void initialize() {
@@ -155,6 +157,16 @@ public class PenjualanController {
         kodeUserColumn.setCellValueFactory(cellData -> cellData.getValue().kodeUserProperty());
         kodeUserColumn.setCellFactory(col -> Function.getWrapTableCell(kodeUserColumn));
 
+        tglPengirimanColumn.setCellValueFactory(cellData -> {
+            try {
+                return new SimpleStringProperty(tglLengkap.format(tglSql.parse(cellData.getValue().getTglPengiriman())));
+            } catch (Exception ex) {
+                return null;
+            }
+        });
+        tglPengirimanColumn.setCellFactory(col -> Function.getWrapTableCell(tglPengirimanColumn));
+        tglPengirimanColumn.setComparator(Function.sortDate(tglLengkap));
+        
         tglPenjualanColumn.setCellValueFactory(cellData -> {
             try {
                 return new SimpleStringProperty(tglLengkap.format(tglSql.parse(cellData.getValue().getTglPenjualan())));
@@ -200,10 +212,10 @@ public class PenjualanController {
         }
         rm.getItems().addAll(refresh);
         penjualanTable.setContextMenu(rm);
-        penjualanTable.setRowFactory((TableView<PenjualanHead> tableView) -> {
-            final TableRow<PenjualanHead> row = new TableRow<PenjualanHead>() {
+        penjualanTable.setRowFactory((TableView<PenjualanBarangHead> tableView) -> {
+            final TableRow<PenjualanBarangHead> row = new TableRow<PenjualanBarangHead>() {
                 @Override
-                public void updateItem(PenjualanHead item, boolean empty) {
+                public void updateItem(PenjualanBarangHead item, boolean empty) {
                     super.updateItem(item, empty);
                     if (empty) {
                         setContextMenu(rm);
@@ -294,7 +306,7 @@ public class PenjualanController {
             });
             return row;
         });
-        allPenjualan.addListener((ListChangeListener.Change<? extends PenjualanHead> change) -> {
+        allPenjualan.addListener((ListChangeListener.Change<? extends PenjualanBarangHead> change) -> {
             searchPenjualan();
         });
         searchField.textProperty().addListener(
@@ -319,16 +331,16 @@ public class PenjualanController {
 
     @FXML
     private void getPenjualan() {
-        Task<List<PenjualanHead>> task = new Task<List<PenjualanHead>>() {
+        Task<List<PenjualanBarangHead>> task = new Task<List<PenjualanBarangHead>>() {
             @Override
-            public List<PenjualanHead> call() throws Exception {
+            public List<PenjualanBarangHead> call() throws Exception {
                 try (Connection con = Koneksi.getConnection()) {
-                    List<PenjualanHead> allPenjualan = PenjualanHeadDAO.getAllByDateAndStatus(con,
+                    List<PenjualanBarangHead> allPenjualan = PenjualanBarangHeadDAO.getAllByDateAndStatus(con,
                             tglMulaiPicker.getValue().toString(), tglAkhirPicker.getValue().toString(), "true");
                     List<Customer> allCustomer = CustomerDAO.getAllByStatus(con, "%");
                     List<Pegawai> allSales = PegawaiDAO.getAllByStatus(con, "%");
-                    List<PenjualanHead> listPenjualan = new ArrayList<>();
-                    for (PenjualanHead p : allPenjualan) {
+                    List<PenjualanBarangHead> listPenjualan = new ArrayList<>();
+                    for (PenjualanBarangHead p : allPenjualan) {
                         for (Customer c : allCustomer) {
                             if (p.getKodeCustomer().equals(c.getKodeCustomer())) {
                                 p.setCustomer(c);
@@ -384,7 +396,7 @@ public class PenjualanController {
     private void searchPenjualan() {
         try {
             filterData.clear();
-            for (PenjualanHead temp : allPenjualan) {
+            for (PenjualanBarangHead temp : allPenjualan) {
                 if (searchField.getText() == null || searchField.getText().equals("")) {
                     filterData.add(temp);
                 } else {
@@ -415,7 +427,7 @@ public class PenjualanController {
         double total = 0;
         double terbayar = 0;
         double belumterbayar = 0;
-        for (PenjualanHead temp : filterData) {
+        for (PenjualanBarangHead temp : filterData) {
             total = total + temp.getTotalPenjualan();
             terbayar = terbayar + temp.getPembayaran();
             belumterbayar = belumterbayar + temp.getSisaPembayaran();
@@ -425,7 +437,7 @@ public class PenjualanController {
         belumTerbayarField.setText(df.format(belumterbayar));
     }
 
-    private void showPembayaran(PenjualanHead p) {
+    private void showPembayaran(PenjualanBarangHead p) {
         Stage stage = new Stage();
         FXMLLoader loader = mainApp.showDialog(mainApp.MainStage, stage, "View/Dialog/NewPembayaran.fxml");
         NewPembayaranController controller = loader.getController();
@@ -481,7 +493,7 @@ public class PenjualanController {
         });
     }
 
-    private void setJatuhTempo(PenjualanHead p) {
+    private void setJatuhTempo(PenjualanBarangHead p) {
         Stage stage = new Stage();
         FXMLLoader loader = mainApp.showDialog(mainApp.MainStage, stage, "View/Dialog/JatuhTempo.fxml");
         JatuhTempoController controller = loader.getController();
@@ -520,7 +532,7 @@ public class PenjualanController {
         });
     }
 
-    private void lihatDetailPemesanan(PenjualanHead p) {
+    private void lihatDetailPemesanan(PenjualanBarangHead p) {
         Stage stage = new Stage();
         FXMLLoader loader = mainApp.showDialog(mainApp.MainStage, stage, "View/Dialog/NewPemesanan.fxml");
         NewPemesananController controller = loader.getController();
@@ -528,7 +540,7 @@ public class PenjualanController {
         controller.setDetailPemesanan(p.getNoPemesanan());
     }
 
-    private void lihatDetailPenjualan(PenjualanHead p) {
+    private void lihatDetailPenjualan(PenjualanBarangHead p) {
         Stage stage = new Stage();
         FXMLLoader loader = mainApp.showDialog(mainApp.MainStage, stage, "View/Dialog/NewPenjualan.fxml");
         NewPenjualanController controller = loader.getController();
@@ -536,7 +548,7 @@ public class PenjualanController {
         controller.setDetailPenjualan(p.getNoPenjualan());
     }
 
-    private void detailBebanPenjualan(PenjualanHead p) {
+    private void detailBebanPenjualan(PenjualanBarangHead p) {
         Stage child = new Stage();
         FXMLLoader loader = mainApp.showDialog(mainApp.MainStage, child, "View/Dialog/DetailBebanPenjualan.fxml");
         DetailBebanPenjualanController controller = loader.getController();
@@ -544,7 +556,7 @@ public class PenjualanController {
         controller.setDetailBebanPenjualan(p.getNoPenjualan());
     }
 
-    private void showDetailPiutang(PenjualanHead p) {
+    private void showDetailPiutang(PenjualanBarangHead p) {
         Stage stage = new Stage();
         FXMLLoader loader = mainApp.showDialog(mainApp.MainStage, stage, "View/Dialog/DetailPiutang.fxml");
         DetailPiutangController x = loader.getController();
@@ -610,11 +622,11 @@ public class PenjualanController {
         });
     }
 
-    private void printInvoice(PenjualanHead p) {
+    private void printInvoice(PenjualanBarangHead p) {
         try (Connection con = Koneksi.getConnection()) {
-            List<PenjualanDetail> listPenjualan = PenjualanDetailDAO.getAllPenjualanDetail(con, p.getNoPenjualan());
-            for (PenjualanDetail d : listPenjualan) {
-                d.setPenjualanHead(p);
+            List<PenjualanBarangDetail> listPenjualan = PenjualanBarangDetailDAO.getAllPenjualanDetail(con, p.getNoPenjualan());
+            for (PenjualanBarangDetail d : listPenjualan) {
+                d.setPenjualanBarangHead(p);
             }
             Report report = new Report();
             report.printInvoice(listPenjualan, p.getTotalPenjualan());
@@ -624,11 +636,11 @@ public class PenjualanController {
         }
     }
 
-    private void printInvoiceSoftCopy(PenjualanHead p) {
+    private void printInvoiceSoftCopy(PenjualanBarangHead p) {
         try (Connection con = Koneksi.getConnection()) {
-            List<PenjualanDetail> listPenjualan = PenjualanDetailDAO.getAllPenjualanDetail(con, p.getNoPenjualan());
-            for (PenjualanDetail d : listPenjualan) {
-                d.setPenjualanHead(p);
+            List<PenjualanBarangDetail> listPenjualan = PenjualanBarangDetailDAO.getAllPenjualanDetail(con, p.getNoPenjualan());
+            for (PenjualanBarangDetail d : listPenjualan) {
+                d.setPenjualanBarangHead(p);
             }
             Report report = new Report();
             report.printInvoiceSoftcopy(listPenjualan, p.getTotalPenjualan());
@@ -683,7 +695,7 @@ public class PenjualanController {
                 double penjualan = 0;
                 double pembayaran = 0;
                 double sisaPembayaran = 0;
-                for (PenjualanHead b : filterData) {
+                for (PenjualanBarangHead b : filterData) {
                     createRow(workbook, sheet, rc, c, "Detail");
                     sheet.getRow(rc).getCell(0).setCellValue(b.getNoPenjualan());
                     sheet.getRow(rc).getCell(1).setCellValue(tglLengkap.format(tglSql.parse(b.getTglPenjualan())));

@@ -5,6 +5,7 @@
  */
 package com.excellentsystem.AuriSteel.View.Report;
 
+import com.excellentsystem.AuriSteel.DAO.GudangDAO;
 import com.excellentsystem.AuriSteel.DAO.KeuanganDAO;
 import com.excellentsystem.AuriSteel.Function;
 import com.excellentsystem.AuriSteel.Koneksi;
@@ -12,6 +13,7 @@ import com.excellentsystem.AuriSteel.Main;
 import static com.excellentsystem.AuriSteel.Main.sistem;
 import static com.excellentsystem.AuriSteel.Main.tgl;
 import static com.excellentsystem.AuriSteel.Main.tglBarang;
+import com.excellentsystem.AuriSteel.Model.Gudang;
 import com.excellentsystem.AuriSteel.Model.Helper.Neraca;
 import com.excellentsystem.AuriSteel.Model.Keuangan;
 import com.excellentsystem.AuriSteel.Model.Otoritas;
@@ -70,6 +72,7 @@ public class LaporanNeracaController  {
     private List<String> kategoriPiutang = new ArrayList<>();
     private List<String> kategoriAsetTetap = new ArrayList<>();
     private List<String> kategoriHutang = new ArrayList<>();
+    private List<String> listGudang = new ArrayList<>();
     private Main mainApp;   
     public void initialize() {
         tglAwalPicker.setConverter(Function.getTglConverter());
@@ -176,6 +179,10 @@ public class LaporanNeracaController  {
                         if(!kategoriHutang.contains(k.getKategori()))
                             kategoriHutang.add(k.getKategori());
                     }
+                    listGudang.clear();
+                    for(Gudang g : GudangDAO.getAll(con)){
+                        listGudang.add(g.getKodeGudang());
+                    }
                     return null;
                 }
             }
@@ -259,41 +266,28 @@ public class LaporanNeracaController  {
             addBoldText("Stok Persediaan Bahan Baku & Barang", 0, rowAktiva);
             rowAktiva = rowAktiva + 1;
             
-            double stokBahanSMG = 0;
-            double stokBahanSBY = 0;
-            for(Keuangan k : stokBahan){
-                if(k.getKategori().equals("SMG"))
-                    stokBahanSMG = stokBahanSMG + k.getJumlahRp();
-                if(k.getKategori().equals("SBY"))
-                    stokBahanSBY = stokBahanSBY + k.getJumlahRp();
+            for(String g : listGudang){
+                double stokBhn = 0;
+                for(Keuangan k : stokBahan){
+                    if(k.getKategori().equals(g))
+                        stokBhn = stokBhn + k.getJumlahRp();
+                }
+                addHyperLinkStokBahanText("Stok Persedian Bahan Baku - "+g,g, 0, rowAktiva);
+                addNormalText(df.format(stokBhn), 1, rowAktiva);
+                totalAsetLancar = totalAsetLancar + stokBhn;
+                rowAktiva = rowAktiva + 1;
+                
+                double stokBrg = 0;
+                for(Keuangan k : stokBarang){
+                    if(k.getKategori().equals(g))
+                        stokBrg = stokBrg + k.getJumlahRp();
+                }
+                addHyperLinkStokBarangText("Stok Persedian Barang - "+g,g, 0, rowAktiva);
+                addNormalText(df.format(stokBrg), 1, rowAktiva);
+                totalAsetLancar = totalAsetLancar + stokBrg;
+                rowAktiva = rowAktiva + 1;
             }
-            addHyperLinkStokBahanText("Stok Persedian Bahan Baku - SMG","SMG", 0, rowAktiva);
-            addNormalText(df.format(stokBahanSMG), 1, rowAktiva);
-            totalAsetLancar = totalAsetLancar + stokBahanSMG;
-            rowAktiva = rowAktiva + 1;
             
-            addHyperLinkStokBahanText("Stok Persedian Bahan Baku - SBY","SBY", 0, rowAktiva);
-            addNormalText(df.format(stokBahanSBY), 1, rowAktiva);
-            totalAsetLancar = totalAsetLancar + stokBahanSBY;
-            rowAktiva = rowAktiva + 1;
-            
-            double stokBarangSMG = 0;
-            double stokBarangSBY = 0;
-            for(Keuangan k : stokBarang){
-                if(k.getKategori().equals("SMG"))
-                    stokBarangSMG = stokBarangSMG + k.getJumlahRp();
-                if(k.getKategori().equals("SBY"))
-                    stokBarangSBY = stokBarangSBY + k.getJumlahRp();
-            }
-            addHyperLinkStokBarangText("Stok Persedian Barang - SMG","SMG", 0, rowAktiva);
-            addNormalText(df.format(stokBarangSMG), 1, rowAktiva);
-            totalAsetLancar = totalAsetLancar + stokBarangSMG;
-            rowAktiva = rowAktiva + 1;
-            
-            addHyperLinkStokBarangText("Stok Persedian Barang - SBY","SBY", 0, rowAktiva);
-            addNormalText(df.format(stokBarangSBY), 1, rowAktiva);
-            totalAsetLancar = totalAsetLancar + stokBarangSBY;
-            rowAktiva = rowAktiva + 1;
             
             addBoldText("Total Stok Persediaan Bahan Baku & Barang", 0, rowAktiva);
             addBoldText(df.format(totalAsetLancar), 1, rowAktiva);

@@ -38,11 +38,11 @@
 	<field name="hargaJual" class="java.lang.Double">
 		<fieldDescription><![CDATA[hargaJual]]></fieldDescription>
 	</field>
-	<field name="keterangan" class="java.lang.String">
-		<fieldDescription><![CDATA[keterangan]]></fieldDescription>
-	</field>
 	<field name="namaBarang" class="java.lang.String">
 		<fieldDescription><![CDATA[namaBarang]]></fieldDescription>
+	</field>
+	<field name="keterangan" class="java.lang.String">
+		<fieldDescription><![CDATA[keterangan]]></fieldDescription>
 	</field>
 	<field name="qty" class="java.lang.Double">
 		<fieldDescription><![CDATA[qty]]></fieldDescription>
@@ -54,43 +54,43 @@
 		<fieldDescription><![CDATA[total]]></fieldDescription>
 	</field>
 	<field name="catatan" class="java.lang.String">
-		<fieldDescription><![CDATA[penjualanHead.catatan]]></fieldDescription>
+		<fieldDescription><![CDATA[penjualanBarangHead.catatan]]></fieldDescription>
 	</field>
 	<field name="noPenjualan" class="java.lang.String">
-		<fieldDescription><![CDATA[penjualanHead.noPenjualan]]></fieldDescription>
+		<fieldDescription><![CDATA[penjualanBarangHead.noPenjualan]]></fieldDescription>
 	</field>
 	<field name="paymentTerm" class="java.lang.String">
-		<fieldDescription><![CDATA[penjualanHead.paymentTerm]]></fieldDescription>
+		<fieldDescription><![CDATA[penjualanBarangHead.paymentTerm]]></fieldDescription>
 	</field>
 	<field name="pembayaran" class="java.lang.Double">
-		<fieldDescription><![CDATA[penjualanHead.pembayaran]]></fieldDescription>
+		<fieldDescription><![CDATA[penjualanBarangHead.pembayaran]]></fieldDescription>
 	</field>
 	<field name="sisaPembayaran" class="java.lang.Double">
-		<fieldDescription><![CDATA[penjualanHead.sisaPembayaran]]></fieldDescription>
+		<fieldDescription><![CDATA[penjualanBarangHead.sisaPembayaran]]></fieldDescription>
 	</field>
 	<field name="tglPenjualan" class="java.lang.String">
-		<fieldDescription><![CDATA[penjualanHead.tglPenjualan]]></fieldDescription>
-	</field>
-	<field name="totalPenjualan" class="java.lang.Double">
-		<fieldDescription><![CDATA[penjualanHead.totalPenjualan]]></fieldDescription>
-	</field>
-	<field name="alamat" class="java.lang.String">
-		<fieldDescription><![CDATA[penjualanHead.customerInvoice.alamat]]></fieldDescription>
-	</field>
-	<field name="kontakPerson" class="java.lang.String">
-		<fieldDescription><![CDATA[penjualanHead.customerInvoice.kontakPerson]]></fieldDescription>
-	</field>
-	<field name="kota" class="java.lang.String">
-		<fieldDescription><![CDATA[penjualanHead.customerInvoice.kota]]></fieldDescription>
-	</field>
-	<field name="nama" class="java.lang.String">
-		<fieldDescription><![CDATA[penjualanHead.customerInvoice.nama]]></fieldDescription>
+		<fieldDescription><![CDATA[penjualanBarangHead.tglPenjualan]]></fieldDescription>
 	</field>
 	<field name="tglPengiriman" class="java.lang.String">
-		<fieldDescription><![CDATA[penjualanHead.tglPengiriman]]></fieldDescription>
+		<fieldDescription><![CDATA[penjualanBarangHead.tglPengiriman]]></fieldDescription>
+	</field>
+	<field name="totalPenjualan" class="java.lang.Double">
+		<fieldDescription><![CDATA[penjualanBarangHead.totalPenjualan]]></fieldDescription>
 	</field>
 	<field name="status" class="java.lang.String">
-		<fieldDescription><![CDATA[penjualanHead.status]]></fieldDescription>
+		<fieldDescription><![CDATA[penjualanBarangHead.status]]></fieldDescription>
+	</field>
+	<field name="alamat" class="java.lang.String">
+		<fieldDescription><![CDATA[penjualanBarangHead.customerInvoice.alamat]]></fieldDescription>
+	</field>
+	<field name="kontakPerson" class="java.lang.String">
+		<fieldDescription><![CDATA[penjualanBarangHead.customerInvoice.kontakPerson]]></fieldDescription>
+	</field>
+	<field name="kota" class="java.lang.String">
+		<fieldDescription><![CDATA[penjualanBarangHead.customerInvoice.kota]]></fieldDescription>
+	</field>
+	<field name="nama" class="java.lang.String">
+		<fieldDescription><![CDATA[penjualanBarangHead.customerInvoice.nama]]></fieldDescription>
 	</field>
 	<background>
 		<band height="842" splitType="Stretch">
@@ -163,7 +163,7 @@
 				</textElement>
 				<textFieldExpression><![CDATA[new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").parse(
 (
- $F{status}.equals("true") ? $F{tglPenjualan} : $F{tglPengiriman}
+ $F{status}.equals( "true" ) ? $F{tglPenjualan} : $F{tglPengiriman}
 ))]]></textFieldExpression>
 			</textField>
 			<textField>

@@ -72,28 +72,6 @@
                <children>
                   <GridPane hgap="7.0" style="-fx-background-color: seccolor6;" vgap="7.0">
                     <columnConstraints>
-                      <ColumnConstraints hgrow="SOMETIMES" maxWidth="50.0" minWidth="50.0" prefWidth="50.0" />
-                      <ColumnConstraints hgrow="SOMETIMES" maxWidth="250.0" minWidth="10.0" prefWidth="250.0" />
-                    </columnConstraints>
-                    <rowConstraints>
-                      <RowConstraints maxHeight="20.0" minHeight="20.0" prefHeight="20.0" vgrow="SOMETIMES" />
-                      <RowConstraints maxHeight="30.0" minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                      <RowConstraints maxHeight="1.7976931348623157E308" minHeight="35.0" prefHeight="35.0" vgrow="SOMETIMES" />
-                    </rowConstraints>
-                     <children>
-                        <TextField fx:id="namaField" disable="true" editable="false" maxHeight="1.7976931348623157E308" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                        <Button fx:id="addSupplierButton" maxHeight="1.7976931348623157E308" mnemonicParsing="false" onAction="#addSupplier" prefWidth="30.0" styleClass="button2" text="..." GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="1" />
-                        <Label minWidth="80.0" prefWidth="80.0" text="Alamat" GridPane.rowIndex="2" />
-                        <Label style="-fx-font-family: Serif; -fx-font-size: 20;" text="Supplier" GridPane.columnSpan="2147483647" GridPane.halignment="LEFT" />
-                        <Label text="Nama" GridPane.rowIndex="1" />
-                        <TextArea fx:id="alamatField" disable="true" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                     </children>
-                     <padding>
-                        <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
-                     </padding>
-                  </GridPane>
-                  <GridPane hgap="7.0" style="-fx-background-color: seccolor6;" vgap="7.0">
-                    <columnConstraints>
                         <ColumnConstraints hgrow="SOMETIMES" maxWidth="100.0" minWidth="10.0" prefWidth="100.0" />
                         <ColumnConstraints hgrow="SOMETIMES" maxWidth="250.0" minWidth="10.0" prefWidth="200.0" />
                     </columnConstraints>
@@ -105,10 +83,32 @@
                      <children>
                         <Label text="Gudang" GridPane.rowIndex="2" />
                         <ComboBox fx:id="gudangCombo" maxWidth="1.7976931348623157E308" styleClass="combo-box-border" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                        <Label text="Sales Contract" />
+                        <Label text="No Pemesanan" />
                         <Label text="Payment Term" GridPane.rowIndex="1" />
-                        <TextField disable="true" maxHeight="1.7976931348623157E308" styleClass="textfield-border" GridPane.columnIndex="1" />
-                        <ComboBox disable="true" maxWidth="1.7976931348623157E308" styleClass="combo-box-border" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                        <TextField fx:id="noPemesananField" disable="true" maxHeight="1.7976931348623157E308" styleClass="textfield-border" GridPane.columnIndex="1" />
+                        <Button fx:id="addPemesananButton" maxHeight="1.7976931348623157E308" mnemonicParsing="false" onAction="#addPemesanan" prefWidth="30.0" styleClass="button2" text="..." GridPane.columnIndex="1" GridPane.halignment="RIGHT" />
+                        <TextField fx:id="paymentTermField" disable="true" prefHeight="30.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                     </children>
+                     <padding>
+                        <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
+                     </padding>
+                  </GridPane>
+                  <GridPane hgap="7.0" style="-fx-background-color: seccolor6;" vgap="7.0">
+                    <columnConstraints>
+                      <ColumnConstraints hgrow="SOMETIMES" maxWidth="50.0" minWidth="50.0" prefWidth="50.0" />
+                      <ColumnConstraints hgrow="SOMETIMES" maxWidth="250.0" minWidth="10.0" prefWidth="250.0" />
+                    </columnConstraints>
+                    <rowConstraints>
+                      <RowConstraints maxHeight="20.0" minHeight="20.0" prefHeight="20.0" vgrow="SOMETIMES" />
+                      <RowConstraints maxHeight="30.0" minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                      <RowConstraints maxHeight="1.7976931348623157E308" minHeight="35.0" prefHeight="35.0" vgrow="SOMETIMES" />
+                    </rowConstraints>
+                     <children>
+                        <TextField fx:id="namaField" disable="true" editable="false" maxHeight="1.7976931348623157E308" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                        <Label minWidth="80.0" prefWidth="80.0" text="Alamat" GridPane.rowIndex="2" />
+                        <Label style="-fx-font-family: Serif; -fx-font-size: 20;" text="Supplier" GridPane.columnSpan="2147483647" GridPane.halignment="LEFT" />
+                        <Label text="Nama" GridPane.rowIndex="1" />
+                        <TextArea fx:id="alamatField" disable="true" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                      </children>
                      <padding>
                         <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />

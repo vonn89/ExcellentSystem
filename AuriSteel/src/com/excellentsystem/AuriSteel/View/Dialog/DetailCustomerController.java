@@ -69,7 +69,7 @@ public class DetailCustomerController  {
             @Override 
             public List<Pegawai> call() throws Exception{
                 try (Connection con = Koneksi.getConnection()) {
-                    return PegawaiDAO.getAllByStatus(con, "true");
+                    return PegawaiDAO.getAllByJabatanAndStatus(con, "Marketing","true");
                 }
             }
         };

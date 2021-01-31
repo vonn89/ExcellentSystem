@@ -11,7 +11,7 @@ import com.excellentsystem.AuriSteel.Koneksi;
 import com.excellentsystem.AuriSteel.Main;
 import static com.excellentsystem.AuriSteel.Main.df;
 import com.excellentsystem.AuriSteel.Model.Barang;
-import com.excellentsystem.AuriSteel.Model.PemesananDetail;
+import com.excellentsystem.AuriSteel.Model.PemesananBarangDetail;
 import java.sql.Connection;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
@@ -94,7 +94,7 @@ public class EditBarangPemesananController  {
             Double.parseDouble(hargaJualField.getText().replaceAll(",", ""))
         ));
     }
-    public void editBarang(PemesananDetail d){
+    public void editBarang(PemesananBarangDetail d){
         Task<Barang> task = new Task<Barang>() {
             @Override 
             public Barang call() throws Exception{

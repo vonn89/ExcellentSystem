@@ -29,10 +29,10 @@ public class Hutang {
     private final StringProperty jatuhTempo = new SimpleStringProperty();
     private final StringProperty kodeUser = new SimpleStringProperty();
     private final StringProperty status = new SimpleStringProperty();
-    private PembelianHead pembelianCoilHead;
+    private PembelianBahanHead pembelianBahanHead;
     private PembelianBarangHead pembelianBarangHead;
-    private PemesananHead pemesananHead;
-    private PemesananCoilHead pemesananCoilHead;
+    private PemesananBarangHead pemesananHead;
+    private PemesananBahanHead pemesananBahanHead;
     private List<Pembayaran> listPembayaran;
 
 
@@ -43,20 +43,28 @@ public class Hutang {
     public void setPembelianBarangHead(PembelianBarangHead pembelianBarangHead) {
         this.pembelianBarangHead = pembelianBarangHead;
     }
+
+    public PembelianBahanHead getPembelianBahanHead() {
+        return pembelianBahanHead;
+    }
+
+    public void setPembelianBahanHead(PembelianBahanHead pembelianBahanHead) {
+        this.pembelianBahanHead = pembelianBahanHead;
+    }
+
+    public PemesananBahanHead getPemesananBahanHead() {
+        return pemesananBahanHead;
+    }
+
+    public void setPemesananBahanHead(PemesananBahanHead pemesananBahanHead) {
+        this.pemesananBahanHead = pemesananBahanHead;
+    }
     
-    public PemesananCoilHead getPemesananCoilHead() {
-        return pemesananCoilHead;
-    }
-
-    public void setPemesananCoilHead(PemesananCoilHead pemesananCoilHead) {
-        this.pemesananCoilHead = pemesananCoilHead;
-    }
-
-    public PemesananHead getPemesananHead() {
+    public PemesananBarangHead getPemesananHead() {
         return pemesananHead;
     }
 
-    public void setPemesananHead(PemesananHead pemesananHead) {
+    public void setPemesananHead(PemesananBarangHead pemesananHead) {
         this.pemesananHead = pemesananHead;
     }
 
@@ -68,14 +76,6 @@ public class Hutang {
         this.listPembayaran = listPembayaran;
     }
     
-    public PembelianHead getPembelianCoilHead() {
-        return pembelianCoilHead;
-    }
-
-    public void setPembelianCoilHead(PembelianHead pembelianCoilHead) {
-        this.pembelianCoilHead = pembelianCoilHead;
-    }
-
     
     public String getKodeUser() {
         return kodeUser.get();

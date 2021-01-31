@@ -31,11 +31,13 @@
                   <HBox alignment="CENTER_RIGHT" layoutX="-341.0" layoutY="-7.0" prefHeight="100.0" spacing="10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <children>
                         <Label prefHeight="30.0" text="Tanggal" />
-                        <DatePicker fx:id="tglMulaiPicker" onAction="#getProduksi" prefHeight="40.0" prefWidth="140.0" />
+                        <DatePicker fx:id="tglMulaiPicker" onAction="#getProduksi" prefHeight="40.0" prefWidth="120.0" />
                         <Label alignment="CENTER" prefHeight="30.0" text="-" />
-                        <DatePicker fx:id="tglAkhirPicker" onAction="#getProduksi" prefHeight="40.0" prefWidth="140.0" />
-                        <Label text="Jenis Produksi" />
-                        <ComboBox fx:id="groupByCombo" onAction="#getProduksi" prefHeight="40.0" prefWidth="180.0" />
+                        <DatePicker fx:id="tglAkhirPicker" onAction="#getProduksi" prefHeight="40.0" prefWidth="120.0" />
+                        <Label text="Jenis " />
+                        <ComboBox fx:id="groupByCombo" onAction="#getProduksi" prefHeight="40.0" prefWidth="140.0" />
+                        <Label layoutX="378.0" layoutY="19.0" text="Status" />
+                        <ComboBox fx:id="statusCombo" layoutX="463.0" layoutY="10.0" onAction="#getProduksi" prefHeight="40.0" prefWidth="100.0" />
                      </children>
                   </HBox>
                </children>
@@ -43,9 +45,12 @@
             <TableView fx:id="produksiHeadTable" prefHeight="200.0" prefWidth="200.0" tableMenuButtonVisible="true" GridPane.rowIndex="2">
               <columns>
                 <TableColumn fx:id="kodeProduksiColumn" maxWidth="2000.0" prefWidth="75.0" text="Kode Produksi" />
-                <TableColumn fx:id="tglProduksiColumn" maxWidth="2000.0" prefWidth="75.0" text="Tgl Produksi" />
+                <TableColumn fx:id="tglMulaiColumn" maxWidth="2000.0" prefWidth="75.0" text="Tgl Mulai" />
+                  <TableColumn fx:id="tglSelesaiColumn" maxWidth="2000.0" prefWidth="75.0" text="Tgl Selesai" />
+                  <TableColumn fx:id="tglVerifikasiColumn" maxWidth="2000.0" prefWidth="75.0" text="Tgl Verifikasi" visible="false" />
                   <TableColumn fx:id="gudangColumn" maxWidth="2000.0" prefWidth="75.0" text="Gudang" />
                   <TableColumn fx:id="listOperatorColumn" maxWidth="2000.0" prefWidth="75.0" text="Operator" />
+                  <TableColumn fx:id="mesinColumn" maxWidth="2000.0" prefWidth="75.0" text="Mesin" />
                   <TableColumn fx:id="bebanMaterialColumn" maxWidth="2000.0" prefWidth="75.0" text="Beban Material" visible="false" />
                   <TableColumn fx:id="bebanProduksiColumn" maxWidth="2000.0" prefWidth="75.0" text="Beban Produksi" visible="false" />
                 <TableColumn fx:id="listBahanColumn" maxWidth="3000.0" prefWidth="75.0" text="List Bahan" />
@@ -54,7 +59,9 @@
                   <TableColumn fx:id="totalBeratBarangColumn" maxWidth="3000.0" prefWidth="75.0" text="Total Berat Barang" />
                   <TableColumn fx:id="beratColumn" maxWidth="2000.0" prefWidth="75.0" text="Berat Jadi" />
                   <TableColumn fx:id="catatanColumn" maxWidth="2000.0" prefWidth="75.0" text="Catatan" />
-                  <TableColumn fx:id="kodeUserColumn" prefWidth="75.0" text="Kode User" visible="false" />
+                  <TableColumn fx:id="kodeUserColumn" prefWidth="75.0" text="User Verifikasi" visible="false" />
+                  <TableColumn fx:id="userMulaiColumn" prefWidth="75.0" text="User Mulai" visible="false" />
+                  <TableColumn fx:id="userSelesaiColumn" prefWidth="75.0" text="User Selesai" visible="false" />
               </columns>
                <columnResizePolicy>
                   <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />

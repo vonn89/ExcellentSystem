@@ -8,7 +8,7 @@ package com.excellentsystem.AuriSteel.View.Dialog;
 import com.excellentsystem.AuriSteel.Function;
 import com.excellentsystem.AuriSteel.Main;
 import static com.excellentsystem.AuriSteel.Main.df;
-import com.excellentsystem.AuriSteel.Model.PemesananDetail;
+import com.excellentsystem.AuriSteel.Model.PemesananBarangDetail;
 import java.util.List;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -27,14 +27,14 @@ import javafx.stage.Stage;
 public class AddDetailPemesananController  {
 
     
-    @FXML private TableView<PemesananDetail> pemesananDetailTable;
-    @FXML private TableColumn<PemesananDetail, String> kodeBarangColumn;
-    @FXML private TableColumn<PemesananDetail, String> namaBarangColumn;
-    @FXML private TableColumn<PemesananDetail, String> keteranganColumn;
-    @FXML private TableColumn<PemesananDetail, String> catatanInternColumn;
-    @FXML private TableColumn<PemesananDetail, String> satuanColumn;
-    @FXML private TableColumn<PemesananDetail, Number> qtyColumn;
-    @FXML private TableColumn<PemesananDetail, Number> qtyTerkirimColumn;
+    @FXML private TableView<PemesananBarangDetail> pemesananDetailTable;
+    @FXML private TableColumn<PemesananBarangDetail, String> kodeBarangColumn;
+    @FXML private TableColumn<PemesananBarangDetail, String> namaBarangColumn;
+    @FXML private TableColumn<PemesananBarangDetail, String> keteranganColumn;
+    @FXML private TableColumn<PemesananBarangDetail, String> catatanInternColumn;
+    @FXML private TableColumn<PemesananBarangDetail, String> satuanColumn;
+    @FXML private TableColumn<PemesananBarangDetail, Number> qtyColumn;
+    @FXML private TableColumn<PemesananBarangDetail, Number> qtyTerkirimColumn;
     
     @FXML private TextField kodeBarangField;
     @FXML private TextField namaBarangField;
@@ -43,11 +43,11 @@ public class AddDetailPemesananController  {
     @FXML public TextField keteranganField;
     @FXML public TextField catatanInternField;
     @FXML public Button addButton;
-    public PemesananDetail pemesananDetail;
+    public PemesananBarangDetail pemesananDetail;
     private Main mainApp;
     private Stage stage;
     private Stage owner;
-    public ObservableList<PemesananDetail> allPemesananDetail = FXCollections.observableArrayList();
+    public ObservableList<PemesananBarangDetail> allPemesananDetail = FXCollections.observableArrayList();
     public void initialize() {
         kodeBarangColumn.setCellValueFactory(cellData -> cellData.getValue().kodeBarangProperty());
         namaBarangColumn.setCellValueFactory(cellData -> cellData.getValue().namaBarangProperty());
@@ -91,11 +91,11 @@ public class AddDetailPemesananController  {
         stage.setX((mainApp.screenSize.getWidth() - stage.getWidth()) / 2);
         stage.setY((mainApp.screenSize.getHeight() - stage.getHeight()) / 2);
     }
-    public void setPemesananDetail(List<PemesananDetail> listPemesanan){
+    public void setPemesananDetail(List<PemesananBarangDetail> listPemesanan){
         allPemesananDetail.clear();
         allPemesananDetail.addAll(listPemesanan);
     }
-    private void selectPemesananDetail(PemesananDetail value){
+    private void selectPemesananDetail(PemesananBarangDetail value){
         pemesananDetail = null;
         kodeBarangField.setText("");
         namaBarangField.setText("");
